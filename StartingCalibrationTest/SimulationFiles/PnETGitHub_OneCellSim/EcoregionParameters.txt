@@ -1,0 +1,9 @@
+>> IMPORTANT : It seems that if only once ecoregion is given here, the other ecoregions will take their parameters from this one.
+>> This behaviour is indicated nowhere in the 
+
+LandisData  EcoregionParameters
+
+EcoregionParameters	 RootingDepth	SoilType  LeakageFrac  PrecLossFrac  SnowSublimFrac  ClimateFileName
+
+eco0	1000	SAND	1	0	0.15	climate.txt
+eco1	1000	SAND	1	0	0.15	climate.txt

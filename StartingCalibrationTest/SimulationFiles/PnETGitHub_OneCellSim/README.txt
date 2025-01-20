@@ -1,0 +1,3 @@
+The files in this folder come from https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/tree/13ffece64f0b0180490aaa96cf91bd212e9e2e50/test/One_Cell . I've modified them slightly in some places for compatibility issues with Linux (name of files on Linux are more case sensitive than on Windows, it seems).
+
+I used them as a base to create the template files for the one-cell simulations that I use in the calibration process (see Jupyter Notebook).
