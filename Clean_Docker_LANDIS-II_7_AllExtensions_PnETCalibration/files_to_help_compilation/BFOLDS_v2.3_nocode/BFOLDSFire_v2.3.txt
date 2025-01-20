@@ -1,0 +1,10 @@
+LandisData   Extension
+
+Name         "BFOLDS Fire Regime Module"
+Version      "2.3"
+Type         disturbance
+Assembly     Landis.Extension.BFOLDSFire
+
+Class        Landis.Extension.BFOLDSFire.PlugIn
+Description  "BFOLDS Fire v2.3; code sent by Marc Ouelette to Clement Hardy in November 2024. Slightly modified by Clement to allow compilation on Linux."
+CoreVersion  7.0
