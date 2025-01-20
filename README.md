@@ -1,4 +1,4 @@
-<p align="center"><img src="./DIVERSE_PnET_Calibration_Logo.png" width="140"></p>
+<p align="center"><img src="./DIVERSE_PnET_Calibration_Logo.png" width="220"></p>
 
 <h1 align="center">Calibration of PnET Succession for the <a src="https://diverseproject.uqo.ca">DIVERSE project</a></h1>
 
@@ -15,12 +15,11 @@
 
 - Install Docker Desktop on your computer (https://www.docker.com/products/docker-desktop/) or simply install Docker if you are using Linux.
 - Clone or download the contents of this repository on your computer.
-- Go to the folder Clean_Docker_LANDIS-II_7_AllExtensions_PnETCalibration in a terminal where you can call Docker (e.g. Windows Powershell)
+- Go to the folder `Clean_Docker_LANDIS-II_7_AllExtensions_PnETCalibration` in a terminal where you can call Docker (e.g. Windows Powershell)
 - Use `docker build -t landis_ii_v7_calibration_pnet ./` to build the docker image. This image contains everything needed to re-do the calibration I've done here in a replicable way (including Jupyter lab to see read and act on the Jupyter notebook), and of course, LANDIS-II. The `Dockerfile` file contain all of the commands used to build the image, and comments about what versions of the LANDIS-II extensions are installed.
-- Once the build is over, run `docker run -it -p 8888:8888 --mount type=bind,src="<CALIBRATION_FOLDER_PATH>",dst=/calibrationFolder landis_ii_v7_calibration_pnet` to open an interactive session with docker. Replace <CALIBRATION_FOLDER_PATH> with the full path to where the folder `Calibration_PnET_DIVERSE` is on your computer.
+- Once the build is over, run `docker run -it -p 8888:8888 --mount type=bind,src="<CALIBRATION_FOLDER_PATH>",dst=/calibrationFolder landis_ii_v7_calibration_pnet` to open an interactive session with docker. Replace `<CALIBRATION_FOLDER_PATH>` with the full path to where the folder `Calibration_PnET_DIVERSE` is on your computer.
 - Jupyter lab will automatically launch when launching the container. Simply click on the URL that it gives you (that will look like http://127.0.0.1:8888/lab?token=<LONG TOKEN>) or copy/paste it in your favorite web browser.
-- In Jupyter lab, use the navigation pannel on the left to go to /calibrationFolder to open the Jupyter notebook corresponding to the calibration you are interested in. You can normally run every cell without any compatibility issue from here. You can also find some `.jupyterlab-workspace` files that will contain a whole workspace that can make things more confortable/more similar to what I used in the calibration process. 
+- In Jupyter lab, use the navigation pannel on the left to go to `/calibrationFolder` to open the Jupyter notebook corresponding to the calibration you are interested in. You can normally run every cell without any compatibility issue from here. You can also find some `.jupyterlab-workspace` files that will contain a whole workspace that can make things more confortable/more similar to what I used in the calibration process. 
 - If you are using these files for your own calibration process, and if you need to add/update Python packages to the docker image to use them in the notebook, you can quit the jupyter lab instance and use `pip` to install them. However, these will be temporary. Editing the `Dockerfile` to add the `pip install ...` commands you need at the end and then re-building the image will make things permanent.
-- You can load the Jupyter workspace I used with the file CalibrationPnET.jupyterlab-workspace.
 
 
