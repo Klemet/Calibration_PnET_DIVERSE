@@ -1,0 +1,745 @@
+
+
+     FOREST VEGETATION SIMULATOR     VERSION ON (FS2022.4) -- ONTARIO                            RV:20221118  01-20-2025  19:48:37
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+                                                OPTIONS SELECTED BY INPUT
+
+KEYWORD FILE NAME: Hardwood.key
+----------------------------------------------------------------------------------------------------------------------------------
+KEYWORD    PARAMETERS:
+--------   -----------------------------------------------------------------------------------------------------------------------
+
+STDIDENT
+           STAND ID= Hardwood                                                                                                  
+
+
+            
+
+ECHOSUM    SUMMARY OUTPUT WILL BE WRITTEN TO FILE REFERENCED BY NUMBER  4
+
+SCREEN     SUMMARY TABLE WILL BE PRINTED TO DATA SET REFERENCE NUMBER     6 AS RUN PROGRESSES.
+
+
+            
+
+DATABASE   DATABASE KEYWORDS:
+
+DSNIN      INPUT DATA BASE IS FVSDataHardwood.db
+
+STANDSQL   STANDSQL COMMAND FOR INPUT DATA BASE: FVSDataHardwood.db
+           SELECT * FROM FVS_StandInit WHERE Stand_ID = 'LD3001'
+
+           STAND-LEVEL DATA BASE READ:
+           STAND_CN: LD3001
+           INV_YEAR:               2004
+           REGION:                    9
+           FOREST:                   15
+            COMPOSITE LOC:          915
+           LATITUDE:            49.0000
+           AGE:                     100
+           ASPECT:                  0.0
+           SLOPE:                  5.00
+           ELEVATION:             518.0
+           BASAL_AREA_FACTOR:      -1.0
+           INV_PLOT_SIZE:            1.
+           SITE_SPECIES:             MH MAPPED TO INTERNAL CODE: MH
+           SITE_INDEX:             12.8 FOR SPECIES: MH
+           END OF DATA BASE READ.
+
+TREESQL    TREESQL COMMAND FOR INPUT DATA BASE: FVSDataHardwood.db
+           SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'LD3001'
+           STAND_CN           WAS IGNORED
+           STAND_ID           WAS IGNORED
+           STANDPLOT_CN       WAS IGNORED
+           STANDPLOT_ID       WAS IGNORED
+           PLOT_ID            WAS USED
+           TREE_ID            WAS USED
+           TREE_COUNT         WAS USED
+           HISTORY            WAS USED
+           SPECIES            WAS USED
+           DBH                WAS USED
+           DG                 WAS USED
+           HT                 WAS USED
+           HTG                WAS USED
+           HTTOPK             WAS USED
+           CRRATIO            WAS USED
+           DAMAGE1            WAS USED
+           SEVERITY1          WAS USED
+           DAMAGE2            WAS USED
+           SEVERITY2          WAS USED
+           DAMAGE3            WAS USED
+           SEVERITY3          WAS USED
+           TREEVALUE          WAS USED
+           PRESCRIPTION       WAS USED
+           AGE                WAS USED
+           SLOPE              WAS USED
+           ASPECT             WAS USED
+           PV_CODE            WAS USED
+           TOPOCODE           WAS USED
+           SITEPREP           WAS USED
+           NUMBER ROWS PROCESSED:   94
+
+END        END OF DATA BASE OPTIONS.
+
+
+            
+
+TIMEINT    ALL CYCLES;  PERIOD LENGTH=  5
+
+NUMCYCLE   NUMBER OF CYCLES= 10
+
+
+            
+
+ESTAB      REGENERATION ESTABLISHMENT OPTIONS:
+           DATE OF DISTURBANCE= 2004
+
+STOCKADJ   PREDICTION OF NATURAL REGENERATION DISABLED.
+
+END        REGENERATION TALLY SEQUENCE SCHEDULED TO START IN 2004 
+           END OF ESTABLISHMENT KEYWORDS
+
+
+            
+           * do a thinning to trigger cutlist and atrtlist tables
+
+THINBBA    DATE/CYCLE= 2029; RESIDUAL=   18.00; PROPORTION OF SELECTED TREES REMOVED= 1.000
+           DBH OF REMOVED TREES WILL RANGE FROM   0.0 TO 999.0 CM, AND
+           HEIGHT OF REMOVED TREES WILL RANGE FROM   0.0 TO 999.0 M.
+
+
+            
+
+TREELIST   DATE/CYCLE=    0; DATA SET REFERENCE NUMBER =  3.; HEADING SUPPRESSION CODE = 0.
+           (0=WITH HEADING, OTHER VALUES=SUPPRESS HEADING).
+
+CUTLIST    DATE/CYCLE=    0; DATA SET REFERENCE NUMBER =  3.; HEADING SUPPRESSION CODE = 0.
+           (0=WITH HEADING, OTHER VALUES=SUPPRESS HEADING).
+
+
+            
+
+DATABASE   DATABASE KEYWORDS:
+
+DSNOUT     DSN FOR OUTPUT DATA BASE IS FVSOutHardwood.db
+
+SUMMARY    SUMMARY STATISTICS SENT TO DATABASE.
+
+CUTLIDB    CUTS INFORMATION FROM OUTPUT SENT TO SPECIFIED DATABASE.
+           SPECIES CODE OUTPUT FORMAT: NORMAL  
+           CREATE TEXT FILE REPORT: NO 
+
+TREELIDB   TREE INFORMATION FROM OUTPUT SENT TO SPECIFIED DATABASE.
+           CREATE TEXT FILE REPORT: NO 
+           SPECIES CODE OUTPUT FORMAT: NORMAL  
+
+END        END OF DATA BASE OPTIONS.
+
+
+            
+
+PROCESS    PROCESS THE STAND.
+----------------------------------------------------------------------------------------------------------------------------------
+
+                                                OPTIONS SELECTED BY DEFAULT
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ TREEFMT    (I4,T1,I7,F6.0,I1,A3,F5.1,F4.1,2F5.1,F5.1,I1,3(I2,I2),2I1,I2,    2I3,2I1,F3.0)  
+                                                                                           
+
+DESIGN     BASAL AREA FACTOR=   -1.0; INVERSE OF FIXED PLOT AREA=    1.0; BREAK DBH=   12.7
+           NUMBER OF PLOTS=     1; NON-STOCKABLE PLOTS=     0; STAND SAMPLING WEIGHT=     1.00000
+           PROPORTION OF STAND CONSIDERED STOCKABLE=  1.000
+
+           HABITAT TYPE IS NOT USED IN THIS VARIANT
+
+STDINFO    FOREST-LOCATION CODE=     915; HABITAT TYPE=  0; AGE=  100; ASPECT AZIMUTH IN DEGREES=   0.; SLOPE=   5.%
+           ELEVATION (M)=518.0; REFERENCE CODE=     
+
+ SPECIES      PJ      PS      RN      RP      PW      SW      SN      BF      SB      TA
+ SDI MAX     799.    799.   1279.   1279.   1279.   1013.   1279.   1279.    959.   1066.
+
+ SPECIES      CE      HE      SO      CR      AB      AR      CW      MV      MR      CB
+ SDI MAX    1066.   1279.    799.    799.    799.    799.    693.    799.    799.   1066.
+
+ SPECIES      EW      ES      ER      BY      BD      MH      MB      BE      AW      OW
+ SDI MAX     799.    799.    799.    799.    799.    799.    799.    799.    799.    853.
+
+ SPECIES      OP      OB      OC      OR      BO      PN      HB      HP      HU      PG
+ SDI MAX     853.    853.    853.    853.    853.    693.    853.    853.    853.    693.
+
+ SPECIES      PT      PB      BW      CH      BT      WB      IW      LB      NC      MM
+ SDI MAX     693.    799.    799.    799.    799.    853.    799.    799.    799.    799.
+
+ SPECIES      MS      MT      BB      CA      BH      DF      HT      ML      GB      SY
+ SDI MAX     799.    799.    799.    799.    799.    799.    906.    799.    746.    799.
+
+ SPECIES      CP      CC      PL      WI      WI      WI      SS      AM      JP      WP
+ SDI MAX     799.    799.    799.    799.    799.    799.    799.    799.    799.   1279.
+
+ SPECIES      SP      BP
+ SDI MAX    1013.    959.
+
+SITECODE   SITE INDEX INFORMATION:
+            PJ=   16.;  PS=   16.;  RN=   14.;  RP=   14.;  PW=   15.;  SW=   13.;  SN=   13.;  BF=   13.; SB=   13.
+            TA=   13.;  CE=   13.;  HE=   13.;  SO=   13.;  CR=   13.;  AB=   15.;  AR=   15.;  CW=   13.; MV=   13.
+            MR=   13.;  CB=   13.;  EW=   14.;  ES=   14.;  ER=   14.;  BY=   13.;  BD=   14.;  MH=   13.; MB=   13.
+            BE=   13.;  AW=   14.;  OW=   13.;  OP=   13.;  OB=   13.;  OC=   13.;  OR=   15.;  BO=   15.; PN=   15.
+            HB=   13.;  HP=   13.;  HU=   13.;  PG=   15.;  PT=   16.;  PB=   16.;  BW=   15.;  CH=   13.; BT=   13.
+            WB=   13.;  IW=   13.;  LB=   13.;  NC=   13.;  MM=   13.;  MS=   13.;  MT=   13.;  BB=   13.; CA=   13.
+            BH=   13.;  DF=   13.;  HT=   13.;  ML=   13.;  GB=   13.;  SY=   13.;  CP=   13.;  CC=   13.; PL=   13.
+            WI=   13.;  WI=   13.;  WI=   13.;  SS=   13.;  AM=   13.;  JP=   16.;  WP=   15.;  SP=   13.; BP=   13.
+           SITE SPECIES=MH CODE=   26
+
+ INVENTORY POINT CROSS REFERENCE (FVS SEQUENTIAL POINT NUMBER = POINT NUMBER AS ENTERED IN THE INPUT DATA):
+  1=       3
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+                                                     ACTIVITY SCHEDULE
+
+ STAND ID= Hardwood                      MGMT ID= NONE                                                                            
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ CYCLE  DATE  EXTENSION  KEYWORD   DATE  PARAMETERS:
+ -----  ----  ---------  --------  ----  ------------------------------------------------------------------------------------------
+
+   1   2004
+               ESTB     TALLY     2004    2004.0000
+               BASE     TREELIST  2004       3.0000     0.0000
+               BASE     CUTLIST   2004       3.0000     0.0000
+
+   2   2009
+               BASE     TREELIST  2009       3.0000     0.0000
+               BASE     CUTLIST   2009       3.0000     0.0000
+
+   3   2014
+               BASE     TREELIST  2014       3.0000     0.0000
+               BASE     CUTLIST   2014       3.0000     0.0000
+
+   4   2019
+               BASE     TREELIST  2019       3.0000     0.0000
+               BASE     CUTLIST   2019       3.0000     0.0000
+
+   5   2024
+               BASE     TREELIST  2024       3.0000     0.0000
+               BASE     CUTLIST   2024       3.0000     0.0000
+
+   6   2029
+               BASE     THINBBA   2029      18.0000     1.0000     0.0000   998.9980     0.0000   999.0000
+               BASE     TREELIST  2029       3.0000     0.0000
+               BASE     CUTLIST   2029       3.0000     0.0000
+
+   7   2034
+               BASE     TREELIST  2034       3.0000     0.0000
+               BASE     CUTLIST   2034       3.0000     0.0000
+
+   8   2039
+               BASE     TREELIST  2039       3.0000     0.0000
+               BASE     CUTLIST   2039       3.0000     0.0000
+
+   9   2044
+               BASE     TREELIST  2044       3.0000     0.0000
+               BASE     CUTLIST   2044       3.0000     0.0000
+
+  10   2049
+               BASE     TREELIST  2049       3.0000     0.0000
+               BASE     CUTLIST   2049       3.0000     0.0000
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+ CALIBRATION STATISTICS:
+
+
+                                                  BE    MH    IW
+                                                 ----  ----  ----
+
+ NUMBER OF RECORDS PER SPECIES                     37    50     7
+
+ NUMBER OF RECORDS CODED AS RECENT MORTALITY        0     0     0
+
+ NUMBER OF RECORDS WITH MISSING HEIGHTS            36    48     7
+
+ NUMBER OF RECORDS WITH BROKEN OR DEAD TOPS         0     0     0
+
+ NUMBER OF RECORDS WITH MISSING CROWN RATIOS       36    48     7
+
+ NUMBER OF RECORDS AVAILABLE FOR SCALING
+ THE DIAMETER INCREMENT MODEL                       0     0     0
+
+ RATIO OF STANDARD ERRORS
+ (INPUT DBH GROWTH DATA : MODEL)                 1.00  1.00  1.00
+
+ WEIGHT GIVEN TO THE INPUT GROWTH DATA WHEN
+ DBH GROWTH MODEL SCALE FACTORS WERE COMPUTED    0.00  0.00  0.00
+
+ INITIAL SCALE FACTORS FOR THE
+ DBH INCREMENT MODEL                             1.00  1.00  1.00
+
+ NUMBER OF RECORDS AVAILABLE FOR SCALING
+ THE SMALL TREE HEIGHT INCREMENT MODEL             0     0     0
+
+ INITIAL SCALE FACTORS FOR THE SMALL TREE
+ HEIGHT INCREMENT MODEL                          1.00  1.00  1.00
+
+ NUMBER OF RECORDS WITH MISTLETOE                   0     0     0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION ON (FS2022.4) -- ONTARIO                            RV:20221118  01-20-2025  19:48:37
+
+STAND ID: Hardwood                      MGMT ID: NONE     
+
+
+                                        STAND COMPOSITION (BASED ON STOCKABLE AREA)
+--------------------------------------------------------------------------------------------------------------------------
+                            PERCENTILE POINTS IN THE
+                     DISTRIBUTION OF STAND ATTRIBUTES BY DBH       TOTAL/HA
+        STAND       -----------------------------------------      OF STAND         DISTRIBUTION OF STAND ATTRIBUTES BY
+YEAR  ATTRIBUTES      10     30     50     70     90    100       ATTRIBUTES       SPECIES AND 3 USER-DEFINED SUBCLASSES
+----  -----------   ------ ------ ------ ------ ------ ------   --------------  ------------------------------------------
+                                 (DBH IN CM)
+
+
+
+2004  TREES           3.1    5.9    9.5   19.4   32.8    53.8     910. TREES     53.% MH1,  40.% BE1,   8.% IW1,   0.% ---
+      VOLUME:  
+        GTV          21.3   28.9   33.8   42.6   48.6    53.8     198. CU M      55.% MH1,  42.% BE1,   3.% IW1,   0.% ---
+        GMV          22.3   30.0   33.8   42.6   53.8    53.8     179. CU M      56.% MH1,  42.% BE1,   3.% IW1,   0.% ---
+        NMV          30.0   33.1   37.1   48.0   53.8    53.8     100. CU M      52.% MH1,  48.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      16.1   25.6   30.4   34.8   48.0    53.8       5. CU M/YR   51.% MH1,  47.% BE1,   2.% IW1,   0.% ---
+      MORTALITY      21.3   28.9   34.8   42.6   48.6    53.8       2. CU M/YR   51.% MH1,  45.% BE1,   4.% IW1,   0.% ---
+
+
+
+2009  TREES           3.4    6.2   10.6   20.1   34.7    55.8     863. TREES     53.% MH1,  40.% BE1,   8.% IW1,   0.% ---
+      VOLUME:  
+        GTV          21.7   30.2   35.2   44.0   50.7    55.8     214. CU M      54.% MH1,  43.% BE1,   3.% IW1,   0.% ---
+        GMV          23.3   30.5   35.4   44.2   50.7    55.8     194. CU M      56.% MH1,  42.% BE1,   2.% IW1,   0.% ---
+        NMV          30.5   34.6   38.9   44.7   55.1    55.8     111. CU M      51.% BE1,  49.% MH1,   0.% ---,   0.% ---
+
+
+      ACCRETION      16.6   25.5   31.8   36.7   50.0    55.8       5. CU M/YR   53.% MH1,  43.% BE1,   4.% IW1,   0.% ---
+      MORTALITY      21.8   30.5   36.3   44.2   50.7    55.8       3. CU M/YR   50.% MH1,  47.% BE1,   3.% IW1,   0.% ---
+
+
+
+2014  TREES           3.8    6.5   11.9   21.1   36.4    57.7     808. TREES     53.% MH1,  40.% BE1,   7.% IW1,   0.% ---
+      VOLUME:  
+        GTV          22.4   31.1   36.7   42.5   52.4    57.7     227. CU M      55.% MH1,  43.% BE1,   3.% IW1,   0.% ---
+        GMV          22.8   31.6   36.8   45.4   52.4    57.7     207. CU M      56.% MH1,  42.% BE1,   2.% IW1,   0.% ---
+        NMV          30.6   36.1   38.9   46.1   52.7    57.7     122. CU M      51.% BE1,  49.% MH1,   0.% ---,   0.% ---
+
+
+      ACCRETION      16.0   26.6   33.2   38.1   51.5    57.7       6. CU M/YR   58.% MH1,  40.% BE1,   1.% IW1,   0.% ---
+      MORTALITY      22.7   32.1   37.9   45.9   52.3    57.7       3. CU M/YR   49.% MH1,  48.% BE1,   3.% IW1,   0.% ---
+
+
+
+2019  TREES           4.1    6.9   13.2   22.7   38.2    59.3     759. TREES     53.% MH1,  40.% BE1,   7.% IW1,   0.% ---
+      VOLUME:  
+        GTV          22.7   31.7   38.2   43.4   54.2    59.3     241. CU M      55.% MH1,  42.% BE1,   3.% IW1,   0.% ---
+        GMV          23.7   32.2   38.2   44.1   54.3    59.3     219. CU M      57.% MH1,  41.% BE1,   2.% IW1,   0.% ---
+        NMV          30.4   35.8   39.5   47.1   54.5    59.3     135. CU M      51.% MH1,  49.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      17.9   28.2   34.0   39.4   53.0    59.3       5. CU M/YR   56.% MH1,  42.% BE1,   1.% IW1,   0.% ---
+      MORTALITY      23.6   33.6   39.4   47.5   53.7    59.3       3. CU M/YR   49.% BE1,  48.% MH1,   3.% IW1,   0.% ---
+
+
+
+2024  TREES           4.5    7.2   13.9   23.5   39.8    61.1     717. TREES     53.% MH1,  40.% BE1,   7.% IW1,   0.% ---
+      VOLUME:  
+        GTV          23.2   33.4   39.4   45.2   55.9    61.1     253. CU M      56.% MH1,  42.% BE1,   3.% IW1,   0.% ---
+        GMV          23.7   33.5   39.6   45.2   55.9    61.1     232. CU M      57.% MH1,  41.% BE1,   2.% IW1,   0.% ---
+        NMV          31.1   36.7   40.4   45.6   55.9    61.1     146. CU M      50.% MH1,  50.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      19.2   29.5   35.1   40.4   54.5    61.1       5. CU M/YR   58.% MH1,  41.% BE1,   1.% IW1,   0.% ---
+      MORTALITY      24.1   35.1   41.3   49.1   55.1    61.1       3. CU M/YR   51.% BE1,  47.% MH1,   2.% IW1,   0.% ---
+
+
+
+2029  TREES           4.8    7.5   15.1   25.0   41.1    62.4     681. TREES     53.% MH1,  40.% BE1,   7.% IW1,   0.% ---
+      VOLUME:  
+        GTV          23.7   33.8   40.9   46.6   57.4    62.4     265. CU M      56.% MH1,  41.% BE1,   3.% IW1,   0.% ---
+        GMV          24.3   34.1   41.0   46.7   57.4    62.4     243. CU M      58.% MH1,  40.% BE1,   2.% IW1,   0.% ---
+        NMV          32.1   37.6   41.8   47.0   57.4    62.4     151. CU M      51.% MH1,  49.% BE1,   0.% ---,   0.% ---
+
+
+      REMOVAL         4.5    7.1   10.8   19.2   30.8    36.1     572. TREES     53.% MH1,  39.% BE1,   9.% IW1,   0.% ---
+      VOLUME:  
+        GTV          18.6   24.0   30.6   32.5   35.0    36.1      95. CU M      62.% MH1,  31.% BE1,   7.% IW1,   0.% ---
+        GMV          20.0   24.6   30.6   32.7   35.0    36.1      84. CU M      63.% MH1,  31.% BE1,   6.% IW1,   0.% ---
+        NMV          30.5   31.6   32.7   33.8   35.6    36.1      84. CU M    
+
+
+      RESIDUAL       36.7   40.7   42.1   46.7   56.7    62.4     109. TREES     54.% MH1,  46.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      38.1   41.0   43.6   47.1   57.4    62.4       3. CU M/YR   57.% BE1,  43.% MH1,   0.% ---,   0.% ---
+      MORTALITY      38.6   41.6   46.1   55.7   61.5    62.4       1. CU M/YR   54.% MH1,  46.% BE1,   0.% ---,   0.% ---
+
+
+
+2034  TREES           0.3    0.3    0.3    0.3   40.9    64.3     842. TREES     51.% MH2,  26.% BE2,  10.% IW2,   7.% MH1
+      VOLUME:  
+        GTV          40.1   43.3   48.0   56.3   62.9    64.3     182. CU M      53.% MH1,  47.% BE1,   0.% ---,   0.% ---
+        GMV          39.9   43.3   48.2   56.9   63.0    64.3     169. CU M      54.% MH1,  46.% BE1,   0.% ---,   0.% ---
+        NMV          39.7   43.3   47.0   52.6   62.9    64.3     121. CU M      51.% MH1,  49.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      39.6   43.0   45.5   49.3   59.1    64.3       3. CU M/YR   56.% BE1,  44.% MH1,   0.% MH2,   0.% BE2
+      MORTALITY      45.4   48.4   48.9   50.8   52.6    64.3       1. CU M/YR   96.% BE1,   4.% MH1,   0.% ---,   0.% ---
+
+
+
+2039  TREES           0.4    0.4    0.7    0.9   42.6    65.9     829. TREES     52.% MH2,  27.% BE2,   9.% IW2,   7.% MH1
+      VOLUME:  
+        GTV          41.4   44.9   48.9   58.0   64.3    65.9     193. CU M      53.% MH1,  47.% BE1,   0.% MH2,   0.% BE2
+        GMV          41.4   44.9   48.9   58.4   64.4    65.9     180. CU M      55.% MH1,  45.% BE1,   0.% MH2,   0.% BE2
+        NMV          41.4   44.8   48.6   54.5   64.3    65.9     127. CU M      52.% MH1,  48.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      41.2   44.7   46.4   50.9   60.3    65.9       3. CU M/YR   54.% BE1,  46.% MH1,   0.% MH2,   0.% IW2
+      MORTALITY      46.2   49.9   50.7   51.4   54.5    65.9       1. CU M/YR   97.% BE1,   3.% MH1,   0.% IW2,   0.% MH2
+
+
+
+2044  TREES           0.6    0.6    0.9    1.0   43.1    67.4     818. TREES     52.% MH2,  27.% BE2,   8.% IW2,   7.% MH1
+      VOLUME:  
+        GTV          43.0   46.5   50.6   59.1   65.7    67.4     201. CU M      54.% MH1,  46.% BE1,   0.% MH2,   0.% BE2
+        GMV          42.9   46.5   50.6   59.7   65.7    67.4     188. CU M      55.% MH1,  45.% BE1,   0.% MH2,   0.% BE2
+        NMV          42.6   46.5   49.2   56.4   65.7    67.4     131. CU M      53.% MH1,  47.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      42.4   46.1   47.9   52.9   61.8    67.4       3. CU M/YR   52.% BE1,  48.% MH1,   0.% MH2,   0.% IW2
+      MORTALITY      47.2   50.6   52.3   53.1   56.1    67.4       2. CU M/YR   97.% BE1,   3.% MH1,   0.% IW2,   0.% MH2
+
+
+
+2049  TREES           0.7    0.7    1.1    1.2   44.5    68.8     806. TREES     53.% MH2,  27.% BE2,   7.% IW2,   7.% MH1
+      VOLUME:  
+        GTV          44.2   48.4   50.9   60.8   67.2    68.8     206. CU M      55.% MH1,  45.% BE1,   0.% MH2,   0.% BE2
+        GMV          44.2   48.4   50.9   61.3   67.2    68.8     193. CU M      57.% MH1,  43.% BE1,   0.% MH2,   0.% BE2
+        NMV          43.9   48.1   50.8   58.8   67.0    68.8     133. CU M      55.% MH1,  45.% BE1,   0.% ---,   0.% ---
+
+
+      ACCRETION      43.8   47.4   49.2   54.3   63.2    68.8       2. CU M/YR   50.% MH1,  50.% BE1,   0.% MH2,   0.% IW2
+      MORTALITY      48.4   50.5   53.4   54.3   57.9    68.8       2. CU M/YR   97.% BE1,   3.% MH1,   0.% IW2,   0.% MH2
+
+
+
+2054  TREES           0.9    0.9    1.3    1.4   45.2    70.1     794. TREES     53.% MH2,  28.% BE2,   7.% MH1,   7.% IW2
+      VOLUME:  
+        GTV          45.2   49.6   52.2   62.5   68.7    70.1     207. CU M      58.% MH1,  42.% BE1,   0.% MH2,   0.% BE2
+        GMV          45.2   49.6   52.6   62.6   68.7    70.1     194. CU M      59.% MH1,  41.% BE1,   0.% MH2,   0.% BE2
+        NMV          45.2   49.5   51.8   61.8   68.7    70.1     133. CU M      58.% MH1,  42.% BE1,   0.% ---,   0.% ---
+
+
+     FOREST VEGETATION SIMULATOR     VERSION ON (FS2022.4) -- ONTARIO                            RV:20221118  01-20-2025  19:48:38
+
+STAND ID: Hardwood                      MGMT ID: NONE     
+
+
+------------------------------------------------------------------------------------------------------------------------------
+                     ATTRIBUTES OF SELECTED SAMPLE TREES                 ADDITIONAL STAND ATTRIBUTES (BASED ON STOCKABLE AREA)
+      -----------------------------------------------------------------  -----------------------------------------------------
+      INITIAL                             LIVE  PAST DBH   BASAL  TREES         QUADRATIC    TREES     BASAL    TOP HT       
+      TREE/HA              DBH   HEIGHT  CROWN    GROWTH    AREA    PER  STAND   MEAN DBH      PER      AREA   LARGEST        
+YEAR    %TILE SPECIES     (CM)      (M)  RATIO      (CM)   %TILE     HA    AGE       (CM)       HA   (M2/HA)     40/HA            
+----  ------- ------- -------- -------- ------ --------- ------- ------  -----  ---------   ------ --------- --------- -------
+
+2004                                          ( 10 YRS)
+
+        10     BE1       3.10     4.57    31     2.49      0.2   10.00
+        30     BE1       5.90     7.85    38     2.19      1.3   10.00
+        50     MH1       9.50    11.72    43     2.82      4.3   10.00
+        70     MH1      19.40    17.32    47     3.02     15.2   10.00
+        90     BE1      32.80    20.47    48     3.47     52.0   10.00
+       100     MH1      53.80    23.36    48     2.62    100.0   10.00
+                                                                         100      18.9      910.      26.       21.7
+
+2009 **                                       (  5 YRS)
+
+        10     BE1       3.44     4.98    32     0.32      0.2    5.72
+        30     MH1       6.23     8.61    38     0.19      1.3    5.68
+        50     MH1      10.60    12.39    43     0.94      4.4    5.72
+        70     IW1      20.12    13.49    36     0.58     16.0    2.36
+        90     MH1      34.74    21.38    48     1.52     55.1    5.72
+       100     MH1      55.78    23.70    48     1.88    100.0    2.38
+                                                                         105      20.0      863.      27.       22.1
+
+2014 **                                       (  5 YRS)
+
+        10     BE1       3.77     5.38    32     0.31      0.2    1.35
+        30     MH1       6.52     8.92    38     0.21      1.5    1.33
+        50     MH1      11.90    13.19    44     1.12      4.6    3.23
+        70     MH1      21.13    18.22    47     1.44     16.7    1.35
+        90     BE1      36.38    21.83    47     1.64     55.2    3.23
+       100     MH1      57.74    24.03    47     1.87    100.0    0.56
+                                                                         110      21.1      808.      28.       22.6
+
+2019 **                                       (  5 YRS)
+
+        10     BE1       4.12     5.80    33     0.33      0.3    1.27
+        30     MH1       6.93     9.35    38     0.18      1.5    1.26
+        50     MH1      13.17    14.11    44     1.10      4.9    3.05
+        70     IW1      22.69    13.90    36     0.48     17.6    0.75
+        90     MH1      38.16    22.30    47     1.68     56.7    3.05
+       100     MH1      59.32    24.36    47     1.77    100.0    1.27
+                                                                         115      22.2      759.      29.       23.0
+
+2024 **                                       (  5 YRS)
+
+        10     BE1       4.47     6.22    34     0.34      0.3    0.72
+        30     MH1       7.20     9.61    38     0.18      1.6    2.87
+        50     IW1      13.95    12.12    34     0.45      5.2    1.13
+        70     IW1      23.46    13.94    36     0.43     18.4    1.19
+        90     BE1      39.75    22.99    47     1.28     57.0    1.20
+       100     MH1      61.11    24.68    47     1.71    100.0    1.20
+                                                                         120      23.2      717.      30.       23.4
+
+2029                                          (  5 YRS)
+
+        10     BE1       4.84     6.66    34     0.35      0.3    0.69
+        30     MH1       7.39     9.80    38     0.16      1.5    2.73
+        50     IW1      14.35    12.25    34     0.38      5.1    1.07
+        70     IW1      23.94    13.98    36     0.45     17.8    1.13
+        90     BE1      41.24    23.51    47     1.40     59.0    1.15
+       100     MH1      62.39    24.97    47     1.22    100.0    1.15
+                                                                         125      24.2      681.      31.       23.8
+                                                                     RESIDUAL:    45.8      109.      18.       23.8
+
+2034 **                                       (  5 YRS)
+
+        10     MH2       0.25     1.37    67     0.00      0.0    1.67
+        30     MH2       0.25     1.43    67     0.00      0.0    0.83
+        50     BE2       0.25     1.37    67     0.00      0.0    0.14
+        70     IW2       0.25     1.49    67     0.00      0.0    1.76
+        90     BE1      40.91    23.65    48     2.10     14.6    0.28
+       100     MH1      64.33    25.12    47     1.86    100.0    1.13
+                                                                         130      17.0      842.      19.       24.0
+
+2039                                          (  5 YRS)
+
+        10     MH2       0.74     1.53    64     0.16      0.0    1.67
+        30     MH2       0.80     1.60    64     0.16      0.1    0.83
+        50     BE2       0.41     1.42    64     0.15      0.0    0.14
+        70     IW2       0.41     1.52    64     0.15      0.0    1.58
+        90     BE1      43.18    24.00    49     2.13     18.1    0.28
+       100     MH1      65.92    25.27    47     1.51    100.0    1.13
+                                                                         135      17.6      829.      20.       24.2
+
+2044                                          (  5 YRS)
+
+        10     MH2       0.93     1.70    61     0.14      0.1    1.66
+        30     MH2       0.98     1.78    61     0.14      0.1    0.82
+        50     BE2       0.56     1.48    61     0.14      0.0    0.14
+        70     IW2       0.56     1.56    61     0.14      0.0    1.44
+        90     BE1      45.04    24.30    50     1.76     16.7    0.28
+       100     MH1      67.41    25.41    47     1.43    100.0    1.12
+                                                                         140      18.0      818.      21.       24.4
+
+2049                                          (  5 YRS)
+
+        10     MH2       1.10     1.85    58     0.14      0.1    1.65
+        30     MH2       1.15     1.94    58     0.14      0.1    0.82
+        50     BE2       0.71     1.52    58     0.14      0.0    0.14
+        70     IW2       0.71     1.59    58     0.14      0.0    1.34
+        90     BE1      46.80    24.57    50     1.65     21.1    0.27
+       100     MH1      68.81    25.55    47     1.35    100.0    1.12
+                                                                         145      18.4      806.      21.       24.5
+
+2054                                          (  5 YRS)
+
+        10     MH2       1.27     2.04    55     0.13      0.1    1.64
+        30     MH2       1.32     2.11    55     0.13      0.2    0.81
+        50     BE2       0.86     1.58    55     0.14      0.0    0.14
+        70     IW2       0.86     1.63    55     0.14      0.0    1.28
+        90     BE1      48.50    24.83    50     1.60     23.7    0.26
+       100     MH1      70.09    25.68    47     1.23    100.0    1.11
+                                                                         150      18.6      794.      22.       23.6
+
+** NOTE:  DUE TO HARVEST, COMPRESSION, OR REGENERATION ESTABLISHMENT, NEW SAMPLE TREES WERE SELECTED.
+
+
+     FOREST VEGETATION SIMULATOR     VERSION ON (FS2022.4) -- ONTARIO                            RV:20221118  01-20-2025  19:48:38
+
+STAND ID: Hardwood                      MGMT ID: NONE    
+
+
+
+                                SUMMARY STATISTICS (PER HA OR STAND BASED ON TOTAL   STAND AREA)
+--------------------------------------------------------------------------------------------------------------------------------------
+               START OF SIMULATION PERIOD                     REMOVALS             AFTER TREATMENT    GROWTH THIS PERIOD
+         --------------------------------------------- ----------------------- ---------------------  ------------------    MAI ------
+         NO OF              TOP        GTV   GMV   NMV NO OF   GTV   GMV   NMV              TOP  RES PERIOD  ACCRE MORT     GTV FOR SS
+YEAR AGE TREES  BA  SDI CCF  HT  QMD  CU M  CU M  CU M TREES  CU M  CU M  CU M  BA  SDI CCF  HT  QMD  YEARS   PER  YEAR    CU M TYP ZT
+---- --- ----- --- ---- --- --- ---- ----- ----- ----- ----- ----- ----- ----- --- ---- --- --- ----  ------ ---- -----   ----- ------
+2004 100   909  25  568 194  21 18.9   198   178   100     0     0     0     0  25  568 194  21 18.9       5    5     1     2.0 801 12
+2009 105   862  27  590 201  22 20.0   213   193   111     0     0     0     0  27  590 201  22 20.0       5    5     2     2.0 801 11
+2014 110   808  28  600 203  22 21.1   227   206   122     0     0     0     0  28  600 203  22 21.1       5    5     2     2.1 801 11
+2019 115   758  29  610 206  22 22.2   240   219   135     0     0     0     0  29  610 206  22 22.2       5    5     2     2.1 801 11
+2024 120   716  30  620 209  23 23.2   253   231   145     0     0     0     0  30  620 209  23 23.2       5    5     2     2.1 801 11
+2029 125   679  31  627 212  23 24.2   265   243   151   570    94    84    37  17  281  97  23 45.8       5    2     0     2.1 801 11
+2034 130   842  19  439 101  24 17.0   181   169   120     0     0     0     0  19  439 101  24 17.0       5    2     0     2.1 801 12
+2039 135   830  19  459 104  24 17.6   192   179   126     0     0     0     0  19  459 104  24 17.6       5    2     1     2.1 801 12
+2044 140   817  20  471 107  24 18.0   201   187   131     0     0     0     0  20  471 107  24 18.0       5    2     1     2.1 801 12
+2049 145   805  21  479 109  24 18.4   206   192   133     0     0     0     0  21  479 109  24 18.4       5    2     2     2.1 801 12
+2054 150   793  21  481 109  23 18.6   207   194   132     0     0     0     0  21  481 109  23 18.6       0    0     0     2.0 801 12
+
+NOTE: 11 LINES OF SUMMARY DATA HAVE BEEN WRITTEN TO THE FILE REFERENCED BY LOGICAL UNIT  4
+
+
+
+
+                                                     ACTIVITY SUMMARY 
+
+ STAND ID= Hardwood                      MGMT ID= NONE                                                                            
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ CYCLE  DATE  EXTENSION  KEYWORD   DATE  ACTIVITY DISPOSITION  PARAMETERS:
+ -----  ----  ---------  --------  ----  --------------------  --------------------------------------------------------------------
+
+   1   2004
+               BASE     CUTLIST   2004  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2004  DONE IN 2008            2004.0000
+               BASE     TREELIST  2004  DONE IN 2008               3.0000     0.0000
+
+   2   2009
+               BASE     CUTLIST   2009  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2013  DONE IN 2013            2004.0000     2.0000
+               BASE     TREELIST  2009  DONE IN 2013               3.0000     0.0000
+
+   3   2014
+               BASE     CUTLIST   2014  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2018  DONE IN 2018            2004.0000     3.0000
+               BASE     TREELIST  2014  DONE IN 2018               3.0000     0.0000
+
+   4   2019
+               BASE     CUTLIST   2019  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2023  DONE IN 2023            2004.0000     4.0000
+               BASE     TREELIST  2019  DONE IN 2023               3.0000     0.0000
+
+   5   2024
+               BASE     CUTLIST   2024  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2024  DONE IN 2028               3.0000     0.0000
+
+   6   2029
+               BASE     THINBBA   2029  DONE IN 2029              18.0000     1.0000     0.0000   998.9980     0.0000   999.0000
+               BASE     CUTLIST   2029  DONE IN 2029               3.0000     0.0000
+               BASE     TREELIST  2029  DONE IN 2033               3.0000     0.0000
+
+   7   2034
+               BASE     CUTLIST   2034  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2034  DONE IN 2038               3.0000     0.0000
+
+   8   2039
+               BASE     CUTLIST   2039  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2039  DONE IN 2043               3.0000     0.0000
+
+   9   2044
+               BASE     CUTLIST   2044  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2044  DONE IN 2048               3.0000     0.0000
+
+  10   2049
+               BASE     CUTLIST   2049  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2049  DONE IN 2053               3.0000     0.0000
+----------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+     FOREST VEGETATION SIMULATOR     VERSION ON (FS2022.4) -- ONTARIO                            RV:20221118  01-20-2025  19:48:37
+ 
+----------------------------------------------------------------------------
+                REGENERATION ESTABLISHMENT MODEL VERSION 2.0
+        STAND ID: Hardwood                       MANAGEMENT CODE: NONE
+----------------------------------------------------------------------------
+ 
+  SITE PREP SUMMARY
+-------------------
+PREP:NONE MECH BURN
+YEAR:2004 2004 2004
+ PCT: 100    0    0
+ 
+ TALLY 1 AT  5 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2008.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 CM DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /HA   TOTAL     /HA   TOTAL HEIGHT      /HA   TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+        MH      0.    0.        0.    0.   0.0        112.   32.   MH
+        BE      0.    0.        0.    0.   0.0        229.   66.   BE
+        IW      0.    0.        0.    0.   0.0          9.    3.   IW
+             -----           -----                   -----
+                0.              0.                    349.
+ 
+ 
+ TALLY 2 AT 10 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2013.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 CM DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /HA   TOTAL     /HA   TOTAL HEIGHT      /HA   TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+        MH      0.    0.        0.    0.   0.0        103.   33.   MH
+        BE      0.    0.        0.    0.   0.0        202.   65.   BE
+        IW      0.    0.        0.    0.   0.0          7.    2.   IW
+             -----           -----                   -----
+                0.              0.                    313.
+ 
+ 
+ TALLY 3 AT 15 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2018.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 CM DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /HA   TOTAL     /HA   TOTAL HEIGHT      /HA   TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+        MH      0.    0.        0.    0.   0.0         95.   36.   MH
+        BE      0.    0.        0.    0.   0.0        169.   64.   BE
+             -----           -----                   -----
+                0.              0.                    265.
+ 
+ 
+ TALLY 4 AT 20 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2023.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 CM DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /HA   TOTAL     /HA   TOTAL HEIGHT      /HA   TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+        MH      0.    0.        0.    0.   0.0         88.   37.   MH
+        BE      0.    0.        0.    0.   0.0        153.   63.   BE
+             -----           -----                   -----
+                0.              0.                    241.
+ 
+------------------------------------------------------
+ REGENERATION FROM STUMP & ROOT SPROUTS
+ 
+ STAND ID: Hardwood                    MANAGEMENT CODE: NONE  YEAR:  2033
+ 
+             TREES  AVERAGE
+    SPECIES  /HA    HEIGHT
+    -------  -----  -------
+       MH     433.     1.4
+       BE     221.     1.4
+       IW      80.     1.4
+             -----
+              734.
+------------------------------------------------------

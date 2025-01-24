@@ -1,0 +1,1902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Calibration test &#8212; Calibration of PnET Succession for the DIVERSE project</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'StartingCalibrationTest/StartingCalibrationTest';</script>
+    <link rel="canonical" href="https://klemet.github.io/Calibration_PnET_DIVERSE/intro.html/StartingCalibrationTest/StartingCalibrationTest.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-light" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-dark pst-js-only" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    👋 Welcome !
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Intro_CalibrationTest.html">Calibration test</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.Loading_functions.html">Loading functions and packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.Test_sim_functions.html">Making a test simulation to get used to the functions</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE/issues/new?title=Issue%20on%20page%20%2FStartingCalibrationTest/StartingCalibrationTest.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/StartingCalibrationTest/StartingCalibrationTest.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Calibration test</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-calibration-work">Pre-calibration work</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-functions-and-packages">Loading functions and packages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#making-a-test-simulation-to-get-used-to-the-functions">Making a test simulation to get used to the functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-species-parameters">Initial species parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-parameter-values">Sources of parameter values</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Initial species parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-parameters">Generic parameters</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-calibration-landscape-ecoregions-initial-communities-climate-etc">Setting up the calibration landscape (ecoregions, initial communities, climate etc.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-landis-ii-parameter-files-for-the-calibration-with-initial-parameters-and-calibration-landscape">Setting up the LANDIS-II parameter files for the calibration (with initial parameters and calibration landscape)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration">Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-calibration-step-monoculture-in-ideal-condition">1st calibration step : Monoculture in ideal condition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibrating-abies-balsamea-in-monoculture">Calibrating <em>Abies balsamea</em> in monoculture</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="calibration-test">
+<h1>Calibration test<a class="headerlink" href="#calibration-test" title="Link to this heading">#</a></h1>
+<p>Using the first version of the <a class="reference external" href="https://klemet.github.io/DIVERSE_LANDIS-II_Parameterization/#Plan%20for%20a%20new%20calibration%20of%20PnET%20in%20Canada">calibration plan described in the documentation</a>, I will attempt here to calibrate a couple of species in a region of Quebec already used for simulations in the DIVERSE project based on the calibration tips of Eric Gustafson hilighted in <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+<p>To run this Jupyter Notebook properly, you need to run it through the docker image of the repository (see <a class="reference external" href="http://README.md">README.md</a>).</p>
+</section>
+<section id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Link to this heading">#</a></h2>
+<p>To calibrate 3 species whose parameters are already proposed in the <a class="reference external" href="https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/blob/master/deploy/docs/LANDIS-II%20PnET-Succession%20v5.1%20User%20Guide.pdf">PnET Succession v5.1 User Guide</a>, but which are found in Quebec :</p>
+<ul class="simple">
+<li><p><em>Abies balsamea</em>, the Balsam Fir</p></li>
+<li><p><em>Acer rubrum</em>, the Red Maple</p></li>
+<li><p><em>Picea mariana</em>, the Black Spruce.</p></li>
+</ul>
+</section>
+<section id="pre-calibration-work">
+<h2>Pre-calibration work<a class="headerlink" href="#pre-calibration-work" title="Link to this heading">#</a></h2>
+<section id="loading-functions-and-packages">
+<h3>Loading functions and packages<a class="headerlink" href="#loading-functions-and-packages" title="Link to this heading">#</a></h3>
+<p>The following code sections are used to load the different functions I wrote to be able to parse, edit, write parameter for small LANDIS-II PnET simulations; but also to read the outputs and plot them. <strong>These functions are essential to automatise the calibration process used in this repository</strong>, so be sure to load them.</p>
+<p>The functions are written in the file <code class="docutils literal notranslate"><span class="pre">functionsForCalibration.py</span></code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you’re missing a package in the docker image that you want to use, add it to <code class="docutils literal notranslate"><span class="pre">Clean_Docker_LANDIS-II_7_AllExtensions_PnETCalibration\files_to_help_compilation\pip_requirements.txt</span></code> and rebuild this docker image.</p>
+<p>You can also let pip choose the right version and then “freeze” it by installing the package in the interactive console of the docker image (just stop jupyter lab beforehand), then use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">MyPackageName</span></code>, then use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">freeze</span></code> to output the package list with the version names. You can then just copy paste the output of <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">freeze</span></code> in the <code class="docutils literal notranslate"><span class="pre">pip_requirements.txt</span></code> file and rebuild the image.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>All functions have a docstring that you can read with</strong> <code class="docutils literal notranslate"><span class="pre">help(&lt;Name</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">function&gt;)</span></code> ! Use it if you’re lost.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading functions</span>
+<span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="making-a-test-simulation-to-get-used-to-the-functions">
+<h3>Making a test simulation to get used to the functions<a class="headerlink" href="#making-a-test-simulation-to-get-used-to-the-functions" title="Link to this heading">#</a></h3>
+<p>If you want to get used to the functions loaded in the previous section, so you can test them here.</p>
+<p>This section :</p>
+<ul class="simple">
+<li><p>Loads all of the parameters from a very simple one-cell simulation folder taken from the GitHub repository of the PnET Succession Extension (in <code class="docutils literal notranslate"><span class="pre">StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim</span></code>) into Python objects</p></li>
+<li><p>Writes all of these parameters from the Python objects and back into LANDIS-II parameters files in <code class="docutils literal notranslate"><span class="pre">/tmp/TestScenarioPnET</span></code>, also copying the files that are not parsed (e.g. raster files) in the process.</p></li>
+<li><p>Runs the simulation (using the LANDIS-II installation that is inside this docker image)</p></li>
+<li><p>Parses the outputs of the simulation (the rasters made with PnEt Output extension and the <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files made with the PnET Site Output extension)</p></li>
+<li><p>Plot the outputs</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you don’t want to test these functions, simply leave this section collapsed and go to <a class="reference internal" href="#Initial-species-parameters"><span class="xref myst">the next section</span></a>.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading all of the parameters from the simple one-cell sim </span>
+<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">Here is the big dictionnary with all of the parameters in it :</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Loading all of the parameters from the simple one-cell sim </span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;/calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="nn">      3 print(&quot;\n\n\nHere is the big dictionnary with all of the parameters</span> in <span class="ni">it :\n\n&quot; + str</span><span class="nt">(PnETGitHub_OneCellSim))</span>
+
+<span class="nn">File /calibrationFolder/calibrationJupyterBook/StartingCalibrationTest/functionsForCalibration.py:477,</span> in <span class="ni">parse_All_LANDIS_PnET_Files</span><span class="nt">(folder_path)</span>
+<span class="g g-Whitespace">    </span><span class="mi">474</span> <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Initialize an empty dictionary to store results</span>
+<span class="g g-Whitespace">    </span><span class="mi">476</span> <span class="c1"># List all files in the specified directory</span>
+<span class="ne">--&gt; </span><span class="mi">477</span> <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder_path</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">478</span>     <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">479</span>     <span class="c1"># Check if the file has a .txt extension</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testing the writing of all the files in a test folder</span>
+<span class="n">testScenarioPath</span> <span class="o">=</span> <span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span>
+
+<span class="c1"># We create the folder</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+
+<span class="n">write_all_LANDIS_files</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">,</span>
+                       <span class="n">PnETGitHub_OneCellSim</span><span class="p">,</span>
+                       <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : Additional file : !Run_scenario.bat
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : Climate file : climate.txt
+Found : Disturbance Reduction File : disturbance_reductions.txt
+Found : Additional file : ecoregion.img
+Found : Main ecoregions file : ecoregion.txt
+Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Additional file : initial-communities.img
+Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
+Found : Additional file : Metadata
+Found : Additional file : Metadata\Output-PnET
+Found : Additional file : Metadata\Output-PnET\CohortBalance.csv_Metadata.xml
+Found : Additional file : Metadata\Output-PnET\Output-PnET.xml
+Found : Additional file : output
+Found : PnET generic parameter file : PnETGenericParameters.txt
+Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
+Found : Main PnET parameter file : pnetsuccession.txt
+Found : Main scenario file : scenario.txt
+Found : Main species parameter file : species.txt
+Found : PnET species parameters file : SpeciesParameters.txt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running the simulation - and priting the log</span>
+<span class="n">runLANDIS_Simulation</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;scenario.txt&quot;</span><span class="p">,</span>
+                    <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LANDIS-II 7.0 (7)
+
+Loading scenario from file &quot;scenario.txt&quot; ...
+Initialized random number generator with user-supplied seed = 1,111
+Loading species data from file &quot;species.txt&quot; ...
+Loading ecoregions from file &quot;ecoregion.txt&quot; ...
+Initializing landscape from ecoregions map &quot;ecoregion.img&quot; ...
+Cell length = 30 m, cell area = 0.09 ha
+Map dimensions: 17 rows by 17 columns = 289 cells
+Sites: 1 active (0.3 %), 288 inactive (99.7 %)
+  reading in ecoregion from ecoregion.img 
+Loading PnET-Succession extension ...
+Initializing PnET-Succession version 5.1.0.0
+   Registering Data:  Succession.WoodyDebris.
+   Registering Data:  Succession.Litter.
+   Registering Data:  Succession.FineFuels.
+   Registering Data:  Succession.PressureHead.
+   Registering Data:  Succession.ExtremeMinTemp.
+   Registering Data:  Succession.PET.
+   Registering Data:  Succession.CWD.
+   Registering Data:  Succession.SmolderConsumption.
+   Registering Data:  Succession.FlamingConsumption.
+   Registering Data:  Succession.MonthlyPressureHead.
+   Registering Data:  Succession.MonthlySoilTemp.
+   Registering Data:  Succession.SoilFieldCapacity.
+  MaxParallelThreads = 1.
+  No ClimateConfigFile provided. Using climate files in ecoregion parameters: EcoregionParameters.txt.
+Eco	Soiltype	WiltPnt		FieldCap	FC-WP		Porosity
+eco1	SAND		0.03999865	0.09784552	0.05784687	0.454455
+Using PAR units of umol/m2/s.
+   Registering Data:  TimeOfLastSuccession.
+   Registering Data:  Shade.
+   Creating Dispersal Neighborhood List.
+   Dispersal:  NeighborRadius=3015, CellLength=30, numCellRadius=100
+Spinning up biomass or reading from maps...
+   Loading initial communities from file &quot;initial-communities.txt&quot; ...
+   Reading initial communities map &quot;initial-communities.img&quot; ...
+   Registering Data:  Succession.BiomassCohorts.ime 0s
+   Registering Data:  Succession.AgeCohorts.
+   Registering Data:  Succession.CohortsPnET.
+Loading Output-PnET extension ...
+   Generating summary table...
+Using the following extensions ...
+   Extension Name            Extension Filename       
+   --------------            ------------------       
+   PnET-Succession           pnetsuccession.txt       
+   Output-PnET               biomass.outputPnET.txt   
+
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-0.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-0.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-0.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-0.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-0.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-0.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-0.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-0.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-0.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-0.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-0.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-0.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-0.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-0.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-0.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-0.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-0.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-0.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-0.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-0.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-0.img ...
+dataset created: output/NSC/querrubr/NSC-0.img
+   Writing pinubank map to output/NSC/pinubank/NSC-0.img ...
+dataset created: output/NSC/pinubank/NSC-0.img
+dataset created: output/NSC/AllSpecies/NSC-0.img
+Updating output variable: PET
+dataset created: output/PET//PET-0.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-0.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-0.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-0.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-0.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-0.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-0.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-0.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-0.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-0.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-0.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-0.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-0.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-0.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-0.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-0.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-0.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-0.img
+Updating output variable: SpeciesEstablishment
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-0.img
+Updating output variable: Water
+dataset created: output/Water/Water-0.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-0.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-0.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-0.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 10
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Cohort reproduction ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-10.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-10.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-10.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-10.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-10.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-10.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-10.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-10.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-10.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-10.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-10.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-10.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-10.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-10.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-10.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-10.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-10.img ...
+dataset created: output/NSC/querrubr/NSC-10.img
+   Writing pinubank map to output/NSC/pinubank/NSC-10.img ...
+dataset created: output/NSC/pinubank/NSC-10.img
+dataset created: output/NSC/AllSpecies/NSC-10.img
+Updating output variable: PET
+dataset created: output/PET//PET-10.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-10.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-10.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-10.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-10.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-10.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-10.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-10.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-10.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-10.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-10.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-10.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-10.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-10.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-10.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-10.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-10.img ...
+dataset created: output/Establishment/querrubr/Establishment-10.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-10.img ...
+dataset created: output/Establishment/pinubank/Establishment-10.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-10.img
+Updating output variable: Water
+dataset created: output/Water/Water-10.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-10.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-10.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-10.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 20
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Cohort reproduction ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-20.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-20.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-20.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-20.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-20.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-20.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-20.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-20.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-20.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-20.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-20.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-20.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-20.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-20.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-20.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-20.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-20.img ...
+dataset created: output/NSC/querrubr/NSC-20.img
+   Writing pinubank map to output/NSC/pinubank/NSC-20.img ...
+dataset created: output/NSC/pinubank/NSC-20.img
+dataset created: output/NSC/AllSpecies/NSC-20.img
+Updating output variable: PET
+dataset created: output/PET//PET-20.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-20.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-20.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-20.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-20.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-20.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-20.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-20.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-20.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-20.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-20.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-20.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-20.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-20.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-20.img ...
+dataset created: output/Establishment/querrubr/Establishment-20.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-20.img ...
+dataset created: output/Establishment/pinubank/Establishment-20.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-20.img
+Updating output variable: Water
+dataset created: output/Water/Water-20.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-20.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-20.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-20.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 30
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Cohort reproduction ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-30.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-30.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-30.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-30.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-30.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-30.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-30.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-30.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-30.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-30.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-30.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-30.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-30.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-30.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-30.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-30.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-30.img ...
+dataset created: output/NSC/querrubr/NSC-30.img
+   Writing pinubank map to output/NSC/pinubank/NSC-30.img ...
+dataset created: output/NSC/pinubank/NSC-30.img
+dataset created: output/NSC/AllSpecies/NSC-30.img
+Updating output variable: PET
+dataset created: output/PET//PET-30.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-30.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-30.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-30.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-30.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-30.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-30.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-30.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-30.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-30.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-30.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-30.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-30.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-30.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-30.img ...
+dataset created: output/Establishment/querrubr/Establishment-30.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-30.img ...
+dataset created: output/Establishment/pinubank/Establishment-30.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-30.img
+Updating output variable: Water
+dataset created: output/Water/Water-30.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-30.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-30.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-30.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 40
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Cohort reproduction ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-40.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-40.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-40.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-40.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-40.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-40.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-40.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-40.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-40.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-40.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-40.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-40.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-40.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-40.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-40.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-40.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-40.img ...
+dataset created: output/NSC/querrubr/NSC-40.img
+   Writing pinubank map to output/NSC/pinubank/NSC-40.img ...
+dataset created: output/NSC/pinubank/NSC-40.img
+dataset created: output/NSC/AllSpecies/NSC-40.img
+Updating output variable: PET
+dataset created: output/PET//PET-40.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-40.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-40.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-40.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-40.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-40.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-40.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-40.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-40.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-40.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-40.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-40.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-40.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-40.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-40.img ...
+dataset created: output/Establishment/querrubr/Establishment-40.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-40.img ...
+dataset created: output/Establishment/pinubank/Establishment-40.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-40.img
+Updating output variable: Water
+dataset created: output/Water/Water-40.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-40.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-40.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-40.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 50
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Cohort reproduction ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+          |----|----|----|----|----|----|----|----|----|----|
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-50.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-50.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-50.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-50.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-50.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-50.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-50.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-50.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-50.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-50.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-50.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-50.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-50.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-50.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-50.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-50.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-50.img ...
+dataset created: output/NSC/querrubr/NSC-50.img
+   Writing pinubank map to output/NSC/pinubank/NSC-50.img ...
+dataset created: output/NSC/pinubank/NSC-50.img
+dataset created: output/NSC/AllSpecies/NSC-50.img
+Updating output variable: PET
+dataset created: output/PET//PET-50.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-50.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-50.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-50.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-50.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-50.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-50.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-50.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-50.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-50.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-50.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-50.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-50.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-50.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-50.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-50.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-50.img ...
+dataset created: output/Establishment/querrubr/Establishment-50.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-50.img ...
+dataset created: output/Establishment/pinubank/Establishment-50.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-50.img
+Updating output variable: Water
+dataset created: output/Water/Water-50.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-50.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-50.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-50.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Model run is complete.
+None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This dictionnary associates the different output with a keyword that tells us if we should skip it during parsing,</span>
+<span class="c1"># or sum it, or average it in the raster maps - depending on what makes the most sense for the output.</span>
+<span class="c1"># The biomassSum keyword is special : it will instruct the function to transform the biomass output that is expressed as a function</span>
+<span class="c1"># of area (almost always g/m2) into an &quot;absolute&quot; amount of biomass (not dependant on the area). Will depend on the size of the</span>
+<span class="c1"># landscape.</span>
+<span class="c1"># The second keyword associated with the output is the unit that we want to obtain in the end; it will be used to make the</span>
+<span class="c1"># labels in the figures with the outputs afterwards.</span>
+<span class="c1"># WARNING : The names here must have the same name as the output folder for each variable, as that&#39;s how the detection is done.</span>
+<span class="c1"># For example : if the LAI rasters are in a folder named LeafAreaIndex, then the keyword must be &quot;LeafAreaIndex&quot;</span>
+<span class="n">outputsUnitDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;AETAvg&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="s2">&quot;mm of water&quot;</span><span class="p">],</span> <span class="c1"># AETAvg is average monthly actual evapotranspiration across the last 12 months of the timestep</span>
+                   <span class="s2">&quot;AgeDistribution&quot;</span><span class="p">:[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span><span class="s2">&quot;Number of cohorts in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Unique age cohorts in each cell</span>
+                   <span class="s2">&quot;AnnualPsn&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span><span class="s2">&quot;Photosynthesis (g/m2)&quot;</span><span class="p">],</span> <span class="c1"># Sum of monthly net photosynthesis)</span>
+                   <span class="s2">&quot;CohortsPerSpecies&quot;</span><span class="p">:[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;Number of cohorts in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Cohort of species in each cell</span>
+                   <span class="s2">&quot;Establishment&quot;</span><span class="p">:[</span><span class="s2">&quot;categorial&quot;</span><span class="p">,</span><span class="s2">&quot;Skipped&quot;</span><span class="p">],</span> <span class="c1"># Values: 0 = No Presence, 1 = Continued Presence. 2 = Discontinued Presence, 3 = New Presence. Categorical, so no sum or average, is just skipped.</span>
+                   <span class="s2">&quot;EstablishmentProbability&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;Average establishment probability in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Average values of cells for a species accross all month of a year.</span>
+                   <span class="s2">&quot;FoliageBiomass&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of foliage biomass in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Averaged because it is expressed in g/m2. Multiply by landscape size to get landscape  data.</span>
+                   <span class="s2">&quot;FoliageSenescence&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of foliage dead during time step&quot;</span><span class="p">],</span> <span class="c1"># Amount of foliage biomass added to litter dead pool, in g/m2</span>
+                   <span class="s2">&quot;LeafAreaIndex&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;Average m2 leaf / m2 ground in the landscape&quot;</span><span class="p">],</span> <span class="c1"># LAI expressed as m2 leaf / m2 ground. By averaging, we get the LAI accross the landscape.</span>
+                   <span class="s2">&quot;MonthlyFolResp&quot;</span><span class="p">:[</span><span class="s2">&quot;monthly&quot;</span><span class="p">,</span> <span class="s2">&quot;Skipped&quot;</span><span class="p">],</span> <span class="c1"># Monthly data are harder to read and are skipped for now.</span>
+                   <span class="s2">&quot;MonthlyGrossPsn&quot;</span><span class="p">:[</span><span class="s2">&quot;monthly&quot;</span><span class="p">,</span> <span class="s2">&quot;Skipped&quot;</span><span class="p">],</span> <span class="c1"># Monthly data are harder to read and are skipped for now.</span>
+                   <span class="s2">&quot;MonthlyNetPsn&quot;</span><span class="p">:[</span><span class="s2">&quot;monthly&quot;</span><span class="p">,</span> <span class="s2">&quot;Skipped&quot;</span><span class="p">],</span> <span class="c1"># Monthly data are harder to read and are skipped for now.</span>
+                   <span class="s2">&quot;MonthlyMaintResp&quot;</span><span class="p">:[</span><span class="s2">&quot;monthly&quot;</span><span class="p">,</span> <span class="s2">&quot;Skipped&quot;</span><span class="p">],</span> <span class="c1"># Monthly data are harder to read and are skipped for now.</span>
+                   <span class="s2">&quot;NSC&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of NSC in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Non Structural Carbon, in g/m2.</span>
+                   <span class="s2">&quot;PET&quot;</span><span class="p">:[</span><span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;mm of water evaporated accross the landscape&quot;</span><span class="p">],</span> <span class="c1"># Evapotranspiration in mm</span>
+                   <span class="s2">&quot;RootBiomass&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of dried root biomass in the landscape&quot;</span><span class="p">],</span> <span class="c1"># Root biomass in grams of dried weight / m2</span>
+                   <span class="s2">&quot;SubCanopyPAR&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;W/m2 or mmol/m2&quot;</span><span class="p">],</span> <span class="c1"># Photosynthetic radiation under the canopy, in W/m2 or mmol/m2 depending on inputs.</span>
+                   <span class="s2">&quot;Water&quot;</span><span class="p">:[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;cm / m averaged acrossed the landscape&quot;</span><span class="p">],</span> <span class="c1"># Water in the cell ? Not sure, not very well explained in user guide. cm / m...of soil ? </span>
+                   <span class="s2">&quot;WoodBiomass&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of woody biomass in landscape&quot;</span><span class="p">],</span> <span class="c1">#Biomass of abovegroud wood (without foliage)</span>
+                   <span class="s2">&quot;WoodyDebris&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of woody debris in landscape&quot;</span><span class="p">],</span> <span class="c1"># Woody debries in g/m2.</span>
+                   <span class="s2">&quot;WoodySenescence&quot;</span><span class="p">:[</span><span class="s2">&quot;biomassSum&quot;</span><span class="p">,</span> <span class="s2">&quot;Mg (tons) of wood dead during time step&quot;</span><span class="p">]</span> <span class="c1"># Quantity of wood adead to the woody dead pool, in g/m2.</span>
+                   <span class="p">}</span>
+
+<span class="c1"># Parsing the rasters and site outputs</span>
+<span class="n">species_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AllSpecies&#39;</span><span class="p">,</span> <span class="s1">&#39;pinubank&#39;</span><span class="p">,</span> <span class="s1">&#39;querrubr&#39;</span><span class="p">]</span>
+<span class="n">result_Rasters</span> <span class="o">=</span> <span class="n">parse_outputRasters_PnET</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/output&quot;</span><span class="p">,</span>
+                                      <span class="n">species_list</span><span class="p">,</span>
+                                     <span class="n">outputsUnitDict</span><span class="p">,</span>
+                                     <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]),</span>
+                                     <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;ecoregion.img&quot;</span><span class="p">])</span>
+
+<span class="n">result_sitesCSV</span> <span class="o">=</span> <span class="n">parse_CSVFiles_PnET_SitesOutput</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/Output/Site1&quot;</span><span class="p">,</span>
+                                                  <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;pnetsuccession.txt&quot;</span><span class="p">][</span><span class="s2">&quot;StartYear&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.10/dist-packages/rasterio/__init__.py:304: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+  dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting raster outputs from PnET Biomass Output</span>
+<span class="n">plot_TimeSeries_RasterPnETOutputs</span><span class="p">(</span><span class="n">result_Rasters</span><span class="p">,</span>
+                                  <span class="n">outputsUnitDict</span><span class="p">,</span>
+                                  <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;biomass.outputPnET.txt&quot;</span><span class="p">][</span><span class="s2">&quot;Timestep&quot;</span><span class="p">]),</span>
+                                  <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;Duration&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6dfbef172b2f5c9da68eb177c34ff91ad64a200aef3dab59f5e2768af0fe7b7f.png" src="../_images/6dfbef172b2f5c9da68eb177c34ff91ad64a200aef3dab59f5e2768af0fe7b7f.png" />
+<img alt="../_images/93be5254760afba164cf585c145ef2b5c47d88ca95d3ae5d0253c76822b9fc90.png" src="../_images/93be5254760afba164cf585c145ef2b5c47d88ca95d3ae5d0253c76822b9fc90.png" />
+<img alt="../_images/2c7e2c29bc216d30d5706025a3a6f3b461d462c2b114049173d1be4c054c920e.png" src="../_images/2c7e2c29bc216d30d5706025a3a6f3b461d462c2b114049173d1be4c054c920e.png" />
+<img alt="../_images/b122ca792c5e90b49ba508cc28b46d55c9d69ae65e08ce9587d49aa63cd63a69.png" src="../_images/b122ca792c5e90b49ba508cc28b46d55c9d69ae65e08ce9587d49aa63cd63a69.png" />
+<img alt="../_images/5ded3e7c879eb2cf24065387cffb8c9d8e3c0c8dcd45dd716e86cf4ecc31035d.png" src="../_images/5ded3e7c879eb2cf24065387cffb8c9d8e3c0c8dcd45dd716e86cf4ecc31035d.png" />
+<img alt="../_images/58acf1884606460739e84ccd6f7454ea22a6c607cafc7450fd83d40774a8809a.png" src="../_images/58acf1884606460739e84ccd6f7454ea22a6c607cafc7450fd83d40774a8809a.png" />
+<img alt="../_images/5260f2d23eef9a8238fd72d98c4540d0f2aaaf74c18557465c57ae1824feb2b8.png" src="../_images/5260f2d23eef9a8238fd72d98c4540d0f2aaaf74c18557465c57ae1824feb2b8.png" />
+<img alt="../_images/5e8c024ba42fc92a6f0a4c5d3090bb16f6dad324394eb37eef7d8f6563246994.png" src="../_images/5e8c024ba42fc92a6f0a4c5d3090bb16f6dad324394eb37eef7d8f6563246994.png" />
+<img alt="../_images/8a4d7966502e02bb13eba379b3cae8623828dcb9f9b37c66d2a2cfcfb2f3aada.png" src="../_images/8a4d7966502e02bb13eba379b3cae8623828dcb9f9b37c66d2a2cfcfb2f3aada.png" />
+<img alt="../_images/8b7f9dc04f9e8ea1d5b99484dc7920861ff4dd60521bb7bd0dbdef7ca1cd3a07.png" src="../_images/8b7f9dc04f9e8ea1d5b99484dc7920861ff4dd60521bb7bd0dbdef7ca1cd3a07.png" />
+<img alt="../_images/479f8405290c57b9e6da1ba7f54e943b94b20bdad9cdcb84dea9a015b17ae6a9.png" src="../_images/479f8405290c57b9e6da1ba7f54e943b94b20bdad9cdcb84dea9a015b17ae6a9.png" />
+<img alt="../_images/2715a0e4e4acd3eb9cf3e154a1398b40ff45751fddbe4ba51f0823f7450df2e7.png" src="../_images/2715a0e4e4acd3eb9cf3e154a1398b40ff45751fddbe4ba51f0823f7450df2e7.png" />
+<img alt="../_images/378833f441f3998c38d5e6bb83960612dd583978e4987b316f0705c16eb28572.png" src="../_images/378833f441f3998c38d5e6bb83960612dd583978e4987b316f0705c16eb28572.png" />
+<img alt="../_images/6c8b159b81c4f89d3f2d9309803ce355e07f68a2a839f2d475c308eba716214c.png" src="../_images/6c8b159b81c4f89d3f2d9309803ce355e07f68a2a839f2d475c308eba716214c.png" />
+<img alt="../_images/5a861f95cd05d9adc5a00d793dfb65c906993d5a2fe02a1d936ad26119a477ad.png" src="../_images/5a861f95cd05d9adc5a00d793dfb65c906993d5a2fe02a1d936ad26119a477ad.png" />
+<img alt="../_images/287e4577970be7aee34bb6e6ad2932399783070b1ab2dc12def593df577fef5b.png" src="../_images/287e4577970be7aee34bb6e6ad2932399783070b1ab2dc12def593df577fef5b.png" />
+<img alt="../_images/4a43eb84b75957a1100e138d2fbde82417e0dfa35c73990c281e9c577e0f8fb1.png" src="../_images/4a43eb84b75957a1100e138d2fbde82417e0dfa35c73990c281e9c577e0f8fb1.png" />
+<img alt="../_images/f38d0976d00ad9a2de774effe94cb810d89b549692531f27a546d6c39eacb488.png" src="../_images/f38d0976d00ad9a2de774effe94cb810d89b549692531f27a546d6c39eacb488.png" />
+<img alt="../_images/bb667d8024f560df5dfa8e75defcf2c69808144054fdc7523ca1aba05a2bef5c.png" src="../_images/bb667d8024f560df5dfa8e75defcf2c69808144054fdc7523ca1aba05a2bef5c.png" />
+<img alt="../_images/495477dbc46b226524076a6d7d826d2a302e5234ec018acbc612a6fd43a6871b.png" src="../_images/495477dbc46b226524076a6d7d826d2a302e5234ec018acbc612a6fd43a6871b.png" />
+<img alt="../_images/b0e687cd957ce4a200e4cdf35ebda5c408cefcf52b60b0eb09e6bf6978b354e6.png" src="../_images/b0e687cd957ce4a200e4cdf35ebda5c408cefcf52b60b0eb09e6bf6978b354e6.png" />
+<img alt="../_images/aeda0a739c3e68754876a78281c17ec38a94d35b3d8b61530951fc1f0d548799.png" src="../_images/aeda0a739c3e68754876a78281c17ec38a94d35b3d8b61530951fc1f0d548799.png" />
+<img alt="../_images/8cd5eef8f07204b33647090eaaeb01cdd78456129729fb3cb3b7c578e6762ecf.png" src="../_images/8cd5eef8f07204b33647090eaaeb01cdd78456129729fb3cb3b7c578e6762ecf.png" />
+<img alt="../_images/0194b2075265d251dc8a7c3cc836e72c2fa55554de371fbc461cf66de502f408.png" src="../_images/0194b2075265d251dc8a7c3cc836e72c2fa55554de371fbc461cf66de502f408.png" />
+<img alt="../_images/9e2ebb5f57820febc8146188a38280102e9e4f15f915e5c36f495650ab0a747f.png" src="../_images/9e2ebb5f57820febc8146188a38280102e9e4f15f915e5c36f495650ab0a747f.png" />
+<img alt="../_images/dd094c5ce64975be7d0056307497677860e8203defc685d019331be0b5eca6e1.png" src="../_images/dd094c5ce64975be7d0056307497677860e8203defc685d019331be0b5eca6e1.png" />
+<img alt="../_images/29e3246e75e71fc00c527323e08efb921c190fbfe70a6064ab3543b8318fbd6a.png" src="../_images/29e3246e75e71fc00c527323e08efb921c190fbfe70a6064ab3543b8318fbd6a.png" />
+<img alt="../_images/7d757ccc68f813d5ef636457b5c39a37f47ed132fd0cb6bf31c622c15f010efa.png" src="../_images/7d757ccc68f813d5ef636457b5c39a37f47ed132fd0cb6bf31c622c15f010efa.png" />
+<img alt="../_images/854206a3ab72b9cdcbe95d79869ba24dab62c9529c5b469018916f229612c278.png" src="../_images/854206a3ab72b9cdcbe95d79869ba24dab62c9529c5b469018916f229612c278.png" />
+<img alt="../_images/a7083b4f1ed942bbdc1a88e0f66659e9347364a0dc15a99806f77760c5127b37.png" src="../_images/a7083b4f1ed942bbdc1a88e0f66659e9347364a0dc15a99806f77760c5127b37.png" />
+<img alt="../_images/12b7b49b33c08cd67aa6a685bbf26ba715e8e924f4cad13f823d7ec093379cda.png" src="../_images/12b7b49b33c08cd67aa6a685bbf26ba715e8e924f4cad13f823d7ec093379cda.png" />
+<img alt="../_images/8b76fbb813866653a71e0afd995b6583836797a28012a7e905ed3e241fdeff62.png" src="../_images/8b76fbb813866653a71e0afd995b6583836797a28012a7e905ed3e241fdeff62.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting csv outputs from PnET Sites Output for one age cohort</span>
+<span class="n">plot_TimeSeries_CSV_PnETSitesOutputs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result_sitesCSV</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">referenceDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">:{</span><span class="s2">&quot;Time&quot;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s2">&quot;Values&quot;</span><span class="p">:[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">]}},</span>
+                                     <span class="n">columnToPlotSelector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">],</span>
+                                     <span class="n">trueTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">realBiomass</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">cellLength</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
+</pre></div>
+</div>
+<img alt="../_images/acdeadf6f5726ce1de8f421b855bc3526e7e12360b02913faf7dae1a0611b2e9.png" src="../_images/acdeadf6f5726ce1de8f421b855bc3526e7e12360b02913faf7dae1a0611b2e9.png" />
+</div>
+</div>
+</section>
+<section id="initial-species-parameters">
+<h3>Initial species parameters<a class="headerlink" href="#initial-species-parameters" title="Link to this heading">#</a></h3>
+<p>In the <a class="reference external" href="https://klemet.github.io/DIVERSE_LANDIS-II_Parameterization/#Plan%20for%20a%20new%20calibration%20of%20PnET%20in%20Canada">calibration plan</a>, I propose we start either with the parameter values for the type of shade tolerant species proposed in the <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> (Table 1 page 74), or with parameter values extracted from the litterature.</p>
+<p><strong>Here, I describe how/from where I obtained these initial parameter values that serve as the basis of the calibration.</strong></p>
+<section id="parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">
+<h4>Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters<a class="headerlink" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters" title="Link to this heading">#</a></h4>
+<p><a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> advises that several species parameters should be used as <em>generic species parameters</em>, meaning that their value should be the same between species, in order to facilitate the comprehension of competition processes.</p>
+<blockquote>
+<div><p>Use the GenericPnETSpeciesParameters file for all parameters that are not varied among species.  Set parameters that will be held constant for your particular experiment or study (e.g., MaintResp, InitialNSC, etc.)</p>
+</div></blockquote>
+<blockquote>
+<div><p>Parameters that the model is highly sensitive to (for which common values should be used as much as possible) include: MaintResp, AmaxA, AmaxB, k, and FracBelowG.</p>
+</div></blockquote>
+<blockquote>
+<div><p>Minimizing species differences in parameters such as SLWDel, PsnAgeRed, k, MaintResp, DNSC and FracBelowG, will make competitive interactions more predictable.  Hold these as close to each other as possible, varying other parameters to calibrate as much as possible within empirical limits.</p>
+</div></blockquote>
+<p>As such, I will begin with these parameters (<code class="docutils literal notranslate"><span class="pre">MaintResp</span></code>, <code class="docutils literal notranslate"><span class="pre">InitialNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">FracBelowG</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnAgeRed</span></code>, <code class="docutils literal notranslate"><span class="pre">DNSC</span></code>) being similar between species, and will only vary them if the calibration process demands it (as highlighted in several sections of the calibration tips in <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>). <code class="docutils literal notranslate"><span class="pre">SLWDel</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxA</span></code> and <code class="docutils literal notranslate"><span class="pre">AmaxB</span></code> will not be generic as they have to vary at least between evergreen and deciduous according to <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>.</p>
+<p>The rest of the species parameters (see <a class="reference download internal" download="" href="../_downloads/fdacaa776b3924fc4af7d207aa63d647/LANDIS-IIPnETextensionParametersInformation.xlsx"><span class="xref download myst">here</span></a> for a full list), which are <code class="docutils literal notranslate"><span class="pre">FolN</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWmax</span></code>, <code class="docutils literal notranslate"><span class="pre">TOFol</span></code>, <code class="docutils literal notranslate"><span class="pre">TORoot</span></code>, <code class="docutils literal notranslate"><span class="pre">TOWood</span></code>, <code class="docutils literal notranslate"><span class="pre">HalfSat</span></code>, <code class="docutils literal notranslate"><span class="pre">H1</span></code>, <code class="docutils literal notranslate"><span class="pre">H2</span></code>, <code class="docutils literal notranslate"><span class="pre">H3</span></code>, <code class="docutils literal notranslate"><span class="pre">H4</span></code>, <code class="docutils literal notranslate"><span class="pre">LeafOnMinT</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTMin</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTOpt</span></code>, <code class="docutils literal notranslate"><span class="pre">EstMoist</span></code>, <code class="docutils literal notranslate"><span class="pre">EstRad</span></code>, <code class="docutils literal notranslate"><span class="pre">FracFol</span></code>, <code class="docutils literal notranslate"><span class="pre">FrActWd</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWDel</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxA</span></code> and <code class="docutils literal notranslate"><span class="pre">AmaxB</span></code> will change by species or by growth form/strategy (e.g. shade tolerant, etc.). <strong>Optional parameters (such as <code class="docutils literal notranslate"><span class="pre">PsnTMax</span></code>, <code class="docutils literal notranslate"><span class="pre">ColTol</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxLAI</span></code>, etc.) will not be considered here</strong>.</p>
+<p>We will also distinguish <em>generic parameters</em> that are not supposed to change by species, but that are essential to the functioning of the PnET Succession algorithm (<code class="docutils literal notranslate"><span class="pre">PARunits</span></code>, <code class="docutils literal notranslate"><span class="pre">PrecipEvents</span></code>, etc.).</p>
+</section>
+<section id="sources-of-parameter-values">
+<h4>Sources of parameter values<a class="headerlink" href="#sources-of-parameter-values" title="Link to this heading">#</a></h4>
+<p>Several sources and references for parameter values will be considered here. I assign to them a number that is indicative of their pertinence related to our study (1 = highest pertinence), and so the priority in which the source will be used to take the initial parameters for the calibration.</p>
+<ul class="simple">
+<li><p><strong>(1)</strong> <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> (the PnET v5.1 user guide, which contains many parameter values recommanded by Eric Gustafson, especially initial values to be used as starting points; see Table 1 page 74 for initial values, or pages 78-79; or pages 80-82 for calibrated values in of northern Wisconsin)</p></li>
+<li><p>Other recommendations of <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>  :</p>
+<ul>
+<li><p><strong>(4)</strong> <a class="reference external" href="https://link.springer.com/article/10.1007/BF00328606">Aber et al. (1996)</a> : Fig 2 shows the relationship between Lean nitrogen concentration (in % of dry weight) and the parameter AmaxA from PnET.</p></li>
+<li><p>Some PnET parameters (e.g., SLWDel, AmaxA, AmaxB, Q10, DVPD1, DVPD2) are hard to estimate and most studies use generic values (e.g., <strong>(5)</strong> <a class="reference external" href="https://www.int-res.com/articles/cr/5/c005p207.pdf">Aber et al. 1995, Table 2</a>, <strong>(6)</strong> <a class="reference external" href="https://link.springer.com/article/10.1007/s10021-005-0079-5">Ollinger and Smith 2005, Table 1</a>).</p></li>
+<li><p><strong>(7)</strong> To calibrate the biomass of roots (via TORoot, FracBelowG), see the estimates of whole tree biomass of <a class="reference external" href="https://books.google.ca/books?hl=fr&amp;amp;lr=&amp;amp;id=rNMHmlNynNsC&amp;amp;oi=fnd&amp;amp;pg=PP4&amp;amp;dq=Smith,+J.E.,+Heath,+L.S.,+Skog,+K.E.,+Birdsey,+R.A.+2006.+Methods+for+calculating+forest+ecosystem+and+harvested+carbon+with+standard+estimates+for+forest+types+of+the+United+States.+USDA+Forest+Service+General+Technical+Report+NE-343.+Northeastern+Research+Station,+Newtown+Square,+PA,+USA.+216+p.&amp;amp;ots=Urs7Cs4FtB&amp;amp;sig=zS2t0mlM9OAMVnifokfRNYAUnpk#v=onepage&amp;amp;q&amp;amp;f=false">Smith et al. 2006</a></p></li>
+</ul>
+</li>
+<li><p>More recent articles about PnET-II :</p>
+<ul>
+<li><p><strong>(8)</strong> <a class="reference external" href="https://www.frontiersin.org/journals/ecology-and-evolution/articles/10.3389/fevo.2021.653393/full">Suárez-Muñoz1 et al. 2021</a> : calibration of PnET Succession in an European context. No north america species, though.</p></li>
+<li><p>No others ? Not a lot of articles; and doesn’t seem like I’ll get better initial params.</p></li>
+</ul>
+</li>
+<li><p>For Quebec,</p>
+<ul>
+<li><p><strong>(2)</strong> Data from <a class="reference external" href="https://esajournals.onlinelibrary.wiley.com/doi/10.1002/eap.2221">Mina et al. 2021</a> (also used in <a class="reference external" href="https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.16197">Mina et al. 2022</a>). All parameters used are on <a class="reference external" href="https://github.com/mrcmina/REDEFINE-Mina_etal_EcolAppl/tree/1.0/Input_Data/PnET">this Github repository</a>. ⚠️ These parameters are for PnET Succession 3.5. According to <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>, several parameters (not precised) need recalibration after version 5.0; therefore, these parameters cannot be used “as is” with v.5.1, even though they are for Quebec.</p></li>
+<li><p><strong>(3)</strong> Data from <a class="reference external" href="https://www.frontiersin.org/articles/10.3389/ffgc.2023.1020305">Ameray et al. 2023</a>. All parameters used are on <a class="reference external" href="https://github.com/Ameray/PhD-thesis/tree/main">this Github repository</a>. ⚠️ These parameters are for PnET Succession 4.1. According to <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>, several parameters (not precised) need recalibration after version 5.0; therefore, these parameters cannot be used “as is” with v.5.1, even though they are for Quebec.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="initial-generic-parameters-for-the-species">
+<h4>Initial generic parameters for the species<a class="headerlink" href="#initial-generic-parameters-for-the-species" title="Link to this heading">#</a></h4>
+<p>Here is a table of species parameter values for the parameters that will be kept as generic (<code class="docutils literal notranslate"><span class="pre">MaintResp</span></code>, <code class="docutils literal notranslate"><span class="pre">InitialNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">FracBelowG</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnAgeRed</span></code>, <code class="docutils literal notranslate"><span class="pre">DNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD1</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD2</span></code>, <code class="docutils literal notranslate"><span class="pre">BFoldResp</span></code>, <code class="docutils literal notranslate"><span class="pre">Q10</span></code>, <code class="docutils literal notranslate"><span class="pre">FolLignin</span></code>, <code class="docutils literal notranslate"><span class="pre">CFracBiomass</span></code>) between species. Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#sources-of-parameter-values"><span class="xref myst">Sources of parameter values</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">MaintResp</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">InitialNSC</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FracBelowG</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PsnAgeRed</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DNSC</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DVPD1</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DVPD2</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">BFoldResp</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">Q10</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FolLignin</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>0.002 <a class="footnote-reference brackets" href="#id90" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>7 <a class="footnote-reference brackets" href="#id91" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.35 (average among species in <a class="footnote-reference brackets" href="#id92" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> and <a class="footnote-reference brackets" href="#id91" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>5 <a class="footnote-reference brackets" href="#id90" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id90" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id90" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.1 <a class="footnote-reference brackets" href="#id90" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id12">
+<h4>Initial species parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<p>Here is a table of parameter values for the parameters that will vary among species (<code class="docutils literal notranslate"><span class="pre">FolN</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWmax</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxLAI</span></code>, <code class="docutils literal notranslate"><span class="pre">TOFol</span></code>, <code class="docutils literal notranslate"><span class="pre">TORoot</span></code>, <code class="docutils literal notranslate"><span class="pre">TOWood</span></code>, <code class="docutils literal notranslate"><span class="pre">HalfSat</span></code>, <code class="docutils literal notranslate"><span class="pre">H1</span></code>, <code class="docutils literal notranslate"><span class="pre">H2</span></code>, <code class="docutils literal notranslate"><span class="pre">H3</span></code>, <code class="docutils literal notranslate"><span class="pre">H4</span></code>, <code class="docutils literal notranslate"><span class="pre">LeafOnMinT</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTMin</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTOpt</span></code>, <code class="docutils literal notranslate"><span class="pre">20k</span></code>, <code class="docutils literal notranslate"><span class="pre">EstMoist</span></code>, <code class="docutils literal notranslate"><span class="pre">EstRad</span></code>, <code class="docutils literal notranslate"><span class="pre">FracFol</span></code>, <code class="docutils literal notranslate"><span class="pre">FrActWd</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWDel</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">KWdLit</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxA</span></code> and <code class="docutils literal notranslate"><span class="pre">AmaxB</span></code>). Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#sources-of-parameter-values"><span class="xref myst">Sources of parameter values</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Species</p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FolN</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">SLWmax</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">TOFol</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">TORoot</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">TOWood</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">HalfSat</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">H1</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">H2</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">H3</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">H4</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">LeafOnMinT</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PsnTMin</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PsnTOpt</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">k</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">EstMoist</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">EstRad</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FracFol</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FrActWd</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">SLWDel</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">AmaxA</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">AmaxB</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">KWdLit</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">CFracBiomass</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><em>Abies balsamea</em></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>134 <a class="footnote-reference brackets" href="#id90" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-1.5 <a class="footnote-reference brackets" href="#id90" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>3 <a class="footnote-reference brackets" href="#id90" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id90" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id90" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.9 <a class="footnote-reference brackets" href="#id90" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.8 <a class="footnote-reference brackets" href="#id90" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>16.8 <a class="footnote-reference brackets" href="#id90" id="id25" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id90" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.976 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant</p></td>
+<td class="text-center"><p>0.07 <a class="footnote-reference brackets" href="#id90" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.00003 <a class="footnote-reference brackets" href="#id90" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.0 <a class="footnote-reference brackets" href="#id90" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id90" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id90" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.125; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id34" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id35" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><em>Acer rubrum</em></p></td>
+<td class="text-center"><p>2.32 <a class="footnote-reference brackets" href="#id90" id="id36" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>73 <a class="footnote-reference brackets" href="#id90" id="id37" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id38" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id90" id="id39" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
+<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id90" id="id40" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>181 <a class="footnote-reference brackets" href="#id90" id="id41" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-2 <a class="footnote-reference brackets" href="#id90" id="id42" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id43" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id44" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id45" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2.4 <a class="footnote-reference brackets" href="#id90" id="id46" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.75 <a class="footnote-reference brackets" href="#id90" id="id47" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>25.5 <a class="footnote-reference brackets" href="#id90" id="id48" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.58 <a class="footnote-reference brackets" href="#id90" id="id49" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id50" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.928 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id51" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant</p></td>
+<td class="text-center"><p>0.014 <a class="footnote-reference brackets" href="#id90" id="id52" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id90" id="id53" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id54" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-46 <a class="footnote-reference brackets" href="#id90" id="id55" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>71.9 <a class="footnote-reference brackets" href="#id90" id="id56" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.075; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id57" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.45 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id58" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><em>Picea mariana</em></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id59" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>225 <a class="footnote-reference brackets" href="#id90" id="id60" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.18 <a class="footnote-reference brackets" href="#id90" id="id61" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id62" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id63" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>197 <a class="footnote-reference brackets" href="#id90" id="id64" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-4.5 <a class="footnote-reference brackets" href="#id90" id="id65" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id90" id="id66" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id90" id="id67" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id90" id="id68" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id90" id="id69" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.175 <a class="footnote-reference brackets" href="#id90" id="id70" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>15.1 <a class="footnote-reference brackets" href="#id90" id="id71" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id90" id="id72" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id73" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.954 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id74" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant</p></td>
+<td class="text-center"><p>0.04 <a class="footnote-reference brackets" href="#id90" id="id75" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id90" id="id76" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.0</p></td>
+<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id90" id="id77" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id90" id="id78" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.125; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id79" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.475 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id80" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="generic-parameters">
+<h4>Generic parameters<a class="headerlink" href="#generic-parameters" title="Link to this heading">#</a></h4>
+<p>These remaining parameters are the one that must be specified in the generic parameter file no matter what, but that are not supposed to vary by species or by ecoregion (<code class="docutils literal notranslate"><span class="pre">PARunits</span></code>, <code class="docutils literal notranslate"><span class="pre">PrecipEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">PrecipEventsWithReplacement</span></code>, <code class="docutils literal notranslate"><span class="pre">ETExtCoeff</span></code>, <code class="docutils literal notranslate"><span class="pre">RETCropCoeff</span></code>, <code class="docutils literal notranslate"><span class="pre">PreventEstablishment</span></code>, <code class="docutils literal notranslate"><span class="pre">Wythers</span></code>, <code class="docutils literal notranslate"><span class="pre">DTEMP</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxPest</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxFrac</span></code>. Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#sources-of-parameter-values"><span class="xref myst">Sources of parameter values</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PARunits</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PrecipEvents</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PrecipEventsWithReplacement</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">ETExtCoeff</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">RETCropCoeff</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PreventEstablishment</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">Wythers</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DTEMP</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">MaxPest</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">AmaxFrac</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>mmol/m2/sec; Same unit as Halfsat, which is from <a class="footnote-reference brackets" href="#id90" id="id81" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (see previous cell)</p></td>
+<td class="text-center"><p>11 <a class="footnote-reference brackets" href="#id90" id="id82" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>True (default value in <a class="footnote-reference brackets" href="#id90" id="id83" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>0.65 (default value in <a class="footnote-reference brackets" href="#id90" id="id84" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>0.30 (default value in <a class="footnote-reference brackets" href="#id90" id="id85" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>True (to prevent establishment in the monoculture calibration)</p></td>
+<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id90" id="id86" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id90" id="id87" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.0 (from <a class="footnote-reference brackets" href="#id90" id="id88" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, where it’s proposed that MaxPest = timestep length/10. Not useful until the calibration of establishment.)</p></td>
+<td class="text-center"><p>0.75 (default value in <a class="footnote-reference brackets" href="#id90" id="id89" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="setting-up-the-calibration-landscape-ecoregions-initial-communities-climate-etc">
+<h3>Setting up the calibration landscape (ecoregions, initial communities, climate etc.)<a class="headerlink" href="#setting-up-the-calibration-landscape-ecoregions-initial-communities-climate-etc" title="Link to this heading">#</a></h3>
+<p>Now that we have initial parameters for our species, we need to define the landscape in which the calibration will take place.</p>
+<p>TO FIND : should I do 2-3 areas for calibration (e.g. temperate, boreal) ? If so, need 2 climate files, and 2 references with the forest vegetation simulator. Check if the FVS has that. EDIT : Actually, no : the idea of PnET is that the model will properly respond to changing temperatures. The first calibration step should therefore be in one set of given conditions. Step 4 will check temperatures anyway.</p>
+</section>
+<section id="setting-up-the-landis-ii-parameter-files-for-the-calibration-with-initial-parameters-and-calibration-landscape">
+<h3>Setting up the LANDIS-II parameter files for the calibration (with initial parameters and calibration landscape)<a class="headerlink" href="#setting-up-the-landis-ii-parameter-files-for-the-calibration-with-initial-parameters-and-calibration-landscape" title="Link to this heading">#</a></h3>
+</section>
+<section id="obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration">
+<h3>Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration<a class="headerlink" href="#obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration" title="Link to this heading">#</a></h3>
+<p>The <a class="reference external" href="https://www.fs.usda.gov/fvs/">Forest Vegetation Simulator</a> (FVS) model was develloped by the US department of Agriculture and Forestry (USDA). It aims to predict the growth and yield of forest stands based on internal equations derived for empirical data, but it also have options to be calibrated or adjusted based on the input data.</p>
+<p>Eric Gustafson recommands its use for the first step of the calibration procedure of PnET Succession (see <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>), where we try to make sure that the growth curve of a new cohort matches what is seen in reality. This is because the curves produced by FVS can be easily compared to PnET, without the trouble that often comes when using real empirical data for such a procedure (as empirical data is messy, needs to be cleaned, has outliers, etc.). As such, using FVS to calibrate PnET is called by some “meta-modelling” - as empirical data has been used to create the FVS model, which is then used to calibrate PnET.</p>
+<p>Gross Total Volume of the stand can be found the the Summary Statistic Table, or in the  SUMMARY OUTPUT FILE (7th column, GTV CU M).</p>
+<p>Try to have functions to launch a sim easily (from inside docker ?) in one command, then register the gross total volume for the sim. Have a template with a MySQL database which can be easily edited through Python.</p>
+<p><code class="docutils literal notranslate"><span class="pre">&amp;</span> <span class="pre">'.\FVSon</span> <span class="pre">(1).exe'</span> <span class="pre">--keywordfile=Hardwood.key</span></code></p>
+<p>PnET Succession cannot output volume; therefore, to compare FVS and PnET outputs, we have to convert FVS output from volume to biomass, and consider this as the “aboveground biomass” that will be in PnET.</p>
+<p>Conversion must be done using either wood specific gravity (but in that case, use the right equation); or wood density (easier). See  <a class="reference external" href="https://books.google.ca/books?hl=en&amp;amp;lr=&amp;amp;id=6fkVc420-MwC&amp;amp;oi=fnd&amp;amp;pg=PA10&amp;amp;dq=Specific+gravity+and+other+properties+of+wood+and+bark+for+156+tree+species+found+in+North+America.&amp;amp;ots=3XEG9vIMwt&amp;amp;sig=q6nzzmulcB8dtUAnIf8_RMa23A4#v=onepage&amp;amp;q=Specific%20gravity%20and%20other%20properties%20of%20wood%20and%20bark%20for%20156%20tree%20species%20found%20in%20North%20America.&amp;amp;f=false">https://books.google.ca/books?hl=en&amp;lr=&amp;id=6fkVc420-MwC&amp;oi=fnd&amp;pg=PA10&amp;dq=Specific+gravity+and+other+properties+of+wood+and+bark+for+156+tree+species+found+in+North+America.&amp;ots=3XEG9vIMwt&amp;sig=q6nzzmulcB8dtUAnIf8_RMa23A4#v=onepage&amp;q=Specific gravity and other properties of wood and bark for 156 tree species found in North America.&amp;f=false</a> for many measures for north america, or my own values for canada.</p>
+<p>There will be 2 big questions :</p>
+<ol class="arabic simple">
+<li><p>What tree density (tree count) to put in FVS, to imitate the kind of tree density that PnET puts as a new cohort in the cell ? No info in the PnET user guide as to how the biomass of a new 1 year old cohort is derived. Maybe I can try a 10 year old stand with a fixed number of trees in FVS (let’s say, 100), and then create a new 10 year initial cohort in PnET that will have a biomass (given through the initial condition files) computed from the Gross Total Volume in the first Timestep of FVS. That way, we set the tree density in FVS arbitrarely, and try to replicate it in PnET.</p></li>
+<li><p>What site index to use in FVS ? It seems to represent nutrients (see README), but maybe also soil hydrology. Nutrients are not simulated in PnET.</p></li>
+</ol>
+</section>
+</section>
+<section id="st-calibration-step-monoculture-in-ideal-condition">
+<h2>1st calibration step : Monoculture in ideal condition<a class="headerlink" href="#st-calibration-step-monoculture-in-ideal-condition" title="Link to this heading">#</a></h2>
+<section id="calibrating-abies-balsamea-in-monoculture">
+<h3>Calibrating <em>Abies balsamea</em> in monoculture<a class="headerlink" href="#calibrating-abies-balsamea-in-monoculture" title="Link to this heading">#</a></h3>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id90" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id5">2</a>,<a role="doc-backlink" href="#id6">3</a>,<a role="doc-backlink" href="#id7">4</a>,<a role="doc-backlink" href="#id8">5</a>,<a role="doc-backlink" href="#id9">6</a>,<a role="doc-backlink" href="#id10">7</a>,<a role="doc-backlink" href="#id11">8</a>,<a role="doc-backlink" href="#id13">9</a>,<a role="doc-backlink" href="#id14">10</a>,<a role="doc-backlink" href="#id15">11</a>,<a role="doc-backlink" href="#id16">12</a>,<a role="doc-backlink" href="#id17">13</a>,<a role="doc-backlink" href="#id18">14</a>,<a role="doc-backlink" href="#id19">15</a>,<a role="doc-backlink" href="#id20">16</a>,<a role="doc-backlink" href="#id21">17</a>,<a role="doc-backlink" href="#id22">18</a>,<a role="doc-backlink" href="#id23">19</a>,<a role="doc-backlink" href="#id24">20</a>,<a role="doc-backlink" href="#id25">21</a>,<a role="doc-backlink" href="#id26">22</a>,<a role="doc-backlink" href="#id27">23</a>,<a role="doc-backlink" href="#id28">24</a>,<a role="doc-backlink" href="#id29">25</a>,<a role="doc-backlink" href="#id30">26</a>,<a role="doc-backlink" href="#id31">27</a>,<a role="doc-backlink" href="#id32">28</a>,<a role="doc-backlink" href="#id33">29</a>,<a role="doc-backlink" href="#id34">30</a>,<a role="doc-backlink" href="#id35">31</a>,<a role="doc-backlink" href="#id36">32</a>,<a role="doc-backlink" href="#id37">33</a>,<a role="doc-backlink" href="#id38">34</a>,<a role="doc-backlink" href="#id39">35</a>,<a role="doc-backlink" href="#id40">36</a>,<a role="doc-backlink" href="#id41">37</a>,<a role="doc-backlink" href="#id42">38</a>,<a role="doc-backlink" href="#id43">39</a>,<a role="doc-backlink" href="#id44">40</a>,<a role="doc-backlink" href="#id45">41</a>,<a role="doc-backlink" href="#id46">42</a>,<a role="doc-backlink" href="#id47">43</a>,<a role="doc-backlink" href="#id48">44</a>,<a role="doc-backlink" href="#id49">45</a>,<a role="doc-backlink" href="#id50">46</a>,<a role="doc-backlink" href="#id51">47</a>,<a role="doc-backlink" href="#id52">48</a>,<a role="doc-backlink" href="#id53">49</a>,<a role="doc-backlink" href="#id54">50</a>,<a role="doc-backlink" href="#id55">51</a>,<a role="doc-backlink" href="#id56">52</a>,<a role="doc-backlink" href="#id57">53</a>,<a role="doc-backlink" href="#id58">54</a>,<a role="doc-backlink" href="#id59">55</a>,<a role="doc-backlink" href="#id60">56</a>,<a role="doc-backlink" href="#id61">57</a>,<a role="doc-backlink" href="#id62">58</a>,<a role="doc-backlink" href="#id63">59</a>,<a role="doc-backlink" href="#id64">60</a>,<a role="doc-backlink" href="#id65">61</a>,<a role="doc-backlink" href="#id66">62</a>,<a role="doc-backlink" href="#id67">63</a>,<a role="doc-backlink" href="#id68">64</a>,<a role="doc-backlink" href="#id69">65</a>,<a role="doc-backlink" href="#id70">66</a>,<a role="doc-backlink" href="#id71">67</a>,<a role="doc-backlink" href="#id72">68</a>,<a role="doc-backlink" href="#id73">69</a>,<a role="doc-backlink" href="#id74">70</a>,<a role="doc-backlink" href="#id75">71</a>,<a role="doc-backlink" href="#id76">72</a>,<a role="doc-backlink" href="#id77">73</a>,<a role="doc-backlink" href="#id78">74</a>,<a role="doc-backlink" href="#id79">75</a>,<a role="doc-backlink" href="#id80">76</a>,<a role="doc-backlink" href="#id81">77</a>,<a role="doc-backlink" href="#id82">78</a>,<a role="doc-backlink" href="#id83">79</a>,<a role="doc-backlink" href="#id84">80</a>,<a role="doc-backlink" href="#id85">81</a>,<a role="doc-backlink" href="#id86">82</a>,<a role="doc-backlink" href="#id87">83</a>,<a role="doc-backlink" href="#id88">84</a>,<a role="doc-backlink" href="#id89">85</a>)</span>
+<p><a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a></p>
+</aside>
+<aside class="footnote brackets" id="id91" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
+<p><a class="reference external" href="https://www.frontiersin.org/articles/10.3389/ffgc.2023.1020305">Ameray et al. 2023</a> : <a class="reference external" href="https://github.com/Ameray/PhD-thesis/tree/main/chapter2/MU2">Github repo</a></p>
+</aside>
+<aside class="footnote brackets" id="id92" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://esajournals.onlinelibrary.wiley.com/doi/10.1002/eap.2221">Mina et al. 2021</a> : <a class="reference external" href="https://github.com/mrcmina/REDEFINE-Mina_etal_EcolAppl/tree/1.0/Input_Data/PnET">Github repo</a></p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./StartingCalibrationTest"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-calibration-work">Pre-calibration work</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-functions-and-packages">Loading functions and packages</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#making-a-test-simulation-to-get-used-to-the-functions">Making a test simulation to get used to the functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-species-parameters">Initial species parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-parameter-values">Sources of parameter values</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Initial species parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-parameters">Generic parameters</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-calibration-landscape-ecoregions-initial-communities-climate-etc">Setting up the calibration landscape (ecoregions, initial communities, climate etc.)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-landis-ii-parameter-files-for-the-calibration-with-initial-parameters-and-calibration-landscape">Setting up the LANDIS-II parameter files for the calibration (with initial parameters and calibration landscape)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration">Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#st-calibration-step-monoculture-in-ideal-condition">1st calibration step : Monoculture in ideal condition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calibrating-abies-balsamea-in-monoculture">Calibrating <em>Abies balsamea</em> in monoculture</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Clément Hardy, PhD
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -607,8 +607,31 @@ RUN cd /bin/LANDIS_Linux \
 # Comment this line to keep the files generated during testing.
 # RUN find $LANDIS_FOLDER//Extension-Age-Only-Succession-Archived/testing/Corev7 -type f -newer "/tmp/tempFileForTestFileRemoval.txt" -exec rm {} \;
 
-# In the end, testing each extension is complicated; files are often missing, or don't have the right version. 
-# I'm letting it go for now.
+
+################################################################
+# INSTALLING THE FOREST VEGETATION SIMULATOR
+# This is not the latest version, as latest version as an issue that breaks the build; but should be good enough
+# See https://github.com/USDAForestService/ForestVegetationSimulator/issues/44 
+################################################################
+
+# Install system dependencies and clear cache
+RUN apt-get update && apt-get install -y \
+    gfortran \
+    cmake \
+    unixodbc-dev \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/* \
+    # Clone and compile FVS (3b09ae2 commit for stability)
+	&& cd /bin && git clone https://github.com/USDAForestService/ForestVegetationSimulator.git \
+    && cd /bin/ForestVegetationSimulator \
+    && git checkout 3b09ae2 \
+    # Compile the FVS binary, keeping this as a separate layer for caching
+	&& cd /bin/ForestVegetationSimulator/bin && make
+
+# Update PATH environment to include the FVS binary
+# For example, FVSon can be called with just "FVSon" from everywhere.
+ENV PATH="/bin/ForestVegetationSimulator/bin:$PATH"
 
 
 ################################################################
@@ -622,8 +645,8 @@ RUN git config --global --unset http.version
 COPY ./files_to_help_compilation/pip_requirements.txt /tmp
 RUN pip install -r /tmp/pip_requirements.txt
 
-# Adding jupyter lab
-RUN pip install jupyterlab
+# Adding jupyter lab and book
+RUN pip install jupyterlab jupyter-book
 
 # Adding add-on "Variable explorer" for jupyter lab
 RUN pip install lckr-jupyterlab-variableinspector
