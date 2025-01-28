@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration &#8212; Calibration of PnET Succession for the DIVERSE project</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'StartingCalibrationTest/5.Obtaining_Growth_data_from_FVS';</script>
+    <link rel="canonical" href="https://klemet.github.io/Calibration_PnET_DIVERSE/intro.html/StartingCalibrationTest/5.Obtaining_Growth_data_from_FVS.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1st calibration step : Monoculture in ideal condition" href="6.Monoculture_ideal_conditions.html" />
+    <link rel="prev" title="Setting up the calibration landscape (ecoregions, initial communities, climate etc.)" href="4.Setting_up_calibration_Landscape.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-light" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-dark pst-js-only" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    👋 Welcome !
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Intro_CalibrationTest.html">Calibration test</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1.Loading_functions.html">Loading functions and packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.Test_sim_functions.html">Making a test simulation to get used to the functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.Initial_Species_Parameters.html">Initial species parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.Setting_up_calibration_Landscape.html">Setting up the calibration landscape (ecoregions, initial communities, climate etc.)</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.Monoculture_ideal_conditions.html">1st calibration step : Monoculture in ideal condition</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE/issues/new?title=Issue%20on%20page%20%2FStartingCalibrationTest/5.Obtaining_Growth_data_from_FVS.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/StartingCalibrationTest/5.Obtaining_Growth_data_from_FVS.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture">Custom python function used to obtain growth data from FVS for a monoculture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration">
+<h1>Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration<a class="headerlink" href="#obtaining-the-growth-data-from-the-forest-vegetation-simulator-that-will-serve-as-reference-for-the-calibration" title="Link to this heading">#</a></h1>
+<p>The <a class="reference external" href="https://www.fs.usda.gov/fvs/">Forest Vegetation Simulator</a> (FVS) model was develloped by the US department of Agriculture and Forestry (USDA). It aims to predict the growth and yield of forest stands based on internal equations derived for empirical data, but it also have options to be calibrated or adjusted based on the input data.</p>
+<p>Eric Gustafson recommands its use for the first step of the calibration procedure of PnET Succession (see <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a>), where we try to make sure that the growth curve of a new cohort matches what is seen in reality. This is because the curves produced by FVS can be easily compared to PnET, without the trouble that often comes when using real empirical data for such a procedure (as empirical data is messy, needs to be cleaned, has outliers, etc.). As such, using FVS to calibrate PnET is called by some “meta-modelling” - as empirical data has been used to create the FVS model, which is then used to calibrate PnET.</p>
+<p>The FVS model is already compiled inside of the Docker image used to produced this document (see readme file to deploy it easily on your computer), thanks to the code provided in <a class="reference external" href="https://github.com/USDAForestService/ForestVegetationSimulator/issues/44#issuecomment-2483578729">this issue</a>. What that means is that FVS can be run from Python functions that I created here (see <a class="reference download internal" download="" href="../_downloads/53d7d171bcfe75ee936a67526a50ff02/functionsForCalibration.py"><span class="xref download myst">functionsForCalibration.py</span></a>) without any need for manually creating the intputs for a FVS simulation (or projection, as it is more usually called in the user guides); or to manually analyze the outputs of FVS.</p>
+<section id="custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture">
+<h2>Custom python function used to obtain growth data from FVS for a monoculture<a class="headerlink" href="#custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture" title="Link to this heading">#</a></h2>
+<p>The function <code class="docutils literal notranslate"><span class="pre">FVS_on_simulationOnSingleEmptyStand</span></code> (inside <a class="reference download internal" download="" href="../_downloads/53d7d171bcfe75ee936a67526a50ff02/functionsForCalibration.py"><span class="xref download myst">functionsForCalibration.py</span></a>) will be main one that we will be using to calibrate PnET.</p>
+<p>This function does the following :</p>
+<ul class="simple">
+<li><p>It creates a MySQL database containg the stand and trees inputs necessary for a simple FVS simulation that contains only young trees of a single species (monoculture) in ideal or default conditions at the beginning.</p>
+<ul>
+<li><p>These initial conditions are used to replicate what happens when we initialize a new age cohort on an empty cell in PnET, in order to do the calibration on monoculture and ideal conditions.</p></li>
+<li><p>While the function allows the user to specify the number of trees, I will use 2471 trees (which will initialize a 1ha stand with 2471 trees) which is the value used in <a class="reference external" href="https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085">Reese et al. 2024, supp. mat. A</a> (recommanded by <a class="reference external" href="https://research.fs.usda.gov/about/people/sturtevant">Brian Sturtevant</a>).</p></li>
+<li><p>The function also allows the user to specify the “Site index” for the stand, which is a value representing the quality of the soil for the species (and is thus used to increase tree growth in the equations inside FVS). <a class="reference external" href="https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085">Reese et al. 2024, supp. mat. A</a> tend to use high site index as the reference to calibrate PnET, which matches the advice of <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> (who recommands that this first calibration step should be done on “ideal conditions”). As the Site Index is a value that varies from species to species, I recommand <a class="reference external" href="https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf">this report from the USDA</a> that shows ranges of values of Site Index in the USA for many species. I will also make several FVS simulations with lower site index values for comparison.</p></li>
+</ul>
+</li>
+<li><p>I creates a simple keyword file, which is the file that defines what stands are simulated, and how.</p>
+<ul>
+<li><p>The keyword file generated simply simulate one stand with a single tree age cohort, and output carbon estimates in the main output file (which are then used to derive aboveground biomass estimates we can compare to PnET)</p></li>
+</ul>
+</li>
+<li><p>It runs the simulation by calling the right FVS “variant” as indicated by the user</p>
+<ul>
+<li><p>There exists more than a dozen FVS variants for different regions of the united states, but also one for Ontario and one for British Columbia. I’ll be using the Ontario variante here by default.</p></li>
+</ul>
+</li>
+<li><p>It reads the outputs to return a dictionnary of values that associates a year (e.g. 2033) to an aboveground biomass value. Convertion from carbon to biomass is explained in the code of the function.</p></li>
+<li><p>The files generated for (inputs) and by (outputs) the FVS simulation are deleted by default (<code class="docutils literal notranslate"><span class="pre">clearFiles</span></code> argument), but this can be overriden.</p></li>
+</ul>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We import the functions</span>
+<span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># We run FVS three times to simulate a basalm fir monoculture on an initially empty stand, and specify all of the arguments</span>
+
+<span class="n">basalmFir_LowSiteIndex</span> <span class="o">=</span> <span class="n">FVS_on_simulationOnSingleEmptyStand</span><span class="p">(</span><span class="n">Latitude</span> <span class="o">=</span> <span class="mf">47.22029</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">74.38606</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Slope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no slope</span>
+                                    <span class="n">Elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no elevation </span>
+                                    <span class="n">treeSpeciesCode</span> <span class="o">=</span> <span class="s2">&quot;BF&quot;</span><span class="p">,</span> <span class="c1"># Balsam fir. All codes are available at https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/canada/on/grinit.f#L43</span>
+                                    <span class="n">numberOfTrees</span> <span class="o">=</span> <span class="mi">2471</span><span class="p">,</span> <span class="c1"># To replicate stocking density from  https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085, supp. mat. A</span>
+                                    <span class="n">siteIndex</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="c1"># Low site index for Balsam fir. See https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf</span>
+                                    <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;FVSon&quot;</span><span class="p">,</span>
+                                    <span class="n">folderForFiles</span> <span class="o">=</span> <span class="s2">&quot;/calibrationFolder/FVS_SingleEmptyStandRun&quot;</span><span class="p">,</span>
+                                    <span class="n">clearFiles</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">basalmFir_averageSiteIndex</span> <span class="o">=</span> <span class="n">FVS_on_simulationOnSingleEmptyStand</span><span class="p">(</span><span class="n">Latitude</span> <span class="o">=</span> <span class="mf">47.22029</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">74.38606</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Slope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no slope</span>
+                                    <span class="n">Elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no elevation </span>
+                                    <span class="n">treeSpeciesCode</span> <span class="o">=</span> <span class="s2">&quot;BF&quot;</span><span class="p">,</span> <span class="c1"># Balsam fir. All codes are available at https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/canada/on/grinit.f#L43</span>
+                                    <span class="n">numberOfTrees</span> <span class="o">=</span> <span class="mi">2471</span><span class="p">,</span> <span class="c1"># To replicate stocking density from  https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085, supp. mat. A</span>
+                                    <span class="n">siteIndex</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="c1"># Average site index for Balsam fir. See https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf</span>
+                                    <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;FVSon&quot;</span><span class="p">,</span>
+                                    <span class="n">folderForFiles</span> <span class="o">=</span> <span class="s2">&quot;/calibrationFolder/FVS_SingleEmptyStandRun&quot;</span><span class="p">,</span>
+                                    <span class="n">clearFiles</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">basalmFir_HighSiteIndex</span> <span class="o">=</span> <span class="n">FVS_on_simulationOnSingleEmptyStand</span><span class="p">(</span><span class="n">Latitude</span> <span class="o">=</span> <span class="mf">47.22029</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">74.38606</span><span class="p">,</span> <span class="c1"># Atikamekw village of Manawan, center of one of our study areas</span>
+                                    <span class="n">Slope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no slope</span>
+                                    <span class="n">Elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no elevation </span>
+                                    <span class="n">treeSpeciesCode</span> <span class="o">=</span> <span class="s2">&quot;BF&quot;</span><span class="p">,</span> <span class="c1"># Balsam fir. All codes are available at https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/canada/on/grinit.f#L43</span>
+                                    <span class="n">numberOfTrees</span> <span class="o">=</span> <span class="mi">2471</span><span class="p">,</span> <span class="c1"># To replicate stocking density from  https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085, supp. mat. A</span>
+                                    <span class="n">siteIndex</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span> <span class="c1"># High site index for Balsam fir. See https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf</span>
+                                    <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;FVSon&quot;</span><span class="p">,</span>
+                                    <span class="n">folderForFiles</span> <span class="o">=</span> <span class="s2">&quot;/calibrationFolder/FVS_SingleEmptyStandRun&quot;</span><span class="p">,</span>
+                                    <span class="n">clearFiles</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+Creating Database with stand and tree ini values
+Creating Keyword file
+Launching FVS sim
+
+                  ON FVS METRIC VARIANT -- RV:20221118  
+
+
+        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
+
+
+               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
+----------------------------------------------------------------------------
+      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
+     ---------------------------- ----------------- ----------------    CU M
+     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
+YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
+---- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
+2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
+2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
+2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
+2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
+2063  1665  25 623  11 13.8   119     0     0     0  25 623  11 13.8   7   1
+2073  1510  31 724  13 16.1   174     0     0     0  31 724  13 16.1   7   3
+2083  1285  34 766  16 18.4   222     0     0     0  34 766  16 18.4   8   3
+2093  1112  38 803  17 20.7   274     0     0     0  38 803  17 20.7   8   3
+2103   986  41 835  19 22.9   324     0     0     0  41 835  19 22.9   9   3
+2113   882  44 867  21 25.1   375     0     0     0  44 867  21 25.1   8   3
+2123   803  47 895  22 27.2   424     0     0     0  47 895  22 27.2   9   4
+2133   729  50 924  23 29.5   478     0     0     0  50 924  23 29.5   9   4
+2143   667  53 951  25 31.7   531     0     0     0  53 951  25 31.7   0   0
+
+Reading Outputs
+Clearing files
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+Creating Database with stand and tree ini values
+Creating Keyword file
+Launching FVS sim
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                  ON FVS METRIC VARIANT -- RV:20221118  
+
+
+        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
+
+
+               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
+----------------------------------------------------------------------------
+      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
+     ---------------------------- ----------------- ----------------    CU M
+     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
+YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
+---- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
+2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
+2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
+2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
+2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
+2063  1670  25 620  11 13.7   118     0     0     0  25 620  11 13.7   6   1
+2073  1530  30 722  13 15.9   172     0     0     0  30 722  13 15.9   7   3
+2083  1307  34 761  16 18.1   220     0     0     0  34 761  16 18.1   8   3
+2093  1134  37 798  17 20.4   271     0     0     0  37 798  17 20.4   8   3
+2103  1011  40 828  19 22.5   319     0     0     0  40 828  19 22.5   8   3
+2113   907  43 860  21 24.6   369     0     0     0  43 860  21 24.6   8   3
+2123   825  46 887  22 26.6   417     0     0     0  46 887  22 26.6   9   4
+2133   749  49 914  23 28.8   470     0     0     0  49 914  23 28.8   9   4
+2143   687  52 941  25 30.9   522     0     0     0  52 941  25 30.9   0   0
+
+Reading Outputs
+Clearing files
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+Creating Database with stand and tree ini values
+Creating Keyword file
+Launching FVS sim
+
+                  ON FVS METRIC VARIANT -- RV:20221118  
+
+
+        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
+
+
+               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
+----------------------------------------------------------------------------
+      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
+     ---------------------------- ----------------- ----------------    CU M
+     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
+YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
+---- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
+2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
+2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
+2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
+2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
+2063  1675  24 618  11 13.6   118     0     0     0  24 618  11 13.6   6   1
+2073  1537  30 714  13 15.7   170     0     0     0  30 714  13 15.7   7   2
+2083  1329  33 756  16 17.9   217     0     0     0  33 756  16 17.9   8   3
+2093  1159  37 791  17 20.0   267     0     0     0  37 791  17 20.0   8   3
+2103  1033  39 823  19 22.0   315     0     0     0  39 823  19 22.0   8   3
+2113   929  42 852  21 24.1   364     0     0     0  42 852  21 24.1   8   3
+2123   848  45 880  22 26.0   410     0     0     0  45 880  22 26.0   9   4
+2133   771  48 907  23 28.1   462     0     0     0  48 907  23 28.1   9   4
+2143   709  51 932  24 30.1   513     0     0     0  51 932  24 30.1   0   0
+
+Reading Outputs
+Clearing files
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We print the outputs of one of the simulations</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">basalmFir_HighSiteIndex</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{2023: 0.4, 2033: 2.6, 2043: 21.6, 2053: 61.0, 2063: 86.4, 2073: 113.6, 2083: 134.4, 2093: 155.6, 2103: 175.8, 2113: 196.6, 2123: 216.8, 2133: 239.6}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Other uses of FVS</p>
+<p>FVS can also output belowground biomass (both live and dead) using the CARBPRET (carbon report) keyword.
+This can be useful to paramterize several parameters of PnET Succession related to the biomass of roots.</p>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Learning more about FVS</p>
+<p>FVS is a complex model with more than a decade of improvments. The existing Python functions present here should be enough to calibrate PnET Succession; but if you need more information about variants, possible outputs and inputs, you can take a look at the many <a class="reference external" href="https://www.fs.usda.gov/fvs/documents/guides.shtml">user guides</a> that are available online.</p>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./StartingCalibrationTest"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="4.Setting_up_calibration_Landscape.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Setting up the calibration landscape (ecoregions, initial communities, climate etc.)</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="6.Monoculture_ideal_conditions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">1st calibration step : Monoculture in ideal condition</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture">Custom python function used to obtain growth data from FVS for a monoculture</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Clément Hardy, PhD
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
