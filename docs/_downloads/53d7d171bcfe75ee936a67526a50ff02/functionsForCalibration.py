@@ -41,6 +41,8 @@ import subprocess
 import rasterio
 import numpy as np
 import shutil
+import sqlite3
+import subprocess
 
 
 #%% FUNCTIONS TO PARSE PARAMETERS
@@ -1438,3 +1440,360 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
 #                     trueTime = False,
 #                     realBiomass = True,
 #                     cellLength = int(PnETGitHub_OneCellSim["scenario.txt"]["CellLength"]))
+
+#%% FUNCTIONS TO LAUNCH AND PARSE A FVS (FOREST VEGETATION SIMULATOR) SIMULATION
+
+def FVS_on_simulationOnSingleEmptyStand(Latitude,
+                                        Longitude,
+                                        Slope,
+                                        Elevation,
+                                        treeSpeciesCode,
+                                        numberOfTrees,
+                                        siteIndex,
+                                        variant = "FVSon",
+                                        folderForFiles = "/tmp/FVS_SingleEmptyStandRun",
+                                        clearFiles = True):
+
+
+    # Check if the directory exists
+    if os.path.exists(folderForFiles):
+        # Remove the directory and all its contents
+        shutil.rmtree(folderForFiles)
+        print(f"The directory '{folderForFiles}' has been deleted.")
+    
+    # Create the directory
+    os.makedirs(folderForFiles)
+    print(f"The directory '{folderForFiles}' has been created.")
+
+    print("Creating Database with stand and tree ini values")
+    # Connect to the SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect(folderForFiles + "/FVSData.db")
+    cursor = conn.cursor()
+    
+    # Create table FVS_StandInit
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS "FVS_StandInit" (
+            	"Stand_CN"	TEXT,
+            	"Stand_ID"	TEXT,
+            	"Variant"	TEXT,
+            	"Inv_Year"	INTEGER,
+            	"Groups"	REAL,
+            	"AddFiles"	TEXT,
+            	"FVSKeywords"	TEXT,
+            	"Latitude"	REAL,
+            	"Longitude"	REAL,
+            	"Region"	INTEGER,
+            	"Forest"	INTEGER,
+            	"District"	INTEGER,
+            	"Compartment"	INTEGER,
+            	"Location"	INTEGER,
+            	"Ecoregion"	TEXT,
+            	"BEC"	TEXT,
+            	"PV_Code"	TEXT,
+            	"PV_Ref_Code"	INTEGER,
+            	"Age"	INTEGER,
+            	"Aspect"	REAL,
+            	"Slope"	REAL,
+            	"Elevation"	REAL,
+            	"ElevFt"	REAL,
+            	"Basal_Area_Factor"	REAL,
+            	"Inv_Plot_Size"	REAL,
+            	"Brk_DBH"	TEXT,
+            	"Num_Plots"	INTEGER,
+            	"NonStk_Plots"	INTEGER,
+            	"Sam_Wt"	REAL,
+            	"Stk_Pcnt"	REAL,
+            	"DG_Trans"	INTEGER,
+            	"DG_Measure"	INTEGER,
+            	"HTG_Trans"	INTEGER,
+            	"HTG_Measure"	INTEGER,
+            	"Mort_Measure"	INTEGER,
+            	"Max_BA"	REAL,
+            	"Max_SDI"	REAL,
+            	"Site_Species"	TEXT,
+            	"Site_Index"	REAL,
+            	"Model_Type"	INTEGER,
+            	"Physio_Region"	INTEGER,
+            	"Forest_Type"	INTEGER,
+            	"State"	INTEGER,
+            	"County"	INTEGER,
+            	"Fuel_Model"	INTEGER,
+            	"Fuel_0_25_H"	REAL,
+            	"Fuel_25_1_H"	REAL,
+            	"Fuel_1_3_H"	REAL,
+            	"Fuel_3_6_H"	REAL,
+            	"Fuel_6_12_H"	REAL,
+            	"Fuel_12_20_H"	REAL,
+            	"Fuel_20_35_H"	REAL,
+            	"Fuel_35_50_H"	REAL,
+            	"Fuel_gt_50_H"	REAL,
+            	"Fuel_0_25_S"	REAL,
+            	"Fuel_25_1_S"	REAL,
+            	"Fuel_1_3_S"	REAL,
+            	"Fuel_3_6_S"	REAL,
+            	"Fuel_6_12_S"	REAL,
+            	"Fuel_12_20_S"	REAL,
+            	"Fuel_20_35_S"	REAL,
+            	"Fuel_35_50_S"	REAL,
+            	"Fuel_gt_50_S"	REAL,
+            	"Fuel_Litter"	REAL,
+            	"Fuel_Duff"	REAL,
+            	"Fuel_0_06_H"	REAL,
+            	"Fuel_06_25_H"	REAL,
+            	"Fuel_25_76_H"	REAL,
+            	"Fuel_76_152_H"	REAL,
+            	"Fuel_152_305_H"	REAL,
+            	"Fuel_305_508_H"	BLOB,
+            	"Fuel_508_889_H"	REAL,
+            	"Fuel_889_1270_H"	REAL,
+            	"Fuel_gt_1270_H"	REAL,
+            	"Fuel_0_06_S"	REAL,
+            	"Fuel_06_25_S"	REAL,
+            	"Fuel_25_76_S"	REAL,
+            	"Fuel_76_152_S"	REAL,
+            	"Fuel_152_305_S"	REAL,
+            	"Fuel_305_508_S"	REAL,
+            	"Fuel_508_889_S"	REAL,
+            	"Fuel_889_1270_S"	REAL,
+            	"Fuel_gt_1270_S"	REAL,
+            	"Photo_Ref"	INTEGER,
+            	"Photo_code"	TEXT,
+            	"Moisture"	REAL
+            )
+    ''')
+    
+    # Create table FVS_TreeInit
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS "FVS_TreeInit" (
+                        	"Stand_CN"	TEXT,
+                        	"Stand_ID"	TEXT,
+                        	"StandPlot_CN"	TEXT,
+                        	"StandPlot_ID"	TEXT,
+                        	"Plot_ID"	INTEGER,
+                        	"Tree_ID"	INTEGER,
+                        	"Tree_Count"	REAL,
+                        	"History"	INTEGER,
+                        	"Species"	TEXT,
+                        	"DBH"	REAL,
+                        	"DG"	REAL,
+                        	"Ht"	REAL,
+                        	"HTG"	REAL,
+                        	"HtTopK"	REAL,
+                        	"CrRatio"	INTEGER,
+                        	"Damage1"	INTEGER,
+                        	"Severity1"	INTEGER,
+                        	"Damage2"	INTEGER,
+                        	"Severity2"	INTEGER,
+                        	"Damage3"	INTEGER,
+                        	"Severity3"	INTEGER,
+                        	"TreeValue"	INTEGER,
+                        	"Prescription"	INTEGER,
+                        	"Age"	INTEGER,
+                        	"Slope"	INTEGER,
+                        	"Aspect"	INTEGER,
+                        	"PV_Code"	INTEGER,
+                        	"TopoCode"	INTEGER,
+                        	"SitePrep"	INTEGER
+                        )
+    ''')
+
+    # Inserting Stand Row
+    data_to_insert = {
+    'Stand_CN': 'STAND_EMPTY',
+    'Stand_ID': 'STAND_EMPTY',
+    'Variant': str(variant[-2:]),
+    'Inv_Year': 2023,
+    'Groups': 'All_Stands',
+    'Latitude': str(Latitude),
+    'Longitude': str(Longitude),
+    'Age': 0,
+    'Aspect': 0,
+    'Slope': str(Slope),
+    'Elevation': str(Elevation),
+    'Basal_Area_Factor': -1.0, # Used to control number of tree in stands.
+    'Inv_Plot_Size': 1.0, # Used to control number of trees in stand.
+    'Num_Plots': 0,
+    'Site_Species': str(treeSpeciesCode),
+    'Site_Index': str(siteIndex)
+    }
+
+    columns = ', '.join(data_to_insert.keys())
+    values = ', '.join(['%s'] * len(data_to_insert))
+    sql = "INSERT INTO FVS_StandInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
+
+    # print(sql)
+
+    cursor.execute(sql)
+    # print(f"{cursor.rowcount} record inserted in database.")
+
+    # Inserting Tree row
+    data_to_insert = {
+    'Stand_CN': 'STAND_EMPTY',
+    'Stand_ID': 'STAND_EMPTY',
+    'Plot_ID': 1,
+    'Tree_ID': 1,
+    'Tree_Count': numberOfTrees,
+    'History': 1, # Values 1-5 doesn't seem to change anything. We'll use that.
+    'Species' : str(treeSpeciesCode),
+    'DBH' : 0.5 # Used to initialize young trees
+    }
+
+    columns = ', '.join(data_to_insert.keys())
+    values = ', '.join(['%s'] * len(data_to_insert))
+    sql = "INSERT INTO FVS_TreeInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
+
+    # print(sql)
+
+    cursor.execute(sql)
+    # print(f"{cursor.rowcount} record inserted in database.")
+
+    # Commit changes to SQL database and close the connection
+    conn.commit()
+    conn.close()
+
+    # Creating Keyword file
+    print("Creating Keyword file")
+    
+    Keywordfile_content = """STDIDENT
+STAND_EMPTY
+
+ECHOSUM
+SCREEN
+
+DATABASE
+DSNin
+FVSData.db
+StandSQL
+SELECT * FROM FVS_StandInit WHERE Stand_ID = 'STAND_EMPTY'
+EndSQL
+TreeSQL
+SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'STAND_EMPTY'
+EndSQL
+End
+
+TIMEINT           10
+NUMCYCLE          12
+
+ESTAB           2023
+STOCKADJ          -1
+END
+
+TREELIST           0
+CUTLIST            0
+
+COMMENT
+The following lines are used to produce a "Carbon report" with the Fire and Fuel extension of FVS.
+See user guide for more : https://www.fs.usda.gov/fmsc/ftp/fvs/docs/gtr/FFEguide.pdf
+CARBCALC 1 1 is used to say that we want the report in metric tons/ha (not us tons), and that a more refined algorithm for biomass estimation be used (Jenkins algorithm, which estimates bark biomass in contrast to the regular algorithm).
+CARBREPT is used to output the report in the main output (.out) file of the simulation.
+END
+
+FMIN
+CARBCALC 1 1
+CARBREPT
+END
+
+
+PROCESS
+STOP
+"""
+    
+    with open(folderForFiles + "/SingleStandSim_Keywords.key", 'w', encoding='utf-8') as file:
+        file.write(Keywordfile_content)
+
+    # Launching the sim
+    print("Launching FVS sim")
+    result = subprocess.run(['FVSon', '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
+    print(result.stdout)
+
+    # print("WARNING : the content of the output dictionnary of this function can differ slightly from what is printed above (console outputs of FVS). It seems that the console output can round certain variables differently than what is in the .out files (that will be read to create the dictionnary). Differences should be minimal.\n\n")
+
+    # Reading the Gross Total Volume as Output
+    print("Reading Outputs")
+    mapping = {}
+    ignoreFirstLine = True
+    with open(folderForFiles + "/SingleStandSim_Keywords.sum", 'r') as file:
+        for line in file:
+            if ignoreFirstLine:
+                ignoreFirstLine = False
+            else:
+                # Split the line into parts based on whitespace
+                parts = line.split()
+                
+                # Check if there are enough parts to avoid IndexError
+                if len(parts) > 8:
+                    # Get the number from the first column (index 0)
+                    key = int(parts[0])
+                    # Get the number from the ninth column (index 8)
+                    value = int(parts[8])
+                    
+                    # Add to dictionary
+                    mapping[key] = value
+
+    # Reading the total stand carbon output and converting it into biomass
+    # The carbon outputs can only be outputed in the .out main report file. Not ideal, but we can get it there.
+    mapping = {}
+    
+    # Define the target string to search for
+    target_string_carbonReport = "******  CARBON REPORT VERSION 1.0 ******"
+    target_string_lastLineBeforeValues = "YEAR    Total    Merch     Live     Dead     Dead      DDW    Floor  Shb/Hrb   Carbon   Carbon  from Fire"
+    target_dashesLine = "--------------------------------------------------------------------------------------------------------------"
+
+    with open(folderForFiles + "/SingleStandSim_Keywords.out", 'r') as file:
+        lines = file.readlines()
+
+    # Initialize variables to track whether we've found the target string and to collect report lines
+    found_target_carbonReport = False
+    found_target_lastLineBeforeValues = False
+    found_target_lastDashesLine = False
+    report_lines = []
+
+    # The loops will look in every lines until we find the mention of the carbon report,
+    # and the lines indicating the beginning of the value table.
+    for line in lines:
+        if not found_target_carbonReport:
+            if target_string_carbonReport in line:
+                found_target_carbonReport = True
+        else:
+            if not found_target_lastLineBeforeValues:
+                if target_string_lastLineBeforeValues in line:
+                    found_target_lastLineBeforeValues = True
+            else:
+                if not found_target_lastDashesLine:
+                    if target_dashesLine in line:
+                        found_target_lastDashesLine = True
+                else:
+                    if re.match(r'^\s*-\s*$', line):
+                        break
+                    else:
+                        # Split the line into parts based on whitespace
+                        parts = line.split()
+                        
+                        # Check if there are enough parts to avoid IndexError
+                        if len(parts) > 8:
+                            # Get the number from the first column (index 0)
+                            key = int(parts[0])
+                            # Get the number from the second column (index 1), stand Aboveground live carbon
+                            value = float(parts[1])
+                            
+                            # Add to dictionary
+                            mapping[key] = value    
+
+    # To convert carbon back to biomass : The algorithm of the Fire and Fuel extension computes biomass, but only outputs carbon (no option for outputting biomass).
+    # However, indicates the convertion factor. Quote :
+    # "Biomass, expressed as dry weight, is assumed to be 50 percent carbon (Penman et al. 2003) for all pools except forest floor, which is estimated as 37 percent carbon (Smith and Heath 2002)"
+    # This is confirmed in the source code; see https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/archive/bgc/src/binitial.f#L28
+    # Therefore, to get biomass from carbon outputs, we just have to multiply it by 2.
+    for key in mapping.keys():
+        mapping[key] = mapping[key]*2
+    
+    # Delete the folder created for the inputs and outputs if specified
+    if clearFiles:
+        print("Clearing files")
+        shutil.rmtree(folderForFiles)
+        print(f"The directory '{folderForFiles}' has been deleted.")
+    
+    return(mapping)
+
+# FIRST : Gotta understand once and for all how stand area is computed, so that I can be sure to control tree density.
+                                        
