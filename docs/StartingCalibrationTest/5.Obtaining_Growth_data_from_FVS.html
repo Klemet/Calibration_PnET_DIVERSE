@@ -373,6 +373,8 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture">Custom python function used to obtain growth data from FVS for a monoculture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-comparing-fvs-outputs-to-pnet-outputs">Test : Comparing FVS outputs to PnET outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-test-with-more-robut-parameters">Another test - with more robut parameters</a></li>
 </ul>
             </nav>
         </div>
@@ -464,36 +466,9 @@
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-
-                  ON FVS METRIC VARIANT -- RV:20221118  
-
-
-        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
-
-
-               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
-----------------------------------------------------------------------------
-      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
-     ---------------------------- ----------------- ----------------    CU M
-     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
-YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
----- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
-2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
-2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
-2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
-2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
-2063  1665  25 623  11 13.8   119     0     0     0  25 623  11 13.8   7   1
-2073  1510  31 724  13 16.1   174     0     0     0  31 724  13 16.1   7   3
-2083  1285  34 766  16 18.4   222     0     0     0  34 766  16 18.4   8   3
-2093  1112  38 803  17 20.7   274     0     0     0  38 803  17 20.7   8   3
-2103   986  41 835  19 22.9   324     0     0     0  41 835  19 22.9   9   3
-2113   882  44 867  21 25.1   375     0     0     0  44 867  21 25.1   8   3
-2123   803  47 895  22 27.2   424     0     0     0  47 895  22 27.2   9   4
-2133   729  50 924  23 29.5   478     0     0     0  50 924  23 29.5   9   4
-2143   667  53 951  25 31.7   531     0     0     0  53 951  25 31.7   0   0
-
-Reading Outputs
-Clearing files
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
@@ -501,70 +476,15 @@ Creating Keyword file
 Launching FVS sim
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                  ON FVS METRIC VARIANT -- RV:20221118  
-
-
-        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
-
-
-               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
-----------------------------------------------------------------------------
-      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
-     ---------------------------- ----------------- ----------------    CU M
-     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
-YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
----- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
-2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
-2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
-2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
-2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
-2063  1670  25 620  11 13.7   118     0     0     0  25 620  11 13.7   6   1
-2073  1530  30 722  13 15.9   172     0     0     0  30 722  13 15.9   7   3
-2083  1307  34 761  16 18.1   220     0     0     0  34 761  16 18.1   8   3
-2093  1134  37 798  17 20.4   271     0     0     0  37 798  17 20.4   8   3
-2103  1011  40 828  19 22.5   319     0     0     0  40 828  19 22.5   8   3
-2113   907  43 860  21 24.6   369     0     0     0  43 860  21 24.6   8   3
-2123   825  46 887  22 26.6   417     0     0     0  46 887  22 26.6   9   4
-2133   749  49 914  23 28.8   470     0     0     0  49 914  23 28.8   9   4
-2143   687  52 941  25 30.9   522     0     0     0  52 941  25 30.9   0   0
-
-Reading Outputs
-Clearing files
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-
-                  ON FVS METRIC VARIANT -- RV:20221118  
-
-
-        STAND = STAND_EMPTY                 MANAGEMENT CODE = NONE
-
-
-               SUMMARY STATISTICS (BASED ON TOTAL STAND AREA)
-----------------------------------------------------------------------------
-      START OF SIMULATION PERIOD    REMOVALS/HA     AFTER TREATMENT   GROWTH
-     ---------------------------- ----------------- ----------------    CU M
-     TREES         TOP        GTV TREES   GTV   GMV         TOP       PER YR
-YEAR   /HA  BA SDI  HT  QMD  CU M   /HA  CU M  CU M  BA SDI  HT  QMD ACC MOR
----- ----- --- --- --- ---- ----- ----- ----- ----- --- --- --- ---- --- ---
-2023  2471   0   5   2  0.5     0     0     0     0   0   5   2  0.5   0   0
-2033  2402   2  74   3  2.9     0     0     0     0   2  74   3  2.9   0   0
-2043  2335   8 284   6  6.8     0     0     0     0   8 284   6  6.8   0   0
-2053  1871  19 511   9 11.3     0     0     0     0  19 511   9 11.3  12   0
-2063  1675  24 618  11 13.6   118     0     0     0  24 618  11 13.6   6   1
-2073  1537  30 714  13 15.7   170     0     0     0  30 714  13 15.7   7   2
-2083  1329  33 756  16 17.9   217     0     0     0  33 756  16 17.9   8   3
-2093  1159  37 791  17 20.0   267     0     0     0  37 791  17 20.0   8   3
-2103  1033  39 823  19 22.0   315     0     0     0  39 823  19 22.0   8   3
-2113   929  42 852  21 24.1   364     0     0     0  42 852  21 24.1   8   3
-2123   848  45 880  22 26.0   410     0     0     0  45 880  22 26.0   9   4
-2133   771  48 907  23 28.1   462     0     0     0  48 907  23 28.1   9   4
-2143   709  51 932  24 30.1   513     0     0     0  51 932  24 30.1   0   0
-
-Reading Outputs
-Clearing files
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 </pre></div>
 </div>
@@ -591,6 +511,317 @@ This can be useful to paramterize several parameters of PnET Succession related 
 <div class="note admonition">
 <p class="admonition-title">Learning more about FVS</p>
 <p>FVS is a complex model with more than a decade of improvments. The existing Python functions present here should be enough to calibrate PnET Succession; but if you need more information about variants, possible outputs and inputs, you can take a look at the many <a class="reference external" href="https://www.fs.usda.gov/fvs/documents/guides.shtml">user guides</a> that are available online.</p>
+</div>
+</section>
+<section id="test-comparing-fvs-outputs-to-pnet-outputs">
+<h2>Test : Comparing FVS outputs to PnET outputs<a class="headerlink" href="#test-comparing-fvs-outputs-to-pnet-outputs" title="Link to this heading">#</a></h2>
+<p>Using the same functions to read and run a simple PnET scenario as used in <a class="reference internal" href="2.Test_sim_functions.html"><span class="std std-doc">Making a test simulation to get used to the functions</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading parameters and launching a simple PnET sim</span>
+<span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1"># Loading parameters from template</span>
+<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="c1"># Editing initial communities to only have single cohort of Pinus banksiana</span>
+<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;querrubr&quot;</span><span class="p">]</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;pinubank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+<span class="c1"># print(PnETGitHub_OneCellSim[&quot;initial-communities.txt&quot;])</span>
+<span class="c1"># Editing cell length so that one cell = 1ha</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="c1"># Putting duration to 120 years</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;Duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">120</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : Additional file : !Run_scenario.bat
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : Climate file : climate.txt
+Found : Disturbance Reduction File : disturbance_reductions.txt
+Found : Additional file : ecoregion.img
+Found : Main ecoregions file : ecoregion.txt
+Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Additional file : initial-communities.img
+Found : Initial Communities file : initial-communities.txt
+Found : PnET generic parameter file : PnETGenericParameters.txt
+Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
+Found : Main PnET parameter file : pnetsuccession.txt
+Found : Additional file : README.txt
+Found : Main scenario file : scenario.txt
+Found : Main species parameter file : species.txt
+Found : PnET species parameters file : SpeciesParameters.txt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Writing parameters in temporary folder</span>
+<span class="n">testScenarioPath</span> <span class="o">=</span> <span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+
+<span class="n">write_all_LANDIS_files</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">,</span>
+                       <span class="n">PnETGitHub_OneCellSim</span><span class="p">,</span>
+                       <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Running LANDIS-II sim</span>
+<span class="n">runLANDIS_Simulation</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;scenario.txt&quot;</span><span class="p">,</span>
+                    <span class="kc">False</span><span class="p">,</span>
+                    <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># Parsing outputs</span>
+<span class="n">result_sitesCSV</span> <span class="o">=</span> <span class="n">parse_CSVFiles_PnET_SitesOutput</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/Output/Site1&quot;</span><span class="p">,</span>
+                                                  <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;pnetsuccession.txt&quot;</span><span class="p">][</span><span class="s2">&quot;StartYear&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : Additional file : !Run_scenario.bat
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : Climate file : climate.txt
+Found : Disturbance Reduction File : disturbance_reductions.txt
+Found : Additional file : ecoregion.img
+Found : Main ecoregions file : ecoregion.txt
+Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Additional file : initial-communities.img
+Found : Initial Communities file : initial-communities.txt
+Found : PnET generic parameter file : PnETGenericParameters.txt
+Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
+Found : Main PnET parameter file : pnetsuccession.txt
+Found : Additional file : README.txt
+Found : Main scenario file : scenario.txt
+Found : Main species parameter file : species.txt
+Found : PnET species parameters file : SpeciesParameters.txt
+Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestScenarioPnET/ &amp;&amp; dotnet $LANDIS_CONSOLE scenario.txt&quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Timeout occurred while waiting for LANDIS-II output.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running FVS simulation with pinus banksiana</span>
+<span class="n">jackPine_HighSiteIndex</span> <span class="o">=</span> <span class="n">FVS_on_simulationOnSingleEmptyStand</span><span class="p">(</span><span class="n">Latitude</span> <span class="o">=</span> <span class="mf">42.73361</span><span class="p">,</span> <span class="c1"># Capital of michigan, to approximate where the parameters of this PnET sample scenario were made</span>
+                                    <span class="n">Longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">84.55556</span><span class="p">,</span> <span class="c1"># Capital of michigan, to approximate where the parameters of this PnET sample scenario were made</span>
+                                    <span class="n">Slope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no slope</span>
+                                    <span class="n">Elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no elevation </span>
+                                    <span class="n">treeSpeciesCode</span> <span class="o">=</span> <span class="s2">&quot;PJ&quot;</span><span class="p">,</span> <span class="c1"># Jack Pine, pinus banksiana. All codes are available at https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/canada/on/grinit.f#L43</span>
+                                    <span class="n">numberOfTrees</span> <span class="o">=</span> <span class="mi">2471</span><span class="p">,</span> <span class="c1"># To replicate stocking density from  https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085, supp. mat. A</span>
+                                    <span class="n">siteIndex</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span> <span class="c1"># High site index for the Jack Pine. See https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf</span>
+                                    <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;FVSon&quot;</span><span class="p">,</span>
+                                    <span class="n">timestep</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                                    <span class="n">numberOfTimesteps</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+                                    <span class="n">folderForFiles</span> <span class="o">=</span> <span class="s2">&quot;/calibrationFolder/FVS_SingleEmptyStandRun&quot;</span><span class="p">,</span>
+                                    <span class="n">clearFiles</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">jackPine_HighSiteIndex</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+Creating Database with stand and tree ini values
+Creating Keyword file
+Launching FVS sim
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{2023: 0.4, 2026: 1.8, 2029: 6.0, 2032: 12.6, 2035: 21.8, 2038: 33.4, 2041: 47.8, 2044: 64.8, 2047: 81.4, 2050: 93.4, 2053: 106.4, 2056: 111.8, 2059: 114.4, 2062: 116.8, 2065: 119.0, 2068: 121.4, 2071: 123.4, 2074: 125.6, 2077: 127.8, 2080: 129.8, 2083: 131.6, 2086: 134.2, 2089: 135.0, 2092: 132.4, 2095: 130.2, 2098: 128.4, 2101: 126.4, 2104: 124.4, 2107: 122.4, 2110: 120.6, 2113: 119.0, 2116: 117.4, 2119: 115.6, 2122: 114.0, 2125: 112.6, 2128: 111.0, 2131: 109.6, 2134: 108.4, 2137: 107.0, 2140: 105.8}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ploting the outputs from PnET and FVS together</span>
+<span class="c1"># We re-format the time entries of the FVS dictionnary so that years are expressed in absoluted (from 0 to 120)</span>
+<span class="n">initialKeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">jackPine_HighSiteIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># print(initialKeys)</span>
+<span class="k">if</span> <span class="n">initialKeys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">initialKeys</span><span class="p">:</span>
+        <span class="n">jackPine_HighSiteIndex</span><span class="p">[</span><span class="n">key</span> <span class="o">-</span> <span class="mi">2023</span><span class="p">]</span> <span class="o">=</span> <span class="n">jackPine_HighSiteIndex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">jackPine_HighSiteIndex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<span class="n">plot_TimeSeries_CSV_PnETSitesOutputs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result_sitesCSV</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">referenceDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">:{</span><span class="s2">&quot;Time&quot;</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">jackPine_HighSiteIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">jackPine_HighSiteIndex</span><span class="o">.</span><span class="n">values</span><span class="p">())}},</span>
+                                     <span class="n">columnToPlotSelector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">],</span>
+                                     <span class="n">trueTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">realBiomass</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">cellLength</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
+</pre></div>
+</div>
+<img alt="../_images/ac33dee07065e9d5a9b2e9105a246f944029793cac06fdbac75f97eead542f50.png" src="../_images/ac33dee07065e9d5a9b2e9105a246f944029793cac06fdbac75f97eead542f50.png" />
+</div>
+</div>
+<p>Here, we can see a pretty large divergence between the prediction of PnET succession and the projection of FVS. The parameters used in PnET Succession are derived from a template on Github, and are of unknown origin to me. Let’s try again, but with the initial parameters that I have identified.</p>
+</section>
+<section id="another-test-with-more-robut-parameters">
+<h2>Another test - with more robut parameters<a class="headerlink" href="#another-test-with-more-robut-parameters" title="Link to this heading">#</a></h2>
+<p>The parameters that we will use this time come from <a class="reference internal" href="3.Initial_Species_Parameters.html"><span class="std std-doc">Initial species parameters</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading parameters and launching a simple PnET sim</span>
+<span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Loading parameters from template</span>
+<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="c1"># Editing initial communities to only have single cohort of Abies Balsamea</span>
+<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;querrubr&quot;</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;pinubank&quot;</span><span class="p">]</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;abiebals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+
+<span class="c1"># Editing cell length so that one cell = 1ha</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="c1"># Putting duration to 120 years</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;Duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">120</span>
+
+<span class="c1"># We load the initial parameters (see 3.Initial_Species_Parameters.ipynb)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="n">coreSpeciesParameters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="n">PnETSpeciesParametersFinal</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/InitialGenericParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="n">genericParameters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+
+<span class="c1"># We replace the dictionnaries from the template with the ones with the initial parameters</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;species.txt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">coreSpeciesParameters</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;SpeciesParameters.txt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PnETSpeciesParametersFinal</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;PnETGenericParameters.txt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">genericParameters</span>
+
+<span class="c1"># Writing parameters in temporary folder</span>
+<span class="n">testScenarioPath</span> <span class="o">=</span> <span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">)</span>
+
+<span class="n">write_all_LANDIS_files</span><span class="p">(</span><span class="n">testScenarioPath</span><span class="p">,</span>
+                       <span class="n">PnETGitHub_OneCellSim</span><span class="p">,</span>
+                       <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Running LANDIS-II sim</span>
+<span class="n">runLANDIS_Simulation</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;scenario.txt&quot;</span><span class="p">,</span>
+                    <span class="kc">False</span><span class="p">,</span>
+                    <span class="mi">5</span><span class="p">)</span>
+<span class="c1"># Parsing outputs</span>
+<span class="n">result_sitesCSV</span> <span class="o">=</span> <span class="n">parse_CSVFiles_PnET_SitesOutput</span><span class="p">(</span><span class="s2">&quot;/tmp/TestScenarioPnET/Output/Site1&quot;</span><span class="p">,</span>
+                                                  <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;pnetsuccession.txt&quot;</span><span class="p">][</span><span class="s2">&quot;StartYear&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : Additional file : !Run_scenario.bat
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : Climate file : climate.txt
+Found : Disturbance Reduction File : disturbance_reductions.txt
+Found : Additional file : ecoregion.img
+Found : Main ecoregions file : ecoregion.txt
+Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Additional file : initial-communities.img
+Found : Initial Communities file : initial-communities.txt
+Found : PnET generic parameter file : PnETGenericParameters.txt
+Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
+Found : Main PnET parameter file : pnetsuccession.txt
+Found : Additional file : README.txt
+Found : Main scenario file : scenario.txt
+Found : Main species parameter file : species.txt
+Found : PnET species parameters file : SpeciesParameters.txt
+Found : Additional file : !Run_scenario.bat
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : Climate file : climate.txt
+Found : Disturbance Reduction File : disturbance_reductions.txt
+Found : Additional file : ecoregion.img
+Found : Main ecoregions file : ecoregion.txt
+Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Additional file : initial-communities.img
+Found : Initial Communities file : initial-communities.txt
+Found : PnET generic parameter file : PnETGenericParameters.txt
+Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
+Found : Main PnET parameter file : pnetsuccession.txt
+Found : Additional file : README.txt
+Found : Main scenario file : scenario.txt
+Found : Main species parameter file : species.txt
+Found : PnET species parameters file : SpeciesParameters.txt
+Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestScenarioPnET/ &amp;&amp; dotnet $LANDIS_CONSOLE scenario.txt&quot;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The LANDIS-II simulation has finished properly !
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running FVS simulation with Abies balsamea</span>
+<span class="n">balsamFir_HighSiteIndex</span> <span class="o">=</span> <span class="n">FVS_on_simulationOnSingleEmptyStand</span><span class="p">(</span><span class="n">Latitude</span> <span class="o">=</span> <span class="mf">42.73361</span><span class="p">,</span> <span class="c1"># Capital of michigan, to approximate where the parameters of this PnET sample scenario were made</span>
+                                    <span class="n">Longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">84.55556</span><span class="p">,</span> <span class="c1"># Capital of michigan, to approximate where the parameters of this PnET sample scenario were made</span>
+                                    <span class="n">Slope</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no slope</span>
+                                    <span class="n">Elevation</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="c1"># We want ideal/neutral conditions, so no elevation </span>
+                                    <span class="n">treeSpeciesCode</span> <span class="o">=</span> <span class="s2">&quot;BF&quot;</span><span class="p">,</span> <span class="c1"># Balsam fir, Abies balsamea. All codes are available at https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/canada/on/grinit.f#L43</span>
+                                    <span class="n">numberOfTrees</span> <span class="o">=</span> <span class="mi">2471</span><span class="p">,</span> <span class="c1"># To replicate stocking density from  https://cdnsciencepub.com/doi/10.1139/cjfr-2024-0085, supp. mat. A</span>
+                                    <span class="n">siteIndex</span> <span class="o">=</span> <span class="mi">70</span><span class="p">,</span> <span class="c1"># High site index for the Balsam fir. See https://www.fs.usda.gov/nrs/pubs/gtr/gtr_nc128.pdf</span>
+                                    <span class="n">variant</span> <span class="o">=</span> <span class="s2">&quot;FVSon&quot;</span><span class="p">,</span>
+                                    <span class="n">timestep</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+                                    <span class="n">numberOfTimesteps</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+                                    <span class="n">folderForFiles</span> <span class="o">=</span> <span class="s2">&quot;/calibrationFolder/FVS_SingleEmptyStandRun&quot;</span><span class="p">,</span>
+                                    <span class="n">clearFiles</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">balsamFir_HighSiteIndex</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+Creating Database with stand and tree ini values
+Creating Keyword file
+Launching FVS sim
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+{2023: 0.4, 2026: 1.0, 2029: 1.6, 2032: 3.2, 2035: 7.0, 2038: 13.8, 2041: 23.8, 2044: 35.8, 2047: 46.4, 2050: 55.2, 2053: 63.4, 2056: 70.6, 2059: 77.8, 2062: 85.2, 2065: 93.2, 2068: 101.6, 2071: 109.8, 2074: 117.6, 2077: 123.4, 2080: 129.8, 2083: 135.8, 2086: 142.0, 2089: 148.2, 2092: 154.6, 2095: 161.0, 2098: 167.2, 2101: 173.8, 2104: 180.2, 2107: 186.8, 2110: 193.2, 2113: 199.6, 2116: 206.0, 2119: 212.6, 2122: 219.6, 2125: 226.6, 2128: 233.4, 2131: 240.2, 2134: 247.0, 2137: 254.0, 2140: 261.0}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ploting the outputs from PnET and FVS together</span>
+<span class="c1"># We re-format the time entries of the FVS dictionnary so that years are expressed in absoluted (from 0 to 120)</span>
+<span class="n">initialKeys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">balsamFir_HighSiteIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># print(initialKeys)</span>
+<span class="k">if</span> <span class="n">initialKeys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">initialKeys</span><span class="p">:</span>
+        <span class="n">balsamFir_HighSiteIndex</span><span class="p">[</span><span class="n">key</span> <span class="o">-</span> <span class="mi">2023</span><span class="p">]</span> <span class="o">=</span> <span class="n">balsamFir_HighSiteIndex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">balsamFir_HighSiteIndex</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<span class="n">plot_TimeSeries_CSV_PnETSitesOutputs</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result_sitesCSV</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">],</span>
+                                     <span class="n">referenceDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">:{</span><span class="s2">&quot;Time&quot;</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">balsamFir_HighSiteIndex</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="s2">&quot;Values&quot;</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">balsamFir_HighSiteIndex</span><span class="o">.</span><span class="n">values</span><span class="p">())}},</span>
+                                     <span class="n">columnToPlotSelector</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Wood(gDW)&quot;</span><span class="p">],</span>
+                                     <span class="n">trueTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">realBiomass</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">cellLength</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
+</pre></div>
+</div>
+<img alt="../_images/560626d6bd4173d70e4fcce506fccc1d3ab6874a5f37a1a7d64b8ff27478c175.png" src="../_images/560626d6bd4173d70e4fcce506fccc1d3ab6874a5f37a1a7d64b8ff27478c175.png" />
+</div>
 </div>
 </section>
 </section>
@@ -662,6 +893,8 @@ This can be useful to paramterize several parameters of PnET Succession related 
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-python-function-used-to-obtain-growth-data-from-fvs-for-a-monoculture">Custom python function used to obtain growth data from FVS for a monoculture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-comparing-fvs-outputs-to-pnet-outputs">Test : Comparing FVS outputs to PnET outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-test-with-more-robut-parameters">Another test - with more robut parameters</a></li>
 </ul>
   </nav></div>
 
