@@ -371,12 +371,11 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-core-species-parameters-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between core species parameters, generic parameters, generic species parameters, and species parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-parameter-values">Sources of parameter values</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Initial species parameters</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-species-parameters-for-the-species">Core species parameters for the species</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Initial species parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-parameters">Generic parameters</a></li>
 </ul>
             </nav>
@@ -393,8 +392,9 @@
 <h1>Initial species parameters<a class="headerlink" href="#initial-species-parameters" title="Link to this heading">#</a></h1>
 <p>In the <a class="reference external" href="https://klemet.github.io/DIVERSE_LANDIS-II_Parameterization/#Plan%20for%20a%20new%20calibration%20of%20PnET%20in%20Canada">calibration plan</a>, I propose we start either with the parameter values for the type of shade tolerant species proposed in the <a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> (Table 1 page 74), or with parameter values extracted from the litterature.</p>
 <p><strong>Here, I describe how/from where I obtained these initial parameter values that serve as the basis of the calibration.</strong></p>
-<section id="parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">
-<h2>Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters<a class="headerlink" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters" title="Link to this heading">#</a></h2>
+<section id="parameters-concerned-and-distinction-between-core-species-parameters-generic-parameters-generic-species-parameters-and-species-parameters">
+<h2>Parameters concerned and distinction between core species parameters, generic parameters, generic species parameters, and species parameters<a class="headerlink" href="#parameters-concerned-and-distinction-between-core-species-parameters-generic-parameters-generic-species-parameters-and-species-parameters" title="Link to this heading">#</a></h2>
+<p>First, we will distinguish between “Core species parameters” - species parameters needed by any succession extension (e.g. Longevity, dispersal distance, etc.); and the species parameters necessary to PnET - which we will distinguish into generic parameters, generic species parameters, and species parameters.</p>
 <p><a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a> advises that several species parameters should be used as <em>generic species parameters</em>, meaning that their value should be the same between species, in order to facilitate the comprehension of competition processes.</p>
 <blockquote>
 <div><p>Use the GenericPnETSpeciesParameters file for all parameters that are not varied among species.  Set parameters that will be held constant for your particular experiment or study (e.g., MaintResp, InitialNSC, etc.)</p>
@@ -435,9 +435,100 @@
 </li>
 </ul>
 </section>
+<section id="core-species-parameters-for-the-species">
+<h2>Core species parameters for the species<a class="headerlink" href="#core-species-parameters-for-the-species" title="Link to this heading">#</a></h2>
+<p>These parameters are needed by all LANDIS-II extensions. They will not be calibrated, as they are all species life-history traits that are well defined in the litterature.</p>
+<!--
+WARNING : If you edit this table, always put any commentaries following the value of the parameter inside parenthesis. This is because we use some Python functions later to read this markdown cell and extract all of the parameter values from this table, to put it into a Python dictionnary that we can then use to interact with LANDIS-II scenarios. Parenthesis and square braquets are ignored, which help the function get the right values for the parameters.
+
+Also, always separate the value from parenthesis or square braquets with a space
+
+In short, don't do :
+7[^1]
+7, comes from this source
+7; comes from this source
+
+Do :
+7 [^1]
+7 (Comes from this source)
+7 (because of this reason) [^1]
+
+Also : Here, the name of the columns must be the exact same as write_LANDIS_SpeciesCoreFile in functionsForCalibration.py.
+-->
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Species Name</p></th>
+<th class="head text-center"><p>Longevity</p></th>
+<th class="head text-center"><p>Sexual Maturity</p></th>
+<th class="head text-center"><p>Shade Tolerance</p></th>
+<th class="head text-center"><p>Fire Tolerance</p></th>
+<th class="head text-center"><p>Seed Dispersal Distance - Effective</p></th>
+<th class="head text-center"><p>Seed Dispersal Distance - Maximum</p></th>
+<th class="head text-center"><p>Vegetative Reproduction Probability</p></th>
+<th class="head text-center"><p>Sprout Age - Min</p></th>
+<th class="head text-center"><p>Sprout Age - Max</p></th>
+<th class="head text-center"><p>Post Fire Regen</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><em>Abies balsamea</em></p></td>
+<td class="text-center"><p>200 <a class="footnote-reference brackets" href="#id121" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>25 <a class="footnote-reference brackets" href="#id121" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>5 <a class="footnote-reference brackets" href="#id121" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id121" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>30 <a class="footnote-reference brackets" href="#id121" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>160 <a class="footnote-reference brackets" href="#id121" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>none <a class="footnote-reference brackets" href="#id121" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><em>Acer rubrum</em></p></td>
+<td class="text-center"><p>235 <a class="footnote-reference brackets" href="#id121" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>5 <a class="footnote-reference brackets" href="#id121" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>4 <a class="footnote-reference brackets" href="#id121" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id121" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>100 <a class="footnote-reference brackets" href="#id121" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>200 <a class="footnote-reference brackets" href="#id121" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.75 <a class="footnote-reference brackets" href="#id121" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>150 <a class="footnote-reference brackets" href="#id121" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>none</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><em>Picea mariana</em></p></td>
+<td class="text-center"><p>215 <a class="footnote-reference brackets" href="#id121" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>30 <a class="footnote-reference brackets" href="#id121" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>3 <a class="footnote-reference brackets" href="#id121" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>3 <a class="footnote-reference brackets" href="#id121" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>79 <a class="footnote-reference brackets" href="#id121" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>158 <a class="footnote-reference brackets" href="#id121" id="id25" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0 <a class="footnote-reference brackets" href="#id121" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>none</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="initial-generic-parameters-for-the-species">
 <h2>Initial generic parameters for the species<a class="headerlink" href="#initial-generic-parameters-for-the-species" title="Link to this heading">#</a></h2>
-<p>Here is a table of species parameter values for the parameters that will be kept as generic (<code class="docutils literal notranslate"><span class="pre">MaintResp</span></code>, <code class="docutils literal notranslate"><span class="pre">InitialNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">FracBelowG</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnAgeRed</span></code>, <code class="docutils literal notranslate"><span class="pre">DNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD1</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD2</span></code>, <code class="docutils literal notranslate"><span class="pre">BFoldResp</span></code>, <code class="docutils literal notranslate"><span class="pre">Q10</span></code>, <code class="docutils literal notranslate"><span class="pre">FolLignin</span></code>, <code class="docutils literal notranslate"><span class="pre">CFracBiomass</span></code>) between species. Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#source-param-values"><span class="std std-ref">Sources of parameter values</span></a>.</p>
+<p>Here is a table of species parameter values for the parameters that will be kept as generic (<code class="docutils literal notranslate"><span class="pre">MaintResp</span></code>, <code class="docutils literal notranslate"><span class="pre">InitialNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">FracBelowG</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnAgeRed</span></code>, <code class="docutils literal notranslate"><span class="pre">DNSC</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD1</span></code>, <code class="docutils literal notranslate"><span class="pre">DVPD2</span></code>, <code class="docutils literal notranslate"><span class="pre">BFolResp</span></code>, <code class="docutils literal notranslate"><span class="pre">Q10</span></code>, <code class="docutils literal notranslate"><span class="pre">FolLignin</span></code>, <code class="docutils literal notranslate"><span class="pre">CFracBiomass</span></code>) between species. Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#source-param-values"><span class="std std-ref">Sources of parameter values</span></a>.</p>
+<!--
+WARNING : If you edit this table, always put any commentaries following the value of the parameter inside parenthesis. This is because we use some Python functions later to read this markdown cell and extract all of the parameter values from this table, to put it into a Python dictionnary that we can then use to interact with LANDIS-II scenarios. Parenthesis and square braquets are ignored, which help the function get the right values for the parameters.
+
+Also, always separate the value from parenthesis or square braquets with a space
+
+In short, don't do :
+7[^1]
+7, comes from this source
+7; comes from this source
+
+Do :
+7 [^1]
+7 (Comes from this source)
+7 (because of this reason) [^1]
+-->
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">MaintResp</span></code></p></th>
@@ -447,29 +538,45 @@
 <th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DNSC</span></code></p></th>
 <th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DVPD1</span></code></p></th>
 <th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">DVPD2</span></code></p></th>
-<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">BFoldResp</span></code></p></th>
+<th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">BFolResp</span></code></p></th>
 <th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">Q10</span></code></p></th>
 <th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">FolLignin</span></code></p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p>0.002 <a class="footnote-reference brackets" href="#id90" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>7 <a class="footnote-reference brackets" href="#id91" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.35 (average among species in <a class="footnote-reference brackets" href="#id92" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> and <a class="footnote-reference brackets" href="#id91" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>)</p></td>
-<td class="text-center"><p>5 <a class="footnote-reference brackets" href="#id90" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id90" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id90" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.1 <a class="footnote-reference brackets" href="#id90" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-even"><td class="text-center"><p>0.002 <a class="footnote-reference brackets" href="#id122" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>7 <a class="footnote-reference brackets" href="#id123" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.35 (average among species in <a class="footnote-reference brackets" href="#id121" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> and <a class="footnote-reference brackets" href="#id123" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>5 <a class="footnote-reference brackets" href="#id122" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id122" id="id34" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.05 <a class="footnote-reference brackets" href="#id122" id="id35" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id122" id="id36" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.1 <a class="footnote-reference brackets" href="#id122" id="id37" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id122" id="id38" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id122" id="id39" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<section id="id12">
-<h3>Initial species parameters<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+</section>
+<section id="id40">
+<h2>Initial species parameters<a class="headerlink" href="#id40" title="Link to this heading">#</a></h2>
 <p>Here is a table of parameter values for the parameters that will vary among species (<code class="docutils literal notranslate"><span class="pre">FolN</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWmax</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxLAI</span></code>, <code class="docutils literal notranslate"><span class="pre">TOFol</span></code>, <code class="docutils literal notranslate"><span class="pre">TORoot</span></code>, <code class="docutils literal notranslate"><span class="pre">TOWood</span></code>, <code class="docutils literal notranslate"><span class="pre">HalfSat</span></code>, <code class="docutils literal notranslate"><span class="pre">H1</span></code>, <code class="docutils literal notranslate"><span class="pre">H2</span></code>, <code class="docutils literal notranslate"><span class="pre">H3</span></code>, <code class="docutils literal notranslate"><span class="pre">H4</span></code>, <code class="docutils literal notranslate"><span class="pre">LeafOnMinT</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTMin</span></code>, <code class="docutils literal notranslate"><span class="pre">PsnTOpt</span></code>, <code class="docutils literal notranslate"><span class="pre">20k</span></code>, <code class="docutils literal notranslate"><span class="pre">EstMoist</span></code>, <code class="docutils literal notranslate"><span class="pre">EstRad</span></code>, <code class="docutils literal notranslate"><span class="pre">FracFol</span></code>, <code class="docutils literal notranslate"><span class="pre">FrActWd</span></code>, <code class="docutils literal notranslate"><span class="pre">SLWDel</span></code>, <code class="docutils literal notranslate"><span class="pre">k</span></code>, <code class="docutils literal notranslate"><span class="pre">KWdLit</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxA</span></code> and <code class="docutils literal notranslate"><span class="pre">AmaxB</span></code>). Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#source-param-values"><span class="std std-ref">Sources of parameter values</span></a>.</p>
+<!--
+WARNING : If you edit this table, always put any commentaries following the value of the parameter inside parenthesis. This is because we use some Python functions later to read this markdown cell and extract all of the parameter values from this table, to put it into a Python dictionnary that we can then use to interact with LANDIS-II scenarios. Parenthesis and square braquets are ignored, which help the function get the right values for the parameters.
+
+Also, always separate the value from parenthesis or square braquets with a space
+
+In short, don't do :
+7[^1]
+7, comes from this source
+7; comes from this source
+
+Do :
+7 [^1]
+7 (Comes from this source)
+7 (because of this reason) [^1]
+-->
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-center"><p>Species</p></th>
@@ -500,88 +607,102 @@
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-center"><p><em>Abies balsamea</em></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
-<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>134 <a class="footnote-reference brackets" href="#id90" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>-1.5 <a class="footnote-reference brackets" href="#id90" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>3 <a class="footnote-reference brackets" href="#id90" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id90" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id90" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1.9 <a class="footnote-reference brackets" href="#id90" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.8 <a class="footnote-reference brackets" href="#id90" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>16.8 <a class="footnote-reference brackets" href="#id90" id="id25" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id90" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
-<td class="text-center"><p>0.976 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant</p></td>
-<td class="text-center"><p>0.07 <a class="footnote-reference brackets" href="#id90" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.00003 <a class="footnote-reference brackets" href="#id90" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.0 <a class="footnote-reference brackets" href="#id90" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id90" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id90" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.125; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id34" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.5 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id35" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant</p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id41" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id122" id="id42" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id122" id="id43" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id122" id="id44" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (same as TOWood)</p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id122" id="id45" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>134 <a class="footnote-reference brackets" href="#id122" id="id46" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-1.5 <a class="footnote-reference brackets" href="#id122" id="id47" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>3 <a class="footnote-reference brackets" href="#id122" id="id48" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id122" id="id49" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>140 <a class="footnote-reference brackets" href="#id122" id="id50" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.9 <a class="footnote-reference brackets" href="#id122" id="id51" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.8 <a class="footnote-reference brackets" href="#id122" id="id52" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>16.8 <a class="footnote-reference brackets" href="#id122" id="id53" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id122" id="id54" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id55" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.976 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id56" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant)</p></td>
+<td class="text-center"><p>0.07 <a class="footnote-reference brackets" href="#id122" id="id57" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.00003 <a class="footnote-reference brackets" href="#id122" id="id58" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.0 <a class="footnote-reference brackets" href="#id122" id="id59" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id122" id="id60" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id122" id="id61" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.125 (written as “KWlit” because of typo in <a class="footnote-reference brackets" href="#id122" id="id62" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>) <a class="footnote-reference brackets" href="#id122" id="id63" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id64" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Abies balsamea</em> is very shade tolerant)</p></td>
 </tr>
 <tr class="row-odd"><td class="text-center"><p><em>Acer rubrum</em></p></td>
-<td class="text-center"><p>2.32 <a class="footnote-reference brackets" href="#id90" id="id36" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>73 <a class="footnote-reference brackets" href="#id90" id="id37" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id38" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id90" id="id39" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
-<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id90" id="id40" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>181 <a class="footnote-reference brackets" href="#id90" id="id41" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>-2 <a class="footnote-reference brackets" href="#id90" id="id42" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id90" id="id43" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id44" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id90" id="id45" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>2.4 <a class="footnote-reference brackets" href="#id90" id="id46" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1.75 <a class="footnote-reference brackets" href="#id90" id="id47" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>25.5 <a class="footnote-reference brackets" href="#id90" id="id48" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.58 <a class="footnote-reference brackets" href="#id90" id="id49" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id50" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
-<td class="text-center"><p>0.928 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id51" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant</p></td>
-<td class="text-center"><p>0.014 <a class="footnote-reference brackets" href="#id90" id="id52" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id90" id="id53" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id90" id="id54" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>-46 <a class="footnote-reference brackets" href="#id90" id="id55" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>71.9 <a class="footnote-reference brackets" href="#id90" id="id56" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.075; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id57" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.45 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id58" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant</p></td>
+<td class="text-center"><p>2.32 <a class="footnote-reference brackets" href="#id122" id="id65" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>73 <a class="footnote-reference brackets" href="#id122" id="id66" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id67" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id122" id="id68" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (same as TOWood)</p></td>
+<td class="text-center"><p>0.037 <a class="footnote-reference brackets" href="#id122" id="id69" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>181 <a class="footnote-reference brackets" href="#id122" id="id70" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-2 <a class="footnote-reference brackets" href="#id122" id="id71" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2 <a class="footnote-reference brackets" href="#id122" id="id72" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id122" id="id73" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>145 <a class="footnote-reference brackets" href="#id122" id="id74" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>2.4 <a class="footnote-reference brackets" href="#id122" id="id75" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.75 <a class="footnote-reference brackets" href="#id122" id="id76" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>25.5 <a class="footnote-reference brackets" href="#id122" id="id77" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.58 <a class="footnote-reference brackets" href="#id122" id="id78" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id79" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.928 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id80" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant)</p></td>
+<td class="text-center"><p>0.014 <a class="footnote-reference brackets" href="#id122" id="id81" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id122" id="id82" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.2 <a class="footnote-reference brackets" href="#id122" id="id83" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-46 <a class="footnote-reference brackets" href="#id122" id="id84" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>71.9 <a class="footnote-reference brackets" href="#id122" id="id85" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.075 (written as “KWlit” because of typo in <a class="footnote-reference brackets" href="#id122" id="id86" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>) <a class="footnote-reference brackets" href="#id122" id="id87" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.45 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id88" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Acer rubrum</em> is somewhat shade tolerant)</p></td>
 </tr>
 <tr class="row-even"><td class="text-center"><p><em>Picea mariana</em></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id59" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>225 <a class="footnote-reference brackets" href="#id90" id="id60" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.18 <a class="footnote-reference brackets" href="#id90" id="id61" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id62" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> same as TOWood</p></td>
-<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id90" id="id63" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>197 <a class="footnote-reference brackets" href="#id90" id="id64" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>-4.5 <a class="footnote-reference brackets" href="#id90" id="id65" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id90" id="id66" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id90" id="id67" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id90" id="id68" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id90" id="id69" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.175 <a class="footnote-reference brackets" href="#id90" id="id70" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>15.1 <a class="footnote-reference brackets" href="#id90" id="id71" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id90" id="id72" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id90" id="id73" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
-<td class="text-center"><p>0.954 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id74" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant</p></td>
-<td class="text-center"><p>0.04 <a class="footnote-reference brackets" href="#id90" id="id75" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id90" id="id76" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id89" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>225 <a class="footnote-reference brackets" href="#id122" id="id90" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.18 <a class="footnote-reference brackets" href="#id122" id="id91" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id122" id="id92" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (same as TOWood)</p></td>
+<td class="text-center"><p>0.03 <a class="footnote-reference brackets" href="#id122" id="id93" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>197 <a class="footnote-reference brackets" href="#id122" id="id94" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>-4.5 <a class="footnote-reference brackets" href="#id122" id="id95" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id122" id="id96" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id122" id="id97" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>138 <a class="footnote-reference brackets" href="#id122" id="id98" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.5 <a class="footnote-reference brackets" href="#id122" id="id99" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.175 <a class="footnote-reference brackets" href="#id122" id="id100" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>15.1 <a class="footnote-reference brackets" href="#id122" id="id101" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.5 <a class="footnote-reference brackets" href="#id122" id="id102" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1 <a class="footnote-reference brackets" href="#id122" id="id103" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (recommanded in paragraph 26 and 32 of calibration tips)</p></td>
+<td class="text-center"><p>0.954 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id104" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant)</p></td>
+<td class="text-center"><p>0.04 <a class="footnote-reference brackets" href="#id122" id="id105" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.000022 <a class="footnote-reference brackets" href="#id122" id="id106" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td class="text-center"><p>0.0</p></td>
-<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id90" id="id77" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id90" id="id78" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.125; written as “KWlit” (typo) in <a class="footnote-reference brackets" href="#id90" id="id79" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>0.475 from page 74 of <a class="footnote-reference brackets" href="#id90" id="id80" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant</p></td>
+<td class="text-center"><p>5.3 <a class="footnote-reference brackets" href="#id122" id="id107" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>21.5 <a class="footnote-reference brackets" href="#id122" id="id108" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.125 (written as “KWlit” because of typo in <a class="footnote-reference brackets" href="#id122" id="id109" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>) <a class="footnote-reference brackets" href="#id122" id="id110" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>0.475 (from page 74 of <a class="footnote-reference brackets" href="#id122" id="id111" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, based on the fact that <em>Picea mariana</em> is pretty shade tolerant)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-</section>
 <section id="generic-parameters">
 <h2>Generic parameters<a class="headerlink" href="#generic-parameters" title="Link to this heading">#</a></h2>
 <p>These remaining parameters are the one that must be specified in the generic parameter file no matter what, but that are not supposed to vary by species or by ecoregion (<code class="docutils literal notranslate"><span class="pre">PARunits</span></code>, <code class="docutils literal notranslate"><span class="pre">PrecipEvents</span></code>, <code class="docutils literal notranslate"><span class="pre">PrecipEventsWithReplacement</span></code>, <code class="docutils literal notranslate"><span class="pre">ETExtCoeff</span></code>, <code class="docutils literal notranslate"><span class="pre">RETCropCoeff</span></code>, <code class="docutils literal notranslate"><span class="pre">PreventEstablishment</span></code>, <code class="docutils literal notranslate"><span class="pre">Wythers</span></code>, <code class="docutils literal notranslate"><span class="pre">DTEMP</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxPest</span></code>, <code class="docutils literal notranslate"><span class="pre">AmaxFrac</span></code>. Exponents are the sources with the same numbers as noted in  <a class="reference internal" href="#source-param-values"><span class="std std-ref">Sources of parameter values</span></a>.</p>
+<!--
+WARNING : If you edit this table, always put any commentaries following the value of the parameter inside parenthesis. This is because we use some Python functions later to read this markdown cell and extract all of the parameter values from this table, to put it into a Python dictionnary that we can then use to interact with LANDIS-II scenarios. Parenthesis and square braquets are ignored, which help the function get the right values for the parameters.
+
+Also, always separate the value from parenthesis or square braquets with a space
+
+In short, don't do :
+7[^1]
+7, comes from this source
+7; comes from this source
+
+Do :
+7 [^1]
+7 (Comes from this source)
+7 (because of this reason) [^1]
+-->
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-center"><p><code class="docutils literal notranslate"><span class="pre">PARunits</span></code></p></th>
@@ -597,35 +718,118 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p>mmol/m2/sec; Same unit as Halfsat, which is from <a class="footnote-reference brackets" href="#id90" id="id81" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (see previous cell)</p></td>
-<td class="text-center"><p>11 <a class="footnote-reference brackets" href="#id90" id="id82" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>True (default value in <a class="footnote-reference brackets" href="#id90" id="id83" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
-<td class="text-center"><p>0.65 (default value in <a class="footnote-reference brackets" href="#id90" id="id84" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
-<td class="text-center"><p>0.30 (default value in <a class="footnote-reference brackets" href="#id90" id="id85" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-even"><td class="text-center"><p>umol (Same unit as Halfsat, which is from <a class="footnote-reference brackets" href="#id122" id="id112" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, see previous cell; umol indicates umol/m2/seconds)</p></td>
+<td class="text-center"><p>11 <a class="footnote-reference brackets" href="#id122" id="id113" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>True (default value in <a class="footnote-reference brackets" href="#id122" id="id114" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>0.65 (default value in <a class="footnote-reference brackets" href="#id122" id="id115" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>0.30 (default value in <a class="footnote-reference brackets" href="#id122" id="id116" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
 <td class="text-center"><p>True (to prevent establishment in the monoculture calibration)</p></td>
-<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id90" id="id86" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id90" id="id87" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
-<td class="text-center"><p>1.0 (from <a class="footnote-reference brackets" href="#id90" id="id88" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, where it’s proposed that MaxPest = timestep length/10. Not useful until the calibration of establishment.)</p></td>
-<td class="text-center"><p>0.75 (default value in <a class="footnote-reference brackets" href="#id90" id="id89" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
+<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id122" id="id117" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>True <a class="footnote-reference brackets" href="#id122" id="id118" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td class="text-center"><p>1.0 (from <a class="footnote-reference brackets" href="#id122" id="id119" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, where it’s proposed that MaxPest = timestep length/10. Not useful until the calibration of establishment.)</p></td>
+<td class="text-center"><p>0.75 (default value in <a class="footnote-reference brackets" href="#id122" id="id120" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># We read the markdown content of the previous cell that contains the markdown table with the parameters,</span>
+<span class="c1"># and we transform it into a Python dictionnary that can be used with the other functions to interact with</span>
+<span class="c1"># LANDIS-II scenarios.</span>
+
+<span class="c1"># Reading species core parameters</span>
+<span class="c1"># We add the Landis Data parameter indication</span>
+<span class="n">coreSpeciesParameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">coreSpeciesParameters</span><span class="p">[</span><span class="s1">&#39;LandisData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Species&#39;</span>
+<span class="n">markdownText</span> <span class="o">=</span> <span class="n">read_markdown_cell</span><span class="p">(</span><span class="s2">&quot;./3.Initial_Species_Parameters.ipynb&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">markdownTable</span> <span class="o">=</span> <span class="n">extract_table</span><span class="p">(</span><span class="n">markdownText</span><span class="p">)</span>
+<span class="n">coreSpeciesParameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseTableSpeciesParameters</span><span class="p">(</span><span class="n">markdownTable</span><span class="p">))</span>
+
+<span class="c1"># print(coreSpeciesParameters)</span>
+
+<span class="c1"># Reading PnET Species Parameters</span>
+<span class="c1"># We format the dictionnary for use with the other functions</span>
+<span class="n">PnETSpeciesParametersFinal</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">PnETSpeciesParametersFinal</span> <span class="p">[</span><span class="s1">&#39;LandisData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;PnETSpeciesParameters&#39;</span>
+<span class="n">markdownText</span> <span class="o">=</span> <span class="n">read_markdown_cell</span><span class="p">(</span><span class="s2">&quot;./3.Initial_Species_Parameters.ipynb&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">markdownTable</span> <span class="o">=</span> <span class="n">extract_table</span><span class="p">(</span><span class="n">markdownText</span><span class="p">)</span>
+<span class="n">PnETSpeciesParameters</span> <span class="o">=</span> <span class="n">parseTableSpeciesParameters</span><span class="p">(</span><span class="n">markdownTable</span><span class="p">)</span>
+<span class="n">PnETSpeciesParametersFinal</span><span class="p">[</span><span class="s1">&#39;PnETSpeciesParameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PnETSpeciesParameters</span>
+
+<span class="c1"># print(PnETSpeciesParametersFinal)</span>
+
+<span class="c1"># Species generic parameters</span>
+<span class="c1"># We add the Landis Data parameter indicator and another needed for this parameter file</span>
+<span class="n">genericParameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+<span class="n">genericParameters</span><span class="p">[</span><span class="s1">&#39;LandisData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;PnETGenericParameters&#39;</span>
+<span class="n">genericParameters</span><span class="p">[</span><span class="s1">&#39;PnETGenericParameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Value&#39;</span>
+<span class="n">markdownText</span> <span class="o">=</span> <span class="n">read_markdown_cell</span><span class="p">(</span><span class="s2">&quot;./3.Initial_Species_Parameters.ipynb&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">markdownTable</span> <span class="o">=</span> <span class="n">extract_table</span><span class="p">(</span><span class="n">markdownText</span><span class="p">)</span>
+<span class="n">genericParameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseTableGenericParameters</span><span class="p">(</span><span class="n">markdownTable</span><span class="p">))</span>
+
+<span class="c1"># print(genericParameters)</span>
+
+<span class="c1"># Generic parameters</span>
+<span class="c1"># We&#39;re going to add these to the generic species parameters to be in one single dict to create the parameter file that corresponds to them</span>
+<span class="n">markdownText</span> <span class="o">=</span> <span class="n">read_markdown_cell</span><span class="p">(</span><span class="s2">&quot;./3.Initial_Species_Parameters.ipynb&quot;</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+<span class="n">markdownTable</span> <span class="o">=</span> <span class="n">extract_table</span><span class="p">(</span><span class="n">markdownText</span><span class="p">)</span>
+<span class="n">genericParameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">parseTableGenericParameters</span><span class="p">(</span><span class="n">markdownTable</span><span class="p">))</span>
+<span class="c1"># print(genericParameters)</span>
+
+<span class="c1"># Now, we change any mention of the species name toward a species code usable in LANDIS-II</span>
+<span class="n">speciesCodeDict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Abies balsamea&quot;</span> <span class="p">:</span> <span class="s2">&quot;abiebals&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;Acer rubrum&quot;</span> <span class="p">:</span> <span class="s2">&quot;acerrubr&quot;</span><span class="p">,</span>
+                   <span class="s2">&quot;Picea mariana&quot;</span> <span class="p">:</span> <span class="s2">&quot;picemari&quot;</span><span class="p">}</span>
+<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">speciesCodeDict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">coreSpeciesParameters</span> <span class="o">=</span> <span class="n">replace_in_dict</span><span class="p">(</span><span class="n">coreSpeciesParameters</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">speciesCodeDict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+    <span class="n">PnETSpeciesParametersFinal</span> <span class="o">=</span> <span class="n">replace_in_dict</span><span class="p">(</span><span class="n">PnETSpeciesParametersFinal</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">speciesCodeDict</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+<span class="c1"># We print the dictionnaries for verification</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">coreSpeciesParameters</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">PnETSpeciesParametersFinal</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">genericParameters</span><span class="p">)</span>
+
+<span class="c1"># We save the dictionnary in a file to use it later in other notebooks.</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="c1"># Step 4: Write the dictionary to the file</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">coreSpeciesParameters</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="c1"># Step 4: Write the dictionary to the file</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">PnETSpeciesParametersFinal</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./SpeciesParametersSets/Initial/InitialGenericParameters.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+    <span class="c1"># Step 4: Write the dictionary to the file</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">genericParameters</span><span class="p">,</span> <span class="n">json_file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;LandisData&#39;: &#39;Species&#39;, &#39;abiebals&#39;: {&#39;Longevity&#39;: &#39;200&#39;, &#39;Sexual Maturity&#39;: &#39;25&#39;, &#39;Shade Tolerance&#39;: &#39;5&#39;, &#39;Fire Tolerance&#39;: &#39;1&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;30&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;160&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0&#39;, &#39;Sprout Age - Min&#39;: &#39;0&#39;, &#39;Sprout Age - Max&#39;: &#39;0&#39;, &#39;Post Fire Regen&#39;: &#39;none&#39;}, &#39;acerrubr&#39;: {&#39;Longevity&#39;: &#39;235&#39;, &#39;Sexual Maturity&#39;: &#39;5&#39;, &#39;Shade Tolerance&#39;: &#39;4&#39;, &#39;Fire Tolerance&#39;: &#39;1&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;100&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;200&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0.75&#39;, &#39;Sprout Age - Min&#39;: &#39;0&#39;, &#39;Sprout Age - Max&#39;: &#39;150&#39;, &#39;Post Fire Regen&#39;: &#39;none&#39;}, &#39;picemari&#39;: {&#39;Longevity&#39;: &#39;215&#39;, &#39;Sexual Maturity&#39;: &#39;30&#39;, &#39;Shade Tolerance&#39;: &#39;3&#39;, &#39;Fire Tolerance&#39;: &#39;3&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;79&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;158&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0&#39;, &#39;Sprout Age - Min&#39;: &#39;0&#39;, &#39;Sprout Age - Max&#39;: &#39;0&#39;, &#39;Post Fire Regen&#39;: &#39;none&#39;}}
+{&#39;LandisData&#39;: &#39;PnETSpeciesParameters&#39;, &#39;PnETSpeciesParameters&#39;: {&#39;abiebals&#39;: {&#39;FolN&#39;: &#39;1&#39;, &#39;SLWmax&#39;: &#39;145&#39;, &#39;TOFol&#39;: &#39;0.2&#39;, &#39;TORoot&#39;: &#39;0.03&#39;, &#39;TOWood&#39;: &#39;0.03&#39;, &#39;HalfSat&#39;: &#39;134&#39;, &#39;H1&#39;: &#39;-1.5&#39;, &#39;H2&#39;: &#39;3&#39;, &#39;H3&#39;: &#39;140&#39;, &#39;H4&#39;: &#39;140&#39;, &#39;LeafOnMinT&#39;: &#39;1.9&#39;, &#39;PsnTMin&#39;: &#39;0.8&#39;, &#39;PsnTOpt&#39;: &#39;16.8&#39;, &#39;k&#39;: &#39;0.5&#39;, &#39;EstMoist&#39;: &#39;1&#39;, &#39;EstRad&#39;: &#39;0.976&#39;, &#39;FracFol&#39;: &#39;0.07&#39;, &#39;FrActWd&#39;: &#39;0.00003&#39;, &#39;SLWDel&#39;: &#39;0.0&#39;, &#39;AmaxA&#39;: &#39;5.3&#39;, &#39;AmaxB&#39;: &#39;21.5&#39;, &#39;KWdLit&#39;: &#39;0.125&#39;, &#39;CFracBiomass&#39;: &#39;0.5&#39;}, &#39;acerrubr&#39;: {&#39;FolN&#39;: &#39;2.32&#39;, &#39;SLWmax&#39;: &#39;73&#39;, &#39;TOFol&#39;: &#39;1&#39;, &#39;TORoot&#39;: &#39;0.037&#39;, &#39;TOWood&#39;: &#39;0.037&#39;, &#39;HalfSat&#39;: &#39;181&#39;, &#39;H1&#39;: &#39;-2&#39;, &#39;H2&#39;: &#39;2&#39;, &#39;H3&#39;: &#39;145&#39;, &#39;H4&#39;: &#39;145&#39;, &#39;LeafOnMinT&#39;: &#39;2.4&#39;, &#39;PsnTMin&#39;: &#39;1.75&#39;, &#39;PsnTOpt&#39;: &#39;25.5&#39;, &#39;k&#39;: &#39;0.58&#39;, &#39;EstMoist&#39;: &#39;1&#39;, &#39;EstRad&#39;: &#39;0.928&#39;, &#39;FracFol&#39;: &#39;0.014&#39;, &#39;FrActWd&#39;: &#39;0.000022&#39;, &#39;SLWDel&#39;: &#39;0.2&#39;, &#39;AmaxA&#39;: &#39;-46&#39;, &#39;AmaxB&#39;: &#39;71.9&#39;, &#39;KWdLit&#39;: &#39;0.075&#39;, &#39;CFracBiomass&#39;: &#39;0.45&#39;}, &#39;picemari&#39;: {&#39;FolN&#39;: &#39;1&#39;, &#39;SLWmax&#39;: &#39;225&#39;, &#39;TOFol&#39;: &#39;0.18&#39;, &#39;TORoot&#39;: &#39;0.03&#39;, &#39;TOWood&#39;: &#39;0.03&#39;, &#39;HalfSat&#39;: &#39;197&#39;, &#39;H1&#39;: &#39;-4.5&#39;, &#39;H2&#39;: &#39;1.5&#39;, &#39;H3&#39;: &#39;138&#39;, &#39;H4&#39;: &#39;138&#39;, &#39;LeafOnMinT&#39;: &#39;1.5&#39;, &#39;PsnTMin&#39;: &#39;0.175&#39;, &#39;PsnTOpt&#39;: &#39;15.1&#39;, &#39;k&#39;: &#39;0.5&#39;, &#39;EstMoist&#39;: &#39;1&#39;, &#39;EstRad&#39;: &#39;0.954&#39;, &#39;FracFol&#39;: &#39;0.04&#39;, &#39;FrActWd&#39;: &#39;0.000022&#39;, &#39;SLWDel&#39;: &#39;0.0&#39;, &#39;AmaxA&#39;: &#39;5.3&#39;, &#39;AmaxB&#39;: &#39;21.5&#39;, &#39;KWdLit&#39;: &#39;0.125&#39;, &#39;CFracBiomass&#39;: &#39;0.475&#39;}}}
+{&#39;LandisData&#39;: &#39;PnETGenericParameters&#39;, &#39;PnETGenericParameters&#39;: &#39;Value&#39;, &#39;MaintResp&#39;: &#39;0.002&#39;, &#39;InitialNSC&#39;: &#39;7&#39;, &#39;FracBelowG&#39;: &#39;0.35&#39;, &#39;PsnAgeRed&#39;: &#39;5&#39;, &#39;DNSC&#39;: &#39;0.05&#39;, &#39;DVPD1&#39;: &#39;0.05&#39;, &#39;DVPD2&#39;: &#39;2&#39;, &#39;BFolResp&#39;: &#39;0.1&#39;, &#39;Q10&#39;: &#39;2&#39;, &#39;FolLignin&#39;: &#39;0.2&#39;, &#39;PARunits&#39;: &#39;umol&#39;, &#39;PrecipEvents&#39;: &#39;11&#39;, &#39;PrecipEventsWithReplacement&#39;: &#39;True&#39;, &#39;ETExtCoeff&#39;: &#39;0.65&#39;, &#39;RETCropCoeff&#39;: &#39;0.30&#39;, &#39;PreventEstablishment&#39;: &#39;True&#39;, &#39;Wythers&#39;: &#39;True&#39;, &#39;DTEMP&#39;: &#39;True&#39;, &#39;MaxPest&#39;: &#39;1.0&#39;, &#39;AmaxFrac&#39;: &#39;0.75&#39;}
+</pre></div>
+</div>
+</div>
+</div>
 <hr class="footnotes docutils" />
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id90" role="doc-footnote">
+<aside class="footnote brackets" id="id121" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id3">3</a>,<a role="doc-backlink" href="#id4">4</a>,<a role="doc-backlink" href="#id5">5</a>,<a role="doc-backlink" href="#id6">6</a>,<a role="doc-backlink" href="#id7">7</a>,<a role="doc-backlink" href="#id8">8</a>,<a role="doc-backlink" href="#id9">9</a>,<a role="doc-backlink" href="#id10">10</a>,<a role="doc-backlink" href="#id11">11</a>,<a role="doc-backlink" href="#id12">12</a>,<a role="doc-backlink" href="#id13">13</a>,<a role="doc-backlink" href="#id14">14</a>,<a role="doc-backlink" href="#id15">15</a>,<a role="doc-backlink" href="#id16">16</a>,<a role="doc-backlink" href="#id17">17</a>,<a role="doc-backlink" href="#id18">18</a>,<a role="doc-backlink" href="#id19">19</a>,<a role="doc-backlink" href="#id20">20</a>,<a role="doc-backlink" href="#id21">21</a>,<a role="doc-backlink" href="#id22">22</a>,<a role="doc-backlink" href="#id23">23</a>,<a role="doc-backlink" href="#id24">24</a>,<a role="doc-backlink" href="#id25">25</a>,<a role="doc-backlink" href="#id26">26</a>,<a role="doc-backlink" href="#id27">27</a>,<a role="doc-backlink" href="#id28">28</a>,<a role="doc-backlink" href="#id31">29</a>)</span>
+<p><a class="reference external" href="https://esajournals.onlinelibrary.wiley.com/doi/10.1002/eap.2221">Mina et al. 2021</a> : <a class="reference external" href="https://github.com/mrcmina/REDEFINE-Mina_etal_EcolAppl/tree/1.0/Input_Data/PnET">Github repo</a></p>
+</aside>
+<aside class="footnote brackets" id="id122" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id5">2</a>,<a role="doc-backlink" href="#id6">3</a>,<a role="doc-backlink" href="#id7">4</a>,<a role="doc-backlink" href="#id8">5</a>,<a role="doc-backlink" href="#id9">6</a>,<a role="doc-backlink" href="#id10">7</a>,<a role="doc-backlink" href="#id11">8</a>,<a role="doc-backlink" href="#id13">9</a>,<a role="doc-backlink" href="#id14">10</a>,<a role="doc-backlink" href="#id15">11</a>,<a role="doc-backlink" href="#id16">12</a>,<a role="doc-backlink" href="#id17">13</a>,<a role="doc-backlink" href="#id18">14</a>,<a role="doc-backlink" href="#id19">15</a>,<a role="doc-backlink" href="#id20">16</a>,<a role="doc-backlink" href="#id21">17</a>,<a role="doc-backlink" href="#id22">18</a>,<a role="doc-backlink" href="#id23">19</a>,<a role="doc-backlink" href="#id24">20</a>,<a role="doc-backlink" href="#id25">21</a>,<a role="doc-backlink" href="#id26">22</a>,<a role="doc-backlink" href="#id27">23</a>,<a role="doc-backlink" href="#id28">24</a>,<a role="doc-backlink" href="#id29">25</a>,<a role="doc-backlink" href="#id30">26</a>,<a role="doc-backlink" href="#id31">27</a>,<a role="doc-backlink" href="#id32">28</a>,<a role="doc-backlink" href="#id33">29</a>,<a role="doc-backlink" href="#id34">30</a>,<a role="doc-backlink" href="#id35">31</a>,<a role="doc-backlink" href="#id36">32</a>,<a role="doc-backlink" href="#id37">33</a>,<a role="doc-backlink" href="#id38">34</a>,<a role="doc-backlink" href="#id39">35</a>,<a role="doc-backlink" href="#id40">36</a>,<a role="doc-backlink" href="#id41">37</a>,<a role="doc-backlink" href="#id42">38</a>,<a role="doc-backlink" href="#id43">39</a>,<a role="doc-backlink" href="#id44">40</a>,<a role="doc-backlink" href="#id45">41</a>,<a role="doc-backlink" href="#id46">42</a>,<a role="doc-backlink" href="#id47">43</a>,<a role="doc-backlink" href="#id48">44</a>,<a role="doc-backlink" href="#id49">45</a>,<a role="doc-backlink" href="#id50">46</a>,<a role="doc-backlink" href="#id51">47</a>,<a role="doc-backlink" href="#id52">48</a>,<a role="doc-backlink" href="#id53">49</a>,<a role="doc-backlink" href="#id54">50</a>,<a role="doc-backlink" href="#id55">51</a>,<a role="doc-backlink" href="#id56">52</a>,<a role="doc-backlink" href="#id57">53</a>,<a role="doc-backlink" href="#id58">54</a>,<a role="doc-backlink" href="#id59">55</a>,<a role="doc-backlink" href="#id60">56</a>,<a role="doc-backlink" href="#id61">57</a>,<a role="doc-backlink" href="#id62">58</a>,<a role="doc-backlink" href="#id63">59</a>,<a role="doc-backlink" href="#id64">60</a>,<a role="doc-backlink" href="#id65">61</a>,<a role="doc-backlink" href="#id66">62</a>,<a role="doc-backlink" href="#id67">63</a>,<a role="doc-backlink" href="#id68">64</a>,<a role="doc-backlink" href="#id69">65</a>,<a role="doc-backlink" href="#id70">66</a>,<a role="doc-backlink" href="#id71">67</a>,<a role="doc-backlink" href="#id72">68</a>,<a role="doc-backlink" href="#id73">69</a>,<a role="doc-backlink" href="#id74">70</a>,<a role="doc-backlink" href="#id75">71</a>,<a role="doc-backlink" href="#id76">72</a>,<a role="doc-backlink" href="#id77">73</a>,<a role="doc-backlink" href="#id78">74</a>,<a role="doc-backlink" href="#id79">75</a>,<a role="doc-backlink" href="#id80">76</a>,<a role="doc-backlink" href="#id81">77</a>,<a role="doc-backlink" href="#id82">78</a>,<a role="doc-backlink" href="#id83">79</a>,<a role="doc-backlink" href="#id84">80</a>,<a role="doc-backlink" href="#id85">81</a>,<a role="doc-backlink" href="#id86">82</a>,<a role="doc-backlink" href="#id87">83</a>,<a role="doc-backlink" href="#id88">84</a>,<a role="doc-backlink" href="#id89">85</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id29">1</a>,<a role="doc-backlink" href="#id33">2</a>,<a role="doc-backlink" href="#id34">3</a>,<a role="doc-backlink" href="#id35">4</a>,<a role="doc-backlink" href="#id36">5</a>,<a role="doc-backlink" href="#id37">6</a>,<a role="doc-backlink" href="#id38">7</a>,<a role="doc-backlink" href="#id39">8</a>,<a role="doc-backlink" href="#id41">9</a>,<a role="doc-backlink" href="#id42">10</a>,<a role="doc-backlink" href="#id43">11</a>,<a role="doc-backlink" href="#id44">12</a>,<a role="doc-backlink" href="#id45">13</a>,<a role="doc-backlink" href="#id46">14</a>,<a role="doc-backlink" href="#id47">15</a>,<a role="doc-backlink" href="#id48">16</a>,<a role="doc-backlink" href="#id49">17</a>,<a role="doc-backlink" href="#id50">18</a>,<a role="doc-backlink" href="#id51">19</a>,<a role="doc-backlink" href="#id52">20</a>,<a role="doc-backlink" href="#id53">21</a>,<a role="doc-backlink" href="#id54">22</a>,<a role="doc-backlink" href="#id55">23</a>,<a role="doc-backlink" href="#id56">24</a>,<a role="doc-backlink" href="#id57">25</a>,<a role="doc-backlink" href="#id58">26</a>,<a role="doc-backlink" href="#id59">27</a>,<a role="doc-backlink" href="#id60">28</a>,<a role="doc-backlink" href="#id61">29</a>,<a role="doc-backlink" href="#id62">30</a>,<a role="doc-backlink" href="#id63">31</a>,<a role="doc-backlink" href="#id64">32</a>,<a role="doc-backlink" href="#id65">33</a>,<a role="doc-backlink" href="#id66">34</a>,<a role="doc-backlink" href="#id67">35</a>,<a role="doc-backlink" href="#id68">36</a>,<a role="doc-backlink" href="#id69">37</a>,<a role="doc-backlink" href="#id70">38</a>,<a role="doc-backlink" href="#id71">39</a>,<a role="doc-backlink" href="#id72">40</a>,<a role="doc-backlink" href="#id73">41</a>,<a role="doc-backlink" href="#id74">42</a>,<a role="doc-backlink" href="#id75">43</a>,<a role="doc-backlink" href="#id76">44</a>,<a role="doc-backlink" href="#id77">45</a>,<a role="doc-backlink" href="#id78">46</a>,<a role="doc-backlink" href="#id79">47</a>,<a role="doc-backlink" href="#id80">48</a>,<a role="doc-backlink" href="#id81">49</a>,<a role="doc-backlink" href="#id82">50</a>,<a role="doc-backlink" href="#id83">51</a>,<a role="doc-backlink" href="#id84">52</a>,<a role="doc-backlink" href="#id85">53</a>,<a role="doc-backlink" href="#id86">54</a>,<a role="doc-backlink" href="#id87">55</a>,<a role="doc-backlink" href="#id88">56</a>,<a role="doc-backlink" href="#id89">57</a>,<a role="doc-backlink" href="#id90">58</a>,<a role="doc-backlink" href="#id91">59</a>,<a role="doc-backlink" href="#id92">60</a>,<a role="doc-backlink" href="#id93">61</a>,<a role="doc-backlink" href="#id94">62</a>,<a role="doc-backlink" href="#id95">63</a>,<a role="doc-backlink" href="#id96">64</a>,<a role="doc-backlink" href="#id97">65</a>,<a role="doc-backlink" href="#id98">66</a>,<a role="doc-backlink" href="#id99">67</a>,<a role="doc-backlink" href="#id100">68</a>,<a role="doc-backlink" href="#id101">69</a>,<a role="doc-backlink" href="#id102">70</a>,<a role="doc-backlink" href="#id103">71</a>,<a role="doc-backlink" href="#id104">72</a>,<a role="doc-backlink" href="#id105">73</a>,<a role="doc-backlink" href="#id106">74</a>,<a role="doc-backlink" href="#id107">75</a>,<a role="doc-backlink" href="#id108">76</a>,<a role="doc-backlink" href="#id109">77</a>,<a role="doc-backlink" href="#id110">78</a>,<a role="doc-backlink" href="#id111">79</a>,<a role="doc-backlink" href="#id112">80</a>,<a role="doc-backlink" href="#id113">81</a>,<a role="doc-backlink" href="#id114">82</a>,<a role="doc-backlink" href="#id115">83</a>,<a role="doc-backlink" href="#id116">84</a>,<a role="doc-backlink" href="#id117">85</a>,<a role="doc-backlink" href="#id118">86</a>,<a role="doc-backlink" href="#id119">87</a>,<a role="doc-backlink" href="#id120">88</a>)</span>
 <p><a class="reference download internal" download="" href="../_downloads/0c3667e495cffb2731d2820363988a43/Gustafson2024PnETUserGuide.pdf"><span class="xref download myst">Gustafson and Miranda (2023)</span></a></p>
 </aside>
-<aside class="footnote brackets" id="id91" role="doc-footnote">
+<aside class="footnote brackets" id="id123" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
-<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
+<span class="backrefs">(<a role="doc-backlink" href="#id30">1</a>,<a role="doc-backlink" href="#id32">2</a>)</span>
 <p><a class="reference external" href="https://www.frontiersin.org/articles/10.3389/ffgc.2023.1020305">Ameray et al. 2023</a> : <a class="reference external" href="https://github.com/Ameray/PhD-thesis/tree/main/chapter2/MU2">Github repo</a></p>
-</aside>
-<aside class="footnote brackets" id="id92" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
-<p><a class="reference external" href="https://esajournals.onlinelibrary.wiley.com/doi/10.1002/eap.2221">Mina et al. 2021</a> : <a class="reference external" href="https://github.com/mrcmina/REDEFINE-Mina_etal_EcolAppl/tree/1.0/Input_Data/PnET">Github repo</a></p>
 </aside>
 </aside>
 </section>
@@ -696,12 +900,11 @@
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between generic parameters, generic species parameters, and species parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-concerned-and-distinction-between-core-species-parameters-generic-parameters-generic-species-parameters-and-species-parameters">Parameters concerned and distinction between core species parameters, generic parameters, generic species parameters, and species parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sources-of-parameter-values">Sources of parameter values</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Initial species parameters</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#core-species-parameters-for-the-species">Core species parameters for the species</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-generic-parameters-for-the-species">Initial generic parameters for the species</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Initial species parameters</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-parameters">Generic parameters</a></li>
 </ul>
   </nav></div>

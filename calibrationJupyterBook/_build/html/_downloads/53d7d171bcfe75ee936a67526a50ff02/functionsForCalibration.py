@@ -42,8 +42,10 @@ import rasterio
 import numpy as np
 import shutil
 import sqlite3
-import subprocess
-
+import time
+import sys
+import pexpect
+import nbformat
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -961,12 +963,19 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True):
 
 #%% FUNCTIONS TO LAUNCH A LANDIS-II SIMULATION
 
-def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False):
+def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, timeout = None):
     """
     Function used to run a LANDIS-II simulation from inside Jupyter notebook.
     ⚠ THIS WILL ONLY WORK IF JUPYTER NOTEBOOK/JUPYTER LAB HAS BEEN LAUNCHED
        FROM INSIDE LINUX. It is made to be used with the Docker image recommanded
        in the Readme of the repository.
+
+    💡 There seems to be a bug in PnET where simulations can freeze when all cohorts
+    have died, which sometimes happen during calibration runs. To bypass this and prevent
+    the whole Python kernel from hanging, we use the Pexpect packages which allows us
+    to create a "Timeout" error if LANDIS-II doesn't output any more characters for a while
+    - as is the case for this type of situation. By default, the function will wait patiently
+    for LANDIS-II to run.
 
     Parameters
     ----------
@@ -977,6 +986,8 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False):
         the LANDIS-II simulation (the scenario file).
     printSim : Boolean, optional
         Used to print the outputs of the sim (the LANDIS-II log). The default is False.
+    timeout: int, optional
+        Used to stop the sim if it's stuck. Time in second to wait for an update to the LANDIS-II output in the terminal. "None" will wait forever.
 
     Returns
     -------
@@ -987,12 +998,45 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False):
     # This command runs a LANDIS-II simulation based on the LANDIS-II installation of the docker image 
     # (located in /bin/LANDIS_Linux). printSim can be use so that the command prints things or not.
     
-    command = "cd " + simulationFolder + "; dotnet /bin/LANDIS_Linux/build/Release/Landis.Console.dll " + scenarioFileName
-    if printSim:
-        result = subprocess.run(command, shell=True)
-        print(result.stdout)
-    else:
-        subprocess.run(command, shell=True, stdout=subprocess.DEVNULL)
+    # command = "cd " + simulationFolder + "; dotnet /bin/LANDIS_Linux/build/Release/Landis.Console.dll " + scenarioFileName
+    command = '/bin/bash -c "cd '+ str(simulationFolder) + ' && dotnet $LANDIS_CONSOLE '+ str(scenarioFileName) + '"'
+    # if printSim:
+        # result = subprocess.run(command, shell=True)
+        # print(result.stdout)
+    # else:
+        # subprocess.run(command, shell=True, stdout=subprocess.DEVNULL)
+
+    try:
+        # Spawn the command
+        print("Launching LANDIS-II simulation with command : " + str(command))
+        child = pexpect.spawn(command)
+        
+        # Read output until EOF or timeout
+        output = ""
+        # print("Entering while loop")
+        while True:
+            try:
+                # Read non-blocking with specified timeout
+                data = child.read_nonblocking(size=1024, timeout=timeout)
+                output += data.decode('utf-8')  # Decode bytes to string
+                # print("While loop : output is " + str(output))
+            except pexpect.exceptions.TIMEOUT:
+                print("Timeout occurred while waiting for LANDIS-II output.")
+                break  # Exit loop on timeout
+            except pexpect.EOF:
+                print("The LANDIS-II simulation has finished properly !")
+                break
+        
+            # Prints the last line
+            if printSim:
+                print(output.splitlines()[-1])
+
+
+    
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+
         
 
 # runLANDIS_Simulation(testScenarioPath,
@@ -1393,14 +1437,14 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         
         
         if trueTime:
-            plt.plot(df['Time'], columnData)
+            plt.plot(df['Time'], columnData, label = "PnET Succession")
         else: #We edit the time to remove the years (e.g. 2000, 2001, etc.) and just use 0 as starting year. Makes things easier for the reference curve.
             timeNormalized = df['Time'] - min(df['Time'])
-            plt.plot(timeNormalized, columnData)
+            plt.plot(timeNormalized, columnData, label = "PnET Succession")
             
         # If reference curve exists for the variable, we display it on the curve
         if column in referenceDict:
-            plt.plot(referenceDict[column]["Time"], referenceDict[column]["Values"], color='#ebcb8b')
+            plt.plot(referenceDict[column]["Time"], referenceDict[column]["Values"], color='#ebcb8b', label = "Reference")
         
         # Set the x-axis ticks to increment by 10 years
         if trueTime:
@@ -1425,6 +1469,9 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         
         # Rotate x-axis labels for better readability
         plt.xticks(rotation=45)
+
+        # Puts a legend
+        plt.legend(loc='upper right')
         
         # Adjust layout to prevent cutting off labels
         plt.tight_layout()
@@ -1451,8 +1498,11 @@ def FVS_on_simulationOnSingleEmptyStand(Latitude,
                                         numberOfTrees,
                                         siteIndex,
                                         variant = "FVSon",
+                                        timestep = 10,
+                                        numberOfTimesteps = 12,
                                         folderForFiles = "/tmp/FVS_SingleEmptyStandRun",
-                                        clearFiles = True):
+                                        clearFiles = True,
+                                        printOutput = False):
 
 
     # Check if the directory exists
@@ -1671,8 +1721,8 @@ SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'STAND_EMPTY'
 EndSQL
 End
 
-TIMEINT           10
-NUMCYCLE          12
+TIMEINT           0      INSERT_TIMEINT
+NUMCYCLE          INSERT_NUMCYCLE
 
 ESTAB           2023
 STOCKADJ          -1
@@ -1697,6 +1747,8 @@ END
 PROCESS
 STOP
 """
+    Keywordfile_content = Keywordfile_content.replace("INSERT_TIMEINT", str(timestep))
+    Keywordfile_content = Keywordfile_content.replace("INSERT_NUMCYCLE", str(numberOfTimesteps))
     
     with open(folderForFiles + "/SingleStandSim_Keywords.key", 'w', encoding='utf-8') as file:
         file.write(Keywordfile_content)
@@ -1704,31 +1756,32 @@ STOP
     # Launching the sim
     print("Launching FVS sim")
     result = subprocess.run(['FVSon', '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
-    print(result.stdout)
+    if printOutput:
+        print(result.stdout)
 
     # print("WARNING : the content of the output dictionnary of this function can differ slightly from what is printed above (console outputs of FVS). It seems that the console output can round certain variables differently than what is in the .out files (that will be read to create the dictionnary). Differences should be minimal.\n\n")
 
-    # Reading the Gross Total Volume as Output
-    print("Reading Outputs")
-    mapping = {}
-    ignoreFirstLine = True
-    with open(folderForFiles + "/SingleStandSim_Keywords.sum", 'r') as file:
-        for line in file:
-            if ignoreFirstLine:
-                ignoreFirstLine = False
-            else:
+    # Reading the Gross Total Volume as Output - outdated
+    # print("Reading Outputs")
+    # mapping = {}
+    # ignoreFirstLine = True
+    # with open(folderForFiles + "/SingleStandSim_Keywords.sum", 'r') as file:
+        # for line in file:
+            # if ignoreFirstLine:
+                # ignoreFirstLine = False
+            # else:
                 # Split the line into parts based on whitespace
-                parts = line.split()
+                # parts = line.split()
                 
                 # Check if there are enough parts to avoid IndexError
-                if len(parts) > 8:
+                # if len(parts) > 8:
                     # Get the number from the first column (index 0)
-                    key = int(parts[0])
+                    # key = int(parts[0])
                     # Get the number from the ninth column (index 8)
-                    value = int(parts[8])
+                    # value = int(parts[8])
                     
                     # Add to dictionary
-                    mapping[key] = value
+                    # mapping[key] = value
 
     # Reading the total stand carbon output and converting it into biomass
     # The carbon outputs can only be outputed in the .out main report file. Not ideal, but we can get it there.
@@ -1795,5 +1848,126 @@ STOP
     
     return(mapping)
 
-# FIRST : Gotta understand once and for all how stand area is computed, so that I can be sure to control tree density.
-                                        
+#%% MISC FUNCTIONS
+
+def read_markdown_cell(notebook_path, markdownCellNumber):
+    """Reads the markdown from a given cell in a jupyter notebook.
+    Usefull to get the tables of parameters, so that we can transform
+    them back into Python objects to deal with.
+    
+    The markdownCellNumber parameter starts at 1 for the first markdown cell
+    of the notebook. Code cells or raw cells are not counted."""
+    
+    # Load the notebook
+    with open(notebook_path, 'r') as f:
+        notebook = nbformat.read(f, as_version=4)
+
+    # Iterate through cells to find the last markdown cell
+    testMarkdown = 1
+    for i in range(0, len(notebook.cells) - 1):
+        if notebook.cells[i].cell_type == 'markdown':
+            if testMarkdown == markdownCellNumber:
+                return notebook.cells[i].source  # Return the markdown content
+            else:
+                testMarkdown += 1
+    return None  # Return None if no markdown cell is found
+
+
+def extract_table(text):
+    """Extract markdown table from text.
+
+    WARNING : The function is pretty simple, and will just take anything
+    between the first | and last | character. As such, don't put several
+    markdwon table in the string of text you want to analyze, or don't use |
+    for other things in your string."""
+    
+    # Find the index of the first "|" character
+    start_index = text.find("|")
+    # Find the index of the last "|" character
+    end_index = text.rfind("|")
+    
+    # Check if both indices are valid
+    if start_index != -1 and end_index != -1 and start_index < end_index:
+        # Extract and return the substring between the two indices
+        return text[start_index:end_index + 1].strip()
+    else:
+        return "No valid table found."
+
+def parseTableSpeciesParameters(markdown_table):
+    """Parse a markdown table like the ones used in 3.Initial_Species_Parameters.ipynb
+    into a Python Dictionnary we can then use for the previous functions that write LANDIS-II
+    scenario files (see above)."""
+    
+    # Split the input into lines
+    lines = markdown_table.strip().split('\n')
+    
+    # Extract headers
+    headers = [header.strip('* ').strip("`") for header in lines[0].strip('| ').split('|')]
+    headers = [header for header in headers if header]  # Remove empty headers
+    
+    # Initialize an empty dictionary to hold the results
+    species_data = {}
+    
+    # Iterate through the rows of the table, starting from the second row
+    for line in lines[2:]:
+        # Split the line into columns
+        columns = [col.strip('* ') for col in line.strip('| ').split('|')]
+        species_name = re.sub(r'\s*\[\^.*?\]', '', columns[0]).strip()  # Remove footnotes and asterisks
+        
+        # Create a dictionary for the species
+        species_info = {}
+        
+        # Iterate over the remaining columns and associate them with headers
+        for header, value in zip(headers[1:], columns[1:]):
+            # clean_value = re.sub(r'\s*\[\^.*?\]', '', value).strip()  # Remove footnotes
+            cleaned_value = re.match(r'(\S+)', value) # Clean the value to extract only the number at the beginning
+            if cleaned_value:
+                species_info[header] = cleaned_value.group(1)
+        
+        # Add the species info to the main dictionary
+        species_data[species_name] = species_info
+    
+    return species_data
+
+def parseTableGenericParameters(markdown_table: str) -> dict:
+    """Same as parse_markdown_table_core_species_parameters,
+    but for tables where we have one value per parameter, for
+    the generic parameters, where there are no variations by species."""
+    
+    # Split the input string into lines
+    lines = markdown_table.strip().split('\n')
+    
+    # Extract headers from the first line (the one with backticks)
+    headers = [value.strip("`") for value in re.split(r'\s*\|\s*', lines[0]) if value.strip()]
+
+    # Initialize a dictionary to hold the results
+    result = {}
+    
+    # Process each row of data (starting from the second line)
+    for line in lines[2:]:
+        # Extract values from the row using a regex that captures all columns
+        values = [value.strip() for value in re.split(r'\s*\|\s*', line) if value.strip()]
+        
+        # If there are values, process them
+        if len(values) == len(headers):  # Ensure we have the same number of values as headers
+            for i, value in enumerate(values):
+                # Clean the value to extract only the number at the beginning
+                cleaned_value = re.match(r'(\S+)', value)
+                if cleaned_value:
+                    result[headers[i]] = cleaned_value.group(1)
+        else:
+            print("ERROR : Mismatch between number of headers of table and values")
+
+    return result
+
+def replace_in_dict(d, old_str, new_str):
+    """Function to replace every key or value string in a dictionnary
+    with another. Used to change the name of species to their species code"""
+    if isinstance(d, dict):
+        return {replace_in_dict(k, old_str, new_str): replace_in_dict(v, old_str, new_str) for k, v in d.items()}
+    elif isinstance(d, list):
+        return [replace_in_dict(item, old_str, new_str) for item in d]
+    elif isinstance(d, str):
+        return d.replace(old_str, new_str)
+    else:
+        return d
