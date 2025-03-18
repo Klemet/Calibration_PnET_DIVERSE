@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Drafts &#8212; Calibration of PnET Succession for the DIVERSE project</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'StartingCalibrationTest/98.Drafts';</script>
+    <link rel="canonical" href="https://klemet.github.io/Calibration_PnET_DIVERSE/intro.html/StartingCalibrationTest/98.Drafts.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-light" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+    <script>document.write(`<img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-dark" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    👋 Welcome !
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="Intro_CalibrationTest.html">Calibration test</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.Loading_functions.html">Loading functions and packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.Test_sim_functions.html">Making a test simulation to get used to the functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.Initial_Species_Parameters.html">Initial species parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.Setting_up_calibration_Landscape.html">Setting up the calibration landscape (ecoregions, initial communities, climate etc.)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.Obtaining_Growth_data_from_FVS.html">Obtaining the growth data from the Forest Vegetation Simulator that will serve as reference for the calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.Monoculture_ideal_conditions.html">1st calibration step : Monoculture in ideal condition</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Klemet/Calibration_PnET_DIVERSE/issues/new?title=Issue%20on%20page%20%2FStartingCalibrationTest/98.Drafts.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/StartingCalibrationTest/98.Drafts.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Drafts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-climate-data-manually-from-climatedata-ca">Obtaining climate data manually from climatedata.ca</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-indices-from-ouranos-climate-canada-and-their-meanings">Climate Indices from Ouranos/Climate Canada and Their Meanings</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-file-names-on-the-server-of-climate-data-canada">Meaning of file names on the server of Climate Data Canada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="drafts">
+<h1>Drafts<a class="headerlink" href="#drafts" title="Link to this heading">#</a></h1>
+<p>This document contains cells or code snippets that I want to keep aside, but that are not used in the rest of the files anymore.</p>
+<section id="obtaining-climate-data-manually-from-climatedata-ca">
+<h2>Obtaining climate data manually from <a class="reference external" href="http://climatedata.ca">climatedata.ca</a><a class="headerlink" href="#obtaining-climate-data-manually-from-climatedata-ca" title="Link to this heading">#</a></h2>
+<p>Since we’re doing calibration simulation here, we don’t have a particular place where our simulation take place. It’s up to us to choose where the climate data comes from, and there is not a “best” way to do things.</p>
+<p>It’s surely most likely better to use climate conditions that are closer to the average of the conditions we want to simulate in other LANDIS-II simulation rather than to extremes (especially for this first step of calibration). We also want to make sure that the location we use ca be inputted in FVSon.</p>
+<p>I propose that we use an area near the border between the boral and temperate forest, and near the center of Ontario. It will be arbitrary.</p>
+<p>Here is a map from of the forests of Ontario from the 2016 forest report of Ontario :</p>
+<p><img alt="" src="https://files.ontario.ca/1a-forestregion-map_e_1.png" /></p>
+<p>The city of <a class="reference external" href="https://www.openstreetmap.org/#map=12/47.8416/-83.4106">Chapleau</a> seems to be located near the limit between the boreal and temperate forest. I will use a 5x5 grid cell (the grid cells being defined in the form of <a class="reference external" href="https://climatedata.ca/download/">https://climatedata.ca/download/</a>) to download the data. Here is what it looks like on <a class="reference external" href="https://climatedata.ca/download/">https://climatedata.ca/download/</a> :</p>
+<p><img alt="" src="StartingCalibrationTest/ChapleauClimateDataDotCA_5x5GridCellsForAveraging.png" /></p>
+<details>
+<summary>🖼️ (Collapsible section) Click here to show what the download form on https://climatedata.ca/download/ looks like when filled.</summary>
+<p><img alt="" src="StartingCalibrationTest/Sceenshot_FormClimateCanadaDotCA_Chapleau5x5Download.png" /></p>
+</details>
+<p>The resulting data is in the files located in ReferencesAndData/ClimateDataChapleauOntario</p>
+<p>The following sections will load and edit this data to create the climate file needed for PnET.</p>
+<section id="climate-indices-from-ouranos-climate-canada-and-their-meanings">
+<h3>Climate Indices from Ouranos/Climate Canada and Their Meanings<a class="headerlink" href="#climate-indices-from-ouranos-climate-canada-and-their-meanings" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>cdd</strong>: Consecutive Dry Days. The maximum number of consecutive days with precipitation below a certain threshold (usually 1mm).</p></li>
+<li><p><strong>cddcold_18</strong>: Consecutive Dry Days (with temperature constraint). The maximum number of consecutive days with precipitation below a certain threshold (likely 1mm) <em>and</em> with a daily mean temperature below 18°C.</p></li>
+<li><p><strong>dlyfrzthw_tx0_tn-1</strong>: Daily Freeze-Thaw cycles. Counts the number of days where the maximum temperature (tx) is above 0°C and the minimum temperature (tn) is below -1°C.</p></li>
+<li><p><strong>first_fall_frost</strong>: Date of the first fall frost. The first day in the autumn/winter season when the temperature drops below freezing (0°C).</p></li>
+<li><p><strong>frost_days</strong>: Number of frost days. The number of days with a minimum temperature below 0°C.</p></li>
+<li><p><strong>frost_free_season</strong>: Length of the frost-free season. The number of days between the last spring frost and the first fall frost.</p></li>
+<li><p><strong>gddgrow_0</strong>: Growing Degree Days (base 0°C). A measure of heat accumulation, calculated by summing the daily difference between the average temperature and a base temperature (0°C) for days when the average temperature is above the base temperature.</p></li>
+<li><p><strong>gddgrow_5</strong>: Growing Degree Days (base 5°C). Same as above, but with a base temperature of 5°C.</p></li>
+<li><p><strong>hddheat_18</strong>: Heating Degree Days (base 18°C). A measure of how much heating is required for a building, calculated by summing the difference between a base temperature (18°C) and the daily average temperature for days when the average temperature is below the base temperature.</p></li>
+<li><p><strong>ice_days</strong>: Number of ice days. The number of days with a maximum temperature below 0°C.</p></li>
+<li><p><strong>last_spring_frost</strong>: Date of the last spring frost. The last day in the spring season when the temperature drops below freezing (0°C).</p></li>
+<li><p><strong>nr_cdd</strong>: Number of Cooling Degree Days. Not explicitly defined in the original list, but typically refers to the number of days requiring cooling.</p></li>
+<li><p><strong>prcptot</strong>: Total precipitation. The sum of all precipitation (rain, snow, etc.) over a given period.</p></li>
+<li><p><strong>r10mm</strong>: Number of heavy precipitation days. The number of days with precipitation of 10mm or more.</p></li>
+<li><p><strong>r1mm</strong>: Number of precipitation days. The number of days with precipitation of 1mm or more.</p></li>
+<li><p><strong>r20mm</strong>: Number of very heavy precipitation days. The number of days with precipitation of 20mm or more.</p></li>
+<li><p><strong>rx1day</strong>: Maximum 1-day precipitation. The highest amount of precipitation recorded on a single day within a given period.</p></li>
+<li><p><strong>rx5day</strong>: Maximum 5-day precipitation. The highest amount of precipitation recorded over a 5-day period within a given period.</p></li>
+<li><p><strong>tg_mean</strong>: Mean temperature. The average of the daily average temperatures.</p></li>
+<li><p><strong>tn_mean</strong>: Mean minimum temperature. The average of the daily minimum temperatures.</p></li>
+<li><p><strong>tn_min</strong>: Minimum temperature. The lowest daily minimum temperature recorded.</p></li>
+<li><p><strong>tnlt_m15</strong>: Number of days with minimum temperature less than -15°C.</p></li>
+<li><p><strong>tnlt_m25</strong>: Number of days with minimum temperature less than -25°C.</p></li>
+<li><p><strong>tr_18</strong>: Number of days with daily mean temperature greater than 18°C.</p></li>
+<li><p><strong>tr_20</strong>: Number of days with daily mean temperature greater than 20°C.</p></li>
+<li><p><strong>tr_22</strong>: Number of days with daily mean temperature greater than 22°C.</p></li>
+<li><p><strong>tx_max</strong>: Maximum temperature. The highest daily maximum temperature recorded.</p></li>
+<li><p><strong>tx_mean</strong>: Mean maximum temperature. The average of the daily maximum temperatures.</p></li>
+<li><p><strong>txgt_25</strong>: Number of days with maximum temperature greater than 25°C.</p></li>
+<li><p><strong>txgt_27</strong>: Number of days with maximum temperature greater than 27°C.</p></li>
+<li><p><strong>txgt_29</strong>: Number of days with maximum temperature greater than 29°C.</p></li>
+<li><p><strong>txgt_30</strong>: Number of days with maximum temperature greater than 30°C.</p></li>
+<li><p><strong>txgt_32</strong>: Number of days with maximum temperature greater than 32°C.</p></li>
+</ol>
+<section id="meaning-of-file-names-on-the-server-of-climate-data-canada">
+<h4>Meaning of file names on the server of Climate Data Canada<a class="headerlink" href="#meaning-of-file-names-on-the-server-of-climate-data-canada" title="Link to this heading">#</a></h4>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Health_regions_of_Canada">https://en.wikipedia.org/wiki/Health_regions_of_Canada</a></p>
+<p>Some .nc files (containing data about a climate variable) are indicated as spatially averaged for different things. For example, these files <a class="reference external" href="https://pavics.ouranos.ca/twitcher/ows/proxy/thredds/catalog/birdhouse/disk2/cccs_portal/indices/Final/CanDCS-M6/tx_max/MS/ssp126/ensemble_percentiles/catalog.html">here</a> :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tx_max_mon_MBCn</span><span class="o">+</span><span class="n">PCIC</span><span class="o">-</span><span class="n">Blend_historical</span><span class="o">+</span><span class="n">ssp126_1950</span><span class="o">-</span><span class="mi">2100</span><span class="n">_spatialAvgCensus_percentiles</span><span class="o">.</span><span class="n">nc</span>
+<span class="n">tx_max_mon_MBCn</span><span class="o">+</span><span class="n">PCIC</span><span class="o">-</span><span class="n">Blend_historical</span><span class="o">+</span><span class="n">ssp126_1950</span><span class="o">-</span><span class="mi">2100</span><span class="n">_spatialAvgHealth_percentiles</span><span class="o">.</span><span class="n">nc</span>
+<span class="n">tx_max_mon_MBCn</span><span class="o">+</span><span class="n">PCIC</span><span class="o">-</span><span class="n">Blend_historical</span><span class="o">+</span><span class="n">ssp126_1950</span><span class="o">-</span><span class="mi">2100</span><span class="n">_spatialAvgWatershed_percentiles</span><span class="o">.</span><span class="n">nc</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Census refers to <a class="reference external" href="https://en.wikipedia.org/wiki/Census_geographic_units_of_Canada">census regions of Canada</a></p></li>
+<li><p>Health refers to <a class="reference external" href="https://en.wikipedia.org/wiki/Health_regions_of_Canada">health regions of Canada</a></p></li>
+<li><p>Watersheds refers to the <a class="reference external" href="https://en.wikipedia.org/wiki/Watersheds_of_North_America">watersheds of Canada</a></p></li>
+</ul>
+<p>Instead, I’ve attempted to create a Generalized Additive Model (GAM) to predict PAR (downwelling shortwave radiation or rsds in CanLEADv1) from Tmin, Tmax and Precipitations. I’ve used a script on the clusters on compute Canada (since the data is large). See <a class="reference internal" href="#./ReferencesAndData/job_script_ClimateDataProcessing_ONLYPOLYGON_INTERACTIONS.sh"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">job_script_ClimateDataProcessing_ONLYPOLYGON_INTERACTIONS.sh</span></code></span></a>.</p>
+<p>The script reads .nc files for Tmin, Tmax, Precipitations and PAR from one of the replicates of CanLEADv1 (<a class="reference external" href="https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanLEADv1/CanRCM4-EWEMBI-MBCn/r1_r1i1p1/">here</a>) and the polygon delimitating the Chapleau area (<a class="reference download internal" download="" href="../_downloads/ed75601ed6c39bbd7b38eabba6e23a25/ChapleauBoundariesClimate.shp"><span class="xref download myst"><code class="docutils literal notranslate"><span class="pre">ChapleauBoundariesClimate.shp</span></code></span></a>). It then gathers the data for each variables inside the polygon, upsamples them from daily to monthly, puts all simultaneous observations of the 4 variables in every cell in a dataframe, and then creates a GAM. Plots are then produced to check the residuals and predictions of the GAM for verification.</p>
+<p>The verification plot shows obvious biases in the residuals, indicating that the model fails to capture some of the variability properly; in particular, higher values of radiation are associated with higher residuals. Still, the fit of the model looks pretty good. Sadly, I don’t see any better alternatives for now :</p>
+<p><img alt="" src="StartingCalibrationTest/ReferencesAndData/PAR_GAM_Validation/residuals_vs_predicted.png" /></p>
+<p>WIP : Improving these GAMs with GAMMs (mixed effects for temporal and spatial autocorrelation) and maybe Tweedie distribution rather than the one used here.
+Idea : Make one python and one R script to deploy on compute Canada; more models and functions in R. Python script (based on current scripts) reads, upsamples the data, then outputs to .csv. R make the models and creates the plot. Run it through interactive session and in current folder to try several models iteratively. Might switch Python script to R to test better upsampling.</p>
+<p>We need PAR in the right format, but also for future conditions - as it can be influenced by clouds.</p>
+<ul class="simple">
+<li><p>MODIS data available at <a class="reference external" href="https://lpdaac.usgs.gov/products/mcd18c2v062/">https://lpdaac.usgs.gov/products/mcd18c2v062/</a> ; but changes every 3 hours, is taken from satellite data =&gt; might have low quality data at some points. Might need something cleaner, and maybe already expressed monthly.</p></li>
+<li><p><a class="reference external" href="https://essd.copernicus.org/articles/14/2007/2022/">https://essd.copernicus.org/articles/14/2007/2022/</a> describes a data set that seems more historical and cleaner than MODIS, but also in 3hours format, from 1984-01-01 to 2018-12-31. Download is made via FTP, meaning that might be able to automatize the process.</p></li>
+</ul>
+<p>Other datasets are referenced in the intro. Havent found the best yet.</p>
+<p>PnET User guide : <a class="reference external" href="https://cida.usgs.gov/thredds/catalog.html?dataset=cida.usgs.gov/macav2metdata_m">https://cida.usgs.gov/thredds/catalog.html?dataset=cida.usgs.gov/macav2metdata_m</a> onthly_historical . But not sure if still active.
+The Thredds server is not active anymore, but I was able to use the code provided to access the data :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">s3fs</span>
+<span class="kn">import</span> <span class="nn">zarr</span>
+<span class="kn">import</span> <span class="nn">dask</span>
+<span class="kn">import</span> <span class="nn">cftime</span>
+
+<span class="n">zarr_url</span> <span class="o">=</span> <span class="s1">&#39;s3://mdmf/gdp/macav2_historical_monthly.zarr/&#39;</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">endpoint_url</span><span class="o">=</span><span class="s1">&#39;https://usgs.osn.mghpcc.org/&#39;</span><span class="p">)</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">get_mapper</span><span class="p">(</span><span class="n">zarr_url</span><span class="p">),</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;zarr&#39;</span><span class="p">,</span> 
+                             <span class="n">backend_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;consolidated&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">},</span> <span class="n">chunks</span><span class="o">=</span><span class="p">{})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sadly, this data is for the contiguous USA only; so we have to look elsewhere.</p>
+<p>we could go with a statistical approach - use existing PAR data to build a statistical model for our landscape linking PAR to over variables we have (precipitations, temperature). A quick search seems to say that such model might have errors of 3-4 MJ/m2/day, while data of PAR in Canada can range from (here for canadian prairies) :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>July (peak summer):
+    Clear sky: 25–28 MJ/m²/day
+    Partly cloudy: 18–22 MJ/m²/day
+    Thunderstorm day: 8–12 MJ/m²/day
+    
+January:
+    Sunny day: 10–12 MJ/m²/day
+    Snowstorm: 3–5 MJ/m²/day
+</pre></div>
+</div>
+<p>So, 3-4 MJ/m2/day might be too much of an error. Or is it ? Maybe there will be much less error on local data.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./StartingCalibrationTest"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-climate-data-manually-from-climatedata-ca">Obtaining climate data manually from climatedata.ca</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#climate-indices-from-ouranos-climate-canada-and-their-meanings">Climate Indices from Ouranos/Climate Canada and Their Meanings</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-file-names-on-the-server-of-climate-data-canada">Meaning of file names on the server of Climate Data Canada</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Clément Hardy, PhD
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
