@@ -11,13 +11,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 # PREPARING PACKAGES AND UPGRADING, AND INSTALLING DEPENDENCIES OF LANDIS-II
 # apt-get clean and rm -rf /var/lib/apt/lists/* are used to clear the packages folder caches
 # to avoid putting them in the docker layerin system, freeing space
-RUN apt update && apt upgrade \
+RUN apt update -y && apt upgrade -y \
 && apt-get update && apt-get -y upgrade \
 && apt-get install -y wget vim pip nano git python3 python-is-python3 \
 && apt-get install -y libjpeg62 \
 && apt-get install -y libpng16-16 \
 && apt-get install -y gdal-bin \
 && apt-get install -y libgdal-dev \
+# Axel is not for LANDIS-II, it's for fast downloads
+&& apt-get install -y axel \
 # Installing libssl1 sometimes needed for Dotnet
 && wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
 && dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
@@ -643,10 +645,10 @@ RUN git config --global --unset http.version
 
 # Adding the Python packages I need to make Magic Harvest run
 COPY ./files_to_help_compilation/pip_requirements.txt /tmp
-RUN pip install -r /tmp/pip_requirements.txt
+RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /tmp/pip_requirements.txt
 
-# Adding jupyter lab and book
-RUN pip install jupyterlab jupyter-book
+# Adding jupyter lab and book; installed alpha version of jupyter lab to remove scrolling issue. Can be changed once version 4.4.0 is not alpha anymore.
+RUN pip install jupyterlab==4.4.0a3 jupyter-book
 
 # Adding add-on "Variable explorer" for jupyter lab
 RUN pip install lckr-jupyterlab-variableinspector
@@ -654,8 +656,19 @@ RUN pip install lckr-jupyterlab-variableinspector
 # Add-on to make markdown code look better
 RUN pip install jupyterlab_myst
 
+# We install zenovo-get, which allows for fast download from Zenovo data. See https://github.com/dvolgyes/zenodo_get
+RUN pip3 install git+https://github.com/dvolgyes/zenodo_get
+
 # Enable JupyterLab
 ENV JUPYTER_ENABLE_LAB=yes
+
+# Save Jupyter lab config in the folder we'll use, /calibrationFolder
+ENV JUPYTER_CONFIG_DIR=/calibrationFolder/.jupyterconfig
+ENV JUPYTERLAB_SETTINGS_DIR=/calibrationFolder/.jupyterconfig/lab/user-settings
+
+# Export pip packages for stability in the future
+# Only used when making a first build with non-freezed Pip requirements
+# RUN pip freeze > requirements.txt
 
 # Expose port 8888 for JupyterLab
 EXPOSE 8888
