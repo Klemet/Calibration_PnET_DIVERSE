@@ -16,33 +16,30 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -68,7 +65,6 @@
     <link rel="prev" title="Loading functions and packages" href="1.Loading_functions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -84,8 +80,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -93,6 +100,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -100,8 +108,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -117,8 +125,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -148,17 +155,21 @@
     
     
     <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-light" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
-    <img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-dark pst-js-only" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>
+    <script>document.write(`<img src="../_static/DIVERSE_PnET_Calibration_Logo.png" class="logo__image only-dark" alt="Calibration of PnET Succession for the DIVERSE project - Home"/>`);</script>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -187,14 +198,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -338,16 +344,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 <button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
@@ -408,8 +422,8 @@
 <h2>Loading functions<a class="headerlink" href="#loading-functions" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functionsForCalibration</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functionsForCalibration</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 </pre></div>
 </div>
 </div>
@@ -485,7 +499,9 @@ Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
 Found : Additional file : README.txt
-Found : Main scenario file : scenario.txt
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : Main scenario file : scenario.txt
 Found : Main species parameter file : species.txt
 Found : PnET species parameters file : SpeciesParameters.txt
 </pre></div>
@@ -523,7 +539,7 @@ Loading PnET-Succession extension ...
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing PnET-Succession version 5.1.0.0
    Registering Data:  Succession.WoodyDebris.
-   Registering Data:  Succession.SmolderConsumption.
+   Registering Data:  Succession.MonthlyPressureHead.
    Registering Data:  Succession.SoilFieldCapacity.
   No ClimateConfigFile provided. Using climate files in ecoregion parameters: EcoregionParameters.txt.
 Eco	Soiltype	WiltPnt		FieldCap	FC-WP		Porosity
@@ -560,7 +576,6 @@ Updating output variable: Root Biomass
 dataset created: output/RootBiomass/querrubr/RootBiomass-0.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-0.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-0.img
-dataset created: output/RootBiomass/AllSpecies/RootBiomass-0.img
 Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-0.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-0.img
@@ -568,9 +583,7 @@ dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-0.img
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-0.img
 dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-0.img
 Updating output variable: NSC
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   Writing querrubr map to output/NSC/querrubr/NSC-0.img ...
+   Writing querrubr map to output/NSC/querrubr/NSC-0.img ...
 dataset created: output/NSC/querrubr/NSC-0.img
    Writing pinubank map to output/NSC/pinubank/NSC-0.img ...
 dataset created: output/NSC/pinubank/NSC-0.img
@@ -652,11 +665,12 @@ dataset created: output/AnnualPsn//AnnualPsn-0.img
 Updating output variable: Water
 dataset created: output/Water/Water-0.img
 Updating output variable: SubCanopyPAR
-dataset created: output/SubCanopyPAR/SubCanopyPAR-0.img
 Updating output variable: WoodyDebris
 dataset created: output/WoodyDebris/WoodyDebris-0.img
 Updating output variable: AgeDistribution
-dataset created: output/AgeDistribution//AgeDistribution-0.img
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataset created: output/AgeDistribution//AgeDistribution-0.img
 Updating output variable: overalloutputs
 Updating output variable: establishmentTable
 Updating output variable: MortalityTable
@@ -664,13 +678,10 @@ Running PnET-Succession ...
 growing cohorts ...
 Progress: 
 Progress: +
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
 Progress: +
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
 Progress: +
-Running Output-PnET ...
 Updating output variable: LAI
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img
@@ -683,34 +694,27 @@ dataset created: output/WoodBiomass/querrubr/WoodBiomass-10.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-10.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-10.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-10.img
-Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-10.img ...
 dataset created: output/RootBiomass/querrubr/RootBiomass-10.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-10.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-10.img
-dataset created: output/RootBiomass/AllSpecies/RootBiomass-10.img
-Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-10.img ...
-dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-10.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-10.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-10.img
 dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-10.img
    Writing querrubr map to output/NSC/querrubr/NSC-10.img ...
-dataset created: output/NSC/querrubr/NSC-10.img
    Writing pinubank map to output/NSC/pinubank/NSC-10.img ...
 dataset created: output/NSC/pinubank/NSC-10.img
 Updating output variable: PET
-dataset created: output/PET//PET-10.img
 Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-10.img ...
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-10.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-10.img
-dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-10.img
+Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-10.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-10.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-10.img ...
 dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-10.img
-dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-10.img
 Updating output variable: AETAvg
 dataset created: output/AETAvg//AETAvg-10.img
 dataset created: output/MonthlyFolResp/MonthlyFolResp-10jan.img
@@ -763,6 +767,7 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10nov.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10dec.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-10.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-10.img
 Updating output variable: EstablishmentProbability
    Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img ...
 dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img
@@ -780,16 +785,18 @@ dataset created: output/Water/Water-10.img
 Updating output variable: SubCanopyPAR
 dataset created: output/SubCanopyPAR/SubCanopyPAR-10.img
 Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-10.img
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-10.img
 Updating output variable: overalloutputs
 Updating output variable: establishmentTable
-Updating output variable: MortalityTable
+Running PnET-Succession ...
 Progress: +
-% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+Progress: +++++++
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
 Progress: +
-Progress: ++++++++++++++++++++++++++++++++++
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Running Output-PnET ...
 Updating output variable: LAI
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img
@@ -802,9 +809,7 @@ dataset created: output/WoodBiomass/querrubr/WoodBiomass-20.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-20.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-20.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-20.img
-Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-20.img ...
-dataset created: output/RootBiomass/querrubr/RootBiomass-20.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-20.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-20.img
 dataset created: output/RootBiomass/AllSpecies/RootBiomass-20.img
@@ -815,18 +820,17 @@ dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-20.img
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-20.img
 Updating output variable: NSC
    Writing querrubr map to output/NSC/querrubr/NSC-20.img ...
-dataset created: output/NSC/querrubr/NSC-20.img
    Writing pinubank map to output/NSC/pinubank/NSC-20.img ...
 dataset created: output/NSC/pinubank/NSC-20.img
+dataset created: output/NSC/AllSpecies/NSC-20.img
 Updating output variable: PET
-dataset created: output/PET//PET-20.img
 Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-20.img ...
-dataset created: output/WoodySenescence/querrubr/WoodySenescence-20.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-20.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-20.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-20.img
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-20.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-20.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-20.img ...
 dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-20.img
 dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-20.img
@@ -872,65 +876,49 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jan.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20feb.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20mar.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20apr.img
-dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20may.img
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20may.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jun.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jul.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20aug.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20sep.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20oct.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20nov.img
-dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20dec.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-20.img
-dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-20.img
 Updating output variable: EstablishmentProbability
    Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img ...
-dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img
    Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img ...
-dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img
 Updating output variable: SpeciesEstablishment
    Writing querrubr map to output/Establishment/querrubr/Establishment-20.img ...
-dataset created: output/Establishment/querrubr/Establishment-20.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-20.img ...
-dataset created: output/Establishment/pinubank/Establishment-20.img
 Updating output variable: AnnualPsn
-dataset created: output/AnnualPsn//AnnualPsn-20.img
 Updating output variable: Water
-dataset created: output/Water/Water-20.img
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updating output variable: SubCanopyPAR
+Updating output variable: SubCanopyPAR
 Updating output variable: WoodyDebris
-dataset created: output/WoodyDebris/WoodyDebris-20.img
 Updating output variable: AgeDistribution
-dataset created: output/AgeDistribution//AgeDistribution-20.img
 Updating output variable: overalloutputs
-Updating output variable: establishmentTable
 Updating output variable: MortalityTable
-Current time: 30
 Progress: +
-Updating output variable: LAI
+Running Output-PnET ...
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img
 dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-30.img
-Updating output variable: WoodBiomass
    Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-30.img ...
 dataset created: output/WoodBiomass/querrubr/WoodBiomass-30.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-30.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-30.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-30.img
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-30.img ...
-dataset created: output/RootBiomass/querrubr/RootBiomass-30.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-30.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-30.img
-Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-30.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-30.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-30.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-30.img
-dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-30.img
    Writing querrubr map to output/NSC/querrubr/NSC-30.img ...
    Writing pinubank map to output/NSC/pinubank/NSC-30.img ...
 dataset created: output/NSC/pinubank/NSC-30.img
@@ -941,7 +929,6 @@ dataset created: output/WoodySenescence/querrubr/WoodySenescence-30.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-30.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-30.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-30.img
-Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-30.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-30.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-30.img ...
@@ -998,12 +985,11 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30oct.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30nov.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-30.img
-   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img ...
+Updating output variable: EstablishmentProbability
    Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img ...
    Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img ...
-dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img
+Updating output variable: SpeciesEstablishment
    Writing querrubr map to output/Establishment/querrubr/Establishment-30.img ...
-dataset created: output/Establishment/querrubr/Establishment-30.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-30.img ...
 dataset created: output/Establishment/pinubank/Establishment-30.img
 Updating output variable: AnnualPsn
@@ -1015,11 +1001,9 @@ Updating output variable: WoodyDebris
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-30.img
 Updating output variable: overalloutputs
-Updating output variable: MortalityTable
+Updating output variable: establishmentTable
 Progress: +
-Progress: ++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: +++++++++++++++++++++++++++++++++++++++++++++
-Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: +++++++++
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img ...
@@ -1035,24 +1019,25 @@ dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-40.img
 dataset created: output/RootBiomass/querrubr/RootBiomass-40.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-40.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-40.img
-Updating output variable: FoliageBiomass
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-40.img
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-40.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-40.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-40.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-40.img
-Updating output variable: NSC
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-40.img
    Writing querrubr map to output/NSC/querrubr/NSC-40.img ...
 dataset created: output/NSC/querrubr/NSC-40.img
    Writing pinubank map to output/NSC/pinubank/NSC-40.img ...
 dataset created: output/NSC/pinubank/NSC-40.img
+dataset created: output/NSC/AllSpecies/NSC-40.img
 Updating output variable: PET
 dataset created: output/PET//PET-40.img
+Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-40.img ...
 dataset created: output/WoodySenescence/querrubr/WoodySenescence-40.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-40.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-40.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-40.img
-Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-40.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-40.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-40.img ...
@@ -1060,9 +1045,7 @@ dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-40.img
 dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-40.img
 Updating output variable: AETAvg
 dataset created: output/AETAvg//AETAvg-40.img
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataset created: output/MonthlyFolResp/MonthlyFolResp-40jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jan.img
 dataset created: output/MonthlyFolResp/MonthlyFolResp-40feb.img
 dataset created: output/MonthlyFolResp/MonthlyFolResp-40mar.img
 dataset created: output/MonthlyFolResp/MonthlyFolResp-40apr.img
@@ -1112,32 +1095,46 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40nov.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40dec.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-40.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-40.img
+Updating output variable: EstablishmentProbability
    Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img
    Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img ...
 dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img
    Writing querrubr map to output/Establishment/querrubr/Establishment-40.img ...
+dataset created: output/Establishment/querrubr/Establishment-40.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-40.img ...
+dataset created: output/Establishment/pinubank/Establishment-40.img
 Updating output variable: AnnualPsn
 dataset created: output/AnnualPsn//AnnualPsn-40.img
 Updating output variable: Water
 dataset created: output/Water/Water-40.img
 Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-40.img
 Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-40.img
 Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-40.img
 Updating output variable: overalloutputs
-Current time: 50
+Updating output variable: establishmentTable
 Progress: +
-Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img
 dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-50.img
+Updating output variable: WoodBiomass
    Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-50.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-50.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-50.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-50.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-50.img
+Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-50.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-50.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-50.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-50.img
 dataset created: output/RootBiomass/AllSpecies/RootBiomass-50.img
@@ -1145,17 +1142,23 @@ dataset created: output/RootBiomass/AllSpecies/RootBiomass-50.img
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-50.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-50.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-50.img
-Updating output variable: NSC
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-50.img
    Writing querrubr map to output/NSC/querrubr/NSC-50.img ...
+dataset created: output/NSC/querrubr/NSC-50.img
    Writing pinubank map to output/NSC/pinubank/NSC-50.img ...
 dataset created: output/NSC/pinubank/NSC-50.img
+dataset created: output/NSC/AllSpecies/NSC-50.img
 Updating output variable: PET
 dataset created: output/PET//PET-50.img
+Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-50.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-50.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-50.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-50.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-50.img
+Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-50.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-50.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-50.img ...
 dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-50.img
 dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-50.img
@@ -1217,7 +1220,7 @@ Updating output variable: EstablishmentProbability
 dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-50.img
    Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img ...
 dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img
-   Writing querrubr map to output/Establishment/querrubr/Establishment-50.img ...
+Updating output variable: SpeciesEstablishment
    Writing querrubr map to output/Establishment/querrubr/Establishment-50.img ...
 dataset created: output/Establishment/querrubr/Establishment-50.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-50.img ...
@@ -1233,6 +1236,7 @@ dataset created: output/WoodyDebris/WoodyDebris-50.img
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-50.img
 Updating output variable: overalloutputs
+Updating output variable: establishmentTable
 Updating output variable: MortalityTable
 Model run is complete.
 The LANDIS-II simulation has finished properly !
@@ -1291,7 +1295,7 @@ The LANDIS-II simulation has finished properly !
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.10/dist-packages/rasterio/__init__.py:304: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.10/dist-packages/rasterio/__init__.py:356: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
   dataset = DatasetReader(path, driver=driver, sharing=sharing, **kwargs)
 </pre></div>
 </div>
@@ -1310,38 +1314,38 @@ The LANDIS-II simulation has finished properly !
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/6dfbef172b2f5c9da68eb177c34ff91ad64a200aef3dab59f5e2768af0fe7b7f.png" src="../_images/6dfbef172b2f5c9da68eb177c34ff91ad64a200aef3dab59f5e2768af0fe7b7f.png" />
-<img alt="../_images/93be5254760afba164cf585c145ef2b5c47d88ca95d3ae5d0253c76822b9fc90.png" src="../_images/93be5254760afba164cf585c145ef2b5c47d88ca95d3ae5d0253c76822b9fc90.png" />
-<img alt="../_images/2c7e2c29bc216d30d5706025a3a6f3b461d462c2b114049173d1be4c054c920e.png" src="../_images/2c7e2c29bc216d30d5706025a3a6f3b461d462c2b114049173d1be4c054c920e.png" />
-<img alt="../_images/5ded3e7c879eb2cf24065387cffb8c9d8e3c0c8dcd45dd716e86cf4ecc31035d.png" src="../_images/5ded3e7c879eb2cf24065387cffb8c9d8e3c0c8dcd45dd716e86cf4ecc31035d.png" />
-<img alt="../_images/b122ca792c5e90b49ba508cc28b46d55c9d69ae65e08ce9587d49aa63cd63a69.png" src="../_images/b122ca792c5e90b49ba508cc28b46d55c9d69ae65e08ce9587d49aa63cd63a69.png" />
-<img alt="../_images/5260f2d23eef9a8238fd72d98c4540d0f2aaaf74c18557465c57ae1824feb2b8.png" src="../_images/5260f2d23eef9a8238fd72d98c4540d0f2aaaf74c18557465c57ae1824feb2b8.png" />
-<img alt="../_images/58acf1884606460739e84ccd6f7454ea22a6c607cafc7450fd83d40774a8809a.png" src="../_images/58acf1884606460739e84ccd6f7454ea22a6c607cafc7450fd83d40774a8809a.png" />
-<img alt="../_images/8b7f9dc04f9e8ea1d5b99484dc7920861ff4dd60521bb7bd0dbdef7ca1cd3a07.png" src="../_images/8b7f9dc04f9e8ea1d5b99484dc7920861ff4dd60521bb7bd0dbdef7ca1cd3a07.png" />
-<img alt="../_images/8a4d7966502e02bb13eba379b3cae8623828dcb9f9b37c66d2a2cfcfb2f3aada.png" src="../_images/8a4d7966502e02bb13eba379b3cae8623828dcb9f9b37c66d2a2cfcfb2f3aada.png" />
-<img alt="../_images/5e8c024ba42fc92a6f0a4c5d3090bb16f6dad324394eb37eef7d8f6563246994.png" src="../_images/5e8c024ba42fc92a6f0a4c5d3090bb16f6dad324394eb37eef7d8f6563246994.png" />
-<img alt="../_images/378833f441f3998c38d5e6bb83960612dd583978e4987b316f0705c16eb28572.png" src="../_images/378833f441f3998c38d5e6bb83960612dd583978e4987b316f0705c16eb28572.png" />
-<img alt="../_images/2715a0e4e4acd3eb9cf3e154a1398b40ff45751fddbe4ba51f0823f7450df2e7.png" src="../_images/2715a0e4e4acd3eb9cf3e154a1398b40ff45751fddbe4ba51f0823f7450df2e7.png" />
-<img alt="../_images/479f8405290c57b9e6da1ba7f54e943b94b20bdad9cdcb84dea9a015b17ae6a9.png" src="../_images/479f8405290c57b9e6da1ba7f54e943b94b20bdad9cdcb84dea9a015b17ae6a9.png" />
-<img alt="../_images/287e4577970be7aee34bb6e6ad2932399783070b1ab2dc12def593df577fef5b.png" src="../_images/287e4577970be7aee34bb6e6ad2932399783070b1ab2dc12def593df577fef5b.png" />
-<img alt="../_images/5a861f95cd05d9adc5a00d793dfb65c906993d5a2fe02a1d936ad26119a477ad.png" src="../_images/5a861f95cd05d9adc5a00d793dfb65c906993d5a2fe02a1d936ad26119a477ad.png" />
-<img alt="../_images/6c8b159b81c4f89d3f2d9309803ce355e07f68a2a839f2d475c308eba716214c.png" src="../_images/6c8b159b81c4f89d3f2d9309803ce355e07f68a2a839f2d475c308eba716214c.png" />
-<img alt="../_images/bb667d8024f560df5dfa8e75defcf2c69808144054fdc7523ca1aba05a2bef5c.png" src="../_images/bb667d8024f560df5dfa8e75defcf2c69808144054fdc7523ca1aba05a2bef5c.png" />
-<img alt="../_images/f38d0976d00ad9a2de774effe94cb810d89b549692531f27a546d6c39eacb488.png" src="../_images/f38d0976d00ad9a2de774effe94cb810d89b549692531f27a546d6c39eacb488.png" />
-<img alt="../_images/4a43eb84b75957a1100e138d2fbde82417e0dfa35c73990c281e9c577e0f8fb1.png" src="../_images/4a43eb84b75957a1100e138d2fbde82417e0dfa35c73990c281e9c577e0f8fb1.png" />
-<img alt="../_images/495477dbc46b226524076a6d7d826d2a302e5234ec018acbc612a6fd43a6871b.png" src="../_images/495477dbc46b226524076a6d7d826d2a302e5234ec018acbc612a6fd43a6871b.png" />
-<img alt="../_images/8cd5eef8f07204b33647090eaaeb01cdd78456129729fb3cb3b7c578e6762ecf.png" src="../_images/8cd5eef8f07204b33647090eaaeb01cdd78456129729fb3cb3b7c578e6762ecf.png" />
-<img alt="../_images/aeda0a739c3e68754876a78281c17ec38a94d35b3d8b61530951fc1f0d548799.png" src="../_images/aeda0a739c3e68754876a78281c17ec38a94d35b3d8b61530951fc1f0d548799.png" />
-<img alt="../_images/b0e687cd957ce4a200e4cdf35ebda5c408cefcf52b60b0eb09e6bf6978b354e6.png" src="../_images/b0e687cd957ce4a200e4cdf35ebda5c408cefcf52b60b0eb09e6bf6978b354e6.png" />
-<img alt="../_images/0194b2075265d251dc8a7c3cc836e72c2fa55554de371fbc461cf66de502f408.png" src="../_images/0194b2075265d251dc8a7c3cc836e72c2fa55554de371fbc461cf66de502f408.png" />
-<img alt="../_images/9e2ebb5f57820febc8146188a38280102e9e4f15f915e5c36f495650ab0a747f.png" src="../_images/9e2ebb5f57820febc8146188a38280102e9e4f15f915e5c36f495650ab0a747f.png" />
-<img alt="../_images/7d757ccc68f813d5ef636457b5c39a37f47ed132fd0cb6bf31c622c15f010efa.png" src="../_images/7d757ccc68f813d5ef636457b5c39a37f47ed132fd0cb6bf31c622c15f010efa.png" />
-<img alt="../_images/29e3246e75e71fc00c527323e08efb921c190fbfe70a6064ab3543b8318fbd6a.png" src="../_images/29e3246e75e71fc00c527323e08efb921c190fbfe70a6064ab3543b8318fbd6a.png" />
-<img alt="../_images/dd094c5ce64975be7d0056307497677860e8203defc685d019331be0b5eca6e1.png" src="../_images/dd094c5ce64975be7d0056307497677860e8203defc685d019331be0b5eca6e1.png" />
-<img alt="../_images/854206a3ab72b9cdcbe95d79869ba24dab62c9529c5b469018916f229612c278.png" src="../_images/854206a3ab72b9cdcbe95d79869ba24dab62c9529c5b469018916f229612c278.png" />
-<img alt="../_images/8b76fbb813866653a71e0afd995b6583836797a28012a7e905ed3e241fdeff62.png" src="../_images/8b76fbb813866653a71e0afd995b6583836797a28012a7e905ed3e241fdeff62.png" />
-<img alt="../_images/12b7b49b33c08cd67aa6a685bbf26ba715e8e924f4cad13f823d7ec093379cda.png" src="../_images/12b7b49b33c08cd67aa6a685bbf26ba715e8e924f4cad13f823d7ec093379cda.png" />
-<img alt="../_images/a7083b4f1ed942bbdc1a88e0f66659e9347364a0dc15a99806f77760c5127b37.png" src="../_images/a7083b4f1ed942bbdc1a88e0f66659e9347364a0dc15a99806f77760c5127b37.png" />
+<img alt="../_images/5d8e606ff5181d1c78b8cc1b94938a18f25dcdaa9d80c54bee5915209afae6b8.png" src="../_images/5d8e606ff5181d1c78b8cc1b94938a18f25dcdaa9d80c54bee5915209afae6b8.png" />
+<img alt="../_images/3c8e430f98c336becec5795b3f7ef34e7fe937c57aacc90ea17ea1ad32f2dadc.png" src="../_images/3c8e430f98c336becec5795b3f7ef34e7fe937c57aacc90ea17ea1ad32f2dadc.png" />
+<img alt="../_images/7ad5418d03f457007c0cee4348b6d08004701de7698039bbf5f1ce5af9d7b5a5.png" src="../_images/7ad5418d03f457007c0cee4348b6d08004701de7698039bbf5f1ce5af9d7b5a5.png" />
+<img alt="../_images/cdfd76cc98808668981632bc927a80a1f4d9f570e8617bce55c67a6e2b54ac26.png" src="../_images/cdfd76cc98808668981632bc927a80a1f4d9f570e8617bce55c67a6e2b54ac26.png" />
+<img alt="../_images/7185d7ff8c7f2ab5726d0e885abda9e87f24e00b7af7f7c573f52d6edd9afc2f.png" src="../_images/7185d7ff8c7f2ab5726d0e885abda9e87f24e00b7af7f7c573f52d6edd9afc2f.png" />
+<img alt="../_images/8c012138376284958057f08473bc6bc9ac845fa44ad3f43bd2b22448ccbd7620.png" src="../_images/8c012138376284958057f08473bc6bc9ac845fa44ad3f43bd2b22448ccbd7620.png" />
+<img alt="../_images/a125212d827ef36dfdd942f433f2d44305a025a180bf254e866d3e5cf8259f48.png" src="../_images/a125212d827ef36dfdd942f433f2d44305a025a180bf254e866d3e5cf8259f48.png" />
+<img alt="../_images/4cc95a29faa4f340fe540c3b6d89495f184346644954fca440b518b885aa4f8e.png" src="../_images/4cc95a29faa4f340fe540c3b6d89495f184346644954fca440b518b885aa4f8e.png" />
+<img alt="../_images/607acb752db738096ac0654a3573a9ec43e2e08db4aacb0c33694e8d93e17866.png" src="../_images/607acb752db738096ac0654a3573a9ec43e2e08db4aacb0c33694e8d93e17866.png" />
+<img alt="../_images/e21a0361560b10c214a0e81d2fb070a0800741522ba89e8bc65dc65c3e03253b.png" src="../_images/e21a0361560b10c214a0e81d2fb070a0800741522ba89e8bc65dc65c3e03253b.png" />
+<img alt="../_images/67c2812639e97ca7b3b396597e5b367cdbfdbb89225b89ad323dc9e3ade791c4.png" src="../_images/67c2812639e97ca7b3b396597e5b367cdbfdbb89225b89ad323dc9e3ade791c4.png" />
+<img alt="../_images/2c3eed3da234e90414a8894244091b85a6609bdf6c70ce9f6355633de0bc1fd6.png" src="../_images/2c3eed3da234e90414a8894244091b85a6609bdf6c70ce9f6355633de0bc1fd6.png" />
+<img alt="../_images/6b32ab0e62e38bbaa21126a6d8447dec6f5c7d8738d34655310d460ff58ac610.png" src="../_images/6b32ab0e62e38bbaa21126a6d8447dec6f5c7d8738d34655310d460ff58ac610.png" />
+<img alt="../_images/856316a0abf09868e54c4fa9eddef2867cab1feb89f3ceaa3f4acf08fda8a7b3.png" src="../_images/856316a0abf09868e54c4fa9eddef2867cab1feb89f3ceaa3f4acf08fda8a7b3.png" />
+<img alt="../_images/cbfd6ec9e5f515478175dfffbbb7511faa1a79eda0e20447390b1f25266be19e.png" src="../_images/cbfd6ec9e5f515478175dfffbbb7511faa1a79eda0e20447390b1f25266be19e.png" />
+<img alt="../_images/f0d74740705a4693d09e4a9583f0fc99e5ed56ebe302c3bc1bb8afebed01da86.png" src="../_images/f0d74740705a4693d09e4a9583f0fc99e5ed56ebe302c3bc1bb8afebed01da86.png" />
+<img alt="../_images/357ea670771a59af3ef4477468807bdfdd5096c1d8d64603a59813277c44aa57.png" src="../_images/357ea670771a59af3ef4477468807bdfdd5096c1d8d64603a59813277c44aa57.png" />
+<img alt="../_images/b182b2ab7cc431266547d0232233187d5020d7a408040bc100454e12b618a08b.png" src="../_images/b182b2ab7cc431266547d0232233187d5020d7a408040bc100454e12b618a08b.png" />
+<img alt="../_images/1c84f01850b7bc30fc77d891e1e7d50da8f23cd9dfac75258008e0c1f4f35e20.png" src="../_images/1c84f01850b7bc30fc77d891e1e7d50da8f23cd9dfac75258008e0c1f4f35e20.png" />
+<img alt="../_images/a950a17835fac2c99a48dc0d586a2e16d53fcfdd8dbdae476b31a8befb6679b5.png" src="../_images/a950a17835fac2c99a48dc0d586a2e16d53fcfdd8dbdae476b31a8befb6679b5.png" />
+<img alt="../_images/25e39bc8c81cce9a7bf62f9d7abf6fe1d73e0ffd97203dc8d2afa1bc524b558a.png" src="../_images/25e39bc8c81cce9a7bf62f9d7abf6fe1d73e0ffd97203dc8d2afa1bc524b558a.png" />
+<img alt="../_images/7363e9b46b5b09a3ce6783ca01963bd7ae35b9f6064737f7a220737e2ca8c609.png" src="../_images/7363e9b46b5b09a3ce6783ca01963bd7ae35b9f6064737f7a220737e2ca8c609.png" />
+<img alt="../_images/f0b7fb6815fd84bec263a87500da29c5fe17eb4da4cc915a90992962d6e5e3fc.png" src="../_images/f0b7fb6815fd84bec263a87500da29c5fe17eb4da4cc915a90992962d6e5e3fc.png" />
+<img alt="../_images/aaa8c3355adcad4c6bfc7b296b85847e7cefa24b937f8af83bb13d29067a8ada.png" src="../_images/aaa8c3355adcad4c6bfc7b296b85847e7cefa24b937f8af83bb13d29067a8ada.png" />
+<img alt="../_images/a013fe999648e2936fe37c7b1b59899b2be7f4171e857c734cade7c4f826642a.png" src="../_images/a013fe999648e2936fe37c7b1b59899b2be7f4171e857c734cade7c4f826642a.png" />
+<img alt="../_images/af38962542be7d377f8d16deb664cdec1fe320494e2857756bc7b7597b1a96ab.png" src="../_images/af38962542be7d377f8d16deb664cdec1fe320494e2857756bc7b7597b1a96ab.png" />
+<img alt="../_images/ef2ce184c6eedfbdc98c6d36054a095f5fd69999f39b2db2b597a6ccac44d44d.png" src="../_images/ef2ce184c6eedfbdc98c6d36054a095f5fd69999f39b2db2b597a6ccac44d44d.png" />
+<img alt="../_images/481cd75c574da943608a5a1d86112c35d707d9f7f40781a505b374eb1f62c3b2.png" src="../_images/481cd75c574da943608a5a1d86112c35d707d9f7f40781a505b374eb1f62c3b2.png" />
+<img alt="../_images/34be932eb634bcbb18f540be2869fbe5ccaaf565ed154ae037072b43baae747d.png" src="../_images/34be932eb634bcbb18f540be2869fbe5ccaaf565ed154ae037072b43baae747d.png" />
+<img alt="../_images/2c234c3865ff02aec8fd79a7bc7717ba9ebce56857a4d9a5c0a5097c4706f6ef.png" src="../_images/2c234c3865ff02aec8fd79a7bc7717ba9ebce56857a4d9a5c0a5097c4706f6ef.png" />
+<img alt="../_images/9550321574d4f02d198f708db3ae9135d80e9bfdcef4d9f1d476e3cdf776c612.png" src="../_images/9550321574d4f02d198f708db3ae9135d80e9bfdcef4d9f1d476e3cdf776c612.png" />
+<img alt="../_images/95a44b18dd8caceed029f4eccb8af4290033344c45e615863a1883ba5bf2c930.png" src="../_images/95a44b18dd8caceed029f4eccb8af4290033344c45e615863a1883ba5bf2c930.png" />
 </div>
 </div>
 </section>
@@ -1362,7 +1366,7 @@ The LANDIS-II simulation has finished properly !
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
 </pre></div>
 </div>
-<img alt="../_images/5d8acc660cae1deddc74a9bc660d1c58c710ad543beb4442c6137fa4d4dbfe5f.png" src="../_images/5d8acc660cae1deddc74a9bc660d1c58c710ad543beb4442c6137fa4d4dbfe5f.png" />
+<img alt="../_images/0c0f81214a8c55b6d890d864f80f8fff25a026b7d9ae05099439ba5aefe3217d.png" src="../_images/0c0f81214a8c55b6d890d864f80f8fff25a026b7d9ae05099439ba5aefe3217d.png" />
 </div>
 </div>
 </section>
@@ -1423,8 +1427,7 @@ The LANDIS-II simulation has finished properly !
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1488,8 +1491,8 @@ By Clément Hardy, PhD
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

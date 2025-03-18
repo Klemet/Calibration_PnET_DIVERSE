@@ -46,6 +46,14 @@ import time
 import sys
 import pexpect
 import nbformat
+from shapely.geometry import Point
+import xarray as xr
+from datetime import datetime
+import geopandas as gpd
+import cftime
+import requests
+from tqdm import tqdm
+
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -775,14 +783,14 @@ def write_LANDIS_MainEcoregionsFile(file_path, data_dict):
         file.write("LandisData Ecoregions\n")
         file.write("\n")
         file.write(">>         Map\n")
-        file.write(">> Active  Code  Name   Description\n")
-        file.write(">> ------  ----  -----  -----------\n")
+        file.write(">> Active  Code  Name                            Description\n")
+        file.write(">> ------  ----  ------------------------------  -----------\n")
 
         # Define fixed widths for each column
         widths = {
             'active': 8,
             'Map code': 4,
-            'name': 8,
+            'name': 30,
             'description': 20,
         }
 
@@ -1375,7 +1383,7 @@ def plot_TimeSeries_RasterPnETOutputs(data_dict, outputs_unit_dict, timestep, si
 #                 int(PnETGitHub_OneCellSim["scenario.txt"]["Duration"]))
 
 
-def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30):
+def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference - FVS"):
     """
     Plots the outputs made by the extension PnET Sites output and read
     by the function parse_CSVFiles_PnET_SitesOutput as Matplotlib plots.
@@ -1393,6 +1401,7 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         the time for each reference value, and "Values" contains the values corresponding
         to each time. The default is {}.
         Example : {"Wood(gDW)":{"Time":range(0, 70, 10), "Values":[1, 3, 3, 3, 3, 4, 5]}}
+        UPDATE : Can now also be a list to display several curves.
     columnToPlotSelector : List of strings, optional
         Contains column names from df that should be plotted; the rest is then ignored.
         The default is [], which plots all columns.
@@ -1405,6 +1414,9 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         will be changed from g/m2 into absolute values in Mg (tons) for the site. The default is True.
     cellLength : Int, optional
         The length of a cell size. MUST BE PROVIDED IF realBiomass = True. The default is 30.
+    referenceLabel: String, optional
+        Labels the reference curve. If referenceDict is a list with several reference curves,
+        then referenceLabel must be a list too.
 
     Returns
     -------
@@ -1428,7 +1440,7 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         columnName = column
 
         # We edit the measures of biomass to put them not as g/m2, but tons in total for the site
-        if realBiomass and (column == "Wood(gDW)" or column == "Root(gDW)" or column == "Fol(gDW)"):
+        if realBiomass and (column == "Wood(gDW)" or column == "Root(gDW)" or column == "Fol(gDW)" or column == "WoodAndLeaves(gDW)"):
             columnData = df[column] * (cellLength*cellLength)
             columnData = columnData / 1000000
             columnName = column[:-5] + " (Mg or Metric tons)"
@@ -1437,14 +1449,29 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
         
         
         if trueTime:
-            plt.plot(df['Time'], columnData, label = "PnET Succession")
+            plt.plot(df['Time'], columnData, label = "PnET Succession - " + str(column))
         else: #We edit the time to remove the years (e.g. 2000, 2001, etc.) and just use 0 as starting year. Makes things easier for the reference curve.
             timeNormalized = df['Time'] - min(df['Time'])
-            plt.plot(timeNormalized, columnData, label = "PnET Succession")
+            plt.plot(timeNormalized, columnData, label = "PnET Succession - " + str(column))
             
         # If reference curve exists for the variable, we display it on the curve
-        if column in referenceDict:
-            plt.plot(referenceDict[column]["Time"], referenceDict[column]["Values"], color='#ebcb8b', label = "Reference")
+
+        # If we gave a list of dictionnary, we'll display them
+        if type(referenceDict) is list:
+            if type(referenceLabel) is not list or (type(referenceLabel) is list and len(referenceDict) != len (referenceLabel)):
+                raise Exception("If referenceDict contains a list of curves, then referenceLabel must contain a list of label of the same size") 
+            cmap = plt.get_cmap('viridis', len(referenceDict))
+            coloursForCurve = cmap(np.linspace(0, 1, len(referenceDict)))
+            color_iterator = iter(coloursForCurve)
+            labelIterator = iter(referenceLabel)
+            for listRefDict in referenceDict:
+                if column in listRefDict:
+                    colourForCurve = next(color_iterator)
+                    labelForCurve = next(labelIterator)
+                    plt.plot(listRefDict[column]["Time"], listRefDict[column]["Values"], color=colourForCurve, label =  labelForCurve)
+        else:
+            if column in referenceDict:
+                plt.plot(referenceDict[column]["Time"], referenceDict[column]["Values"], color='#ebcb8b', label = referenceLabel)
         
         # Set the x-axis ticks to increment by 10 years
         if trueTime:
@@ -1495,11 +1522,14 @@ def FVS_on_simulationOnSingleEmptyStand(Latitude,
                                         Slope,
                                         Elevation,
                                         treeSpeciesCode,
-                                        numberOfTrees,
+                                        treesPerHectares,
                                         siteIndex,
                                         variant = "FVSon",
+                                        Max_BA = "",
                                         timestep = 10,
                                         numberOfTimesteps = 12,
+                                        outputFormatBiomass = "Metric tons per hectares",
+                                        outputFormatYears = "Real date",
                                         folderForFiles = "/tmp/FVS_SingleEmptyStandRun",
                                         clearFiles = True,
                                         printOutput = False):
@@ -1646,7 +1676,7 @@ def FVS_on_simulationOnSingleEmptyStand(Latitude,
                         	"SitePrep"	INTEGER
                         )
     ''')
-
+    
     # Inserting Stand Row
     data_to_insert = {
     'Stand_CN': 'STAND_EMPTY',
@@ -1664,7 +1694,8 @@ def FVS_on_simulationOnSingleEmptyStand(Latitude,
     'Inv_Plot_Size': 1.0, # Used to control number of trees in stand.
     'Num_Plots': 0,
     'Site_Species': str(treeSpeciesCode),
-    'Site_Index': str(siteIndex)
+    'Site_Index': str(siteIndex),
+    'Max_BA': str(Max_BA)
     }
 
     columns = ', '.join(data_to_insert.keys())
@@ -1676,6 +1707,16 @@ def FVS_on_simulationOnSingleEmptyStand(Latitude,
     cursor.execute(sql)
     # print(f"{cursor.rowcount} record inserted in database.")
 
+    # WARNING : It looks like the tree density is calculated differently from one variant to the other.
+    # In particular, it seems like the american variants of FVS will use the number of trees given in the stand
+    # as the density/acre, while FVS Ontario will use it as density/hectare. I tested almost all american variants,
+    # and this is to be that every time.
+    # We make the change here.
+    if variant != "FVSon" and variant != "FVSbc" : # The two canadian variants seem to only deal in Ha
+        numberOfTrees = treesPerHectares * 0.4046856422
+    else:
+        numberOfTrees = treesPerHectares
+    
     # Inserting Tree row
     data_to_insert = {
     'Stand_CN': 'STAND_EMPTY',
@@ -1743,7 +1784,6 @@ CARBCALC 1 1
 CARBREPT
 END
 
-
 PROCESS
 STOP
 """
@@ -1755,7 +1795,7 @@ STOP
 
     # Launching the sim
     print("Launching FVS sim")
-    result = subprocess.run(['FVSon', '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
+    result = subprocess.run([variant, '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
     if printOutput:
         print(result.stdout)
 
@@ -1789,6 +1829,7 @@ STOP
     
     # Define the target string to search for
     target_string_carbonReport = "******  CARBON REPORT VERSION 1.0 ******"
+    target_string_carbonUnits = "ALL VARIABLES ARE REPORTED IN"
     target_string_lastLineBeforeValues = "YEAR    Total    Merch     Live     Dead     Dead      DDW    Floor  Shb/Hrb   Carbon   Carbon  from Fire"
     target_dashesLine = "--------------------------------------------------------------------------------------------------------------"
 
@@ -1797,6 +1838,7 @@ STOP
 
     # Initialize variables to track whether we've found the target string and to collect report lines
     found_target_carbonReport = False
+    found_target_carbonUnits = False
     found_target_lastLineBeforeValues = False
     found_target_lastDashesLine = False
     report_lines = []
@@ -1808,29 +1850,40 @@ STOP
             if target_string_carbonReport in line:
                 found_target_carbonReport = True
         else:
-            if not found_target_lastLineBeforeValues:
-                if target_string_lastLineBeforeValues in line:
-                    found_target_lastLineBeforeValues = True
-            else:
-                if not found_target_lastDashesLine:
-                    if target_dashesLine in line:
-                        found_target_lastDashesLine = True
-                else:
-                    if re.match(r'^\s*-\s*$', line):
-                        break
+            if not found_target_carbonUnits:
+                if target_string_carbonUnits in line:
+                    found_target_carbonUnits = True
+                    if "TONS/ACRE" in line :
+                        carbonUnits = "TONS/ACRE"
+                        print("Detected unit in carbon outputs is US Tons/Acre. Will transform into Metric ton / hectare.")
+                    elif "METRIC TONS/HECTARE" in line:
+                        carbonUnits = "METRIC TONS/HECTARE"
                     else:
-                        # Split the line into parts based on whitespace
-                        parts = line.split()
-                        
-                        # Check if there are enough parts to avoid IndexError
-                        if len(parts) > 8:
-                            # Get the number from the first column (index 0)
-                            key = int(parts[0])
-                            # Get the number from the second column (index 1), stand Aboveground live carbon
-                            value = float(parts[1])
+                        raise Exception("Carbon units not properly detected in .out file of FVS. Please check the file; should be TONS/ACRES or METRIC TONS/HECTARE.")
+            else:
+                if not found_target_lastLineBeforeValues:
+                    if target_string_lastLineBeforeValues in line:
+                        found_target_lastLineBeforeValues = True
+                else:
+                    if not found_target_lastDashesLine:
+                        if target_dashesLine in line:
+                            found_target_lastDashesLine = True
+                    else:
+                        if re.match(r'^\s*-\s*$', line):
+                            break
+                        else:
+                            # Split the line into parts based on whitespace
+                            parts = line.split()
                             
-                            # Add to dictionary
-                            mapping[key] = value    
+                            # Check if there are enough parts to avoid IndexError
+                            if len(parts) > 8:
+                                # Get the number from the first column (index 0)
+                                key = int(parts[0])
+                                # Get the number from the second column (index 1), stand Aboveground live carbon
+                                value = float(parts[1])
+                                
+                                # Add to dictionary
+                                mapping[key] = value    
 
     # To convert carbon back to biomass : The algorithm of the Fire and Fuel extension computes biomass, but only outputs carbon (no option for outputting biomass).
     # However, indicates the convertion factor. Quote :
@@ -1839,13 +1892,41 @@ STOP
     # Therefore, to get biomass from carbon outputs, we just have to multiply it by 2.
     for key in mapping.keys():
         mapping[key] = mapping[key]*2
-    
+
+    # There is a big issue when choosing the different variants : sometimes, the keyword CARBCALC 1 1 - which indicates among other things that
+    # we want an output of carbon in Metric tons per hectare rather than US tons / acre - does not work ! 
+    # So here, we check and make the transformation to Metric tons per hectares if needed.
+    if carbonUnits == "TONS/ACRE":
+        for key in mapping.keys():
+            # Metric Tons per Hectare = US Tons per Acre×2.24127
+            mapping[key] = mapping[key]*2.24127
+            
     # Delete the folder created for the inputs and outputs if specified
     if clearFiles:
         print("Clearing files")
         shutil.rmtree(folderForFiles)
         print(f"The directory '{folderForFiles}' has been deleted.")
-    
+
+    # We end up by converting things according to the arguments of the function
+    if outputFormatBiomass != "Metric tons per hectares" and outputFormatBiomass != "Metric gram per meter squared":
+        raise Exception("outputFormatBiomass must be either 'Metric tons per hectares' or 'Metric gram per meter squared'.") 
+    if outputFormatYears != "Real date" and outputFormatYears != "Start at 0":
+        raise Exception("outputFormatYears must be either 'Real date' or 'Start at 0'.")
+
+    if outputFormatYears == "Start at 0":
+        initialKeys = list(mapping.keys())
+        beginningYear = min(initialKeys)
+        for key in initialKeys:
+            mapping[key - beginningYear] = mapping[key]
+            del mapping[key]
+
+    if outputFormatBiomass == "Metric gram per meter squared":
+        for key in mapping.keys():
+            # Mg to gram
+            mapping[key] = mapping[key] * 1000000
+            # Hectare to m2
+            mapping[key] = mapping[key]/10000
+
     return(mapping)
 
 #%% MISC FUNCTIONS
@@ -1971,3 +2052,410 @@ def replace_in_dict(d, old_str, new_str):
         return d.replace(old_str, new_str)
     else:
         return d
+
+# Functions to transform kelvins to celciuses
+def kelvin_to_celsius(kelvin):
+    celsius = kelvin - 273.15
+    return celsius
+
+# Function to load and filter data in a .nc file by polygon
+def load_and_filter_by_polygon(file_path, shapefile_path):
+    # Load the shapefile
+    gdf = gpd.read_file(shapefile_path)
+    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
+    if gdf.crs != 'EPSG:4326':
+        gdf = gdf.to_crs('EPSG:4326')
+    # Get the polygon from the shapefile (assuming first polygon if multiple)
+    polygon = gdf.geometry.iloc[0]
+    # Load the climate data
+    ds = xr.open_dataset(file_path)
+    # Create a mask for points inside the polygon
+    # We try with different attribute names
+    try:
+        lon_grid, lat_grid = np.meshgrid(ds.lon.values, ds.lat.values)
+        mask = np.zeros((len(ds.lat), len(ds.lon)), dtype=bool)
+        for i in range(len(ds.lat)):
+            for j in range(len(ds.lon)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                mask[i, j] = polygon.contains(point)
+        # Apply the mask to the dataset
+        # First, we need to convert the mask to have the same dimensions as the dataset
+        mask_da = xr.DataArray(mask, coords=[ds.lat, ds.lon], dims=['lat', 'lon'])
+
+    # In some cases, lat and lon are not the names used for the dimensions. We try another.
+    except:
+        # Code to handle the exception
+        print("lat and lon not found as attributes of ds. trying other")
+        lon_grid, lat_grid = np.meshgrid(ds.LonDim.values, ds.LatDim.values)
+        mask = np.zeros((len(ds.LatDim), len(ds.LonDim)), dtype=bool)
+        for i in range(len(ds.LatDim)):
+            for j in range(len(ds.LonDim)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                mask[i, j] = polygon.contains(point)
+        # Apply the mask to the dataset
+        # First, we need to convert the mask to have the same dimensions as the dataset
+        mask_da = xr.DataArray(mask, coords=[ds.LatDim, ds.LonDim], dims=['LatDim', 'LonDim'])
+        print(mask_da)
+
+    # Apply the mask
+    ds_filtered = ds.where(mask_da, drop=True)
+    return ds_filtered
+
+# Progress bar for downloads of some files with urllib.request
+def progress_hook(count, block_size, total_size):
+    """
+    A callback function for urlretrieve that displays a progress bar.
+
+    Args:
+        count: The count of blocks transferred so far
+        block_size: The size of each block in bytes
+        total_size: The total size of the file in bytes
+    """
+    downloaded = count * block_size
+    percent = min(int(downloaded * 100 / total_size), 100)
+
+    # Create a simple progress bar
+    bar_length = 50
+    filled_length = int(bar_length * percent // 100)
+    bar = '█' * filled_length + '-' * (bar_length - filled_length)
+
+    # Print the progress bar
+    sys.stdout.write(f'\r|{bar}| {percent}% Complete ({downloaded}/{total_size} bytes)')
+    sys.stdout.flush()
+
+    # Add a newline when download completes
+    if downloaded >= total_size:
+        sys.stdout.write('\n')
+
+# Function to process CO2 data and fill the dataframe
+def process_co2_data(historical_ds, future_ds, shapefile, df):
+    # Add CO2_Concentration column to dataframe
+    df['CO2_Concentration'] = np.nan
+
+    # Load the shapefile
+    gdf = gpd.read_file(shapefile)
+    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
+    if gdf.crs != 'EPSG:4326':
+        gdf = gdf.to_crs('EPSG:4326')
+    # Get the polygon from the shapefile (assuming first polygon if multiple)
+    polygon = gdf.geometry.iloc[0]
+    # Get the centroid of the polygon
+    polygon_centroid = polygon.centroid
+
+    # Process historical data (1950-2013)
+    # Create a mask for points inside the polygon for historical data
+    lon_values = historical_ds.Longitude.values
+    lat_values = historical_ds.Latitude.values
+    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
+    hist_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
+
+    # Check each point if it's inside the polygon
+    for i in range(len(lat_values)):
+        for j in range(len(lon_values)):
+            point = Point(lon_grid[i, j], lat_grid[i, j])
+            hist_mask[i, j] = polygon.contains(point)
+
+    # If no points are inside the polygon, find the closest point to the polygon centroid
+    if not np.any(hist_mask):
+        print("No points found inside the polygon for historical data. Finding closest point...")
+        min_dist = float('inf')
+        closest_i, closest_j = 0, 0
+
+        for i in range(len(lat_values)):
+            for j in range(len(lon_values)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                dist = point.distance(polygon_centroid)
+                if dist < min_dist:
+                    min_dist = dist
+                    closest_i, closest_j = i, j
+
+        hist_mask[closest_i, closest_j] = True
+        print(f"Closest point to polygon centroid for historical data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
+
+    # Process future data (2014-2100)
+    # Create a mask for points inside the polygon for future data
+    lon_values = future_ds.longitude.values
+    lat_values = future_ds.latitude.values
+    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
+    future_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
+
+    # Check each point if it's inside the polygon
+    for i in range(len(lat_values)):
+        for j in range(len(lon_values)):
+            point = Point(lon_grid[i, j], lat_grid[i, j])
+            future_mask[i, j] = polygon.contains(point)
+
+    # If no points are inside the polygon, find the closest point to the polygon centroid
+    if not np.any(future_mask):
+        print("No points found inside the polygon for future data. Finding closest point...")
+        min_dist = float('inf')
+        closest_i, closest_j = 0, 0
+
+        for i in range(len(lat_values)):
+            for j in range(len(lon_values)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                dist = point.distance(polygon_centroid)
+                if dist < min_dist:
+                    min_dist = dist
+                    closest_i, closest_j = i, j
+
+        future_mask[closest_i, closest_j] = True
+        print(f"Closest point to polygon centroid for future data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
+
+    # Extract monthly CO2 values for 2013 to capture seasonal pattern
+    monthly_values_2013 = {}
+    for month in range(1, 13):
+        time_str = f"2013-{month:02d}-01"
+        try:
+            time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+            co2_slice = historical_ds.value.isel(Times=time_idx).values
+            masked_values = co2_slice[hist_mask]
+            if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                monthly_values_2013[month] = np.nanmean(masked_values)
+        except (IndexError, KeyError):
+            print(f"Time {time_str} not found in historical dataset")
+
+    # Extract monthly CO2 values for 2015 to capture seasonal pattern
+    monthly_values_2015 = {}
+    for month in range(1, 13):
+        time_str = f"2015-{month:02d}-01"
+        try:
+            time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(2015, month, 15, 0, 0, 0, 0))[0][0]
+            co2_slice = future_ds.CO2.isel(time=time_idx).values
+            masked_values = co2_slice[future_mask]
+            if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                monthly_values_2015[month] = np.nanmean(masked_values)
+        except (IndexError, KeyError):
+            print(f"Time {time_str} not found in future dataset")
+
+    # Calculate annual averages for 2013 and 2015
+    if len(monthly_values_2013) == 12 and len(monthly_values_2015) == 12:
+        annual_avg_2013 = sum(monthly_values_2013.values()) / 12
+        annual_avg_2015 = sum(monthly_values_2015.values()) / 12
+
+        # Calculate seasonal anomalies (deviations from annual mean)
+        seasonal_anomaly_2013 = {month: value - annual_avg_2013 for month, value in monthly_values_2013.items()}
+        seasonal_anomaly_2015 = {month: value - annual_avg_2015 for month, value in monthly_values_2015.items()}
+
+        # Average the seasonal anomalies from 2013 and 2015
+        avg_seasonal_anomaly = {month: (seasonal_anomaly_2013[month] + seasonal_anomaly_2015[month]) / 2 
+                               for month in range(1, 13)}
+
+        # Calculate the expected annual average for 2014 (linear interpolation)
+        annual_avg_2014 = annual_avg_2013 + (annual_avg_2015 - annual_avg_2013) / 2
+
+        # Calculate the expected monthly values for 2014
+        monthly_values_2014 = {month: annual_avg_2014 + avg_seasonal_anomaly[month] for month in range(1, 13)}
+
+        print("Successfully calculated seasonal pattern for 2014")
+    else:
+        print("Cannot calculate seasonal pattern, missing monthly data for 2013 or 2015")
+        monthly_values_2014 = None
+
+    # Fill in CO2 concentration for each year and month in the dataframe
+    for index, row in df.iterrows():
+        year = int(row['Year'])
+        month = int(row['Month'])
+
+        if 1950 <= year <= 2013:
+            # Find the corresponding time in the historical dataset
+            time_str = f"{year}-{month:02d}-01"
+            try:
+                # Find the time index
+                time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+
+                # Extract CO2 values for this time and apply the mask
+                co2_slice = historical_ds.value.isel(Times=time_idx).values
+                masked_values = co2_slice[hist_mask]
+
+                # Calculate the average if there are valid values
+                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
+            except (IndexError, KeyError):
+                print(f"Time {time_str} not found in historical dataset")
+
+        elif year == 2014:
+            # Use the seasonally adjusted values for 2014
+            if monthly_values_2014 and month in monthly_values_2014:
+                df.at[index, 'CO2_Concentration'] = monthly_values_2014[month]
+            else:
+                # Fallback to simple linear interpolation if seasonal adjustment failed
+                if 'value' in monthly_values_2013.get(month, {}) and 'value' in monthly_values_2015.get(month, {}):
+                    interpolated_value = (monthly_values_2013[month] + monthly_values_2015[month]) / 2
+                    df.at[index, 'CO2_Concentration'] = interpolated_value
+                else:
+                    print(f"Cannot interpolate for 2014-{month:02d}, missing data")
+
+        elif 2014 <= year <= 2100:
+            # Find the corresponding time in the future dataset
+            time_str = f"{year}-{month:02d}-01"
+            try:
+                # Find the time index
+                # Different here, as this file uses cftime format.
+                # Plus, don't ask me why, they put the day for the timestep at 15
+                time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(year, month, 15, 0, 0, 0, 0))[0][0]
+
+                # Extract CO2 values for this time and apply the mask
+                # Here again, dimension names and all are different
+                co2_slice = future_ds.CO2.isel(time=time_idx).values
+                masked_values = co2_slice[future_mask]
+
+                # Calculate the average if there are valid values
+                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
+            except (IndexError, KeyError):
+                print(f"Time {time_str} not found in future dataset")
+
+    return df
+
+
+def standardize_xarray_dataset(ds):
+    """
+    Transform an xarray Dataset by converting longitude and latitude from variables to coordinates
+    when they exist as variables and the dataset only has a time coordinate.
+
+    Parameters:
+    -----------
+    ds : xarray.Dataset
+        The input dataset, typically loaded from a .nc file
+
+    Returns:
+    --------
+    xarray.Dataset
+        Transformed dataset with longitude and latitude as coordinates if applicable
+    """
+
+    # Change dimension name if it's not "time"
+    if "Times" in set(ds.coords):
+        ds = ds.rename_dims(dims_dict={"Times":"time"})
+        
+    # Check if longitude and latitude exist as variables
+    lon_var = None
+    lat_var = None
+
+    # Look for common longitude and latitude variable names
+    lon_names = ['lon', 'longitude', 'LON', 'LONGITUDE', 'Longitude', "LonDim"]
+    lat_names = ['lat', 'latitude', 'LAT', 'LATITUDE', 'Latitude', "LatDim"]
+
+    for name in lon_names:
+        if name in ds.variables:
+            lon_var = name
+            break
+
+    for name in lat_names:
+        if name in ds.variables:
+            lat_var = name
+            break
+
+    # If both longitude and latitude variables exist, convert them to coordinates
+    if lon_var is not None and lat_var is not None:
+        # Create a new dataset with longitude and latitude as coordinates
+        lon_values = ds[lon_var].values
+        lat_values = ds[lat_var].values
+
+        # Create meshgrid if longitude and latitude are 1D
+        if lon_values.ndim == 1 and lat_values.ndim == 1:
+            lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
+
+            # Create new dataset with proper coordinates
+            new_ds = xr.Dataset(
+                coords={
+                    'time': (["time"], ds.coords["time"].values),
+                    'latitude': (['latitude'], lat_values),
+                    'longitude': (['longitude'], lon_values)
+                }
+            )
+
+            # Copy all variables except longitude and latitude
+            for var_name, var in ds.variables.items():
+                if var_name not in [lon_var, lat_var, 'time']:
+                    # Reshape the data if needed based on dimensions
+                    if var.ndim == 1:
+                        # Handle 1D variables
+                        new_ds[var_name] = var
+                    else:
+                        # Assume the variable has dimensions that match the grid
+                        new_dims = ['time', 'latitude', 'longitude'][:var.ndim]
+                        new_ds[var_name] = (new_dims, var.values)
+
+            return new_ds
+        else:
+            # If longitude and latitude are already 2D, use them directly as coordinates
+            ds = ds.assign_coords({
+                'longitude': ds[lon_var],
+                'latitude': ds[lat_var]
+            })
+
+            # Drop the original variables to avoid duplication
+            ds = ds.drop_vars([lon_var, lat_var])
+
+            return ds
+
+    # If conditions are not met, return the original dataset
+    return ds
+
+# Downloads a file quickly using the axel package for linux, and display a progress bar properly in Jupyter notebook
+def download_file(url, save_path):
+    # Start the process
+    process = subprocess.Popen(['axel', '-n', '10', '--output=' + str(save_path), url],
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.STDOUT,
+                              universal_newlines=True,
+                              bufsize=1)
+    
+    last_line = ""
+    # Read and display output in real-time
+    for line in iter(process.stdout.readline, ''):
+        # Store the last line
+        last_line = line.rstrip()
+    
+        # Clear the current line and print the new one
+        # This creates the "updating" effect
+        sys.stdout.write('\r' + ' ' * 100 + '\r')  # Clear line
+        sys.stdout.write(last_line)
+        sys.stdout.flush()
+    
+    # Wait for the process to complete
+    return_code = process.wait()
+    
+    # Print a newline at the end
+    print()
+    
+    # Create a result object similar to subprocess.run for compatibility
+    result = type('', (), {})()
+    result.returncode = return_code
+    result.stdout = last_line
+    result.stderr = ""
+
+# Similar toload_and_filter_by_polygon (see above), but adapted for CanLEADv1 datasets
+def load_and_filter_by_polygon_canLEADv1(file_path, shapefile_path):
+    # Load the shapefile
+    gdf = gpd.read_file(shapefile_path)
+    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
+    if gdf.crs != 'EPSG:4326':
+        gdf = gdf.to_crs('EPSG:4326')
+    # Get the polygon from the shapefile (assuming first polygon if multiple)
+    polygon = gdf.geometry.iloc[0]
+    # Load the climate data
+    ds = xr.open_dataset(file_path)
+    # Create a mask for points inside the polygon
+    lon_grid, lat_grid = np.meshgrid(ds.lon.values, ds.lat.values)
+    mask = np.zeros((len(ds.lat), len(ds.lon)), dtype=bool)
+    # Check each point if it's inside the polygon
+    for i in range(len(ds.lat)):
+        for j in range(len(ds.lon)):
+            point = Point(lon_grid[i, j], lat_grid[i, j])
+            mask[i, j] = polygon.contains(point)
+    # Apply the mask to the dataset
+    # First, we need to convert the mask to have the same dimensions as the dataset
+    mask_da = xr.DataArray(mask, coords=[ds.lat, ds.lon], dims=['lat', 'lon'])
+    # Apply the mask
+    ds_filtered = ds.where(mask_da, drop=True)
+    return ds_filtered
+
+# Used for conversion of time format when converting CanLEADv1 data into a panda dataframe
+def convert_cftime_to_datetime(cftime_obj):
+	if pd.isna(cftime_obj):
+		return pd.NaT
+	return datetime(cftime_obj.year, cftime_obj.month, cftime_obj.day, 
+                   cftime_obj.hour, cftime_obj.minute, cftime_obj.second)
