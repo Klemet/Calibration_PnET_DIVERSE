@@ -53,6 +53,9 @@ import geopandas as gpd
 import cftime
 import requests
 from tqdm import tqdm
+import matplotlib.dates as mdates
+from matplotlib.colors import to_rgba
+from matplotlib.gridspec import GridSpec
 
 
 #%% FUNCTIONS TO PARSE PARAMETERS
@@ -2055,8 +2058,10 @@ def replace_in_dict(d, old_str, new_str):
 
 # Functions to transform kelvins to celciuses
 def kelvin_to_celsius(kelvin):
-    celsius = kelvin - 273.15
-    return celsius
+    if isinstance(kelvin, list):
+        return [temp - 273.15 for temp in kelvin]
+    else:
+        return kelvin - 273.15
 
 # Function to load and filter data in a .nc file by polygon
 def load_and_filter_by_polygon(file_path, shapefile_path):
@@ -2128,7 +2133,85 @@ def progress_hook(count, block_size, total_size):
         sys.stdout.write('\n')
 
 # Function to process CO2 data and fill the dataframe
-def process_co2_data(historical_ds, future_ds, shapefile, df):
+# Based on datasets from https://zenodo.org/records/5021361
+def process_co2_data(historical_ds, shapefile, df):
+    # Add CO2_Concentration column to dataframe
+    df['CO2_Concentration'] = np.nan
+
+    # Load the shapefile
+    gdf = gpd.read_file(shapefile)
+    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
+    if gdf.crs != 'EPSG:4326':
+        gdf = gdf.to_crs('EPSG:4326')
+    # Get the polygon from the shapefile (assuming first polygon if multiple)
+    polygon = gdf.geometry.iloc[0]
+    # Get the centroid of the polygon
+    polygon_centroid = polygon.centroid
+
+    # Process historical data (1950-2013)
+    # Create a mask for points inside the polygon for historical data
+    lon_values = historical_ds.Longitude.values
+    lat_values = historical_ds.Latitude.values
+    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
+    hist_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
+
+    # Check each point if it's inside the polygon
+    for i in range(len(lat_values)):
+        for j in range(len(lon_values)):
+            point = Point(lon_grid[i, j], lat_grid[i, j])
+            hist_mask[i, j] = polygon.contains(point)
+
+    # If no points are inside the polygon, find the closest point to the polygon centroid
+    if not np.any(hist_mask):
+        print("No points found inside the polygon for historical data. Finding closest point...")
+        min_dist = float('inf')
+        closest_i, closest_j = 0, 0
+
+        for i in range(len(lat_values)):
+            for j in range(len(lon_values)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                dist = point.distance(polygon_centroid)
+                if dist < min_dist:
+                    min_dist = dist
+                    closest_i, closest_j = i, j
+
+        hist_mask[closest_i, closest_j] = True
+        print(f"Closest point to polygon centroid for historical data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
+
+    # Fill in CO2 concentration for each year and month in the dataframe
+    for index, row in df.iterrows():
+        year = int(row['Year'])
+        month = int(row['Month'])
+
+        if 1950 <= year <= 2013:
+            # Find the corresponding time in the historical dataset
+            time_str = f"{year}-{month:02d}-01"
+            try:
+                # Find the time index
+                time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+
+                # Extract CO2 values for this time and apply the mask
+                co2_slice = historical_ds.value.isel(Times=time_idx).values
+                masked_values = co2_slice[hist_mask]
+
+                # Calculate the average if there are valid values
+                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
+            except (IndexError, KeyError):
+                print(f"Time {time_str} not found in historical dataset")
+
+        elif year == 2014:
+            print("You are outside of historical data ! Use process_co2_data_withFutureInterpolation to deal with future data from https://zenodo.org/records/5021361")
+
+    return df
+
+# Function to process CO2 data and fill the dataframe
+# Based on datasets from https://zenodo.org/records/5021361
+# But this time, takes into account future data coming from
+# https://zenodo.org/records/5021361; and does an interpolation
+# because there is one missing year (2014) between their historical
+# and future datasets
+def process_co2_data_withFutureInterpolation(historical_ds, future_ds, shapefile, df):
     # Add CO2_Concentration column to dataframe
     df['CO2_Concentration'] = np.nan
 
@@ -2309,6 +2392,7 @@ def process_co2_data(historical_ds, future_ds, shapefile, df):
     return df
 
 
+
 def standardize_xarray_dataset(ds):
     """
     Transform an xarray Dataset by converting longitude and latitude from variables to coordinates
@@ -2459,3 +2543,290 @@ def convert_cftime_to_datetime(cftime_obj):
 		return pd.NaT
 	return datetime(cftime_obj.year, cftime_obj.month, cftime_obj.day, 
                    cftime_obj.hour, cftime_obj.minute, cftime_obj.second)
+
+
+def plot_climateVariable_time_series_with_moving_average(variable_dict, dates_time, variableName, window_years=20, highlightModel = ""):
+        """
+        Plot precipitation time series with a 20-year moving average for multiple models,
+        compute the median of the averaged data, and highlight the model closest to the median.
+    
+        Parameters:
+        -----------
+        variable_dict : dict
+            Dictionary with model names as keys and variable time series as values
+        dates_time : list
+            List of date strings with the same length as the precipitation time series
+        window_years : int
+            Size of the moving average window in years (default: 20)
+        """
+        # Convert dates to datetime objects
+        dates = [datetime.strptime(date_str, "%Y-%m-%d") for date_str in dates_time]
+    
+        # Create a DataFrame with dates as index for easier manipulation
+        df = pd.DataFrame(variable_dict, index=dates)
+    
+        # Calculate the window size in terms of data points
+        # Assuming data is annual, monthly, or daily
+        # Data is monthly, so windows is mutliplied by 12
+        window_size = 12 * window_years
+    
+        # Apply moving average to each model's data
+        df_avg = df.rolling(window=window_size, center=True, min_periods=1).mean()
+    
+        # print(df)
+        # print(df_avg)
+    
+        # Compute the median across all models for the averaged data
+        df_avg['median'] = df_avg.drop(columns=['median'] if 'median' in df_avg.columns else []).median(axis=1)
+    
+        # Calculate which model is closest to the median
+        # Using mean squared error as the distance metric
+        mse_values = {}
+        for model in variable_dict.keys():
+            # Filter out NaN values that might appear at the edges due to the rolling window
+            valid_idx = ~np.isnan(df_avg[model]) & ~np.isnan(df_avg['median'])
+            if valid_idx.sum() > 0:
+                mse_values[model] = np.mean((df_avg[model][valid_idx] - df_avg['median'][valid_idx])**2)
+            else:
+                mse_values[model] = float('inf')
+    
+        closest_model = min(mse_values, key=mse_values.get)
+    
+        # Create the plot
+        plt.figure(figsize=(14, 8))
+    
+        # Generate a colormap with 26 distinct colors
+        colors = plt.cm.tab20.colors + plt.cm.tab20b.colors + plt.cm.tab20c.colors
+    
+        # Plot each model's time series with transparency
+        for i, model in enumerate(variable_dict.keys()):
+            if model != closest_model:
+                color = colors[i % len(colors)]
+                plt.plot(df_avg.index, df_avg[model], color=color, alpha=0.5, linewidth=1, label=model)
+    
+        # Plot the median with less transparency
+        plt.plot(df_avg.index, df_avg['median'], color='black', alpha=0.8, linewidth=2, label='Median')
+    
+        # Plot the closest model on top with full opacity and thicker line
+        plt.plot(df_avg.index, df_avg[closest_model], color='red', alpha=1.0, 
+                 linewidth=3, label=f'{closest_model} (Closest to Median)')
+
+        # Plot an additional model if we want
+        if highlightModel != "":
+            plt.plot(df_avg.index, df_avg[highlightModel], color='yellow', alpha=1.0, 
+            linewidth=3, label=f'{highlightModel}')
+    
+        # Format the x-axis to show dates properly
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
+        plt.gcf().autofmt_xdate()  # Rotate date labels
+    
+        plt.title(f'{variableName} Time Series by Model ({window_years}-Year Moving Average)')
+        plt.xlabel('Date')
+        plt.ylabel(str(variableName) + ' (Moving Average)')
+        plt.grid(True, alpha=0.3)
+        # plt.ylim(0, 100)
+    
+        # Create a legend with a reasonable size
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small')
+    
+        plt.tight_layout()
+        return plt
+
+def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict, dates_time, window_years=20):
+    """
+    Plot time series with a moving average for precipitation, max temperature, and min temperature.
+    Compute the median for each variable and highlight the model closest to the median across all variables.
+
+    Parameters:
+    -----------
+    precip_dict : dict
+        Dictionary with model names as keys and precipitation time series as values
+    tmax_dict : dict
+        Dictionary with model names as keys and maximum temperature time series as values
+    tmin_dict : dict
+        Dictionary with model names as keys and minimum temperature time series as values
+    dates_time : list
+        List of date strings with the same length as the time series
+    window_years : int
+        Size of the moving average window in years (default: 20)
+    """
+    # Convert dates to datetime objects
+    dates = [datetime.strptime(date_str, "%Y-%m-%d") for date_str in dates_time]
+
+    # Create DataFrames with dates as index for easier manipulation
+    df_precip = pd.DataFrame(precip_dict, index=dates)
+    df_tmax = pd.DataFrame(tmax_dict, index=dates)
+    df_tmin = pd.DataFrame(tmin_dict, index=dates)
+
+    # Calculate the window size in terms of data points
+    # Assuming data is monthly (most common for climate data)
+    window_size = 12 * window_years
+
+    # Apply moving average to each model's data for all variables
+    df_precip_avg = df_precip.rolling(window=window_size, center=True, min_periods=1).mean()
+    df_tmax_avg = df_tmax.rolling(window=window_size, center=True, min_periods=1).mean()
+    df_tmin_avg = df_tmin.rolling(window=window_size, center=True, min_periods=1).mean()
+
+    # Compute the median across all models for each variable
+    df_precip_avg['median'] = df_precip_avg.median(axis=1)
+    df_tmax_avg['median'] = df_tmax_avg.median(axis=1)
+    df_tmin_avg['median'] = df_tmin_avg.median(axis=1)
+
+    # Calculate standardized MSE for each model across all variables
+    models = list(precip_dict.keys())
+    mse_values = {model: {'precip': 0, 'tmax': 0, 'tmin': 0} for model in models}
+
+    # Calculate MSE for each variable
+    for model in models:
+        # Filter out NaN values that might appear at the edges due to the rolling window
+        valid_idx_precip = ~np.isnan(df_precip_avg[model]) & ~np.isnan(df_precip_avg['median'])
+        valid_idx_tmax = ~np.isnan(df_tmax_avg[model]) & ~np.isnan(df_tmax_avg['median'])
+        valid_idx_tmin = ~np.isnan(df_tmin_avg[model]) & ~np.isnan(df_tmin_avg['median'])
+
+        if valid_idx_precip.sum() > 0:
+            mse_values[model]['precip'] = np.mean((df_precip_avg[model][valid_idx_precip] - df_precip_avg['median'][valid_idx_precip])**2)
+        else:
+            mse_values[model]['precip'] = float('inf')
+
+        if valid_idx_tmax.sum() > 0:
+            mse_values[model]['tmax'] = np.mean((df_tmax_avg[model][valid_idx_tmax] - df_tmax_avg['median'][valid_idx_tmax])**2)
+        else:
+            mse_values[model]['tmax'] = float('inf')
+
+        if valid_idx_tmin.sum() > 0:
+            mse_values[model]['tmin'] = np.mean((df_tmin_avg[model][valid_idx_tmin] - df_tmin_avg['median'][valid_idx_tmin])**2)
+        else:
+            mse_values[model]['tmin'] = float('inf')
+
+    # Standardize MSE values for each variable
+    precip_mse_values = np.array([mse_values[model]['precip'] for model in models])
+    tmax_mse_values = np.array([mse_values[model]['tmax'] for model in models])
+    tmin_mse_values = np.array([mse_values[model]['tmin'] for model in models])
+
+    # Remove infinite values for standardization
+    precip_mse_finite = precip_mse_values[np.isfinite(precip_mse_values)]
+    tmax_mse_finite = tmax_mse_values[np.isfinite(tmax_mse_values)]
+    tmin_mse_finite = tmin_mse_values[np.isfinite(tmin_mse_values)]
+
+    # Standardize each variable's MSE (z-score)
+    precip_mean, precip_std = np.mean(precip_mse_finite), np.std(precip_mse_finite)
+    tmax_mean, tmax_std = np.mean(tmax_mse_finite), np.std(tmax_mse_finite)
+    tmin_mean, tmin_std = np.mean(tmin_mse_finite), np.std(tmin_mse_finite)
+
+    # Calculate standardized MSE and combined score
+    combined_scores = {}
+    for i, model in enumerate(models):
+        precip_score = (mse_values[model]['precip'] - precip_mean) / precip_std if np.isfinite(mse_values[model]['precip']) else float('inf')
+        tmax_score = (mse_values[model]['tmax'] - tmax_mean) / tmax_std if np.isfinite(mse_values[model]['tmax']) else float('inf')
+        tmin_score = (mse_values[model]['tmin'] - tmin_mean) / tmin_std if np.isfinite(mse_values[model]['tmin']) else float('inf')
+
+        # Average of standardized scores (lower is better)
+        if np.isfinite(precip_score) and np.isfinite(tmax_score) and np.isfinite(tmin_score):
+            combined_scores[model] = (precip_score + tmax_score + tmin_score) / 3
+        else:
+            combined_scores[model] = float('inf')
+
+    # Find the model with the lowest combined standardized MSE
+    closest_model = min(combined_scores, key=combined_scores.get)
+
+    # Create the plot with 3 subplots and extra space at the top for the main title
+    fig = plt.figure(figsize=(16, 16))  # Increased height
+    gs = GridSpec(3, 1, figure=fig, height_ratios=[1, 1, 1])
+
+    # Add a main title with more space
+    fig.suptitle(f'Climate Variables with {window_years}-Year Moving Average\nBest Overall Model: {closest_model}', 
+                fontsize=16, y=0.98)  # Positioned higher
+
+    # Generate a colormap with 26 distinct colors
+    colors = plt.cm.tab20.colors + plt.cm.tab20b.colors + plt.cm.tab20c.colors
+
+    # Create a color mapping for models
+    color_map = {model: colors[i % len(colors)] for i, model in enumerate(models)}
+
+    # Create empty lists to collect all line objects and labels for the legend
+    all_lines = []
+    all_labels = []
+
+    # Plot precipitation
+    ax1 = fig.add_subplot(gs[0])
+    for model in models:
+        if model != closest_model:
+            line, = ax1.plot(df_precip_avg.index, df_precip_avg[model], color=color_map[model], 
+                           alpha=0.5, linewidth=1)
+            all_lines.append(line)
+            all_labels.append(model)
+
+    median_line, = ax1.plot(df_precip_avg.index, df_precip_avg['median'], color='black', 
+                          alpha=0.8, linewidth=2)
+    closest_line, = ax1.plot(df_precip_avg.index, df_precip_avg[closest_model], color='red', 
+                           alpha=1.0, linewidth=3)
+
+    # Add median and closest model to the legend collection
+    all_lines.append(median_line)
+    all_labels.append('Median')
+    all_lines.append(closest_line)
+    all_labels.append(f'{closest_model} (Best Overall)')
+
+    ax1.set_title(f'Precipitation ({window_years}-Year Moving Average)')
+    ax1.set_ylabel('Precipitation')
+    ax1.grid(True, alpha=0.3)
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    ax1.xaxis.set_major_locator(mdates.AutoDateLocator())
+
+    # Plot max temperature
+    ax2 = fig.add_subplot(gs[1])
+    for model in models:
+        if model != closest_model:
+            ax2.plot(df_tmax_avg.index, df_tmax_avg[model], color=color_map[model], 
+                    alpha=0.5, linewidth=1)
+
+    ax2.plot(df_tmax_avg.index, df_tmax_avg['median'], color='black', 
+             alpha=0.8, linewidth=2)
+    ax2.plot(df_tmax_avg.index, df_tmax_avg[closest_model], color='red', 
+             alpha=1.0, linewidth=3)
+
+    ax2.set_title(f'Maximum Temperature ({window_years}-Year Moving Average)')
+    ax2.set_ylabel('Maximum Temperature')
+    ax2.grid(True, alpha=0.3)
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    ax2.xaxis.set_major_locator(mdates.AutoDateLocator())
+
+    # Plot min temperature
+    ax3 = fig.add_subplot(gs[2])
+    for model in models:
+        if model != closest_model:
+            ax3.plot(df_tmin_avg.index, df_tmin_avg[model], color=color_map[model], 
+                    alpha=0.5, linewidth=1)
+
+    ax3.plot(df_tmin_avg.index, df_tmin_avg['median'], color='black', 
+             alpha=0.8, linewidth=2)
+    ax3.plot(df_tmin_avg.index, df_tmin_avg[closest_model], color='red', 
+             alpha=1.0, linewidth=3)
+
+    ax3.set_title(f'Minimum Temperature ({window_years}-Year Moving Average)')
+    ax3.set_xlabel('Date')
+    ax3.set_ylabel('Minimum Temperature')
+    ax3.grid(True, alpha=0.3)
+    ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    ax3.xaxis.set_major_locator(mdates.AutoDateLocator())
+
+    # Format dates on x-axis
+    plt.gcf().autofmt_xdate()
+
+    # Create a separate legend figure for all models
+    # Place the legend outside the plot area
+    fig.subplots_adjust(right=0.8, top=0.9)  # Make room for the legend and title
+
+    # Create the legend with all models
+    legend = fig.legend(all_lines, all_labels, loc='center right', 
+                       bbox_to_anchor=(0.98, 0.5), fontsize='small', 
+                       title="Models", ncol=1)
+
+    # Adjust the legend to make it more readable if there are many models
+    if len(models) > 15:
+        legend._ncol = 2  # Use 2 columns for the legend if there are many models
+
+    plt.tight_layout(rect=[0, 0, 0.8, 0.97])  # Adjust layout but leave space for legend and title
+
+    return fig, closest_model, combined_scores

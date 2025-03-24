@@ -1,0 +1,1044 @@
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+                                                OPTIONS SELECTED BY INPUT
+
+KEYWORD FILE NAME: SingleStandSim_Keywords
+----------------------------------------------------------------------------------------------------------------------------------
+KEYWORD    PARAMETERS:
+--------   -----------------------------------------------------------------------------------------------------------------------
+
+STDIDENT
+           STAND ID= STAND_EMPTY                                                                                               
+
+
+            
+
+ECHOSUM    SUMMARY OUTPUT WILL BE WRITTEN TO FILE REFERENCED BY NUMBER  4
+
+SCREEN     SUMMARY TABLE WILL BE PRINTED TO DATA SET REFERENCE NUMBER     6 AS RUN PROGRESSES.
+
+
+            
+
+DATABASE   DATABASE KEYWORDS:
+
+DSNIN      INPUT DATA BASE IS FVSData.db
+
+STANDSQL   STANDSQL COMMAND FOR INPUT DATA BASE: FVSData.db
+           SELECT * FROM FVS_StandInit WHERE Stand_ID = 'STAND_EMPTY'
+
+           STAND-LEVEL DATA BASE READ:
+           STAND_CN: STAND_EMPTY
+           INV_YEAR:               2023
+
+********   FVS03 WARNING:  FOREST CODE INDICATES THE GEOGRAPHIC LOCATION IS OUTSIDE THE RANGE OF THE MODEL.  DEFAULT CODE IS USED.
+
+********   FOREST CODE USED IN THIS PROJECTION IS 907
+           LONGITUDE:          -84.5556
+           LATITUDE:            42.7336
+           AGE:                       0
+           ASPECT:                  0.0
+           SLOPE:                  0.00
+           ELEVATION:              14.0
+           BASAL_AREA_FACTOR:      -1.0
+           INV_PLOT_SIZE:            1.
+           NUM_PLOTS:                 0
+           SITE_SPECIES:             BF MAPPED TO INTERNAL CODE: BF
+           SITE_INDEX:             70.0 FOR SPECIES: BF
+           MAX_BA:                170.0
+           END OF DATA BASE READ.
+
+TREESQL    TREESQL COMMAND FOR INPUT DATA BASE: FVSData.db
+           SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'STAND_EMPTY'
+           STAND_CN           WAS IGNORED
+           STAND_ID           WAS IGNORED
+           STANDPLOT_CN       WAS IGNORED
+           STANDPLOT_ID       WAS IGNORED
+           PLOT_ID            WAS USED
+           TREE_ID            WAS USED
+           TREE_COUNT         WAS USED
+           HISTORY            WAS USED
+           SPECIES            WAS USED
+           DBH                WAS USED
+           DG                 WAS USED
+           HT                 WAS USED
+           HTG                WAS USED
+           HTTOPK             WAS USED
+           CRRATIO            WAS USED
+           DAMAGE1            WAS USED
+           SEVERITY1          WAS USED
+           DAMAGE2            WAS USED
+           SEVERITY2          WAS USED
+           DAMAGE3            WAS USED
+           SEVERITY3          WAS USED
+           TREEVALUE          WAS USED
+           PRESCRIPTION       WAS USED
+           AGE                WAS USED
+           SLOPE              WAS USED
+           ASPECT             WAS USED
+           PV_CODE            WAS USED
+           TOPOCODE           WAS USED
+           SITEPREP           WAS USED
+           NUMBER ROWS PROCESSED:    1
+
+END        END OF DATA BASE OPTIONS.
+
+
+            
+
+TIMEINT    ALL CYCLES;  PERIOD LENGTH= 10
+
+NUMCYCLE   NUMBER OF CYCLES= 20
+
+
+            
+
+ESTAB      REGENERATION ESTABLISHMENT OPTIONS:
+           DATE OF DISTURBANCE= 2023
+
+STOCKADJ  PREDICTION OF NATURAL REGENERATION DISABLED.
+
+END        REGENERATION TALLY SEQUENCE SCHEDULED TO START IN 2023 
+           END OF ESTABLISHMENT KEYWORDS
+
+
+            
+
+TREELIST   DATE/CYCLE=    0; DATA SET REFERENCE NUMBER =  3.; HEADING SUPPRESSION CODE = 0.
+           (0=WITH HEADING, OTHER VALUES=SUPPRESS HEADING).
+
+CUTLIST    DATE/CYCLE=    0; DATA SET REFERENCE NUMBER =  3.; HEADING SUPPRESSION CODE = 0.
+           (0=WITH HEADING, OTHER VALUES=SUPPRESS HEADING).
+
+
+            
+
+COMMENT 
+           The following lines are used to produce a "Carbon report" with the Fire and Fuel
+           See user guide for more : https://www.fs.usda.gov/fmsc/ftp/fvs/docs/gtr/FFEguide
+           CARBCALC 1 1 is used to say that we want the report in metric tons/ha (not us to
+           CARBREPT is used to output the report in the main output (.out) file of the simu
+
+END 
+
+
+            
+
+FMIN       FIRE MODEL KEYWORDS:
+
+CARBCALC   CARBON REPORTS WILL BE BASED ON METHOD 1 (0=FFE, 1=JENKINS)
+           REPORT UNITS WILL BE 0 (0=US(TONS/ACRE), 1=METRIC(METRIC TONS/HA) 2=COMBINED(METRIC TONS/ACRE))
+           PROPORTION OF DEAD ROOTS DECAYING ANNUALLY WILL BE:  0.0425 (<0 = NO DEAD ROOTS)
+           SOFTWOOD DIAMETER BREAKPOINT:   9.0
+           HARDWOOD DIAMETER BREAKPOINT:  11.0
+
+CARBREPT   THE MAIN CARBON REPORT WILL BE PRINTED.
+
+END        END OF FIRE MODEL OPTIONS.
+
+
+            
+
+PROCESS    PROCESS THE STAND.
+----------------------------------------------------------------------------------------------------------------------------------
+
+                                                OPTIONS SELECTED BY DEFAULT
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+TREEFMT    (I4,T1,I7,F6.0,I1,A3,F4.1,F3.1,2F3.0,F4.1,I1,3(I2,I2),2I1,I2,    2I3,2I1,F3.0)  
+                                                                                           
+
+DESIGN     BASAL AREA FACTOR=   -1.0; INVERSE OF FIXED PLOT AREA=    1.0; BREAK DBH=    5.0
+           NUMBER OF PLOTS=     1; NON-STOCKABLE PLOTS=     0; STAND SAMPLING WEIGHT=     1.00000
+           PROPORTION OF STAND CONSIDERED STOCKABLE=  1.000
+
+********   FVS14 WARNING:  HABITAT/PLANT ASSOCIATION/ECOREGION CODE WAS NOT RECOGNIZED; HABITAT/PLANT ASSOCIATION/ECOREGION SET TO DEFAULT CODE.
+
+           PLANT ASSOCIATION CODE USED IN THIS PROJECTION IS FDN12   
+
+STDINFO    FOREST-LOCATION CODE=     907; HABITAT TYPE=  1; AGE=    0; ASPECT AZIMUTH IN DEGREES=   0.; SLOPE=   0.%
+           ELEVATION(100'S FEET)= 14.0;  REFERENCE CODE=     
+
+SPECIES      JP      SC      RN      RP      WP      WS      NS      BF      BS      TA
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      WC      EH      OS      RC      BA      GA      EC      SV      RM      BC
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      AE      RL      RE      YB      BW      SM      BM      AB      WA      WO
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      SW      BR      CK      RO      BO      NP      BH      PH      SH      BT
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      QA      BP      PB      __      BN      WN      HH      BK      OH      BE
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      ST      MM      AH      AC      HK      DW      HT      AP      BG      SY
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.    367.    367.
+
+SPECIES      PR      CC      PL      WI      BL      DM      SS      MA
+SDI MAX     367.    367.    367.    367.    367.    367.    367.    367.
+
+                                  NATIONAL VOLUME ESTIMATOR LIBRARY EQUATION NUMBERS
+SPECIES CUBIC FOOT BOARD FOOT SPECIES CUBIC FOOT BOARD FOOT SPECIES CUBIC FOOT BOARD FOOT SPECIES CUBIC FOOT BOARD FOOT 
+------- ---------- ---------- ------- ---------- ---------- ------- ---------- ---------- ------- ---------- ---------- 
+  JP    900CLKE105 900CLKE105   SC    900CLKE130 900CLKE130   RN    900CLKE125 900CLKE125   RP    900CLKE125 900CLKE125
+  WP    900CLKE129 900CLKE129   WS    900CLKE094 900CLKE094   NS    900CLKE091 900CLKE091   BF    900CLKE012 900CLKE012
+  BS    900CLKE095 900CLKE095   TA    900CLKE071 900CLKE071   WC    900CLKE241 900CLKE241   EH    900CLKE261 900CLKE261
+  OS    900CLKE299 900CLKE299   RC    900CLKE068 900CLKE068   BA    900CLKE543 900CLKE543   GA    900CLKE544 900CLKE544
+  EC    900CLKE742 900CLKE742   SV    900CLKE317 900CLKE317   RM    900CLKE316 900CLKE316   BC    900CLKE762 900CLKE762
+  AE    900CLKE972 900CLKE972   RL    900CLKE975 900CLKE975   RE    900CLKE977 900CLKE977   YB    900CLKE371 900CLKE371
+  BW    900CLKE951 900CLKE951   SM    900CLKE318 900CLKE318   BM    900CLKE314 900CLKE314   AB    900CLKE531 900CLKE531
+  WA    900CLKE541 900CLKE541   WO    900CLKE802 900CLKE802   SW    900CLKE804 900CLKE804   BR    900CLKE823 900CLKE823
+  CK    900CLKE826 900CLKE826   RO    900CLKE833 900CLKE833   BO    900CLKE837 900CLKE837   NP    900CLKE809 900CLKE809
+  BH    900CLKE402 900CLKE402   PH    900CLKE403 900CLKE403   SH    900CLKE407 900CLKE407   BT    900CLKE743 900CLKE743
+  QA    900CLKE746 900CLKE746   BP    900CLKE741 900CLKE741   PB    900CLKE375 900CLKE375   __    900CLKE000 900CLKE000
+  BN    900CLKE601 900CLKE601   WN    900CLKE602 900CLKE602   HH    900CLKE701 900CLKE701   BK    900CLKE901 900CLKE901
+  OH    900CLKE998 900CLKE998   BE    900CLKE313 900CLKE313   ST    900CLKE315 900CLKE315   MM    900CLKE319 900CLKE319
+  AH    900CLKE391 900CLKE391   AC    900CLKE421 900CLKE421   HK    900CLKE462 900CLKE462   DW    900CLKE491 900CLKE491
+  HT    900CLKE500 900CLKE500   AP    900CLKE660 900CLKE660   BG    900CLKE693 900CLKE693   SY    900CLKE731 900CLKE731
+  PR    900CLKE761 900CLKE761   CC    900CLKE763 900CLKE763   PL    900CLKE760 900CLKE760   WI    900CLKE920 900CLKE920
+  BL    900CLKE922 900CLKE922   DM    900CLKE923 900CLKE923   SS    900CLKE931 900CLKE931   MA    900CLKE935 900CLKE935
+
+SITECODE   SITE INDEX INFORMATION:
+            JP=   84.;  SC=   84.;  RN=   84.;  RP=   84.;  WP=   82.;  WS=   70.;  NS=   70.;  BF=   70.; BS=   66.
+            TA=   70.;  WC=   46.;  EH=   70.;  OS=   70.;  RC=   70.;  BA=   71.;  GA=   71.;  EC=   70.; SV=   70.
+            RM=   79.;  BC=   79.;  AE=   75.;  RL=   75.;  RE=   75.;  YB=   73.;  BW=   77.;  SM=   69.; BM=   69.
+            AB=   69.;  WA=   78.;  WO=   70.;  SW=   70.;  BR=   70.;  CK=   70.;  RO=   82.;  BO=   82.; NP=   82.
+            BH=   70.;  PH=   70.;  SH=   70.;  BT=   84.;  QA=   84.;  BP=   84.;  PB=   82.;  __=   70.; BN=   70.
+            WN=   70.;  HH=   70.;  BK=   70.;  OH=   70.;  BE=   70.;  ST=   70.;  MM=   70.;  AH=   70.; AC=   70.
+            HK=   70.;  DW=   70.;  HT=   70.;  AP=   70.;  BG=   70.;  SY=   70.;  PR=   70.;  CC=   70.; PL=   70.
+            WI=   70.;  BL=   70.;  DM=   70.;  SS=   70.;  MA=   70.
+           SITE SPECIES=BF CODE=    8
+
+INVENTORY POINT CROSS REFERENCE (FVS SEQUENTIAL POINT NUMBER = POINT NUMBER AS ENTERED IN THE INPUT DATA):
+  1=       1
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+                                                     ACTIVITY SCHEDULE
+
+STAND ID= STAND_EMPTY                   MGMT ID= NONE                                                                            
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+CYCLE  DATE  EXTENSION  KEYWORD   DATE  PARAMETERS:
+-----  ----  ---------  --------  ----  ------------------------------------------------------------------------------------------
+
+   1   2023
+               ESTB     TALLY     2023    2023.0000
+               BASE     TREELIST  2023       3.0000     0.0000
+               BASE     CUTLIST   2023       3.0000     0.0000
+
+   2   2033
+               BASE     TREELIST  2033       3.0000     0.0000
+               BASE     CUTLIST   2033       3.0000     0.0000
+
+   3   2043
+               BASE     TREELIST  2043       3.0000     0.0000
+               BASE     CUTLIST   2043       3.0000     0.0000
+
+   4   2053
+               BASE     TREELIST  2053       3.0000     0.0000
+               BASE     CUTLIST   2053       3.0000     0.0000
+
+   5   2063
+               BASE     TREELIST  2063       3.0000     0.0000
+               BASE     CUTLIST   2063       3.0000     0.0000
+
+   6   2073
+               BASE     TREELIST  2073       3.0000     0.0000
+               BASE     CUTLIST   2073       3.0000     0.0000
+
+   7   2083
+               BASE     TREELIST  2083       3.0000     0.0000
+               BASE     CUTLIST   2083       3.0000     0.0000
+
+   8   2093
+               BASE     TREELIST  2093       3.0000     0.0000
+               BASE     CUTLIST   2093       3.0000     0.0000
+
+   9   2103
+               BASE     TREELIST  2103       3.0000     0.0000
+               BASE     CUTLIST   2103       3.0000     0.0000
+
+  10   2113
+               BASE     TREELIST  2113       3.0000     0.0000
+               BASE     CUTLIST   2113       3.0000     0.0000
+
+  11   2123
+               BASE     TREELIST  2123       3.0000     0.0000
+               BASE     CUTLIST   2123       3.0000     0.0000
+
+  12   2133
+               BASE     TREELIST  2133       3.0000     0.0000
+               BASE     CUTLIST   2133       3.0000     0.0000
+
+  13   2143
+               BASE     TREELIST  2143       3.0000     0.0000
+               BASE     CUTLIST   2143       3.0000     0.0000
+
+  14   2153
+               BASE     TREELIST  2153       3.0000     0.0000
+               BASE     CUTLIST   2153       3.0000     0.0000
+
+  15   2163
+               BASE     TREELIST  2163       3.0000     0.0000
+               BASE     CUTLIST   2163       3.0000     0.0000
+
+  16   2173
+               BASE     TREELIST  2173       3.0000     0.0000
+               BASE     CUTLIST   2173       3.0000     0.0000
+
+  17   2183
+               BASE     TREELIST  2183       3.0000     0.0000
+               BASE     CUTLIST   2183       3.0000     0.0000
+
+  18   2193
+               BASE     TREELIST  2193       3.0000     0.0000
+               BASE     CUTLIST   2193       3.0000     0.0000
+
+  19   2203
+               BASE     TREELIST  2203       3.0000     0.0000
+               BASE     CUTLIST   2203       3.0000     0.0000
+
+  20   2213
+               BASE     TREELIST  2213       3.0000     0.0000
+               BASE     CUTLIST   2213       3.0000     0.0000
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+CALIBRATION STATISTICS:
+
+
+                                                 BF
+                                                ----
+
+NUMBER OF RECORDS PER SPECIES                      1
+
+NUMBER OF RECORDS WITH MISSING HEIGHTS             1
+
+NUMBER OF RECORDS WITH BROKEN OR DEAD TOPS         0
+
+NUMBER OF RECORDS WITH MISSING CROWN RATIOS        1
+
+NUMBER OF RECORDS AVAILABLE FOR SCALING
+THE DIAMETER INCREMENT MODEL                       0
+
+RATIO OF STANDARD ERRORS
+(INPUT DBH GROWTH DATA : MODEL)                 1.00
+
+WEIGHT GIVEN TO THE INPUT GROWTH DATA WHEN
+DBH GROWTH MODEL SCALE FACTORS WERE COMPUTED    0.00
+
+INITIAL SCALE FACTORS FOR THE
+DBH INCREMENT MODEL                             1.00
+
+NUMBER OF RECORDS AVAILABLE FOR SCALING
+THE SMALL TREE HEIGHT INCREMENT MODEL             0
+
+INITIAL SCALE FACTORS FOR THE SMALL TREE
+HEIGHT INCREMENT MODEL                          1.00
+
+NUMBER OF RECORDS WITH MISTLETOE                   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+STAND ID: STAND_EMPTY                   MGMT ID: NONE     
+
+
+                                        STAND COMPOSITION (BASED ON STOCKABLE AREA)
+--------------------------------------------------------------------------------------------------------------------------
+                            PERCENTILE POINTS IN THE
+                     DISTRIBUTION OF STAND ATTRIBUTES BY DBH      TOTAL/ACRE
+        STAND       -----------------------------------------      OF STAND         DISTRIBUTION OF STAND ATTRIBUTES BY
+YEAR  ATTRIBUTES      10     30     50     70     90    100       ATTRIBUTES       SPECIES AND 3 USER-DEFINED SUBCLASSES
+----  -----------   ------ ------ ------ ------ ------ ------   --------------  ------------------------------------------
+                                 (DBH IN INCHES)
+
+
+
+2023  TREES           0.5    0.5    0.5    0.5    0.5     0.5    1000. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         0.5    0.5    0.5    0.5    0.5     0.5       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         0.5    0.5    0.5    0.5    0.5     0.5       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         0.5    0.5    0.5    0.5    0.5     0.5       0. BDFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       0.5    0.5    0.5    0.5    0.5     0.5       0. CUFT/YR    0.% ---,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       0.5    0.5    0.5    0.5    0.5     0.5       0. CUFT/YR    0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2033  TREES           3.6    3.6    3.6    3.8    3.8     3.8     972. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         3.8    3.8    3.8    3.8    3.8     3.8       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         3.8    3.8    3.8    3.8    3.8     3.8       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         3.8    3.8    3.8    3.8    3.8     3.8       0. BDFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       3.6    3.6    3.6    3.8    3.8     3.8     193. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       3.8    3.8    3.8    3.8    3.8     3.8       0. CUFT/YR    0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2043  TREES           5.7    5.9    5.9    6.1    6.1     6.5     710. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         5.9    5.9    5.9    6.1    6.3     6.5    1934. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         6.5    6.5    6.5    6.5    6.5     6.5       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         6.5    6.5    6.5    6.5    6.5     6.5       0. BDFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       5.7    5.9    6.1    6.1    6.5     6.5     107. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       5.9    5.9    5.9    6.1    6.3     6.5      36. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2053  TREES           6.4    6.6    6.6    6.7    7.2     8.2     580. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         6.4    6.6    6.6    7.2    8.2     8.2    2648. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         8.2    8.2    8.2    8.2    8.2     8.2       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         8.2    8.2    8.2    8.2    8.2     8.2       0. BDFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       6.4    6.6    6.7    7.2    8.2     8.2      70. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       6.4    6.6    6.6    6.7    7.2     8.2      27. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2063  TREES           6.8    7.1    7.1    7.3    7.9     8.9     515. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         6.8    7.1    7.2    7.8    8.9     8.9    3079. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         8.9    8.9    8.9    8.9    8.9     8.9       0. CUFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         8.9    8.9    8.9    8.9    8.9     8.9       0. BDFT       0.% ---,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       6.8    7.1    7.3    7.8    8.9     8.9     105. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       6.8    7.1    7.1    7.2    7.8     8.9      41. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2073  TREES           7.5    7.6    7.8    8.7    8.7    10.4     438. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         7.6    7.6    8.1    8.7   10.4    10.4    3712. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        10.4   10.4   10.4   10.4   10.4    10.4     363. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        10.4   10.4   10.4   10.4   10.4    10.4    1328. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       7.6    7.6    8.1    8.7   10.4    10.4     112. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       7.3    7.6    7.6    7.8    8.7    10.4      52. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2083  TREES           8.2    8.7    8.7    9.6   10.0    11.3     366. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         8.2    8.7    9.1    9.6   11.3    11.3    4311. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         9.1    9.6    9.6   11.3   11.3    11.3    1360. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         9.2    9.6    9.6   11.3   11.3    11.3    4775. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       8.7    8.7    9.1    9.6   11.3    11.3     110. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       7.8    8.2    8.7    8.7    9.6    11.3      63. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2093  TREES           8.9    9.8    9.8   10.4   11.9    11.9     302. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH         8.9    9.8   10.4   10.4   11.9    11.9    4778. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         9.8    9.8   10.4   11.1   11.9    11.9    2623. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG         9.8    9.8   10.4   11.1   11.9    11.9   10379. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION       9.8    9.8   10.4   10.7   11.9    11.9     102. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       8.6    8.9    9.8    9.8   10.4    11.9      70. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2103  TREES           9.6   10.8   10.8   11.3   12.8    12.8     248. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        10.6   10.8   11.3   11.5   12.8    12.8    5096. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        10.6   10.8   11.3   11.5   12.8    12.8    3518. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        10.6   10.8   11.3   12.8   12.8    12.8   14087. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      10.6   10.8   11.3   11.5   12.8    12.8     112. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY       9.6   10.6   10.8   10.8   12.8    12.8      81. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2113  TREES          11.6   12.0   12.2   12.2   14.1    14.1     201. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        11.6   12.0   12.2   12.5   14.1    14.1    5409. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        11.6   12.0   12.2   14.1   14.1    14.1    4181. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        12.0   12.0   12.2   14.1   14.1    14.1   18406. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      11.6   12.0   12.2   12.5   14.1    14.1      76. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      11.0   12.0   12.0   12.2   14.1    14.1      59. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2123  TREES          12.5   12.8   12.9   12.9   14.9    14.9     177. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        12.5   12.8   12.9   13.7   14.9    14.9    5574. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        12.8   12.8   12.9   14.7   14.9    14.9    4536. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        12.8   12.8   12.9   14.7   14.9    14.9   20144. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      12.5   12.8   12.9   12.9   14.7    14.9      71. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      11.6   12.8   12.9   13.7   14.9    14.9      59. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2133  TREES          13.5   13.5   13.5   14.0   15.2    15.9     157. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        13.5   13.5   13.5   14.8   15.2    15.9    5692. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        13.5   13.5   13.5   14.8   15.2    15.9    4810. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        13.5   13.5   13.5   14.8   15.2    15.9   22903. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      13.5   13.5   13.5   13.5   15.2    15.9      59. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      13.5   13.5   13.5   14.8   15.2    15.9      50. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2143  TREES          14.1   14.1   14.6   14.6   15.8    16.3     143. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        14.1   14.1   14.6   15.1   15.8    16.3    5775. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        14.1   14.4   14.6   15.1   15.8    16.3    5004. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        14.1   14.4   14.6   15.1   15.8    16.3   24358. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      14.1   14.1   14.1   14.4   15.1    16.3      87. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      14.1   14.1   14.6   15.1   15.8    16.3      76. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2153  TREES          15.2   15.2   16.0   16.3   16.3    16.6     124. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        15.2   15.2   16.0   16.3   16.3    16.6    5886. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        15.2   15.2   16.0   16.3   16.3    16.6    5258. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        15.2   15.2   16.0   16.3   16.3    16.6   27172. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      15.2   15.2   15.2   16.0   16.3    16.6      99. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      15.2   15.2   16.0   16.3   16.3    16.6      89. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2163  TREES          16.3   16.9   17.4   17.4   17.8    17.8     106. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        16.3   16.9   17.4   17.4   17.8    17.8    5991. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        16.3   16.9   17.4   17.8   17.8    17.8    5497. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        16.3   16.9   17.4   17.8   17.8    17.8   28098. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      16.9   17.4   17.4   17.8   17.8    17.8      88. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      16.3   16.9   17.4   17.4   17.8    17.8      80. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2173  TREES          16.9   17.1   18.7   18.7   19.6    19.6      92. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        16.9   18.7   18.7   19.6   19.6    19.6    6068. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        16.9   18.7   18.7   19.6   19.6    19.6    5669. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        16.9   18.7   18.7   19.6   19.6    19.6   30411. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      16.9   16.9   17.1   18.7   19.6    19.6      54. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      16.9   18.7   18.7   19.6   19.6    19.6      50. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2183  TREES          17.9   18.9   19.1   19.8   20.2    20.2      84. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        17.9   19.1   19.1   20.2   20.2    20.2    6105. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        17.9   19.1   19.1   20.2   20.2    20.2    5758. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        17.9   19.1   19.1   20.2   20.2    20.2   31289. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      17.9   18.9   19.1   19.1   20.2    20.2      77. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      17.9   19.1   19.1   20.2   20.2    20.2      72. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2193  TREES          19.0   20.6   20.6   20.9   21.0    21.0      74. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        19.0   20.6   20.6   20.9   21.0    21.0    6156. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        19.0   20.6   20.6   20.9   21.0    21.0    5871. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        19.0   20.6   20.6   21.0   21.0    21.0   33051. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      20.4   20.6   20.9   20.9   21.0    21.0      67. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      19.0   20.6   20.6   20.9   21.0    21.0      63. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2203  TREES          20.2   21.6   21.6   22.2   22.9    22.9      66. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        20.2   21.6   21.6   22.2   22.9    22.9    6190. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        20.2   21.6   21.6   22.2   22.9    22.9    5950. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        20.2   21.6   21.6   22.2   22.9    22.9   34032. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      20.8   21.6   21.6   21.6   22.2    22.9      51. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      20.2   21.6   21.6   22.2   22.9    22.9      49. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2213  TREES          20.6   22.8   22.8   23.3   23.4    23.4      61. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        20.6   22.8   23.3   23.3   23.4    23.4    6209. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        20.6   22.8   23.3   23.3   23.4    23.4    5998. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        20.6   22.8   23.3   23.3   23.4    23.4   35159. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+      ACCRETION      19.8   22.8   23.3   23.3   23.4    23.4      52. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      MORTALITY      20.6   22.8   23.3   23.3   23.4    23.4      51. CUFT/YR  100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+
+2223  TREES          21.7   23.7   23.7   24.2   25.0    25.0      56. TREES    100.% BF1,   0.% ---,   0.% ---,   0.% ---
+      VOLUME:  
+        MERCH        21.7   23.7   24.2   24.2   25.0    25.0    6223. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        21.7   23.7   24.2   24.2   25.0    25.0    6041. CUFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+        SAWLG        21.7   23.7   24.2   24.2   25.0    25.0   35746. BDFT     100.% BF1,   0.% ---,   0.% ---,   0.% ---
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:40
+
+STAND ID: STAND_EMPTY                   MGMT ID: NONE     
+
+
+------------------------------------------------------------------------------------------------------------------------------
+                     ATTRIBUTES OF SELECTED SAMPLE TREES                 ADDITIONAL STAND ATTRIBUTES (BASED ON STOCKABLE AREA)
+      -----------------------------------------------------------------  -----------------------------------------------------
+      INITIAL                           LIVE   PAST DBH  BASAL   TREES          QUADRATIC   TREES    BASAL  TOP HEIGHT       
+      TREES/A            DBH    HEIGHT  CROWN   GROWTH   AREA     PER    STAND   MEAN DBH    PER     AREA     LARGEST       
+YEAR   %TILE  SPECIES (INCHES)  (FEET)  RATIO  (INCHES)  %TILE    ACRE   AGE     (INCHES)    ACRE   (SQFT/A) 40/A (FT)        
+----  ------- ------- -------- -------- ------ --------- ------- ------  -----  ---------   ------ --------- --------- -------
+
+2023                                          ( 10 YRS)
+
+        10     BF1       0.50     6.64    57     0.00    100.0  999.98
+        30     BF1       0.50     6.64    57     0.00    100.0  999.98
+        50     BF1       0.50     6.64    57     0.00    100.0  999.98
+        70     BF1       0.50     6.64    57     0.00    100.0  999.98
+        90     BF1       0.50     6.64    57     0.00    100.0  999.98
+       100     BF1       0.50     6.64    57     0.00    100.0  999.98
+                                                                           0       0.5     1000.       1.        6.6
+
+2033 **                                       ( 10 YRS)
+
+        10     BF1       3.58    23.06    51     2.89     57.0  583.14
+        30     BF1       3.58    23.06    51     2.89     57.0  583.14
+        50     BF1       3.58    23.06    51     2.89     57.0  583.14
+        70     BF1       3.78    24.15    51     3.09     83.6  242.98
+        90     BF1       3.84    24.44    51     3.14    100.0  145.79
+       100     BF1       3.84    24.44    51     3.14    100.0  145.79
+                                                                          10       3.7      972.      71.       24.4
+
+2043 **                                       ( 10 YRS)
+
+        10     BF1       5.69    38.74    46     1.74     10.0   15.98
+        30     BF1       5.94    37.86    46     2.22     53.9  255.68
+        50     BF1       5.94    37.86    46     2.22     53.9  255.68
+        70     BF1       6.07    37.08    46     2.35     72.9  106.53
+        90     BF1       6.14    39.86    46     2.22     88.6  106.53
+       100     BF1       6.47    39.16    47     2.53    100.0   44.39
+                                                                          20       6.0      710.     140.       39.2
+
+2053                                          ( 10 YRS)
+
+        10     BF1       6.55    53.79    46     0.81     21.6   13.04
+        30     BF1       6.60    49.45    46     0.62     55.5  208.64
+        50     BF1       6.60    49.45    46     0.62     55.5  208.64
+        70     BF1       7.19    55.18    47     1.05     90.9   86.93
+        90     BF1       6.69    49.03    46     0.51     70.0   86.93
+       100     BF1       8.20    62.82    49     1.63    100.0   36.22
+                                                                          30       6.8      580.     146.       62.1
+
+2063                                          ( 10 YRS)
+
+        10     BF1       7.05    59.65    46     0.48     17.3   12.15
+        30     BF1       7.09    55.08    46     0.46     50.0  180.85
+        50     BF1       7.09    55.08    46     0.46     50.0  180.85
+        70     BF1       7.75    61.93    47     0.53     85.3   82.78
+        90     BF1       7.22    55.48    47     0.50     64.0   74.79
+       100     BF1       8.88    70.78    49     0.64    100.0   35.66
+                                                                          40       7.3      515.     151.       69.9
+
+2073                                          ( 10 YRS)
+
+        10     BF1       7.50    63.53    46     0.42      8.3   10.90
+        30     BF1       7.58    60.02    47     0.46     37.4  148.11
+        50     BF1       7.58    60.02    47     0.46     37.4  148.11
+        70     BF1       8.68    71.92    48     0.88     81.9   77.38
+        90     BF1       7.76    61.16    47     0.51     50.2   61.77
+       100     BF1      10.45    83.57    50     1.47    100.0   34.94
+                                                                          50       8.2      438.     159.       82.1
+
+2083                                          ( 10 YRS)
+
+        10     BF1       8.83    74.85    48     1.25     46.1    8.94
+        30     BF1       8.68    70.14    47     1.03     43.9  114.58
+        50     BF1       8.68    70.14    47     1.03     43.9  114.58
+        70     BF1       9.59    79.51    49     0.86     81.3   72.03
+        90     BF1       8.24    64.90    47     0.45     15.7   48.73
+       100     BF1      11.29    89.25    51     0.80    100.0   34.30
+                                                                          60       9.1      366.     167.       88.1
+
+2093                                          ( 10 YRS)
+
+        10     BF1       9.24    76.77    48     0.39     14.0    7.68
+        30     BF1       9.82    78.86    49     1.08     50.0   88.92
+        50     BF1       9.82    78.86    49     1.08     50.0   88.92
+        70     BF1      10.43    85.11    49     0.79     73.6   67.69
+        90     BF1       8.87    69.94    47     0.59     11.9   33.35
+       100     BF1      11.94    92.55    51     0.61    100.0   33.38
+                                                                          70      10.2      302.     170.       91.6
+
+2103                                          ( 10 YRS)
+
+        10     BF1       9.61    77.80    48     0.35      3.6    5.62
+        30     BF1      10.80    84.94    50     0.92     43.6   70.26
+        50     BF1      10.80    84.94    50     0.92     43.6   70.26
+        70     BF1      11.32    89.93    50     0.84     70.1   64.58
+        90     BF1       9.62    75.49    48     0.71      9.0   18.16
+       100     BF1      12.85    96.26    52     0.85    100.0   31.85
+                                                                          80      11.2      248.     170.       95.9
+
+2113                                          ( 10 YRS)
+
+        10     BF1      10.54    83.27    49     0.87      1.8    2.86
+        30     BF1      11.99    90.66    51     1.12     38.2   55.14
+        50     BF1      11.99    90.66    51     1.12     38.2   55.14
+        70     BF1      12.18    93.54    51     0.80     66.8   60.16
+        90     BF1      11.04    83.67    50     1.33      4.8    7.68
+       100     BF1      14.14    99.90    53     1.22    100.0   29.67
+                                                                          90      12.4      201.     170.       99.5
+
+2123                                          ( 10 YRS)
+
+        10     BF1      11.56    88.22    51     0.96      2.5    1.56
+        30     BF1      12.86    93.99    52     0.81     65.4   47.98
+        50     BF1      12.86    93.99    52     0.81     65.4   47.98
+        70     BF1      12.75    95.28    52     0.54     39.9   55.79
+        90     BF1      11.46    84.76    51     0.39      1.8    4.32
+       100     BF1      14.91   101.55    54     0.72    100.0   27.51
+                                                                         100      13.3      177.     170.      100.9
+
+2133                                          ( 10 YRS)
+
+        10     BF1      12.59    92.30    52     0.97      1.4    0.98
+        30     BF1      13.52    96.01    53     0.63     26.9   43.37
+        50     BF1      13.52    96.01    53     0.63     26.9   43.37
+        70     BF1      13.54    97.52    53     0.74     56.5   50.43
+        90     BF1      12.26    88.29    51     0.75      0.9    1.93
+       100     BF1      15.23   101.71    54     0.30     92.1   24.87
+                                                                         110      14.1      157.     170.      101.5
+
+2143                                          ( 10 YRS)
+
+        10     BF1      13.63    95.69    53     0.98      1.2    0.82
+        30     BF1      14.58    98.82    54     0.99     66.4   39.65
+        50     BF1      14.58    98.82    54     0.99     66.4   39.65
+        70     BF1      14.13    98.82    53     0.56     30.7   46.10
+        90     BF1      13.17    91.95    52     0.86      0.7    1.25
+       100     BF1      15.76   102.50    54     0.50     92.4   22.74
+                                                                         120      14.7      143.     170.      101.9
+
+2153                                          ( 10 YRS)
+
+        10     BF1      14.78    98.71    54     1.08      1.1    0.72
+        30     BF1      15.17   100.01    54     0.56     26.5   34.48
+        50     BF1      15.17   100.01    54     0.56     26.5   34.48
+        70     BF1      16.35   102.43    55     2.08     93.1   40.09
+        90     BF1      13.94    94.48    53     0.72      0.5    0.88
+       100     BF1      15.99   102.60    54     0.22     58.8   19.77
+                                                                         130      15.8      124.     170.      102.5
+
+2163                                          ( 10 YRS)
+
+        10     BF1      16.11   101.34    55     1.25      1.3    0.61
+        30     BF1      17.77   103.44    55     2.44    100.0   29.29
+        50     BF1      17.77   103.44    55     2.44    100.0   29.29
+        70     BF1      17.36   103.84    56     0.96     70.3   34.06
+        90     BF1      15.95    99.17    55     1.90      0.8    0.72
+       100     BF1      16.25   102.70    54     0.24     15.6   16.80
+                                                                         140      17.2      106.     170.      103.5
+
+2173                                          ( 10 YRS)
+
+        10     BF1      17.32   103.15    56     1.14     25.9    0.53
+        30     BF1      19.60   105.19    56     1.72    100.0   25.38
+        50     BF1      19.60   105.19    56     1.72    100.0   25.38
+        70     BF1      18.75   105.17    57     1.30     68.7   29.51
+        90     BF1      16.26    99.27    55     0.29      0.5    0.63
+       100     BF1      16.86   103.43    54     0.57     13.8   14.55
+                                                                         150      18.5       92.     170.      105.2
+
+2183                                          ( 10 YRS)
+
+        10     BF1      18.48   104.45    57     1.09     12.8    0.48
+        30     BF1      20.18   105.63    56     0.54    100.0   23.27
+        50     BF1      20.18   105.63    56     0.54    100.0   23.27
+        70     BF1      19.14   105.34    57     0.37     60.0   27.05
+        90     BF1      16.86   100.30    55     0.56      0.5    0.57
+       100     BF1      18.94   105.22    55     1.96     28.2   13.34
+                                                                         160      19.3       84.     170.      105.6
+
+2193                                          ( 10 YRS)
+
+        10     BF1      19.50   105.33    57     0.96     12.8    0.43
+        30     BF1      21.04   106.21    56     0.81    100.0   20.53
+        50     BF1      21.04   106.21    56     0.81    100.0   20.53
+        70     BF1      20.58   106.24    57     1.36     54.3   23.87
+        90     BF1      18.45   102.72    56     1.49      0.6    0.51
+       100     BF1      20.91   106.35    55     1.85     70.8   11.77
+                                                                         170      20.5       74.     170.      106.3
+
+2203                                          ( 10 YRS)
+
+        10     BF1      20.15   105.76    57     0.61      6.2    0.38
+        30     BF1      22.23   106.78    56     1.12     82.2   18.41
+        50     BF1      22.23   106.78    56     1.12     82.2   18.41
+        70     BF1      21.63   106.74    57     0.99     53.1   21.41
+        90     BF1      18.96   103.25    56     0.49      0.5    0.45
+       100     BF1      22.89   107.07    55     1.86    100.0   10.56
+                                                                         180      21.7       66.     170.      106.8
+
+2213                                          ( 10 YRS)
+
+        10     BF1      20.44   105.86    57     0.28      6.0    0.35
+        30     BF1      22.85   107.01    56     0.58     48.5   16.97
+        50     BF1      22.85   107.01    56     0.58     48.5   16.97
+        70     BF1      23.33   107.25    57     1.60     83.0   19.73
+        90     BF1      20.04   104.43    56     1.01      5.6    0.42
+       100     BF1      23.36   107.20    55     0.44    100.0    9.73
+                                                                         190      22.6       61.     170.      107.2
+
+2223                                          ( 10 YRS)
+
+        10     BF1      20.77   105.96    57     0.30      1.2    0.32
+        30     BF1      23.73   107.29    56     0.83     48.2   15.58
+        50     BF1      23.73   107.29    56     0.83     48.2   15.58
+        70     BF1      24.16   107.35    57     0.77     82.1   18.12
+        90     BF1      20.52   104.77    56     0.45      0.5    0.38
+       100     BF1      24.96   107.30    55     1.50    100.0    8.93
+                                                                         200      23.6       56.     170.      107.3
+
+** NOTE:  DUE TO HARVEST, COMPRESSION, OR REGENERATION ESTABLISHMENT, NEW SAMPLE TREES WERE SELECTED.
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:40
+
+STAND ID: STAND_EMPTY                   MGMT ID: NONE    
+
+
+
+                                SUMMARY STATISTICS (PER ACRE OR STAND BASED ON TOTAL STAND AREA)
+--------------------------------------------------------------------------------------------------------------------------------------
+               START OF SIMULATION PERIOD                     REMOVALS             AFTER TREATMENT    GROWTH THIS PERIOD
+         --------------------------------------------- ----------------------- ---------------------  ------------------   MAI  ------
+         NO OF              TOP      MERCH SAWLG SAWLG NO OF MERCH SAWLG SAWLG              TOP  RES  PERIOD ACCRE MORT   MERCH FOR SS
+YEAR AGE TREES  BA  SDI CCF HT  QMD  CU FT CU FT BD FT TREES CU FT CU FT BD FT  BA  SDI CCF HT   QMD  YEARS   PER  YEAR   CU FT TYP ZT
+---- --- ----- --- ---- --- --- ---- ----- ----- ----- ----- ----- ----- ----- --- ---- --- --- ----  ------ ---- -----   ----- ------
+2023   0  1000   1    8   4   7  0.5     0     0     0     0     0     0     0   1    8   4   7  0.5      10    0     0     0.0 121 32
+2033  10   972  71  195 181  24  3.7     0     0     0     0     0     0     0  71  195 181  24  3.7      10  193     0     0.0 121 32
+2043  20   710 140  313 215  39  6.0  1934     0     0     0     0     0     0 140  313 215  39  6.0      10  107    36     0.0 121 22
+2053  30   580 146  312 197  62  6.8  2648     0     0     0     0     0     0 146  312 197  62  6.8      10   70    27     0.0 121 22
+2063  40   515 151  313 189  70  7.3  3079     0     0     0     0     0     0 151  313 189  70  7.3      10  105    41     0.0 121 22
+2073  50   438 159  315 178  82  8.2  3712   363  1328     0     0     0     0 159  315 178  82  8.2      10  112    52     0.0 121 22
+2083  60   366 167  316 166  88  9.1  4311  1360  4775     0     0     0     0 167  316 166  88  9.1      10  110    63     0.0 121 12
+2093  70   302 170  309 152  92 10.2  4778  2623 10379     0     0     0     0 170  309 152  92 10.2      10  102    70     0.0 121 12
+2103  80   248 170  297 138  96 11.2  5096  3518 14087     0     0     0     0 170  297 138  96 11.2      10  112    81     0.0 121 12
+2113  90   201 170  285 124  99 12.4  5409  4181 18406     0     0     0     0 170  285 124  99 12.4      10   76    59     0.0 121 12
+2123 100   177 170  278 117 101 13.3  5574  4536 20144     0     0     0     0 170  278 117 101 13.3      10   71    59     0.0 121 12
+2133 110   157 170  272 110 102 14.1  5692  4810 22903     0     0     0     0 170  272 110 102 14.1      10   59    50     0.0 121 12
+2143 120   143 170  267 105 102 14.7  5775  5004 24358     0     0     0     0 170  267 105 102 14.7      10   87    76     0.0 121 12
+2153 130   124 170  260  98 103 15.8  5886  5258 27172     0     0     0     0 170  260  98 103 15.8      10   99    89     0.0 121 12
+2163 140   106 170  252  90 104 17.2  5991  5497 28098     0     0     0     0 170  252  90 104 17.2      10   88    80     0.0 121 12
+2173 150    92 170  244  84 105 18.5  6068  5669 30411     0     0     0     0 170  244  84 105 18.5      10   54    50     0.0 121 13
+2183 160    84 170  240  80 106 19.3  6105  5758 31289     0     0     0     0 170  240  80 106 19.3      10   77    72     0.0 121 13
+2193 170    74 170  235  75 106 20.5  6156  5871 33051     0     0     0     0 170  235  75 106 20.5      10   67    63     0.0 121 13
+2203 180    66 170  230  71 107 21.7  6190  5950 34032     0     0     0     0 170  230  71 107 21.7      10   51    49     0.0 121 13
+2213 190    61 170  226  68 107 22.6  6209  5998 35159     0     0     0     0 170  226  68 107 22.6      10   52    51     0.0 121 13
+2223 200    56 170  222  65 107 23.6  6223  6041 35746     0     0     0     0 170  222  65 107 23.6       0    0     0     0.0 121 13
+
+NOTE: 21 LINES OF SUMMARY DATA HAVE BEEN WRITTEN TO THE FILE REFERENCED BY LOGICAL UNIT  4
+
+
+
+
+                                                     ACTIVITY SUMMARY 
+
+STAND ID= STAND_EMPTY                   MGMT ID= NONE                                                                            
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+CYCLE  DATE  EXTENSION  KEYWORD   DATE  ACTIVITY DISPOSITION  PARAMETERS:
+-----  ----  ---------  --------  ----  --------------------  --------------------------------------------------------------------
+
+   1   2023
+               BASE     CUTLIST   2023  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2023  DONE IN 2032            2023.0000
+               BASE     TREELIST  2023  DONE IN 2032               3.0000     0.0000
+
+   2   2033
+               BASE     CUTLIST   2033  NOT DONE                   3.0000     0.0000
+               ESTB     TALLY     2042  DONE IN 2042            2023.0000     2.0000
+               BASE     TREELIST  2033  DONE IN 2042               3.0000     0.0000
+
+   3   2043
+               BASE     CUTLIST   2043  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2043  DONE IN 2052               3.0000     0.0000
+
+   4   2053
+               BASE     CUTLIST   2053  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2053  DONE IN 2062               3.0000     0.0000
+
+   5   2063
+               BASE     CUTLIST   2063  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2063  DONE IN 2072               3.0000     0.0000
+
+   6   2073
+               BASE     CUTLIST   2073  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2073  DONE IN 2082               3.0000     0.0000
+
+   7   2083
+               BASE     CUTLIST   2083  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2083  DONE IN 2092               3.0000     0.0000
+
+   8   2093
+               BASE     CUTLIST   2093  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2093  DONE IN 2102               3.0000     0.0000
+
+   9   2103
+               BASE     CUTLIST   2103  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2103  DONE IN 2112               3.0000     0.0000
+
+  10   2113
+               BASE     CUTLIST   2113  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2113  DONE IN 2122               3.0000     0.0000
+
+  11   2123
+               BASE     CUTLIST   2123  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2123  DONE IN 2132               3.0000     0.0000
+
+  12   2133
+               BASE     CUTLIST   2133  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2133  DONE IN 2142               3.0000     0.0000
+
+  13   2143
+               BASE     CUTLIST   2143  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2143  DONE IN 2152               3.0000     0.0000
+
+  14   2153
+               BASE     CUTLIST   2153  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2153  DONE IN 2162               3.0000     0.0000
+
+  15   2163
+               BASE     CUTLIST   2163  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2163  DONE IN 2172               3.0000     0.0000
+
+  16   2173
+               BASE     CUTLIST   2173  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2173  DONE IN 2182               3.0000     0.0000
+
+  17   2183
+               BASE     CUTLIST   2183  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2183  DONE IN 2192               3.0000     0.0000
+
+  18   2193
+               BASE     CUTLIST   2193  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2193  DONE IN 2202               3.0000     0.0000
+
+  19   2203
+               BASE     CUTLIST   2203  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2203  DONE IN 2212               3.0000     0.0000
+
+  20   2213
+               BASE     CUTLIST   2213  NOT DONE                   3.0000     0.0000
+               BASE     TREELIST  2213  DONE IN 2222               3.0000     0.0000
+----------------------------------------------------------------------------------------------------------------------------------
+ 
+ 
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+ 
+----------------------------------------------------------------------------
+                REGENERATION ESTABLISHMENT MODEL VERSION 2.0
+        STAND ID: STAND_EMPTY                    MANAGEMENT CODE: NONE
+----------------------------------------------------------------------------
+ 
+  SITE PREP SUMMARY
+-------------------
+PREP:NONE MECH BURN
+YEAR:2023 2023 2023
+ PCT: 100    0    0
+ 
+TALLY 1 AT 10 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2032.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 IN. DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /ACRE TOTAL     /ACRE TOTAL HEIGHT      /ACRE TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+             -----           -----                   -----
+                0.              0.                      0.
+ 
+ 
+TALLY 2 AT 20 YEARS.  REGENERATION SUMMARY IN THE FALL OF 2042.
+ 
+     SUMMARY OF ALL          SUMMARY OF BEST         TREES < 3.0 IN. DBH
+     TREES REGENERATING      TREES REGENERATING      BEING PROJECTED BY
+     DURING THIS TALLY.      DURING THIS TALLY.      THE PROGNOSIS MODEL
+     -------------------     -------------------     -------------------
+             TREES % OF      TREES % OF  AVERAGE     TREES % OF
+     SPECIES /ACRE TOTAL     /ACRE TOTAL HEIGHT      /ACRE TOTAL SPECIES
+     ------- ----- -----     ----- ----- -------     ----- ----- -------
+             -----           -----                   -----
+                0.              0.                      0.
+ 
+
+
+--------------------------------------------------------------------------------------------------------------
+                              ******  CARBON REPORT VERSION 1.0 ******
+                                         STAND CARBON REPORT (BASED ON STOCKABLE AREA)
+                              ALL VARIABLES ARE REPORTED IN TONS/ACRE
+
+STAND ID: STAND_EMPTY                   MGMT ID: NONE
+--------------------------------------------------------------------------------------------------------------
+      Aboveground Live    Belowground                        Forest             Total    Total     Carbon
+     ----------------- -----------------    Stand  -------------------------    Stand  Removed   Released
+YEAR    Total    Merch     Live     Dead     Dead      DDW    Floor  Shb/Hrb   Carbon   Carbon  from Fire
+--------------------------------------------------------------------------------------------------------------
+2023      0.2      0.0      0.1      0.0      0.0      3.3     14.0      0.0     17.6      0.0        0.0
+2033     10.8      0.0      2.4      0.0      0.0      1.5     13.4      0.0     28.2      0.0        0.0
+2043     26.8     16.4      5.9      0.7      1.8      1.2     13.4      0.0     49.7      0.0        0.0
+2053     29.8     18.5      6.5      1.5      3.3      3.5     13.5      0.0     58.1      0.0        0.0
+2063     32.0     20.0      7.0      1.7      2.2      4.6     13.4      0.0     60.9      0.0        0.0
+2073     35.5     22.4      7.7      2.0      3.4      3.9     13.2      0.0     65.8      0.0        0.0
+2083     39.3     25.0      8.5      2.4      4.0      4.3     13.2      0.1     71.8      0.0        0.0
+2093     42.1     27.0      9.0      2.9      4.8      4.8     13.1      0.1     76.8      0.0        0.0
+2103     44.1     28.5      9.5      3.2      5.1      5.3     13.0      0.1     80.4      0.0        0.0
+2113     46.3     30.1      9.9      3.6      5.9      5.7     12.9      0.1     84.5      0.0        0.0
+2123     47.7     31.2     10.2      3.4      4.3      6.3     12.9      0.1     85.0      0.0        0.0
+2133     49.1     32.1     10.5      3.3      4.2      5.9     12.8      0.1     85.9      0.0        0.0
+2143     50.2     32.9     10.7      3.1      3.6      5.9     12.7      0.1     86.3      0.0        0.0
+2153     51.9     34.1     11.1      3.4      5.4      5.9     12.6      0.1     90.4      0.0        0.0
+2163     53.9     35.6     11.5      3.9      6.3      7.4     12.5      0.1     95.6      0.0        0.0
+2173     55.9     37.0     11.9      4.0      5.7      9.2     12.4      0.1     99.3      0.0        0.0
+2183     57.0     37.8     12.1      3.6      3.6     10.4     12.4      0.1     99.3      0.0        0.0
+2193     58.8     39.1     12.5      3.8      5.2     10.2     12.3      0.1    102.7      0.0        0.0
+2203     60.4     40.2     12.8      3.7      4.6     11.3     12.2      0.1    105.1      0.0        0.0
+2213     61.6     41.1     13.1      3.4      3.7     11.7     12.1      0.1    105.7      0.0        0.0
