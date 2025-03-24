@@ -1,0 +1,343 @@
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  0  CYCLE LENGTH: 10 YRS  YEAR: 2023  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    1 BF  8  1  0   1  999.978    0.000   0.5  0.00   6.6  0.0 57  0.9  0 100.00     0    0.0    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  1  CYCLE LENGTH: 10 YRS  YEAR: 2033  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    2 BF  8  1  0   1  242.976    7.019   3.8  3.09  24.1 17.5 51  6.7  0  83.58     0    0.0    0.0     0.0  0  0   0
+       1    1 BF  8  1  0   1  583.142   16.845   3.6  2.89  23.1 16.4 51  6.4  0  57.02     0    0.0    0.0     0.0  0  0   0
+       1    3 BF  8  1  0   1  145.785    4.211   3.8  3.14  24.4 17.8 51  6.8  0 100.00     0    0.0    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  2  CYCLE LENGTH: 10 YRS  YEAR: 2043  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   44.389   16.355   6.5  2.53  39.2 15.0 47  9.8  0 100.00     0    3.4    0.0     0.0  0  0   0
+       1    2 BF  8  1  0   1  106.535   39.251   6.1  2.22  39.9 15.7 46  9.5  0  88.60     0    3.0    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   26.634    9.813   6.0  2.05  40.1 16.0 46  9.3  0  57.58     0    2.7    0.0     0.0  0  0   0
+       1    4 BF  8  1  0   1  106.534   39.251   6.1  2.35  37.1 14.0 46  9.4  0  72.91     0    2.8    0.0     0.0  0  0   0
+       1    1 BF  8  1  0   1  255.683   94.202   5.9  2.22  37.9 14.8 46  9.3  0  53.88     0    2.6    0.0     0.0  0  0   0
+       1    5 BF  8  1  0   1   63.921   23.551   5.7  1.96  36.9 13.8 46  9.1  0   8.00     0    2.2    0.0     0.0  0  0   0
+       1    8 BF  8  1  0   1   26.634    9.813   6.3  2.33  39.4 15.0 46  9.6  0  92.75     0    3.2    0.0     0.0  0  0   0
+       1    3 BF  8  1  0   1   63.921   23.551   5.9  1.94  39.0 14.6 46  9.3  0  18.70     0    2.6    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1   15.980    5.888   5.7  1.74  38.7 14.3 46  9.1  0  10.01     0    2.3    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  3  CYCLE LENGTH: 10 YRS  YEAR: 2053  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   36.221    8.168   8.2  1.63  62.8 23.7 49 11.4  0 100.00     0    8.2    0.0     0.0  0  0   0
+       1    2 BF  8  1  0   1   86.932   19.603   6.7  0.51  49.0  9.2 46  9.9  0  69.96     0    4.2    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   21.733    4.901   6.4  0.40  46.4  6.3 46  9.7  0   3.32     0    3.6    0.0     0.0  0  0   0
+       1    4 BF  8  1  0   1   86.932   19.603   7.2  1.05  55.2 18.1 47 10.4  0  90.90     0    5.5    0.0     0.0  0  0   0
+       1    1 BF  8  1  0   1  208.636   47.047   6.6  0.62  49.5 11.6 46  9.8  0  55.46     0    4.1    0.0     0.0  0  0   0
+       1    5 BF  8  1  0   1   52.159   11.762   6.4  0.70  50.0 13.2 46  9.7  0  11.31     0    3.8    0.0     0.0  0  0   0
+       1    8 BF  8  1  0   1   21.733    4.901   7.2  0.81  54.4 15.0 47 10.4  0  74.15     0    5.4    0.0     0.0  0  0   0
+       1    3 BF  8  1  0   1   52.159   11.762   6.5  0.55  49.2 10.1 46  9.7  0  19.49     0    3.9    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1   13.040    2.940   6.5  0.81  53.8 15.0 46  9.8  0  21.57     0    4.2    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  4  CYCLE LENGTH: 10 YRS  YEAR: 2063  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   35.659    0.562   8.9  0.64  70.8  8.0 49 12.0  0 100.00     0   10.8    0.0     0.0  0  0   0
+       1    2 BF  8  1  0   1   74.789   12.142   7.2  0.50  55.5  6.5 47 10.4  0  64.04     0    5.5    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   17.824    3.909   7.3  0.80  57.6 11.2 47 10.5  0  67.42     0    5.7    0.0     0.0  0  0   0
+       1    4 BF  8  1  0   1   82.779    4.152   7.8  0.53  61.9  6.7 47 10.9  0  85.32     0    7.1    0.0     0.0  0  0   0
+       1    1 BF  8  1  0   1  180.848   27.787   7.1  0.46  55.1  5.6 46 10.3  0  50.01     0    5.3    0.0     0.0  0  0   0
+       1    5 BF  8  1  0   1   45.686    6.473   6.8  0.35  53.2  3.2 46 10.0  0   7.58     0    4.6    0.0     0.0  0  0   0
+       1    8 BF  8  1  0   1   20.447    1.286   7.9  0.63  62.8  8.4 48 11.1  0  89.87     0    7.4    0.0     0.0  0  0   0
+       1    3 BF  8  1  0   1   44.972    7.187   6.8  0.32  51.4  2.3 46 10.0  0  15.13     0    4.6    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1   12.152    0.888   7.1  0.48  59.7  5.9 46 10.2  0  17.31     0    5.5    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  5  CYCLE LENGTH: 10 YRS  YEAR: 2073  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   34.938    0.721  10.4  1.47  83.6 12.8 50 13.4  0 100.00     0   16.9   10.4    38.0  0  0   0
+       1    2 BF  8  1  0   1   61.771   13.019   7.8  0.51  61.2  5.7 47 10.9  0  50.20     0    7.1    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   15.357    2.467   8.2  0.92  68.3 10.7 47 11.3  0  61.87     0    8.8    0.0     0.0  0  0   0
+       1    4 BF  8  1  0   1   77.385    5.394   8.7  0.88  71.9 10.0 48 11.8  0  81.86     0   10.3    0.0     0.0  0  0   0
+       1    1 BF  8  1  0   1  148.113   32.735   7.6  0.46  60.0  4.9 47 10.7  0  37.44     0    6.6    0.0     0.0  0  0   0
+       1    5 BF  8  1  0   1   35.962    9.724   8.1  1.24  67.0 13.8 47 11.2  0  58.30     0    8.4    0.0     0.0  0  0   0
+       1    8 BF  8  1  0   1   19.397    1.049   8.7  0.83  72.1  9.3 48 11.8  0  86.93     0   10.5    0.0     0.0  0  0   0
+       1    3 BF  8  1  0   1   34.046   10.926   7.3  0.43  55.9  4.4 46 10.4  0   6.20     0    5.7    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1   10.897    1.254   7.5  0.42  63.5  3.9 46 10.6  0   8.30     0    6.7    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  6  CYCLE LENGTH: 10 YRS  YEAR: 2083  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   34.304    0.634  11.3  0.80  89.3  5.7 51 14.2  0 100.00     0   21.0   14.6    56.0  0  0   0
+       1    2 BF  8  1  0   1   48.731   13.040   8.2  0.45  64.9  3.7 47 11.3  0  15.66     0    8.5    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   13.563    1.794  10.0  1.63  80.9 12.7 49 12.9  0  85.70     0   14.9    8.3    30.0  0  0   0
+       1    4 BF  8  1  0   1   72.034    5.351   9.6  0.86  79.5  7.6 49 12.6  0  81.29     0   13.5    6.8    24.0  0  0   0
+       1    1 BF  8  1  0   1  114.579   33.534   8.7  1.03  70.1 10.1 47 11.7  0  43.85     0   10.1    0.0     0.0  0  0   0
+       1    5 BF  8  1  0   1   31.182    4.780   9.1  0.95  75.9  8.8 48 12.1  0  54.60     0   11.6    5.1    12.0  0  0   0
+       1    8 BF  8  1  0   1   18.105    1.293   9.2  0.45  75.5  3.4 48 12.2  0  59.62     0   11.8    5.4    19.0  0  0   0
+       1    3 BF  8  1  0   1   24.449    9.596   7.8  0.46  60.0  4.1 46 10.8  0   4.84     0    7.0    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1    8.942    1.955   8.8  1.25  74.9 11.3 48 11.9  0  46.13     0   11.0    0.0     0.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  7  CYCLE LENGTH: 10 YRS  YEAR: 2093  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   33.384    0.920  11.9  0.61  92.5  3.3 51 14.7  0 100.00     0   24.4   18.1    79.0  0  0   0
+       1    2 BF  8  1  0   1   33.349   15.382   8.9  0.59  69.9  5.0 47 11.8  0  11.91     0   10.6    0.0     0.0  0  0   0
+       1    7 BF  8  1  0   1   13.069    0.494  10.7  0.71  85.8  4.9 50 13.6  0  78.45     0   18.3   11.8    50.0  0  0   0
+       1    4 BF  8  1  0   1   67.692    4.342  10.4  0.79  85.1  5.6 49 13.3  0  73.63     0   17.2   10.5    38.0  0  0   0
+       1    1 BF  8  1  0   1   88.915   25.664   9.8  1.08  78.9  8.7 49 12.8  0  49.99     0   14.2    7.7    30.0  0  0   0
+       1    5 BF  8  1  0   1   27.338    3.845   9.8  0.66  80.9  5.0 49 12.8  0  22.46     0   14.4    7.7    30.0  0  0   0
+       1    8 BF  8  1  0   1   15.761    2.344  11.1  1.81  86.6 11.1 50 14.0  0  84.73     0   20.0   13.7    56.0  0  0   0
+       1    3 BF  8  1  0   1   14.683    9.767   8.6  0.78  67.3  7.3 47 11.6  0   3.49     0    9.7    0.0     0.0  0  0   0
+       1    9 BF  8  1  0   1    7.680    1.263   9.2  0.39  76.8  1.9 48 12.2  0  14.01     0   12.1    5.6    19.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  8  CYCLE LENGTH: 10 YRS  YEAR: 2103  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   31.847    1.537  12.8  0.85  96.3  3.7 52 15.6  0 100.00     0   29.4   23.3    96.0  0  0   0
+       1    2 BF  8  1  0   1   18.157   15.192   9.6  0.71  75.5  5.6 48 12.5  0   8.99     0   13.1    6.8    29.0  0  0   0
+       1    7 BF  8  1  0   1   12.467    0.602  12.8  1.97  94.3  8.4 52 15.5  0  83.13     0   28.8   22.8    96.0  0  0   0
+       1    4 BF  8  1  0   1   64.575    3.117  11.3  0.84  89.9  4.8 50 14.1  0  70.15     0   21.3   14.8    56.0  0  0   0
+       1    1 BF  8  1  0   1   70.259   18.656  10.8  0.92  84.9  6.1 50 13.7  0  43.58     0   18.4   12.0    50.0  0  0   0
+       1    5 BF  8  1  0   1   23.152    4.186  10.6  0.71  85.4  4.5 50 13.5  0  17.30     0   17.7   11.1    41.0  0  0   0
+       1    8 BF  8  1  0   1   15.035    0.726  11.5  0.37  87.9  1.3 51 14.4  0  76.56     0   21.8   15.6    62.0  0  0   0
+       1    3 BF  8  1  0   1    6.978    7.705   9.3  0.64  72.3  5.0 48 12.3  0   1.93     0   11.7    5.6    19.0  0  0   0
+       1    9 BF  8  1  0   1    5.618    2.062   9.6  0.35  77.8  1.0 48 12.5  0   3.60     0   13.4    6.9    29.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE:  9  CYCLE LENGTH: 10 YRS  YEAR: 2113  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   29.671    2.175  14.1  1.22  99.9  3.6 53 16.7  0 100.00     0   37.0   31.3   146.0  0  0   0
+       1    2 BF  8  1  0   1    7.678   10.479  11.0  1.33  83.7  8.2 50 13.9  0   4.78     0   19.1   13.0    56.0  0  0   0
+       1    7 BF  8  1  0   1   11.616    0.852  14.1  1.16  98.3  4.1 53 16.7  0  80.96     0   36.0   30.4   134.0  0  0   0
+       1    4 BF  8  1  0   1   60.165    4.411  12.2  0.80  93.5  3.6 51 14.9  0  66.78     0   25.7   19.4    87.0  0  0   0
+       1    1 BF  8  1  0   1   55.144   15.115  12.0  1.12  90.7  5.7 51 14.8  0  38.17     0   24.2   18.1    78.0  0  0   0
+       1    5 BF  8  1  0   1   18.566    4.585  11.6  0.93  90.1  4.8 51 14.4  0  12.74     0   22.4   16.0    64.0  0  0   0
+       1    8 BF  8  1  0   1   13.542    1.493  12.5  0.93  92.4  4.5 52 15.3  0  73.60     0   27.0   21.0    87.0  0  0   0
+       1    3 BF  8  1  0   1    2.145    4.833  10.5  1.11  79.8  7.5 49 13.3  0   0.75     0   16.4   10.3    36.0  0  0   0
+       1    9 BF  8  1  0   1    2.859    2.759  10.5  0.87  83.3  5.5 49 13.4  0   1.77     0   17.2   10.8    38.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 10  CYCLE LENGTH: 10 YRS  YEAR: 2123  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   27.515    2.157  14.9  0.72 101.5  1.7 54 17.5  0 100.00     0   41.8   36.4   178.0  0  0   0
+       1    2 BF  8  1  0   1    4.317    3.361  11.5  0.39  84.8  1.1 51 14.3  0   1.82     0   21.0   15.0    56.0  0  0   0
+       1    7 BF  8  1  0   1   10.771    0.844  14.7  0.62 100.0  1.6 54 17.3  0  80.38     0   40.1   34.7   177.0  0  0   0
+       1    4 BF  8  1  0   1   55.791    4.373  12.8  0.54  95.3  1.7 52 15.5  0  39.91     0   28.8   22.7    96.0  0  0   0
+       1    1 BF  8  1  0   1   47.981    7.163  12.9  0.81  94.0  3.3 52 15.6  0  65.35     0   28.9   23.0    96.0  0  0   0
+       1    5 BF  8  1  0   1   15.753    2.813  12.5  0.91  93.9  3.7 52 15.3  0  10.80     0   27.4   21.3    87.0  0  0   0
+       1    8 BF  8  1  0   1   12.558    0.984  13.7  1.10  96.4  4.0 53 16.4  0  72.90     0   33.7   28.0   128.0  0  0   0
+       1    3 BF  8  1  0   1    0.816    1.329  12.0  1.41  87.1  7.3 51 14.8  0   2.86     0   23.5   17.6    76.0  0  0   0
+       1    9 BF  8  1  0   1    1.556    1.303  11.6  0.96  88.2  4.9 51 14.4  0   2.49     0   22.0   15.8    62.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 11  CYCLE LENGTH: 10 YRS  YEAR: 2133  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   24.868    2.646  15.2  0.30 101.7  0.2 54 17.7  0  92.14     0   43.7   38.4   187.0  0  0   0
+       1    2 BF  8  1  0   1    1.925    2.392  12.3  0.75  88.3  3.5 51 15.0  0   0.93     0   24.9   19.1    87.0  0  0   0
+       1    7 BF  8  1  0   1    9.735    1.036  15.9  1.09 102.2  2.3 55 18.3  0 100.00     0   47.8   42.7   216.0  0  0   0
+       1    4 BF  8  1  0   1   50.426    5.366  13.5  0.74  97.5  2.2 53 16.2  0  56.51     0   33.1   27.3   128.0  0  0   0
+       1    1 BF  8  1  0   1   43.367    4.615  13.5  0.63  96.0  2.0 53 16.2  0  26.87     0   32.7   27.0   128.0  0  0   0
+       1    5 BF  8  1  0   1   14.238    1.515  14.0  1.36  98.0  4.1 53 16.6  0  65.71     0   35.6   30.0   128.0  0  0   0
+       1    8 BF  8  1  0   1   11.350    1.208  14.8  1.00  99.3  2.9 54 17.3  0  73.63     0   40.2   34.8   177.0  0  0   0
+       1    3 BF  8  1  0   1    0.467    0.348  13.6  1.52  93.2  6.1 53 16.3  0  56.78     0   32.3   26.8   128.0  0  0   0
+       1    9 BF  8  1  0   1    0.982    0.574  12.6  0.97  92.3  4.1 52 15.4  0   1.43     0   27.2   21.3    87.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 12  CYCLE LENGTH: 10 YRS  YEAR: 2143  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   22.735    2.133  15.8  0.50 102.5  0.8 54 18.2  0  92.41     0   47.2   42.1   198.0  0  0   0
+       1    2 BF  8  1  0   1    1.253    0.672  13.2  0.86  91.9  3.7 52 15.8  0   0.70     0   29.9   24.3   111.0  0  0   0
+       1    7 BF  8  1  0   1    8.900    0.835  16.3  0.41 102.8  0.5 55 18.7  0 100.00     0   50.7   45.8   249.0  0  0   0
+       1    4 BF  8  1  0   1   46.100    4.326  14.1  0.56  98.8  1.3 53 16.7  0  30.72     0   36.6   31.0   144.0  0  0   0
+       1    1 BF  8  1  0   1   39.647    3.720  14.6  0.99  98.8  2.8 54 17.2  0  66.42     0   39.1   33.7   175.0  0  0   0
+       1    5 BF  8  1  0   1   13.017    1.221  14.4  0.39  98.6  0.6 53 17.0  0  39.38     0   38.0   32.5   146.0  0  0   0
+       1    8 BF  8  1  0   1   10.376    0.974  15.1  0.32  99.5  0.2 54 17.6  0  74.29     0   42.2   37.0   178.0  0  0   0
+       1    3 BF  8  1  0   1    0.413    0.055  14.8  1.10  96.9  3.7 54 17.3  0  66.70     0   39.5   34.3   175.0  0  0   0
+       1    9 BF  8  1  0   1    0.823    0.158  13.6  0.98  95.7  3.4 53 16.3  0   1.19     0   33.1   27.5   128.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 13  CYCLE LENGTH: 10 YRS  YEAR: 2153  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   19.770    2.965  16.0  0.22 102.6  0.1 54 18.4  0  58.77     0   48.8   43.7   224.0  0  0   0
+       1    2 BF  8  1  0   1    0.882    0.372  13.9  0.72  94.5  2.5 53 16.6  0   0.55     0   34.4   29.0   128.0  0  0   0
+       1    7 BF  8  1  0   1    7.740    1.161  16.6  0.31 102.9  0.2 55 19.0  0 100.00     0   52.9   48.1   251.0  0  0   0
+       1    4 BF  8  1  0   1   40.088    6.012  16.3  2.08 102.4  3.6 55 18.7  0  93.13     0   50.9   46.0   249.0  0  0   0
+       1    1 BF  8  1  0   1   34.476    5.170  15.2  0.56 100.0  1.2 54 17.7  0  26.52     0   42.8   37.6   187.0  0  0   0
+       1    5 BF  8  1  0   1   11.319    1.698  15.2  0.74 100.3  1.7 54 17.7  0  34.89     0   43.0   37.8   187.0  0  0   0
+       1    8 BF  8  1  0   1    9.023    1.353  16.0  0.83 101.3  1.8 55 18.4  0  42.54     0   48.2   43.2   216.0  0  0   0
+       1    3 BF  8  1  0   1    0.359    0.054  15.3  0.46  97.9  1.0 54 17.8  0  35.15     0   42.7   37.6   187.0  0  0   0
+       1    9 BF  8  1  0   1    0.716    0.107  14.8  1.08  98.7  3.0 54 17.3  0   1.05     0   40.1   34.8   177.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 14  CYCLE LENGTH: 10 YRS  YEAR: 2163  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   16.798    2.972  16.3  0.24 102.7  0.1 54 18.6  0  15.58     0   50.4   45.4   234.0  0  0   0
+       1    2 BF  8  1  0   1    0.722    0.159  16.0  1.90  99.2  4.7 55 18.4  0   0.84     0   47.2   42.3   206.0  0  0   0
+       1    7 BF  8  1  0   1    6.576    1.163  16.9  0.24 103.0  0.1 55 19.2  0  28.52     0   54.7   49.9   252.0  0  0   0
+       1    4 BF  8  1  0   1   34.062    6.026  17.4  0.96 103.8  1.4 56 19.7  0  70.31     0   58.2   53.6   270.0  0  0   0
+       1    1 BF  8  1  0   1   29.294    5.182  17.8  2.44 103.4  3.4 55 19.9  0 100.00     0   60.9   56.4   294.0  0  0   0
+       1    5 BF  8  1  0   1    9.618    1.701  16.9  1.65 103.0  2.7 55 19.2  0  37.37     0   54.9   50.2   252.0  0  0   0
+       1    8 BF  8  1  0   1    7.667    1.356  16.8  0.75 102.6  1.3 55 19.1  0  22.51     0   53.8   49.0   252.0  0  0   0
+       1    3 BF  8  1  0   1    0.305    0.054  15.9  0.63  99.5  1.5 55 18.4  0   0.25     0   47.2   42.3   206.0  0  0   0
+       1    9 BF  8  1  0   1    0.608    0.108  16.1  1.25 101.3  2.6 55 18.5  0   1.34     0   48.9   44.0   219.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 15  CYCLE LENGTH: 10 YRS  YEAR: 2173  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   14.553    2.246  16.9  0.57 103.4  0.7 54 19.1  0  13.80     0   54.6   49.8   252.0  0  0   0
+       1    2 BF  8  1  0   1    0.626    0.097  16.3  0.29  99.3  0.1 55 18.7  0   0.53     0   49.2   44.4   222.0  0  0   0
+       1    7 BF  8  1  0   1    5.697    0.879  17.1  0.23 103.1  0.1 55 19.4  0  25.36     0   56.3   51.6   261.0  0  0   0
+       1    4 BF  8  1  0   1   29.508    4.554  18.7  1.30 105.2  1.3 57 20.9  0  68.73     0   68.8   64.5   354.0  0  0   0
+       1    1 BF  8  1  0   1   25.377    3.916  19.6  1.72 105.2  1.8 56 21.6  0 100.00     0   75.2   71.2   385.0  0  0   0
+       1    5 BF  8  1  0   1    8.332    1.286  18.7  1.64 104.8  1.8 56 20.8  0  35.46     0   68.1   63.8   354.0  0  0   0
+       1    8 BF  8  1  0   1    6.642    1.025  17.1  0.26 102.7  0.1 55 19.3  0  20.00     0   55.7   51.0   261.0  0  0   0
+       1    3 BF  8  1  0   1    0.264    0.041  17.6  1.61 102.3  2.9 56 19.9  0  26.13     0   59.5   55.0   289.0  0  0   0
+       1    9 BF  8  1  0   1    0.527    0.081  17.3  1.14 103.2  1.8 56 19.6  0  25.86     0   57.6   53.0   270.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 16  CYCLE LENGTH: 10 YRS  YEAR: 2183  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   13.343    1.210  18.9  1.96 105.2  1.8 55 20.9  0  28.20     0   70.2   66.0   365.0  0  0   0
+       1    2 BF  8  1  0   1    0.574    0.052  16.9  0.56 100.3  1.0 55 19.2  0   0.52     0   53.3   48.7   251.0  0  0   0
+       1    7 BF  8  1  0   1    5.223    0.474  17.9  0.73 104.0  0.9 55 20.1  0  12.06     0   62.0   57.5   294.0  0  0   0
+       1    4 BF  8  1  0   1   27.055    2.453  19.1  0.37 105.3  0.2 57 21.3  0  60.00     0   71.8   67.6   365.0  0  0   0
+       1    1 BF  8  1  0   1   23.268    2.110  20.2  0.54 105.6  0.4 56 22.0  0 100.00     0   80.1   76.2   419.0  0  0   0
+       1    5 BF  8  1  0   1    7.639    0.693  19.8  1.05 105.7  0.9 56 21.7  0  69.61     0   77.2   73.2   405.0  0  0   0
+       1    8 BF  8  1  0   1    6.090    0.552  17.8  0.67 103.6  0.9 55 19.9  0   6.69     0   60.9   56.4   294.0  0  0   0
+       1    3 BF  8  1  0   1    0.242    0.022  18.1  0.40 102.7  0.4 56 20.3  0  12.31     0   62.7   58.3   294.0  0  0   0
+       1    9 BF  8  1  0   1    0.483    0.044  18.5  1.09 104.4  1.3 57 20.7  0  12.84     0   66.4   62.1   330.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:39
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 17  CYCLE LENGTH: 10 YRS  YEAR: 2193  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   11.771    1.572  20.9  1.85 106.4  1.1 55 22.6  0  70.85     0   86.6   82.8   484.0  0  0   0
+       1    2 BF  8  1  0   1    0.506    0.068  18.4  1.49 102.7  2.4 56 20.6  0   0.55     0   65.3   61.1   328.0  0  0   0
+       1    7 BF  8  1  0   1    4.608    0.615  19.0  1.08 105.1  1.1 55 21.0  0  12.32     0   70.9   66.7   365.0  0  0   0
+       1    4 BF  8  1  0   1   23.868    3.187  20.6  1.36 106.2  0.9 57 22.5  0  54.33     0   83.8   80.0   437.0  0  0   0
+       1    1 BF  8  1  0   1   20.527    2.741  21.0  0.81 106.2  0.6 56 22.8  0 100.00     0   87.6   83.9   484.0  0  0   0
+       1    5 BF  8  1  0   1    6.739    0.900  20.4  0.60 106.1  0.4 56 22.3  0  21.88     0   82.6   78.7   437.0  0  0   0
+       1    8 BF  8  1  0   1    5.372    0.717  18.9  1.09 104.8  1.2 56 21.0  0   6.96     0   69.9   65.7   365.0  0  0   0
+       1    3 BF  8  1  0   1    0.214    0.029  18.7  0.55 103.4  0.7 56 20.8  0   0.79     0   67.2   63.0   352.0  0  0   0
+       1    9 BF  8  1  0   1    0.426    0.057  19.5  0.96 105.3  0.9 57 21.6  0  12.84     0   74.6   70.5   375.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:40
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 18  CYCLE LENGTH: 10 YRS  YEAR: 2203  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1   10.558    1.213  22.9  1.86 107.1  0.7 55 24.2  0 100.00     0  104.6  101.2   587.0  0  0   0
+       1    2 BF  8  1  0   1    0.454    0.052  19.0  0.49 103.3  0.5 56 21.0  0   0.52     0   69.4   65.3   363.0  0  0   0
+       1    7 BF  8  1  0   1    4.133    0.475  19.3  0.26 105.2  0.1 55 21.2  0   5.47     0   73.1   69.0   375.0  0  0   0
+       1    4 BF  8  1  0   1   21.408    2.460  21.6  0.99 106.7  0.5 57 23.4  0  53.05     0   93.0   89.4   504.0  0  0   0
+       1    1 BF  8  1  0   1   18.411    2.116  22.2  1.12 106.8  0.6 56 23.8  0  82.25     0   98.4   94.9   558.0  0  0   0
+       1    5 BF  8  1  0   1    6.045    0.695  20.8  0.31 106.2  0.1 56 22.5  0  20.91     0   85.4   81.6   464.0  0  0   0
+       1    8 BF  8  1  0   1    4.818    0.554  20.2  1.23 105.8  1.0 56 22.1  0  12.54     0   80.6   76.7   419.0  0  0   0
+       1    3 BF  8  1  0   1    0.192    0.022  19.5  0.81 104.4  1.0 56 21.5  0   5.71     0   74.2   70.2   385.0  0  0   0
+       1    9 BF  8  1  0   1    0.382    0.044  20.1  0.61 105.8  0.4 57 22.1  0   6.21     0   79.9   76.0   419.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:40
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 19  CYCLE LENGTH: 10 YRS  YEAR: 2213  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1    9.729    0.828  23.4  0.44 107.2  0.1 55 24.6  0 100.00     0  109.1  105.8   632.0  0  0   0
+       1    2 BF  8  1  0   1    0.418    0.036  20.0  1.01 104.4  1.2 56 21.9  0   5.58     0   78.3   74.4   419.0  0  0   0
+       1    7 BF  8  1  0   1    3.809    0.324  19.8  0.49 105.5  0.3 55 21.7  0   4.81     0   77.4   73.4   405.0  0  0   0
+       1    4 BF  8  1  0   1   19.728    1.679  23.3  1.60 107.2  0.5 57 24.8  0  82.96     0  108.8  105.5   632.0  0  0   0
+       1    1 BF  8  1  0   1   16.967    1.444  22.8  0.58 107.0  0.2 56 24.3  0  48.51     0  104.1  100.7   587.0  0  0   0
+       1    5 BF  8  1  0   1    5.570    0.474  21.1  0.31 106.3  0.1 56 22.8  0  20.09     0   88.2   84.5   484.0  0  0   0
+       1    8 BF  8  1  0   1    4.440    0.378  20.6  0.39 105.9  0.2 56 22.4  0  12.12     0   84.1   80.3   437.0  0  0   0
+       1    3 BF  8  1  0   1    0.177    0.015  20.0  0.44 104.7  0.3 56 21.9  0   5.04     0   78.1   74.2   419.0  0  0   0
+       1    9 BF  8  1  0   1    0.352    0.030  20.4  0.28 105.9  0.1 57 22.4  0   6.05     0   82.4   78.6   437.0  0  0   0
+
+
+     FOREST VEGETATION SIMULATOR     VERSION FS2023.3 -- LAKE STATES                            RV:20230728    03-24-2025  20:02:40
+
+COMPLETE TREE LIST -- STAND: STAND_EMPTY                 MGMTID: NONE  END CYCLE: 20  CYCLE LENGTH: 10 YRS  YEAR: 2223  PAGE:  1
+  TREE   TREE SP SP TR SS PNT  TREES    MORTAL   CURR  DIB   CURR  HT     MAX       BA   POINT TOT MCH SAW CU SAW BD PW SL TRC
+ NUMBER  INDX CD NO CL CD NUM PER ACRE PER ACRE  DIAM  INCR   HT  INCR CR  CW  MS %-TILE  BAL CU FT VL FT VOL FT VL  DF DF  HT
+-------- ---- -- -- -- -- --- -------- -------- ----- ----- ----- ---- -- ---- -- ------ ----- ------ ------ ------- -- -- ---
+       1    6 BF  8  1  0   1    8.934    0.795  25.0  1.50 107.3  0.1 55 26.0  0 100.00     0  124.7  121.7   728.0  0  0   0
+       1    2 BF  8  1  0   1    0.384    0.034  20.5  0.45 104.8  0.3 56 22.3  0   0.52     0   82.3   78.5   437.0  0  0   0
+       1    7 BF  8  1  0   1    3.498    0.311  21.9  1.93 106.5  1.0 55 23.4  0  20.08     0   95.1   91.6   542.0  0  0   0
+       1    4 BF  8  1  0   1   18.116    1.613  24.2  0.77 107.3  0.1 57 25.5  0  82.15     0  116.7  113.6   685.0  0  0   0
+       1    1 BF  8  1  0   1   15.580    1.387  23.7  0.83 107.3  0.3 56 25.0  0  48.23     0  112.6  109.4   641.0  0  0   0
+       1    5 BF  8  1  0   1    5.115    0.455  21.7  0.55 106.6  0.3 56 23.3  0  14.70     0   93.5   89.9   506.0  0  0   0
+       1    8 BF  8  1  0   1    4.078    0.363  21.0  0.37 106.1  0.1 56 22.8  0   6.98     0   87.5   83.8   484.0  0  0   0
+       1    3 BF  8  1  0   1    0.162    0.014  20.6  0.54 105.1  0.4 56 22.4  0   0.74     0   83.0   79.2   437.0  0  0   0
+       1    9 BF  8  1  0   1    0.324    0.029  20.8  0.30 106.0  0.1 57 22.6  0   1.19     0   85.2   81.4   464.0  0  0   0
