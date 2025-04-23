@@ -14,10 +14,26 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update -y && apt upgrade -y \
 && apt-get update && apt-get -y upgrade \
 && apt-get install -y wget vim pip nano git python3 python-is-python3 \
+#######################################################################################
+# WARNING : UNCOMMENT THE FOLLOWING LINE IF YOU ARE USING A JOB COMPUTER WITH A FIREWALL
+# THAT CREATES MAN-IN-THE-MIDDLE ATTACKS TO LISTEN TO YOUR CONNECTION, RESULTING IN A 
+# "SELF-SIGNED CERTIFICATE" ERROR WITH WGET COMMANDS.
+# See https://stackoverflow.com/questions/39639860/dealing-with-corporate-firewall-adding-self-signed-certificates
+# and https://docs.docker.com/engine/network/ca-certs/ for documentation about these errors.
+# This commands removes certificate check for all wget commands
+# should be safe since we download from official
+# and well known websites like Github, archive.ubuntu.com, etc.
+# Is needed because some users have job computer that intercept TLS connections and force the use
+# of company certificates which we cannot put in the Docker image without bothering the user.
+# This is disabled at the end of the Dockerfile to avoid security issues once the build is finished.
+# && echo "check_certificate = off" >> ~/.wgetrc \
+#######################################################################################
 && apt-get install -y libjpeg62 \
 && apt-get install -y libpng16-16 \
 && apt-get install -y gdal-bin \
 && apt-get install -y libgdal-dev \
+# Installing certificates to avoid wget error
+&& apt-get install -y ssl-cert ca-certificates \
 # Axel is not for LANDIS-II, it's for fast downloads
 && apt-get install -y axel \
 # Installing libssl1 sometimes needed for Dotnet
@@ -284,6 +300,7 @@ RUN cd /bin/LANDIS_Linux \
 # without the same version.
 # We also don't take commit c4771b5294806b51ebcd498c3fd46eb765e5d7c5 (which is also more recent than the one used here)
 # because it's a small commit that removes a file which make the build impossible. I don't understand why the devs did this.
+# POTENTIAL FIX : Forcing biomass succession to compile with Landis.Library.Biomass-v2.1. Should work without too much issues. 
 RUN cd /bin/LANDIS_Linux \
 && ./downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Extension-Biomass-Harvest.git 883e93340b75df2759f528a5c17fe4846433c6aa /src \ 
 && cd /bin/LANDIS_Linux/Extension-Biomass-Harvest/src \
@@ -648,7 +665,7 @@ COPY ./files_to_help_compilation/pip_requirements.txt /tmp
 RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /tmp/pip_requirements.txt
 
 # Adding jupyter lab and book; installed alpha version of jupyter lab to remove scrolling issue. Can be changed once version 4.4.0 is not alpha anymore.
-RUN pip install jupyterlab==4.4.0a3 jupyter-book
+RUN pip install jupyterlab==4.4.0 jupyter-book
 
 # Adding add-on "Variable explorer" for jupyter lab
 RUN pip install lckr-jupyterlab-variableinspector
@@ -675,3 +692,8 @@ EXPOSE 8888
 
 # Make the Jupyterlab start with the container
 CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
+
+# Removes the line that disable certificate check with wget (see beginning of Dockerfile)
+# Is used so that if the user uses Wget again with the image, then the certificate verification
+# will be in place, avoiding potential security issues.
+RUN sed -i '/^check_certificate = off$/d' ~/.wgetrc
