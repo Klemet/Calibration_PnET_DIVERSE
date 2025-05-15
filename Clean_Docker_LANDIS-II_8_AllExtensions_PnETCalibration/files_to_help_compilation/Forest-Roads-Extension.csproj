@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <NeutralLanguage>English</NeutralLanguage>
+    <RootNamespace>Landis.Extension.ForestRoadsSimulation</RootNamespace>
+    <AssemblyName>Landis.Extension.ForestRoadsSimulation</AssemblyName>
+    <AssemblyTitle>Landis.Extension.ForestRoadsSimulation</AssemblyTitle>
+    <PackageLicenseUrl>https://github.com/Klemet/LANDIS-II-Forest-Roads-Simulation-module/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Klemet/LANDIS-II-Forest-Roads-Simulation-module</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>LANDIS-II;Landis;Extension;Forest roads</PackageTags>
+    <Authors>Clement Hardy</Authors>
+    <Description>Forest Roads Simulation Module</Description>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<Deterministic>false</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<OutputPath>..\build\extensions</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Landis.Core" Version="3.0.1" />
+  </ItemGroup>
+  
+<ItemGroup>
+    <Reference Include="C5, Version=2.5.0.0, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
+      <HintPath>packages\C5.2.5.3\lib\net45\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Core.3.0.1\lib\netstandard2.0\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core.Implementation, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Core.Implementation.3.0.1\lib\netstandard2.0\Landis.Core.Implementation.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Landscapes, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Landscapes.2.0.1\lib\netstandard2.0\Landis.Landscapes.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.UniversalCohorts-v1">
+      <HintPath>..\build\extensions\Landis.Library.UniversalCohorts-v1.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.HarvestManagement-v4">
+      <HintPath>..\build\extensions\Landis.Library.HarvestManagement-v4.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Metadata-v2">
+      <HintPath>..\build\extensions\Landis.Library.Metadata-v2.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.SpatialModeling, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.SpatialModeling.2.0.1\lib\netstandard2.0\Landis.SpatialModeling.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Utilities, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Utilities.2.0.0\lib\netstandard2.0\Landis.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+    <Reference Include="Priority Queue, Version=4.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\OptimizedPriorityQueue.4.2.0\lib\net45\Priority Queue.dll</HintPath>
+    </Reference>
+    <Reference Include="Supercluster.KDTree, Version=1.0.4.0, Culture=neutral, PublicKeyToken=4423da5f8ba350cf, processorArchitecture=MSIL">
+      <HintPath>packages\Supercluster.KDTree.1.0.4\lib\Supercluster.KDTree.dll</HintPath>
+    </Reference>
+    <Reference Include="Troschuetz.Random, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2f204b7110a52060, processorArchitecture=MSIL">
+      <HintPath>packages\Troschuetz.Random.4.3.0\lib\net461\Troschuetz.Random.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

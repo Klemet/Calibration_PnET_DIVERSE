@@ -2,6 +2,8 @@
 
 <h1 align="center">Calibration of PnET Succession for the <a src="https://diverseproject.uqo.ca">DIVERSE project</a></h1>
 
+[![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://klemet.github.io/Calibration_PnET_DIVERSE/)
+
 ## 🎯 Objective
 
 - This repo contains the files used to calibrate the canadian tree species we will simulate with the [PnET Succession Extension](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession) of the [LANDIS-II Forest Landscape Model](https://www.landis-ii.org/).
@@ -16,9 +18,9 @@
 - Install Docker Desktop on your computer (https://www.docker.com/products/docker-desktop/) or simply install Docker if you are using Linux.
 - Clone or download the contents of this repository on your computer.
 - Go to the folder `Clean_Docker_LANDIS-II_7_AllExtensions_PnETCalibration` in a terminal where you can call Docker (e.g. Windows Powershell)
-- Use `docker build -t landis_ii_v7_calibration_pnet ./` to build the docker image. This image contains everything needed to re-do the calibration I've done here in a replicable way (including Jupyter lab to see read and act on the Jupyter notebooks file which have been used to create the Jupyter Book available [here](https://klemet.github.io/Calibration_PnET_DIVERSE/)), and of course, LANDIS-II. The `Dockerfile` file contain all of the commands used to build the image, and comments about what versions of the LANDIS-II extensions are installed.
+- Use `docker build -t landis_ii_v8_calibration_pnet ./` to build the docker image. This image contains everything needed to re-do the calibration I've done here in a replicable way (including Jupyter lab to see read and act on the Jupyter notebooks file which have been used to create the Jupyter Book available [here](https://klemet.github.io/Calibration_PnET_DIVERSE/)), and of course, LANDIS-II. The `Dockerfile` file contain all of the commands used to build the image, and comments about what versions of the LANDIS-II extensions are installed.
 > ⚠️ You might get some errors during the build. These are often due to some downloads from github failing for a reason unkown. Just re-launch the build process, and everything should be fine. If things are still not working, please [post an issue](https://github.com/Klemet/Calibration_PnET_DIVERSE/issues) with the error message that you are getting.
-- Once the build is over, run `docker run -it -p 8888:8888 --mount type=bind,src="<CALIBRATION_FOLDER_PATH>",dst=/calibrationFolder landis_ii_v7_calibration_pnet` in a terminal to open an interactive session with docker. Replace `<CALIBRATION_FOLDER_PATH>` with the full path to where the folder `Calibration_PnET_DIVERSE` is on your computer. It is advised that you keep the bind to `/calibrationFolder` in the container, as Jupyter lab is configured to look there for its configuration files.
+- Once the build is over, run `docker run -it -p 8888:8888 --mount type=bind,src="<CALIBRATION_FOLDER_PATH>",dst=/calibrationFolder landis_ii_v8_calibration_pnet` in a terminal to open an interactive session with docker. Replace `<CALIBRATION_FOLDER_PATH>` with the full path to where the folder `Calibration_PnET_DIVERSE` is on your computer. It is advised that you keep the bind to `/calibrationFolder` in the container, as Jupyter lab is configured to look there for its configuration files.
 > ⚠️ **If you close the terminal where you have entered the `docker run` command, the Docker container will close down with it !**
 - Jupyter lab will automatically launch when launching the container. Simply click on the URL that it gives you (that will look like http://127.0.0.1:8888/lab?token=<LONG TOKEN>) or copy/paste it in your favorite web browser.
 - In Jupyter lab, use the navigation pannel on the left to go to `/calibrationFolder` to open the Jupyter notebooks corresponding to the part of the calibration you are interested in. You can normally run every cell without any compatibility issue from here.
