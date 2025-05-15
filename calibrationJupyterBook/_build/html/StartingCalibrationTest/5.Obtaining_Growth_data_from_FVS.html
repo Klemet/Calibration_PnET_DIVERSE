@@ -389,6 +389,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-comparing-fvs-outputs-to-pnet-outputs">Test : Comparing FVS outputs to PnET outputs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-test-with-more-robut-parameters">Another test - with more robut parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#todo">TODO</a></li>
 </ul>
             </nav>
         </div>
@@ -476,29 +477,24 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
+The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
+Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
+Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clearing files
+Clearing files
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 </pre></div>
 </div>
@@ -535,10 +531,13 @@ This can be useful to paramterize several parameters of PnET Succession related 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading parameters and launching a simple PnET sim</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functionsForCalibration</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 <span class="c1"># Loading parameters from template</span>
-<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim_v8&quot;</span><span class="p">)</span>
 <span class="c1"># Editing initial communities to only have single cohort of Pinus banksiana</span>
-<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;querrubr&quot;</span><span class="p">]</span>
-<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;pinubank&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+<span class="c1"># Updated for v8</span>
+<span class="c1"># we clear all of the rows</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># We add a single new row for pinus banksiana with biomass 0 (there will be a spin up anyway)</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>	<span class="s2">&quot;pinubank&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">]</span>
 <span class="c1"># print(PnETGitHub_OneCellSim[&quot;initial-communities.txt&quot;])</span>
 <span class="c1"># Editing cell length so that one cell = 1ha</span>
 <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
@@ -555,8 +554,9 @@ Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Initial Communities file : initial-communities.csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -600,8 +600,9 @@ Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : dataframe : initial-communities.csv, exporting to .csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -610,9 +611,7 @@ Found : Main scenario file : scenario.txt
 Found : Main species parameter file : species.txt
 Found : PnET species parameters file : SpeciesParameters.txt
 Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestScenarioPnET/ &amp;&amp; dotnet $LANDIS_CONSOLE scenario.txt&quot;
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Timeout occurred while waiting for LANDIS-II output.
+The LANDIS-II simulation has finished properly!
 </pre></div>
 </div>
 </div>
@@ -642,9 +641,7 @@ Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestSce
 Creating Database with stand and tree ini values
 Creating Keyword file
 Launching FVS sim
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{2023: 0.4, 2026: 1.8, 2029: 6.0, 2032: 12.6, 2035: 21.8, 2038: 33.4, 2041: 47.8, 2044: 64.8, 2047: 81.4, 2050: 93.4, 2053: 106.4, 2056: 111.8, 2059: 114.4, 2062: 116.8, 2065: 119.0, 2068: 121.4, 2071: 123.4, 2074: 125.6, 2077: 127.8, 2080: 129.8, 2083: 131.6, 2086: 134.2, 2089: 135.0, 2092: 132.4, 2095: 130.2, 2098: 128.4, 2101: 126.4, 2104: 124.4, 2107: 122.4, 2110: 120.6, 2113: 119.0, 2116: 117.4, 2119: 115.6, 2122: 114.0, 2125: 112.6, 2128: 111.0, 2131: 109.6, 2134: 108.4, 2137: 107.0, 2140: 105.8}
+{2023: 0.4, 2026: 1.8, 2029: 6.0, 2032: 12.6, 2035: 21.8, 2038: 33.4, 2041: 47.8, 2044: 64.8, 2047: 81.4, 2050: 93.4, 2053: 106.4, 2056: 111.8, 2059: 114.4, 2062: 116.8, 2065: 119.0, 2068: 121.4, 2071: 123.4, 2074: 125.6, 2077: 127.8, 2080: 129.8, 2083: 131.6, 2086: 134.2, 2089: 135.0, 2092: 132.4, 2095: 130.2, 2098: 128.4, 2101: 126.4, 2104: 124.4, 2107: 122.4, 2110: 120.6, 2113: 119.0, 2116: 117.4, 2119: 115.6, 2122: 114.0, 2125: 112.6, 2128: 111.0, 2131: 109.6, 2134: 108.4, 2137: 107.0, 2140: 105.8}
 </pre></div>
 </div>
 </div>
@@ -673,7 +670,7 @@ Launching FVS sim
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
 </pre></div>
 </div>
-<img alt="../_images/254fe60f1b94d667a0d91aaa2883f4e0208c191089cda7662d26fd7150943e3a.png" src="../_images/254fe60f1b94d667a0d91aaa2883f4e0208c191089cda7662d26fd7150943e3a.png" />
+<img alt="../_images/0574f2ff9e238c93d92d71f61fe3ded73fa6279948b01552772782884b0db4ce.png" src="../_images/0574f2ff9e238c93d92d71f61fe3ded73fa6279948b01552772782884b0db4ce.png" />
 </div>
 </div>
 <p>Here, we can see a pretty large divergence between the prediction of PnET succession and the projection of FVS. The parameters used in PnET Succession are derived from a template on Github, and are of unknown origin to me. Let’s try again, but with the initial parameters that I have identified.</p>
@@ -688,11 +685,13 @@ Launching FVS sim
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 
 <span class="c1"># Loading parameters from template</span>
-<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim_v8&quot;</span><span class="p">)</span>
 <span class="c1"># Editing initial communities to only have single cohort of Abies Balsamea</span>
-<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;querrubr&quot;</span><span class="p">]</span>
-<span class="k">del</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;pinubank&quot;</span><span class="p">]</span>
-<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.txt&quot;</span><span class="p">][</span><span class="s2">&quot;abiebals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+<span class="c1"># Updated for v8</span>
+<span class="c1"># we clear all of the rows</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># We add a single new row for pinus banksiana with biomass 0 (there will be a spin up anyway)</span>
+<span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;initial-communities.csv&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>	<span class="s2">&quot;abiebals&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">]</span>
 
 <span class="c1"># Editing cell length so that one cell = 1ha</span>
 <span class="n">PnETGitHub_OneCellSim</span><span class="p">[</span><span class="s2">&quot;scenario.txt&quot;</span><span class="p">][</span><span class="s2">&quot;CellLength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
@@ -742,8 +741,9 @@ Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Initial Communities file : initial-communities.csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -752,16 +752,15 @@ Found : Main scenario file : scenario.txt
 Found : Main species parameter file : species.txt
 Found : PnET species parameters file : SpeciesParameters.txt
 Found : Additional file : !Run_scenario.bat
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
+Found : PnET OutputBiomass parameter file : biomass.outputPnET.txt
 Found : Climate file : climate.txt
 Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : dataframe : initial-communities.csv, exporting to .csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -770,9 +769,7 @@ Found : Main scenario file : scenario.txt
 Found : Main species parameter file : species.txt
 Found : PnET species parameters file : SpeciesParameters.txt
 Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestScenarioPnET/ &amp;&amp; dotnet $LANDIS_CONSOLE scenario.txt&quot;
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The LANDIS-II simulation has finished properly !
+The LANDIS-II simulation has finished properly!
 </pre></div>
 </div>
 </div>
@@ -802,13 +799,9 @@ Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestSce
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been deleted.
 The directory &#39;/calibrationFolder/FVS_SingleEmptyStandRun&#39; has been created.
 Creating Database with stand and tree ini values
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Creating Keyword file
+Creating Keyword file
 Launching FVS sim
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Detected unit in carbon outputs is US Tons/Acre. Will transform into Metric ton / hectare.
+Detected unit in carbon outputs is US Tons/Acre. Will transform into Metric ton / hectare.
 {2023: 0.8965080000000001, 2033: 48.411432000000005, 2043: 120.13207200000001, 2053: 133.57969200000002, 2063: 143.44128, 2073: 159.13017000000002, 2083: 176.16382199999998, 2093: 188.71493400000003, 2103: 197.68001400000003, 2113: 207.54160199999998, 2123: 213.81715800000003, 2133: 220.09271400000003, 2143: 225.02350800000002, 2153: 232.643826, 2163: 241.608906, 2173: 250.573986, 2183: 255.50478, 2193: 263.573352, 2203: 270.745416, 2213: 276.12446400000005}
 </pre></div>
 </div>
@@ -838,9 +831,34 @@ Launching FVS sim
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All plots have been generated and saved.
 </pre></div>
 </div>
-<img alt="../_images/b53570e3ddb766039653f62034038bdf8e5fe21f260bb02bbb80c5fdb27bf4e3.png" src="../_images/b53570e3ddb766039653f62034038bdf8e5fe21f260bb02bbb80c5fdb27bf4e3.png" />
+<img alt="../_images/fbd4eca5dabcc1cf1febd93b6b77c28ace37a1ef33b35562bc7956040bcbb4cd.png" src="../_images/fbd4eca5dabcc1cf1febd93b6b77c28ace37a1ef33b35562bc7956040bcbb4cd.png" />
 </div>
 </div>
+</section>
+<section id="todo">
+<h2>TODO<a class="headerlink" href="#todo" title="Link to this heading">#</a></h2>
+<p>The problem : The curve of FVS is VERY influenced by the site index and by the maximum basal area. But it’s hard to get this data from empirical data !</p>
+<p>But it’s not completly impossible either. In any case, we should not use the values used by Brian’s team, since these values represent the  maximum densities that the species were able to reach in their study region; and the site index also represent things possible in their study region.</p>
+<p>While it is tempting to say that the parameters of Brian’s team can be used in other areas because the parameters of PnET should generate the right vegetation dynamics in another region as long as we change the parameters of the abiotic environment, I don’t think it’s true. It’s because what these parameters represent are not the physiology of a species throughout the world, but of the species in its local region. Species are an abstract notion, and nature is more complex; there can be a lot of intra-specific variation due to many factors. If we don’t calibrate on empirical data or empirical models from the study area, we will miss this intra-specific variation, and we might get the wrong results.</p>
+<p>Possibilities :</p>
+<ul class="simple">
+<li><p>Switch to using pure empirical data to calibrate PnET : Sample plot data and local yield curve expressed in tons per hectare, or grams per m2 through time. Doable, but will require a lot of data cleaning and adaptation for different data sets throughout the different provinces.</p></li>
+<li><p>Use FVS ontario, but derive site index and maximal basal area from empirical data as Brian’s team did. But we will get into more troubles as we move away from Ontario and Quebec (where FVS ontario has been calibrated and tested).</p>
+<ul>
+<li><p>We can also use the best we can for each region; i.e. use FVSon for Ontario and Quebec, and then see if the parameters we derive from there fits the growth curves in other provinces pretty well. FVSon still has the huge advantage of helping us to get an idea of what the dynamic in a monoculture looks like.</p></li>
+<li><p>Ameray et al. said that they had mean site index data from the NFI. I can’t find them, but that would help tremendously.</p></li>
+</ul>
+</li>
+</ul>
+<p>Next :</p>
+<ul class="simple">
+<li><p>Ask Jesus if we can have box plots of Biomass (or merchentable volume) by year in our PSPs and TSPs that have a lot of the species of consideration (we can use the percentiles of the box plot to have a good idea of where to put the curve</p></li>
+<li><p>Ask Jesus if he could help to find the Site Index for our sites, as well as the Maximum Basal Area based on Brian’s methodology</p></li>
+<li><p>Ask Jesus what approach he would think is the best</p></li>
+<li><p>Ask Ameray where he got their site index data</p></li>
+<li><p>Consider the ground plots and the photo plots of the NFI (<a class="reference external" href="https://nfi.nfis.org/en/maps">https://nfi.nfis.org/en/maps</a>) : clicking on a ground plot on the map, we can see that we have data of the estimated leading species + the biomass + the age in the plot. Pretty perfect. Could have this throughout Canada. But the number of plots is much, much smaller than provincial plot data. Could at least be taken into account ?</p></li>
+</ul>
+<p>(Waiting for answers)</p>
 </section>
 </section>
 
@@ -912,6 +930,7 @@ Launching FVS sim
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-comparing-fvs-outputs-to-pnet-outputs">Test : Comparing FVS outputs to PnET outputs</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-test-with-more-robut-parameters">Another test - with more robut parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#todo">TODO</a></li>
 </ul>
   </nav></div>
 

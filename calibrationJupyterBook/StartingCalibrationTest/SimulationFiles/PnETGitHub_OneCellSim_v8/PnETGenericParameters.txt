@@ -1,0 +1,12 @@
+LandisData PnETGenericParameters
+
+
+
+PnETGenericParameters Value
+
+DTemp		true
+Wythers		true
+PrecipEvents	25
+PrecipEventsWithReplacement	false
+>> Added by Clement to force a spinup; not sure if spinup is by default now
+InitialCommunitiesSpinup true

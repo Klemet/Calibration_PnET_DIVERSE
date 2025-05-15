@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+<!-- Compiling this one has been hard.
+I had to do the following edits :
+- Replace all of the "property group" section at the beginning
+with the one from the Forest-Roads-Extension.csproj of the FRS extension;
+then, replace the fields with the corresponding ones for this extension.
+- Change '$(Configuration)|$(Platform)'=='Release|AnyCPU' to
+'$(Configuration)|$(Platform)'=='Debug|AnyCPU' (seems like this one is
+stuck on debug ?)
+- Take away all references to the librairies like "system", except the
+one for netstandard.
+- For all of the LANDIS librairies that are not in the folder package,
+had a <HintPath> tag with the path in ..\build\extensions.
+
+WARNING : If the version of an extension such as Base Harvest or
+Biomass Harvest changes, remember to change the references here, 
+or the build will fail (and the error will not show it) !
+-->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyVersion>2.1</AssemblyVersion>
+    <NeutralLanguage>English</NeutralLanguage>
+    <RootNamespace>Landis.Extension.MagicHarvest</RootNamespace>
+    <AssemblyName>Landis.Extension.MagicHarvest</AssemblyName>
+    <AssemblyTitle>Landis.Extension.MagicHarvest</AssemblyTitle>
+    <PackageProjectUrl>http://www.landis-ii.org</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Klemet/LANDIS-II-Magic-Harvest</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>LANDIS-II;Landis;Extension;Harvest</PackageTags>
+    <Authors>Clement Hardy</Authors>
+    <Description>Magic Harvest Extension</Description>
+	<Deterministic>false</Deterministic>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<OutputPath>..\build\extensions</OutputPath>
+  </PropertyGroup>
+  
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	<OutputPath>..\build\extensions</OutputPath>
+  </PropertyGroup>
+  
+ <ItemGroup>
+    <Reference Include="Landis.Core, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Core.3.0.1\lib\netstandard2.0\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core.Implementation, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Core.Implementation.3.0.1\lib\netstandard2.0\Landis.Core.Implementation.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Extension.BiomassHarvest-v6">
+      <HintPath>..\build\extensions\Landis.Extension.BiomassHarvest-v6.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.HarvestManagement-v4">
+		<SpecificVersion>False</SpecificVersion>
+		<HintPath>..\build\extensions\Landis.Library.HarvestManagement-v4.dll</HintPath>
+	</Reference>
+    <Reference Include="Landis.Library.SiteHarvest-v2">
+		<HintPath>..\build\extensions\Landis.Library.SiteHarvest-v2.dll</HintPath>
+	</Reference>
+    <Reference Include="Landis.SpatialModeling, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.SpatialModeling.2.0.1\lib\netstandard2.0\Landis.SpatialModeling.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Utilities, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Landis.Utilities.2.0.0\lib\netstandard2.0\Landis.Utilities.dll</HintPath>
+    </Reference>
+	<Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\InputParameters.cs" />
+    <Compile Include="src\InputParametersParser.cs" />
+    <Compile Include="src\PlugIn.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuGet.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+</Project>

@@ -408,7 +408,7 @@ document.write(`
 <p>If you want to get used to the functions loaded in the previous section, so you can test them here.</p>
 <p>This section :</p>
 <ul class="simple">
-<li><p>Loads all of the parameters from a very simple one-cell simulation folder taken from the GitHub repository of the PnET Succession Extension (in <code class="docutils literal notranslate"><span class="pre">StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim</span></code>) into Python objects</p></li>
+<li><p>Loads all of the parameters from a very simple one-cell simulation folder taken from the GitHub repository of the PnET Succession Extension (in <code class="docutils literal notranslate"><span class="pre">StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim_v8</span></code>) into Python objects</p></li>
 <li><p>Writes all of these parameters from the Python objects and back into LANDIS-II parameters files in <code class="docutils literal notranslate"><span class="pre">/tmp/TestScenarioPnET</span></code>, also copying the files that are not parsed (e.g. raster files) in the process.</p></li>
 <li><p>Runs the simulation (using the LANDIS-II installation that is inside this docker image)</p></li>
 <li><p>Parses the outputs of the simulation (the rasters made with PnEt Output extension and the <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files made with the PnET Site Output extension)</p></li>
@@ -433,7 +433,7 @@ document.write(`
 <h2>Loading all of the parameters from the simple one-cell sim<a class="headerlink" href="#loading-all-of-the-parameters-from-the-simple-one-cell-sim" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PnETGitHub_OneCellSim</span> <span class="o">=</span> <span class="n">parse_All_LANDIS_PnET_Files</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;./SimulationFiles/PnETGitHub_OneCellSim_v8&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">Here is the big dictionnary with all of the parameters in it :</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">PnETGitHub_OneCellSim</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -446,8 +446,9 @@ Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : Initial Communities file : initial-communities.csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -460,7 +461,15 @@ Found : PnET species parameters file : SpeciesParameters.txt
 
 Here is the big dictionnary with all of the parameters in it :
 
-{&#39;!Run_scenario.bat&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim/!Run_scenario.bat&#39;, &#39;biomass.outputPnET.txt&#39;: {&#39;LandisData&#39;: &#39;&quot;Output-PnET&quot;&#39;, &#39;Timestep&#39;: &#39;10&#39;, &#39;Species&#39;: &#39;ALL&#39;, &#39;WoodBiomass&#39;: &#39;output/WoodBiomass/{species}/WoodBiomass-{timestep}.img&#39;, &#39;FoliageBiomass&#39;: &#39;output/FoliageBiomass/{species}/FoliageBiomass-{timestep}.img&#39;, &#39;RootBiomass&#39;: &#39;output/RootBiomass/{species}/RootBiomass-{timestep}.img&#39;, &#39;NSC&#39;: &#39;output/NSC/{species}/NSC-{timestep}.img&#39;, &#39;WoodySenescence&#39;: &#39;output/WoodySenescence/{species}/WoodySenescence-{timestep}.img&#39;, &#39;FoliageSenescence&#39;: &#39;output/FoliageSenescence/{species}/FoliageSenescence-{timestep}.img&#39;, &#39;AETAvg&#39;: &#39;output/AETAvg/{species}/AETAvg-{timestep}.img&#39;, &#39;PET&#39;: &#39;output/PET/{species}/PET-{timestep}.img&#39;, &#39;AgeDistribution&#39;: &#39;output/AgeDistribution/{species}/AgeDistribution-{timestep}.img&#39;, &#39;AnnualPsn&#39;: &#39;output/AnnualPsn/{species}/AnnualPsn-{timestep}.img&#39;, &#39;CohortsPerSpecies&#39;: &#39;output/CohortsPerSpecies/{species}/CohortsPerSpecies-{timestep}.img&#39;, &#39;Establishment&#39;: &#39;output/Establishment/{species}/Establishment-{timestep}.img&#39;, &#39;EstablishmentProbability&#39;: &#39;output/EstablishmentProbability/{species}/EstablishmentProbability-{timestep}.img&#39;, &#39;LeafAreaIndex&#39;: &#39;output/LeafAreaIndex/{species}/LeafAreaIndex-{timestep}.img&#39;, &#39;MonthlyFolResp&#39;: &#39;output/MonthlyFolResp/MonthlyFolResp-{timestep}.img&#39;, &#39;MonthlyGrossPsn&#39;: &#39;output/MonthlyGrossPsn/MonthlyGrossPsn-{timestep}.img&#39;, &#39;MonthlyNetPsn&#39;: &#39;output/MonthlyNetPsn/MonthlyNetPsn-{timestep}.img&#39;, &#39;MonthlyMaintResp&#39;: &#39;output/MonthlyMaintResp/MonthlyMaintResp-{timestep}.img&#39;, &#39;WoodyDebris&#39;: &#39;output/WoodyDebris/WoodyDebris-{timestep}.img&#39;, &#39;SubCanopyPAR&#39;: &#39;output/SubCanopyPAR/SubCanopyPAR-{timestep}.img&#39;, &#39;Water&#39;: &#39;output/Water/Water-{timestep}.img&#39;, &#39;CohortBalance&#39;: &#39;output/CohortBalance.csv&#39;, &#39;EstablishmentTable&#39;: &#39;output/EstablishmentTable.csv&#39;, &#39;MortalityTable&#39;: &#39;output/MortalityTable.csv&#39;}, &#39;climate.txt&#39;: {&#39;1600-1996&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;350.9959848079&#39;, &#39;Prec&#39;: &#39;12.14&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;422.8764365948&#39;, &#39;Prec&#39;: &#39;27.27&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;681.9568657618&#39;, &#39;Prec&#39;: &#39;13.93&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;829.6802172436&#39;, &#39;Prec&#39;: &#39;50.08&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;814.6535078721&#39;, &#39;Prec&#39;: &#39;93.63&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;722.9276678308&#39;, &#39;Prec&#39;: &#39;160.56&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;872.8925973439&#39;, &#39;Prec&#39;: &#39;89.87&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;722.1271241014&#39;, &#39;Prec&#39;: &#39;80.46&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;538.6992001016&#39;, &#39;Prec&#39;: &#39;101.9&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;398.4617125821&#39;, &#39;Prec&#39;: &#39;92.88&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;286.6469988492&#39;, &#39;Prec&#39;: &#39;51.52&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;256.5194056339&#39;, &#39;Prec&#39;: &#39;18.33&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1997&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;297.6606941234&#39;, &#39;Prec&#39;: &#39;26.416&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;459.687347277&#39;, &#39;Prec&#39;: &#39;29.972&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;639.2213468298&#39;, &#39;Prec&#39;: &#39;123.19&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;757.6523826222&#39;, &#39;Prec&#39;: &#39;36.576&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;820.4509999536&#39;, &#39;Prec&#39;: &#39;54.864&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;718.279288454&#39;, &#39;Prec&#39;: &#39;38.862&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;813.0007719273&#39;, &#39;Prec&#39;: &#39;39.37&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;745.4156095801&#39;, &#39;Prec&#39;: &#39;54.864&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;585.7956123241&#39;, &#39;Prec&#39;: &#39;136.652&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;422.2229098247&#39;, &#39;Prec&#39;: &#39;105.156&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;301.6793240297&#39;, &#39;Prec&#39;: &#39;160.528&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;277.9706075513&#39;, &#39;Prec&#39;: &#39;28.702&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1998&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;308.6888052882&#39;, &#39;Prec&#39;: &#39;190.5&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;513.1942832055&#39;, &#39;Prec&#39;: &#39;144.018&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;564.5587479666&#39;, &#39;Prec&#39;: &#39;154.94&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;801.777901273&#39;, &#39;Prec&#39;: &#39;118.618&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;809.1306271837&#39;, &#39;Prec&#39;: &#39;116.84&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;785.4460606177&#39;, &#39;Prec&#39;: &#39;130.048&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;709.353639689&#39;, &#39;Prec&#39;: &#39;42.926&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;714.033867377&#39;, &#39;Prec&#39;: &#39;63.246&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;618.1866783245&#39;, &#39;Prec&#39;: &#39;22.606&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;476.891657399&#39;, &#39;Prec&#39;: &#39;142.748&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;289.9886518071&#39;, &#39;Prec&#39;: &#39;1.778&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;248.2078448468&#39;, &#39;Prec&#39;: &#39;20.574&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1999-2300&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;350.9959848079&#39;, &#39;Prec&#39;: &#39;12.14&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;422.8764365948&#39;, &#39;Prec&#39;: &#39;27.27&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;681.9568657618&#39;, &#39;Prec&#39;: &#39;13.93&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;829.6802172436&#39;, &#39;Prec&#39;: &#39;50.08&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;814.6535078721&#39;, &#39;Prec&#39;: &#39;93.63&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;722.9276678308&#39;, &#39;Prec&#39;: &#39;160.56&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;872.8925973439&#39;, &#39;Prec&#39;: &#39;89.87&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;722.1271241014&#39;, &#39;Prec&#39;: &#39;80.46&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;538.6992001016&#39;, &#39;Prec&#39;: &#39;101.9&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;398.4617125821&#39;, &#39;Prec&#39;: &#39;92.88&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;286.6469988492&#39;, &#39;Prec&#39;: &#39;51.52&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;256.5194056339&#39;, &#39;Prec&#39;: &#39;18.33&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}}, &#39;disturbance_reductions.txt&#39;: {&#39;LandisData&#39;: &#39;DisturbanceReductions&#39;, &#39;DisturbanceReductions&#39;: {&#39;WoodReduction&#39;: {&#39;fire&#39;: &#39;0.33&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0.70&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;FolReduction&#39;: {&#39;fire&#39;: &#39;1&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;RootReduction&#39;: {&#39;fire&#39;: &#39;0&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;DeadWoodReduction&#39;: {&#39;fire&#39;: &#39;0.7&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;LitterReduction&#39;: {&#39;fire&#39;: &#39;0.9&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0.1&#39;, &#39;bda&#39;: &#39;0&#39;}}}, &#39;ecoregion.img&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim/ecoregion.img&#39;, &#39;ecoregion.txt&#39;: {&#39;LandisData&#39;: &#39;Ecoregions&#39;, &#39;eco0&#39;: {&#39;active&#39;: &#39;no&#39;, &#39;Map Code&#39;: &#39;0&#39;, &#39;Description&#39;: &#39;&quot;inactive&quot;&#39;}, &#39;eco1&#39;: {&#39;active&#39;: &#39;yes&#39;, &#39;Map Code&#39;: &#39;1&#39;, &#39;Description&#39;: &#39;&quot;well-drained rocky slopes - SW aspect&quot;&#39;}}, &#39;EcoregionParameters.txt&#39;: {&#39;LandisData&#39;: &#39;EcoregionParameters&#39;, &#39;EcoregionParameters&#39;: {&#39;eco0&#39;: {&#39;RootingDepth&#39;: &#39;1000&#39;, &#39;SoilType&#39;: &#39;SAND&#39;, &#39;LeakageFrac&#39;: &#39;1&#39;, &#39;PrecLossFrac&#39;: &#39;0&#39;, &#39;SnowSublimFrac&#39;: &#39;0.15&#39;, &#39;ClimateFileName&#39;: &#39;climate.txt&#39;}, &#39;eco1&#39;: {&#39;RootingDepth&#39;: &#39;1000&#39;, &#39;SoilType&#39;: &#39;SAND&#39;, &#39;LeakageFrac&#39;: &#39;1&#39;, &#39;PrecLossFrac&#39;: &#39;0&#39;, &#39;SnowSublimFrac&#39;: &#39;0.15&#39;, &#39;ClimateFileName&#39;: &#39;climate.txt&#39;}}}, &#39;initial-communities.img&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim/initial-communities.img&#39;, &#39;initial-communities.txt&#39;: {&#39;LandisData&#39;: &#39;&quot;Initial Communities&quot;&#39;, &#39;MapCode&#39;: &#39;1&#39;, &#39;querrubr&#39;: &#39;10 20 30 40&#39;, &#39;pinubank&#39;: &#39;40 50 60 70&#39;}, &#39;PnETGenericParameters.txt&#39;: {&#39;LandisData&#39;: &#39;PnETGenericParameters&#39;, &#39;PnETGenericParameters&#39;: &#39;Value&#39;, &#39;DTemp&#39;: &#39;true&#39;, &#39;Wythers&#39;: &#39;true&#39;, &#39;PrecipEvents&#39;: &#39;25&#39;, &#39;PrecipEventsWithReplacement&#39;: &#39;false&#39;}, &#39;PnEToutputsites_onecell.txt&#39;: {&#39;LandisData&#39;: &#39;PNEToutputsites&#39;, &#39;PNEToutputsites&#39;: &#39;Row Column&#39;, &#39;Site1&#39;: &#39;9 9&#39;}, &#39;pnetsuccession.txt&#39;: {&#39;LandisData&#39;: &#39;&quot;PnET-Succession&quot;&#39;, &#39;PnET-Succession&#39;: &#39;Value&#39;, &#39;Timestep&#39;: &#39;10&#39;, &#39;StartYear&#39;: &#39;2000&#39;, &#39;SeedingAlgorithm&#39;: &#39;WardSeedDispersal&#39;, &#39;Latitude&#39;: &#39;42&#39;, &#39;PNEToutputsites&#39;: &#39;PnEToutputsites_onecell.txt&#39;, &#39;InitialCommunities&#39;: &#39;initial-communities.txt&#39;, &#39;InitialCommunitiesMap&#39;: &#39;initial-communities.img&#39;, &#39;PnETSpeciesParameters&#39;: &#39;SpeciesParameters.txt&#39;, &#39;EcoregionParameters&#39;: &#39;EcoregionParameters.txt&#39;, &#39;PnETGenericParameters&#39;: &#39;PnETGenericParameters.txt&#39;, &#39;DisturbanceReductions&#39;: &#39;disturbance_reductions.txt&#39;}, &#39;README.txt&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim/README.txt&#39;, &#39;scenario.txt&#39;: {&#39;LandisData&#39;: &#39;Scenario&#39;, &#39;Duration&#39;: &#39;50&#39;, &#39;Species&#39;: &#39;species.txt&#39;, &#39;Ecoregions&#39;: &#39;ecoregion.txt&#39;, &#39;EcoregionsMap&#39;: &#39;ecoregion.img&#39;, &#39;CellLength&#39;: &#39;30&#39;, &#39;&quot;PnET-Succession&quot;&#39;: &#39;pnetsuccession.txt&#39;, &#39;&quot;Output-PnET&quot;&#39;: &#39;biomass.outputPnET.txt&#39;, &#39;RandomNumberSeed&#39;: &#39;1111&#39;}, &#39;species.txt&#39;: {&#39;LandisData&#39;: &#39;Species&#39;, &#39;querrubr&#39;: {&#39;Longevity&#39;: &#39;100&#39;, &#39;Sexual Maturity&#39;: &#39;50&#39;, &#39;Shade Tolerance&#39;: &#39;3&#39;, &#39;Fire Tolerance&#39;: &#39;2&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;30&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;3000&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0.9&#39;, &#39;Sprout Age - Min&#39;: &#39;20&#39;, &#39;Sprout Age - Max&#39;: &#39;100&#39;, &#39;Post Fire Regen&#39;: &#39;resprout&#39;}, &#39;pinubank&#39;: {&#39;Longevity&#39;: &#39;100&#39;, &#39;Sexual Maturity&#39;: &#39;15&#39;, &#39;Shade Tolerance&#39;: &#39;1&#39;, &#39;Fire Tolerance&#39;: &#39;3&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;20&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;100&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0&#39;, &#39;Sprout Age - Min&#39;: &#39;0&#39;, &#39;Sprout Age - Max&#39;: &#39;0&#39;, &#39;Post Fire Regen&#39;: &#39;serotiny&#39;}}, &#39;SpeciesParameters.txt&#39;: {&#39;LandisData&#39;: &#39;PnETSpeciesParameters&#39;, &#39;PnETSpeciesParameters&#39;: {&#39;querrubr&#39;: {&#39;FolN&#39;: &#39;2.8&#39;, &#39;SLWmax&#39;: &#39;75&#39;, &#39;SLWDel&#39;: &#39;0.2&#39;, &#39;TOfol&#39;: &#39;1&#39;, &#39;AmaxA&#39;: &#39;-46&#39;, &#39;AmaxB&#39;: &#39;71.9&#39;, &#39;HalfSat&#39;: &#39;437&#39;, &#39;H3&#39;: &#39;131&#39;, &#39;H4&#39;: &#39;380&#39;, &#39;PsnTMin&#39;: &#39;2&#39;, &#39;PsnTOpt&#39;: &#39;24&#39;, &#39;PsnTMax&#39;: &#39;40&#39;, &#39;k&#39;: &#39;0.58&#39;, &#39;FracBelowG&#39;: &#39;0.33&#39;, &#39;FracFol&#39;: &#39;0.035&#39;, &#39;FrActWd&#39;: &#39;0.00004&#39;}, &#39;pinubank&#39;: {&#39;FolN&#39;: &#39;2.6&#39;, &#39;SLWmax&#39;: &#39;180&#39;, &#39;SLWDel&#39;: &#39;0.2&#39;, &#39;TOfol&#39;: &#39;0.35&#39;, &#39;AmaxA&#39;: &#39;-46&#39;, &#39;AmaxB&#39;: &#39;71.9&#39;, &#39;HalfSat&#39;: &#39;437&#39;, &#39;H3&#39;: &#39;131&#39;, &#39;H4&#39;: &#39;380&#39;, &#39;PsnTMin&#39;: &#39;4&#39;, &#39;PsnTOpt&#39;: &#39;24&#39;, &#39;PsnTMax&#39;: &#39;40&#39;, &#39;k&#39;: &#39;0.5&#39;, &#39;FracBelowG&#39;: &#39;0.25&#39;, &#39;FracFol&#39;: &#39;0.035&#39;, &#39;FrActWd&#39;: &#39;0.00004&#39;}}}}
+{&#39;!Run_scenario.bat&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim_v8/!Run_scenario.bat&#39;, &#39;biomass.outputPnET.txt&#39;: {&#39;LandisData&#39;: &#39;&quot;Output-PnET&quot;&#39;, &#39;Timestep&#39;: &#39;10&#39;, &#39;Species&#39;: &#39;ALL&#39;, &#39;WoodBiomass&#39;: &#39;output/WoodBiomass/{species}/WoodBiomass-{timestep}.img&#39;, &#39;FoliageBiomass&#39;: &#39;output/FoliageBiomass/{species}/FoliageBiomass-{timestep}.img&#39;, &#39;RootBiomass&#39;: &#39;output/RootBiomass/{species}/RootBiomass-{timestep}.img&#39;, &#39;NSC&#39;: &#39;output/NSC/{species}/NSC-{timestep}.img&#39;, &#39;WoodySenescence&#39;: &#39;output/WoodySenescence/{species}/WoodySenescence-{timestep}.img&#39;, &#39;FoliageSenescence&#39;: &#39;output/FoliageSenescence/{species}/FoliageSenescence-{timestep}.img&#39;, &#39;AETAvg&#39;: &#39;output/AETAvg/{species}/AETAvg-{timestep}.img&#39;, &#39;PET&#39;: &#39;output/PET/{species}/PET-{timestep}.img&#39;, &#39;AgeDistribution&#39;: &#39;output/AgeDistribution/{species}/AgeDistribution-{timestep}.img&#39;, &#39;AnnualPsn&#39;: &#39;output/AnnualPsn/{species}/AnnualPsn-{timestep}.img&#39;, &#39;CohortsPerSpecies&#39;: &#39;output/CohortsPerSpecies/{species}/CohortsPerSpecies-{timestep}.img&#39;, &#39;Establishment&#39;: &#39;output/Establishment/{species}/Establishment-{timestep}.img&#39;, &#39;EstablishmentProbability&#39;: &#39;output/EstablishmentProbability/{species}/EstablishmentProbability-{timestep}.img&#39;, &#39;LeafAreaIndex&#39;: &#39;output/LeafAreaIndex/{species}/LeafAreaIndex-{timestep}.img&#39;, &#39;MonthlyFolResp&#39;: &#39;output/MonthlyFolResp/MonthlyFolResp-{timestep}.img&#39;, &#39;MonthlyGrossPsn&#39;: &#39;output/MonthlyGrossPsn/MonthlyGrossPsn-{timestep}.img&#39;, &#39;MonthlyNetPsn&#39;: &#39;output/MonthlyNetPsn/MonthlyNetPsn-{timestep}.img&#39;, &#39;MonthlyMaintResp&#39;: &#39;output/MonthlyMaintResp/MonthlyMaintResp-{timestep}.img&#39;, &#39;WoodyDebris&#39;: &#39;output/WoodyDebris/WoodyDebris-{timestep}.img&#39;, &#39;SubCanopyPAR&#39;: &#39;output/SubCanopyPAR/SubCanopyPAR-{timestep}.img&#39;, &#39;Water&#39;: &#39;output/Water/Water-{timestep}.img&#39;, &#39;CohortBalance&#39;: &#39;output/CohortBalance.csv&#39;, &#39;EstablishmentTable&#39;: &#39;output/EstablishmentTable.csv&#39;, &#39;MortalityTable&#39;: &#39;output/MortalityTable.csv&#39;}, &#39;climate.txt&#39;: {&#39;1600-1996&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;350.9959848079&#39;, &#39;Prec&#39;: &#39;12.14&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;422.8764365948&#39;, &#39;Prec&#39;: &#39;27.27&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;681.9568657618&#39;, &#39;Prec&#39;: &#39;13.93&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;829.6802172436&#39;, &#39;Prec&#39;: &#39;50.08&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;814.6535078721&#39;, &#39;Prec&#39;: &#39;93.63&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;722.9276678308&#39;, &#39;Prec&#39;: &#39;160.56&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;872.8925973439&#39;, &#39;Prec&#39;: &#39;89.87&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;722.1271241014&#39;, &#39;Prec&#39;: &#39;80.46&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;538.6992001016&#39;, &#39;Prec&#39;: &#39;101.9&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;398.4617125821&#39;, &#39;Prec&#39;: &#39;92.88&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;286.6469988492&#39;, &#39;Prec&#39;: &#39;51.52&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;256.5194056339&#39;, &#39;Prec&#39;: &#39;18.33&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1997&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;297.6606941234&#39;, &#39;Prec&#39;: &#39;26.416&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;459.687347277&#39;, &#39;Prec&#39;: &#39;29.972&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;639.2213468298&#39;, &#39;Prec&#39;: &#39;123.19&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;757.6523826222&#39;, &#39;Prec&#39;: &#39;36.576&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;820.4509999536&#39;, &#39;Prec&#39;: &#39;54.864&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;718.279288454&#39;, &#39;Prec&#39;: &#39;38.862&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;813.0007719273&#39;, &#39;Prec&#39;: &#39;39.37&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;745.4156095801&#39;, &#39;Prec&#39;: &#39;54.864&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;585.7956123241&#39;, &#39;Prec&#39;: &#39;136.652&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;422.2229098247&#39;, &#39;Prec&#39;: &#39;105.156&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;301.6793240297&#39;, &#39;Prec&#39;: &#39;160.528&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;277.9706075513&#39;, &#39;Prec&#39;: &#39;28.702&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1998&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;308.6888052882&#39;, &#39;Prec&#39;: &#39;190.5&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;513.1942832055&#39;, &#39;Prec&#39;: &#39;144.018&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;564.5587479666&#39;, &#39;Prec&#39;: &#39;154.94&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;801.777901273&#39;, &#39;Prec&#39;: &#39;118.618&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;809.1306271837&#39;, &#39;Prec&#39;: &#39;116.84&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;785.4460606177&#39;, &#39;Prec&#39;: &#39;130.048&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;709.353639689&#39;, &#39;Prec&#39;: &#39;42.926&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;714.033867377&#39;, &#39;Prec&#39;: &#39;63.246&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;618.1866783245&#39;, &#39;Prec&#39;: &#39;22.606&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;476.891657399&#39;, &#39;Prec&#39;: &#39;142.748&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;289.9886518071&#39;, &#39;Prec&#39;: &#39;1.778&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;248.2078448468&#39;, &#39;Prec&#39;: &#39;20.574&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}, &#39;1999-2300&#39;: {&#39;1&#39;: {&#39;TMax&#39;: &#39;2.1&#39;, &#39;TMin&#39;: &#39;-6.1&#39;, &#39;PAR&#39;: &#39;350.9959848079&#39;, &#39;Prec&#39;: &#39;12.14&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;2&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-5&#39;, &#39;PAR&#39;: &#39;422.8764365948&#39;, &#39;Prec&#39;: &#39;27.27&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;3&#39;: {&#39;TMax&#39;: &#39;9.6&#39;, &#39;TMin&#39;: &#39;-1.1&#39;, &#39;PAR&#39;: &#39;681.9568657618&#39;, &#39;Prec&#39;: &#39;13.93&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;4&#39;: {&#39;TMax&#39;: &#39;16.5&#39;, &#39;TMin&#39;: &#39;4.6&#39;, &#39;PAR&#39;: &#39;829.6802172436&#39;, &#39;Prec&#39;: &#39;50.08&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;5&#39;: {&#39;TMax&#39;: &#39;21.6&#39;, &#39;TMin&#39;: &#39;9.6&#39;, &#39;PAR&#39;: &#39;814.6535078721&#39;, &#39;Prec&#39;: &#39;93.63&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;6&#39;: {&#39;TMax&#39;: &#39;26.2&#39;, &#39;TMin&#39;: &#39;14.7&#39;, &#39;PAR&#39;: &#39;722.9276678308&#39;, &#39;Prec&#39;: &#39;160.56&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;7&#39;: {&#39;TMax&#39;: &#39;28.1&#39;, &#39;TMin&#39;: &#39;17.1&#39;, &#39;PAR&#39;: &#39;872.8925973439&#39;, &#39;Prec&#39;: &#39;89.87&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;8&#39;: {&#39;TMax&#39;: &#39;27.4&#39;, &#39;TMin&#39;: &#39;16.4&#39;, &#39;PAR&#39;: &#39;722.1271241014&#39;, &#39;Prec&#39;: &#39;80.46&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;9&#39;: {&#39;TMax&#39;: &#39;23.5&#39;, &#39;TMin&#39;: &#39;12.2&#39;, &#39;PAR&#39;: &#39;538.6992001016&#39;, &#39;Prec&#39;: &#39;101.9&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;10&#39;: {&#39;TMax&#39;: &#39;17&#39;, &#39;TMin&#39;: &#39;6.1&#39;, &#39;PAR&#39;: &#39;398.4617125821&#39;, &#39;Prec&#39;: &#39;92.88&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;11&#39;: {&#39;TMax&#39;: &#39;10.7&#39;, &#39;TMin&#39;: &#39;1.5&#39;, &#39;PAR&#39;: &#39;286.6469988492&#39;, &#39;Prec&#39;: &#39;51.52&#39;, &#39;CO2&#39;: &#39;313.065&#39;}, &#39;12&#39;: {&#39;TMax&#39;: &#39;4.1&#39;, &#39;TMin&#39;: &#39;-3.7&#39;, &#39;PAR&#39;: &#39;256.5194056339&#39;, &#39;Prec&#39;: &#39;18.33&#39;, &#39;CO2&#39;: &#39;313.065&#39;}}}, &#39;disturbance_reductions.txt&#39;: {&#39;LandisData&#39;: &#39;DisturbanceReductions&#39;, &#39;DisturbanceReductions&#39;: {&#39;WoodReduction&#39;: {&#39;fire&#39;: &#39;0.33&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0.70&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;FolReduction&#39;: {&#39;fire&#39;: &#39;1&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;RootReduction&#39;: {&#39;fire&#39;: &#39;0&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;DeadWoodReduction&#39;: {&#39;fire&#39;: &#39;0.7&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0&#39;, &#39;bda&#39;: &#39;0&#39;}, &#39;LitterReduction&#39;: {&#39;fire&#39;: &#39;0.9&#39;, &#39;wind&#39;: &#39;0&#39;, &#39;harvest&#39;: &#39;0.1&#39;, &#39;bda&#39;: &#39;0&#39;}}}, &#39;ecoregion.img&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim_v8/ecoregion.img&#39;, &#39;ecoregion.txt&#39;: {&#39;LandisData&#39;: &#39;Ecoregions&#39;, &#39;eco0&#39;: {&#39;active&#39;: &#39;no&#39;, &#39;Map Code&#39;: &#39;0&#39;, &#39;Description&#39;: &#39;&quot;inactive&quot;&#39;}, &#39;eco1&#39;: {&#39;active&#39;: &#39;yes&#39;, &#39;Map Code&#39;: &#39;1&#39;, &#39;Description&#39;: &#39;&quot;well-drained rocky slopes - SW aspect&quot;&#39;}}, &#39;EcoregionParameters.txt&#39;: {&#39;LandisData&#39;: &#39;EcoregionParameters&#39;, &#39;EcoregionParameters&#39;: {&#39;eco0&#39;: {&#39;RootingDepth&#39;: &#39;1000&#39;, &#39;SoilType&#39;: &#39;SAND&#39;, &#39;LeakageFrac&#39;: &#39;1&#39;, &#39;PrecLossFrac&#39;: &#39;0&#39;, &#39;SnowSublimFrac&#39;: &#39;0.15&#39;, &#39;ClimateFileName&#39;: &#39;climate.txt&#39;}, &#39;eco1&#39;: {&#39;RootingDepth&#39;: &#39;1000&#39;, &#39;SoilType&#39;: &#39;SAND&#39;, &#39;LeakageFrac&#39;: &#39;1&#39;, &#39;PrecLossFrac&#39;: &#39;0&#39;, &#39;SnowSublimFrac&#39;: &#39;0.15&#39;, &#39;ClimateFileName&#39;: &#39;climate.txt&#39;}}}, &#39;initial-communities.csv&#39;:    MapCode SpeciesName  CohortAge  CohortBiomass
+0        1    querrubr         10              0
+1        1    querrubr         20              0
+2        1    querrubr         30              0
+3        1    querrubr         40              0
+4        1    pinubank         40              0
+5        1    pinubank         50              0
+6        1    pinubank         60              0
+7        1    pinubank         70              0, &#39;initial-communities.img&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim_v8/initial-communities.img&#39;, &#39;Landis-log.txt&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim_v8/Landis-log.txt&#39;, &#39;PnETGenericParameters.txt&#39;: {&#39;LandisData&#39;: &#39;PnETGenericParameters&#39;, &#39;PnETGenericParameters&#39;: &#39;Value&#39;, &#39;DTemp&#39;: &#39;true&#39;, &#39;Wythers&#39;: &#39;true&#39;, &#39;PrecipEvents&#39;: &#39;25&#39;, &#39;PrecipEventsWithReplacement&#39;: &#39;false&#39;, &#39;InitialCommunitiesSpinup&#39;: &#39;true&#39;}, &#39;PnEToutputsites_onecell.txt&#39;: {&#39;LandisData&#39;: &#39;PNEToutputsites&#39;, &#39;PNEToutputsites&#39;: &#39;Row Column&#39;, &#39;Site1&#39;: &#39;9 9&#39;}, &#39;pnetsuccession.txt&#39;: {&#39;LandisData&#39;: &#39;&quot;PnET-Succession&quot;&#39;, &#39;PnET-Succession&#39;: &#39;Value&#39;, &#39;Timestep&#39;: &#39;10&#39;, &#39;StartYear&#39;: &#39;2000&#39;, &#39;SeedingAlgorithm&#39;: &#39;WardSeedDispersal&#39;, &#39;Latitude&#39;: &#39;42&#39;, &#39;PNEToutputsites&#39;: &#39;PnEToutputsites_onecell.txt&#39;, &#39;InitialCommunities&#39;: &#39;initial-communities.csv&#39;, &#39;InitialCommunitiesMap&#39;: &#39;initial-communities.img&#39;, &#39;PnETSpeciesParameters&#39;: &#39;SpeciesParameters.txt&#39;, &#39;EcoregionParameters&#39;: &#39;EcoregionParameters.txt&#39;, &#39;PnETGenericParameters&#39;: &#39;PnETGenericParameters.txt&#39;, &#39;DisturbanceReductions&#39;: &#39;disturbance_reductions.txt&#39;}, &#39;README.txt&#39;: &#39;./SimulationFiles/PnETGitHub_OneCellSim_v8/README.txt&#39;, &#39;scenario.txt&#39;: {&#39;LandisData&#39;: &#39;Scenario&#39;, &#39;Duration&#39;: &#39;50&#39;, &#39;Species&#39;: &#39;species.txt&#39;, &#39;Ecoregions&#39;: &#39;ecoregion.txt&#39;, &#39;EcoregionsMap&#39;: &#39;ecoregion.img&#39;, &#39;CellLength&#39;: &#39;30&#39;, &#39;&quot;PnET-Succession&quot;&#39;: &#39;pnetsuccession.txt&#39;, &#39;&quot;Output-PnET&quot;&#39;: &#39;biomass.outputPnET.txt&#39;, &#39;RandomNumberSeed&#39;: &#39;1111&#39;}, &#39;species.txt&#39;: {&#39;LandisData&#39;: &#39;Species&#39;, &#39;querrubr&#39;: {&#39;Longevity&#39;: &#39;100&#39;, &#39;Sexual Maturity&#39;: &#39;50&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;30&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;3000&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0.9&#39;, &#39;Sprout Age - Min&#39;: &#39;20&#39;, &#39;Sprout Age - Max&#39;: &#39;100&#39;, &#39;Post Fire Regen&#39;: &#39;resprout&#39;}, &#39;pinubank&#39;: {&#39;Longevity&#39;: &#39;100&#39;, &#39;Sexual Maturity&#39;: &#39;15&#39;, &#39;Seed Dispersal Distance - Effective&#39;: &#39;20&#39;, &#39;Seed Dispersal Distance - Maximum&#39;: &#39;100&#39;, &#39;Vegetative Reproduction Probability&#39;: &#39;0&#39;, &#39;Sprout Age - Min&#39;: &#39;0&#39;, &#39;Sprout Age - Max&#39;: &#39;0&#39;, &#39;Post Fire Regen&#39;: &#39;serotiny&#39;}}, &#39;SpeciesParameters.txt&#39;: {&#39;LandisData&#39;: &#39;PnETSpeciesParameters&#39;, &#39;PnETSpeciesParameters&#39;: {&#39;querrubr&#39;: {&#39;FolN&#39;: &#39;2.8&#39;, &#39;SLWmax&#39;: &#39;75&#39;, &#39;SLWDel&#39;: &#39;0.2&#39;, &#39;TOfol&#39;: &#39;1&#39;, &#39;AmaxA&#39;: &#39;-46&#39;, &#39;AmaxB&#39;: &#39;71.9&#39;, &#39;HalfSat&#39;: &#39;437&#39;, &#39;H3&#39;: &#39;131&#39;, &#39;H4&#39;: &#39;380&#39;, &#39;PsnTMin&#39;: &#39;2&#39;, &#39;PsnTOpt&#39;: &#39;24&#39;, &#39;PsnTMax&#39;: &#39;40&#39;, &#39;k&#39;: &#39;0.58&#39;, &#39;FracBelowG&#39;: &#39;0.33&#39;, &#39;FracFol&#39;: &#39;0.035&#39;, &#39;FrActWd&#39;: &#39;0.00004&#39;}, &#39;pinubank&#39;: {&#39;FolN&#39;: &#39;2.6&#39;, &#39;SLWmax&#39;: &#39;180&#39;, &#39;SLWDel&#39;: &#39;0.2&#39;, &#39;TOfol&#39;: &#39;0.35&#39;, &#39;AmaxA&#39;: &#39;-46&#39;, &#39;AmaxB&#39;: &#39;71.9&#39;, &#39;HalfSat&#39;: &#39;437&#39;, &#39;H3&#39;: &#39;131&#39;, &#39;H4&#39;: &#39;380&#39;, &#39;PsnTMin&#39;: &#39;4&#39;, &#39;PsnTOpt&#39;: &#39;24&#39;, &#39;PsnTMax&#39;: &#39;40&#39;, &#39;k&#39;: &#39;0.5&#39;, &#39;FracBelowG&#39;: &#39;0.25&#39;, &#39;FracFol&#39;: &#39;0.035&#39;, &#39;FrActWd&#39;: &#39;0.00004&#39;}}}}
 </pre></div>
 </div>
 </div>
@@ -493,8 +502,9 @@ Found : Disturbance Reduction File : disturbance_reductions.txt
 Found : Additional file : ecoregion.img
 Found : Main ecoregions file : ecoregion.txt
 Found : PnET Ecoregion parameter file : EcoregionParameters.txt
+Found : dataframe : initial-communities.csv, exporting to .csv
 Found : Additional file : initial-communities.img
-Found : Initial Communities file : initial-communities.txt
+Found : Additional file : Landis-log.txt
 Found : PnET generic parameter file : PnETGenericParameters.txt
 Found : PnET OutputSites parameter file : PnEToutputsites_onecell.txt
 Found : Main PnET parameter file : pnetsuccession.txt
@@ -519,44 +529,33 @@ Found : PnET species parameters file : SpeciesParameters.txt
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Launching LANDIS-II simulation with command : /bin/bash -c &quot;cd /tmp/TestScenarioPnET/ &amp;&amp; dotnet $LANDIS_CONSOLE scenario.txt&quot;
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LANDIS-II 7.0 (7)
+?1h<span class="err"></span>=LANDIS-II 8.0 (8)
 
 Loading scenario from file &quot;scenario.txt&quot; ...
 Initialized random number generator with user-supplied seed = 1,111
 Loading species data from file &quot;species.txt&quot; ...
 Loading ecoregions from file &quot;ecoregion.txt&quot; ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Initializing landscape from ecoregions map &quot;ecoregion.img&quot; ...
+Core metadata:
+
+Initializing landscape from ecoregions map &quot;ecoregion.img&quot; ...
 Cell length = 30 m, cell area = 0.09 ha
 Map dimensions: 17 rows by 17 columns = 289 cells
 Sites: 1 active (0.3 %), 288 inactive (99.7 %)
   reading in ecoregion from ecoregion.img 
 Loading PnET-Succession extension ...
-Initializing PnET-Succession version 5.1.0.0
+Initializing PnET-Succession version 6.0.3.0
    Registering Data:  Succession.WoodyDebris.
-   Registering Data:  Succession.PressureHead.
    Registering Data:  Succession.SoilFieldCapacity.
-  MaxParallelThreads = 1.
   No ClimateConfigFile provided. Using climate files in ecoregion parameters: EcoregionParameters.txt.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eco	Soiltype	WiltPnt		FieldCap	FC-WP		Porosity
-eco1	SAND		0.03999865	0.09784552	0.05784687	0.454455
+Eco	Soiltype	WiltPnt		FieldCap	FC-WP		Porosity
+eco1	SAND		0.039998654	0.097845525	0.05784687	0.45445505
 Using PAR units of umol/m2/s.
    Registering Data:  Shade.
-   Creating Dispersal Neighborhood List.
    Dispersal:  NeighborRadius=3015, CellLength=30, numCellRadius=100
 Spinning up biomass or reading from maps...
-   Loading initial communities from file &quot;initial-communities.txt&quot; ...
+   Loading initial communities from file &quot;initial-communities.csv&quot; ...
    Reading initial communities map &quot;initial-communities.img&quot; ...
 	Progress = 100% Elapsed time 0s EstimatedTotalTime 0s
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>	Progress = 100% Elapsed time 0s EstimatedTotalTime 0s   Registering Data:  Succession.BiomassCohorts.
-   Registering Data:  Succession.AgeCohorts.
    Registering Data:  Succession.CohortsPnET.
 Loading Output-PnET extension ...
    Generating summary table...
@@ -600,9 +599,7 @@ dataset created: output/WoodySenescence/querrubr/WoodySenescence-0.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-0.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-0.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-0.img
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updating output variable: Foliage Senescence
+Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-0.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-0.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-0.img ...
@@ -673,7 +670,6 @@ dataset created: output/Water/Water-0.img
 Updating output variable: SubCanopyPAR
 dataset created: output/SubCanopyPAR/SubCanopyPAR-0.img
 Updating output variable: WoodyDebris
-dataset created: output/WoodyDebris/WoodyDebris-0.img
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-0.img
 Updating output variable: overalloutputs
@@ -681,29 +677,27 @@ Updating output variable: establishmentTable
 Updating output variable: MortalityTable
 Running PnET-Succession ...
 growing cohorts ...
-          |----|----|----|----|----|----|----|----|----|----|
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
 Progress: 
 Progress: +
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
 Progress: +
+Progress: ++++++++
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
 Progress: +
-Progress: ++++++++++++++++++++++++++++++++++++++
-Running Output-PnET ...
+Updating output variable: LAI
 Updating output variable: LAI
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img
 dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-10.img
-Updating output variable: WoodBiomass
    Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-10.img ...
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-10.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-10.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-10.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-10.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-10.img
-Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-10.img ...
 dataset created: output/RootBiomass/querrubr/RootBiomass-10.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-10.img ...
@@ -723,7 +717,6 @@ dataset created: output/NSC/pinubank/NSC-10.img
 dataset created: output/NSC/AllSpecies/NSC-10.img
 Updating output variable: PET
 dataset created: output/PET//PET-10.img
-Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-10.img ...
 dataset created: output/WoodySenescence/querrubr/WoodySenescence-10.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-10.img ...
@@ -796,7 +789,6 @@ dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbabili
 Updating output variable: SpeciesEstablishment
    Writing querrubr map to output/Establishment/querrubr/Establishment-10.img ...
 dataset created: output/Establishment/querrubr/Establishment-10.img
-dataset created: output/Establishment/querrubr/Establishment-10.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-10.img ...
 dataset created: output/Establishment/pinubank/Establishment-10.img
 Updating output variable: AnnualPsn
@@ -806,25 +798,17 @@ dataset created: output/Water/Water-10.img
 Updating output variable: SubCanopyPAR
 dataset created: output/SubCanopyPAR/SubCanopyPAR-10.img
 Updating output variable: WoodyDebris
-dataset created: output/WoodyDebris/WoodyDebris-10.img
 Updating output variable: AgeDistribution
-dataset created: output/AgeDistribution//AgeDistribution-10.img
 Updating output variable: overalloutputs
-Updating output variable: establishmentTable
 Updating output variable: MortalityTable
-Current time: 20
+Running PnET-Succession ...
 Progress: +
-Progress: ++
-Progress: +
-Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
-Running Output-PnET ...
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++
 Updating output variable: LAI
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img
-dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-20.img
-Updating output variable: WoodBiomass
    Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-20.img ...
 dataset created: output/WoodBiomass/querrubr/WoodBiomass-20.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-20.img ...
@@ -835,18 +819,16 @@ Updating output variable: Root Biomass
 dataset created: output/RootBiomass/querrubr/RootBiomass-20.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-20.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-20.img
-dataset created: output/RootBiomass/AllSpecies/RootBiomass-20.img
+Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-20.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-20.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-20.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-20.img
-dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-20.img
 Updating output variable: NSC
    Writing querrubr map to output/NSC/querrubr/NSC-20.img ...
 dataset created: output/NSC/querrubr/NSC-20.img
    Writing pinubank map to output/NSC/pinubank/NSC-20.img ...
 dataset created: output/NSC/pinubank/NSC-20.img
-dataset created: output/NSC/AllSpecies/NSC-20.img
 Updating output variable: PET
 dataset created: output/PET//PET-20.img
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-20.img ...
@@ -854,7 +836,6 @@ dataset created: output/WoodySenescence/querrubr/WoodySenescence-20.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-20.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-20.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-20.img
-Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-20.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-20.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-20.img ...
@@ -909,9 +890,8 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20aug.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20sep.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20oct.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20nov.img
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updating output variable: CohortsPerSpc
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20dec.img
+Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-20.img
 dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-20.img
 Updating output variable: EstablishmentProbability
@@ -937,10 +917,9 @@ dataset created: output/AgeDistribution//AgeDistribution-20.img
 Updating output variable: overalloutputs
 Updating output variable: establishmentTable
 Updating output variable: MortalityTable
-Running PnET-Succession ...
+Current time: 30
 Progress: +
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: +++++++++++++++++
 Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
 Updating output variable: LAI
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img ...
@@ -954,13 +933,11 @@ dataset created: output/WoodBiomass/querrubr/WoodBiomass-30.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-30.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-30.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-30.img
-Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-30.img ...
 dataset created: output/RootBiomass/querrubr/RootBiomass-30.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-30.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-30.img
 dataset created: output/RootBiomass/AllSpecies/RootBiomass-30.img
-Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-30.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-30.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-30.img ...
@@ -968,18 +945,16 @@ dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-30.img
 dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-30.img
 Updating output variable: NSC
    Writing querrubr map to output/NSC/querrubr/NSC-30.img ...
-dataset created: output/NSC/querrubr/NSC-30.img
    Writing pinubank map to output/NSC/pinubank/NSC-30.img ...
 dataset created: output/NSC/pinubank/NSC-30.img
-dataset created: output/NSC/AllSpecies/NSC-30.img
 Updating output variable: PET
 dataset created: output/PET//PET-30.img
+Updating output variable: Woody Senescence
    Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-30.img ...
 dataset created: output/WoodySenescence/querrubr/WoodySenescence-30.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-30.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-30.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-30.img
-Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-30.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-30.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-30.img ...
@@ -1034,7 +1009,6 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30aug.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30sep.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30oct.img
 dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30nov.img
-dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30dec.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-30.img
 dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-30.img
@@ -1057,15 +1031,12 @@ dataset created: output/WoodyDebris/WoodyDebris-30.img
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-30.img
 Updating output variable: overalloutputs
-Updating output variable: establishmentTable
 Updating output variable: MortalityTable
-Current time: 40
 Progress: +
-Progress: ++++++++++++++++++++++++++++++++++++++++++
+Progress: +
 Updating output variable: LAI
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img ...
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img
 dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-40.img
@@ -1081,6 +1052,7 @@ dataset created: output/RootBiomass/querrubr/RootBiomass-40.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-40.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-40.img
 dataset created: output/RootBiomass/AllSpecies/RootBiomass-40.img
+Updating output variable: FoliageBiomass
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-40.img ...
 dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-40.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-40.img ...
@@ -1159,6 +1131,7 @@ dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40dec.img
 Updating output variable: CohortsPerSpc
 dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-40.img
 dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-40.img
+Updating output variable: EstablishmentProbability
    Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img ...
 dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img
    Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img ...
@@ -1166,46 +1139,36 @@ dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbabili
    Writing querrubr map to output/Establishment/querrubr/Establishment-40.img ...
 dataset created: output/Establishment/querrubr/Establishment-40.img
    Writing pinubank map to output/Establishment/pinubank/Establishment-40.img ...
-dataset created: output/Establishment/pinubank/Establishment-40.img
 Updating output variable: AnnualPsn
-dataset created: output/AnnualPsn//AnnualPsn-40.img
 Updating output variable: Water
 dataset created: output/Water/Water-40.img
 Updating output variable: SubCanopyPAR
 dataset created: output/SubCanopyPAR/SubCanopyPAR-40.img
 Updating output variable: WoodyDebris
-dataset created: output/WoodyDebris/WoodyDebris-40.img
 Updating output variable: AgeDistribution
-dataset created: output/AgeDistribution//AgeDistribution-40.img
 Updating output variable: overalloutputs
-Updating output variable: establishmentTable
 Updating output variable: MortalityTable
+Current time: 50
 Progress: +
-Progress: +
-Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
-Updating output variable: LAI
+Progress: ++++++++++++++++++++++
    Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img ...
 dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img
    Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img ...
 dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img
 dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-50.img
-Updating output variable: WoodBiomass
    Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-50.img ...
 dataset created: output/WoodBiomass/querrubr/WoodBiomass-50.img
    Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-50.img ...
 dataset created: output/WoodBiomass/pinubank/WoodBiomass-50.img
 dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-50.img
-Updating output variable: Root Biomass
    Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-50.img ...
 dataset created: output/RootBiomass/querrubr/RootBiomass-50.img
    Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-50.img ...
 dataset created: output/RootBiomass/pinubank/RootBiomass-50.img
-dataset created: output/RootBiomass/AllSpecies/RootBiomass-50.img
    Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-50.img ...
-dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-50.img
    Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-50.img ...
 dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-50.img
-dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-50.img
+Updating output variable: NSC
    Writing querrubr map to output/NSC/querrubr/NSC-50.img ...
 dataset created: output/NSC/querrubr/NSC-50.img
    Writing pinubank map to output/NSC/pinubank/NSC-50.img ...
@@ -1218,7 +1181,6 @@ dataset created: output/WoodySenescence/querrubr/WoodySenescence-50.img
    Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-50.img ...
 dataset created: output/WoodySenescence/pinubank/WoodySenescence-50.img
 dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-50.img
-Updating output variable: Foliage Senescence
    Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-50.img ...
 dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-50.img
    Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-50.img ...
@@ -1293,16 +1255,13 @@ dataset created: output/Water/Water-50.img
 Updating output variable: SubCanopyPAR
 dataset created: output/SubCanopyPAR/SubCanopyPAR-50.img
 Updating output variable: WoodyDebris
-Updating output variable: AgeDistribution
+dataset created: output/WoodyDebris/WoodyDebris-50.img
 Updating output variable: AgeDistribution
 dataset created: output/AgeDistribution//AgeDistribution-50.img
 Updating output variable: overalloutputs
-Updating output variable: establishmentTable
 Updating output variable: MortalityTable
 Model run is complete.
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The LANDIS-II simulation has finished properly !
+The LANDIS-II simulation has finished properly!
 </pre></div>
 </div>
 </div>

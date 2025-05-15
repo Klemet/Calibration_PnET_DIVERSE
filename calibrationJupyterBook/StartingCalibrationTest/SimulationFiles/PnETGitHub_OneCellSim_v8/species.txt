@@ -1,0 +1,7 @@
+LandisData	Species									
+										
+>>                      Sexual  Seed Disperal Dist  Vegetative   Sprout Age  Post-Fire
+>> Name      Longevity  Maturity  Effective  Maximum  Reprod Prob  Min   Max   Regen
+>> ----      ---------  --------  ---------  -------  -----------  ----------  --------
+querrubr	 100	50	30	3000	0.9	20	100	resprout
+pinubank	100	15	20	100	0	0	0	serotiny

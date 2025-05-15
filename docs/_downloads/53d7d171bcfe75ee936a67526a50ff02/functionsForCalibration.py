@@ -56,7 +56,11 @@ from tqdm import tqdm
 import matplotlib.dates as mdates
 from matplotlib.colors import to_rgba
 from matplotlib.gridspec import GridSpec
-
+from rasterio.windows import Window
+from scipy.spatial.distance import cdist
+from siphon.catalog import TDSCatalog
+from clisops.core import subset
+import warnings
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -223,11 +227,10 @@ def parse_LANDIS_SpeciesCoreFile(file_path):
     """
     
     # Define the keys for the nested dictionary
+    # Edited for v8 to remove shade tolerance and fire tolerance
     keys = [
         "Longevity",
         "Sexual Maturity",
-        "Shade Tolerance",
-        "Fire Tolerance",
         "Seed Dispersal Distance - Effective",
         "Seed Dispersal Distance - Maximum",
         "Vegetative Reproduction Probability",
@@ -492,7 +495,7 @@ def parse_All_LANDIS_PnET_Files(folder_path):
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
         # Check if the file has a .txt extension
-        if filename.endswith('.txt'):
+        if filename.endswith('.txt') or filename.endswith('.csv'):
             with open(file_path, 'r') as file:
                 content = file.read()
                 # We make a version of the list of lines with the words separated
@@ -519,9 +522,11 @@ def parse_All_LANDIS_PnET_Files(folder_path):
                     results[filename] = parse_ecoregions_file(file_path)
 
                 # Initial Communities file
-                elif ["LandisData", "Initial Communities"] in content_separated or ["LandisData", '"Initial Communities"'] in content_separated or ["LandisData", "Initial", "Communities"] in content_separated or ['LandisData', '"Initial', 'Communities"'] in content_separated:
+                # We add the detection of the .csv file header/columns
+                elif ["LandisData", "Initial Communities"] in content_separated or ["LandisData", '"Initial Communities"'] in content_separated or ["LandisData", "Initial", "Communities"] in content_separated or ['LandisData', '"Initial', 'Communities"'] in content_separated or ["MapCode,SpeciesName,CohortAge,CohortBiomass"] in content_separated:
                     print("Found : Initial Communities file : " + str(filename))
-                    results[filename] = parse_LANDIS_SimpleParameterFile(file_path)
+                    # Now that initial communities are a .csv file, we can load this file in a panda dataframe for easy editing
+                    results[filename] = pd.read_csv(file_path)
 
                 # Climate data file
                 elif ["Year", "Month", "TMax", "TMin", "PAR", "Prec", "CO2"] in content_separated:
@@ -911,6 +916,7 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True):
                     write_LANDIS_MainEcoregionsFile(outputFolder + "ecoregion.txt", dataDict[filename])
         
                 # Initial Communities file
+                # Dealing with the .csv file is out of it if statement, see below
                 elif dataDict[filename]["LandisData"] == "Initial Communities" or dataDict[filename]["LandisData"] == '"Initial Communities"':
                     print("Found : Initial Communities file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
@@ -959,7 +965,11 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True):
                     
                 else:
                     print("WARNING : file type not recognized for the following dictionnary :" + str(dataDict[filename]))
-        
+
+        elif "DataFrame" in str(type(dataDict[filename])): # Dealing with dataframe (often loaded from .csv files) to output them back as .csv
+                print("Found : dataframe : " + str(filename) + ", exporting to .csv")
+                dataDict[filename].to_csv(outputFolder + str(filename), index=False)
+            
         # If it's not a parameter file, we record its path
         # Can be used to copy/paste any other file
         else:
@@ -1024,6 +1034,8 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, t
         
         # Read output until EOF or timeout
         output = ""
+        foundError = False
+        
         # print("Entering while loop")
         while True:
             try:
@@ -1035,13 +1047,20 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, t
                 print("Timeout occurred while waiting for LANDIS-II output.")
                 break  # Exit loop on timeout
             except pexpect.EOF:
-                print("The LANDIS-II simulation has finished properly !")
+                # Check the exit status
+                child.close()
+                if child.exitstatus != 0 or foundError:
+                    print("The LANDIS-II simulation seem to have encountered an error; please check the landis log file for more details.")
+                else:
+                    print("The LANDIS-II simulation has finished properly!")
                 break
         
             # Prints the last line
             if printSim:
-                print(output.splitlines()[-1])
-
+                chunkText = output.splitlines()[-1]
+                print(chunkText)
+                if "ERROR" in chunkText.upper() or "EXCEPTION" in chunkText.upper() or "FAILED" in chunkText.upper():
+                    foundError = True
 
     
     except Exception as e:
@@ -1386,7 +1405,7 @@ def plot_TimeSeries_RasterPnETOutputs(data_dict, outputs_unit_dict, timestep, si
 #                 int(PnETGitHub_OneCellSim["scenario.txt"]["Duration"]))
 
 
-def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference - FVS"):
+def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference - FVS", labelOfFirstCurve = ""):
     """
     Plots the outputs made by the extension PnET Sites output and read
     by the function parse_CSVFiles_PnET_SitesOutput as Matplotlib plots.
@@ -1420,6 +1439,8 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
     referenceLabel: String, optional
         Labels the reference curve. If referenceDict is a list with several reference curves,
         then referenceLabel must be a list too.
+    labelOfFirstCurve: String, optional
+        Label of the first curve (made with data from object df). If left empty, then the name of the variable given in columnToPlotSelector is used.
 
     Returns
     -------
@@ -1449,17 +1470,22 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
             columnName = column[:-5] + " (Mg or Metric tons)"
         else:
             columnData = df[column]
-        
+
+        # We prepare the label of the first curve if it is given
+        if labelOfFirstCurve == "":
+            labelFirstCurve = "PnET Succession - " + str(column)
+        else:
+            labelFirstCurve = labelOfFirstCurve
         
         if trueTime:
-            plt.plot(df['Time'], columnData, label = "PnET Succession - " + str(column))
+            plt.plot(df['Time'], columnData, label = labelFirstCurve)
         else: #We edit the time to remove the years (e.g. 2000, 2001, etc.) and just use 0 as starting year. Makes things easier for the reference curve.
             timeNormalized = df['Time'] - min(df['Time'])
-            plt.plot(timeNormalized, columnData, label = "PnET Succession - " + str(column))
+            plt.plot(timeNormalized, columnData, label = labelFirstCurve)
             
         # If reference curve exists for the variable, we display it on the curve
 
-        # If we gave a list of dictionnary, we'll display them
+        # If we gave a list or dictionnary, we'll display them
         if type(referenceDict) is list:
             if type(referenceLabel) is not list or (type(referenceLabel) is list and len(referenceDict) != len (referenceLabel)):
                 raise Exception("If referenceDict contains a list of curves, then referenceLabel must contain a list of label of the same size") 
@@ -2633,7 +2659,7 @@ def plot_climateVariable_time_series_with_moving_average(variable_dict, dates_ti
         plt.tight_layout()
         return plt
 
-def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict, dates_time, window_years=20):
+def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict, dates_time, window_years=20, highlightModel = ""):
     """
     Plot time series with a moving average for precipitation, max temperature, and min temperature.
     Compute the median for each variable and highlight the model closest to the median across all variables.
@@ -2761,12 +2787,20 @@ def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict
                           alpha=0.8, linewidth=2)
     closest_line, = ax1.plot(df_precip_avg.index, df_precip_avg[closest_model], color='red', 
                            alpha=1.0, linewidth=3)
+    if highlightModel != "":
+        highlighted_line = ax1.plot(df_precip_avg.index, df_precip_avg[highlightModel], color='yellow', 
+                             alpha=1.0, linewidth=3)
+        
 
     # Add median and closest model to the legend collection
     all_lines.append(median_line)
     all_labels.append('Median')
     all_lines.append(closest_line)
     all_labels.append(f'{closest_model} (Best Overall)')
+    if highlightModel != "":
+        all_lines.append(highlighted_line)
+        all_labels.append(f'{highlightModel} (Highlighted)')
+    
 
     ax1.set_title(f'Precipitation ({window_years}-Year Moving Average)')
     ax1.set_ylabel('Precipitation')
@@ -2785,6 +2819,9 @@ def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict
              alpha=0.8, linewidth=2)
     ax2.plot(df_tmax_avg.index, df_tmax_avg[closest_model], color='red', 
              alpha=1.0, linewidth=3)
+    if highlightModel != "":
+        ax2.plot(df_tmax_avg.index, df_tmax_avg[highlightModel], color='yellow', 
+             alpha=1.0, linewidth=3)
 
     ax2.set_title(f'Maximum Temperature ({window_years}-Year Moving Average)')
     ax2.set_ylabel('Maximum Temperature')
@@ -2802,6 +2839,9 @@ def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict
     ax3.plot(df_tmin_avg.index, df_tmin_avg['median'], color='black', 
              alpha=0.8, linewidth=2)
     ax3.plot(df_tmin_avg.index, df_tmin_avg[closest_model], color='red', 
+             alpha=1.0, linewidth=3)
+    if highlightModel != "":
+        ax3.plot(df_tmin_avg.index, df_tmin_avg[highlightModel], color='yellow', 
              alpha=1.0, linewidth=3)
 
     ax3.set_title(f'Minimum Temperature ({window_years}-Year Moving Average)')
@@ -2830,3 +2870,561 @@ def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict
     plt.tight_layout(rect=[0, 0, 0.8, 0.97])  # Adjust layout but leave space for legend and title
 
     return fig, closest_model, combined_scores
+
+def save_average_raster(output_path, average_array, metadata):
+    """
+    Save the average array as a new raster.
+
+    Args:
+        output_path: Path where to save the output raster
+        average_array: Numpy array containing the average values
+        metadata: Metadata for the output raster
+    """
+    # Update metadata for the output file
+    metadata.update({
+        'dtype': 'float32',
+        'driver': 'GTiff',
+    })
+
+    with rasterio.open(output_path, 'w', **metadata) as dst:
+        # Write all bands
+        if average_array.ndim == 3:
+            for i in range(average_array.shape[0]):
+                dst.write(average_array[i].astype(np.float32), i+1)
+        else:
+            dst.write(average_array.astype(np.float32), 1)
+
+# Used to average soil textures rasters
+
+def calculate_raster_average(raster_paths, weights=None):
+    """
+    Calculate the weighted average of multiple rasters with the same dimensions,
+    given as a list of paths to the rasters and corresponding weights.
+
+    Args:
+        raster_paths: List of paths to .tif raster files
+        weights: List of weights corresponding to each raster. If None, equal weights are used.
+
+    Returns:
+        tuple: (weighted_average_array, metadata) where weighted_average_array is a numpy array
+               containing the weighted average values and metadata is from the first raster
+    """
+    if not raster_paths:
+        raise ValueError("No raster paths provided")
+
+    # Set default weights if none provided
+    if weights is None:
+        weights = np.ones(len(raster_paths))
+
+    # Validate weights
+    if len(weights) != len(raster_paths):
+        raise ValueError("Number of weights must match number of rasters")
+
+    # Convert weights to numpy array
+    weights = np.array(weights, dtype=np.float64)
+
+    # Open the first raster to get metadata and initialize the sum arrays
+    with rasterio.open(raster_paths[0]) as src:
+        # Get metadata from the first raster
+        metadata = src.meta.copy()
+        # Read all bands
+        first_raster = src.read()
+        # Initialize sum array with zeros of the same shape
+        weighted_sum_array = np.zeros_like(first_raster, dtype=np.float64)
+        # Add the first raster to the weighted sum
+        weighted_sum_array += first_raster * weights[0]
+
+    # Process the remaining rasters
+    for i, path in enumerate(raster_paths[1:], 1):
+        with rasterio.open(path) as src:
+            # Check dimensions match
+            if src.shape != (metadata['height'], metadata['width']):
+                raise ValueError(f"Raster {path} has different dimensions than the first raster")
+            # Add to the weighted sum
+            weighted_sum_array += src.read() * weights[i]
+
+    # Calculate the weighted average
+    weights_sum = np.sum(weights)
+    if weights_sum == 0:
+        raise ValueError("Sum of weights cannot be zero")
+
+    weighted_average_array = weighted_sum_array / weights_sum
+
+    return weighted_average_array, metadata
+
+
+# Takes the path to two averaged sand and clay % rasters, 
+# and generates a re-classified raster with codes corresponding to
+# the 12 soils types from the SaxtonAndRawls default parameters in PnET Succession
+# using the euclidian distance in the dimension of % of sand and % of clay for each cell
+# and the soil types
+def classify_soil_types_chunked(sand_path, clay_path, output_path, chunk_size=1024):
+    """
+    Classify soil types based on sand, clay, and silt percentages using a chunked approach.
+
+    Parameters:
+    -----------
+    sand_path : str
+        Path to the .tif file containing sand percentage values
+    clay_path : str
+        Path to the .tif file containing clay percentage values
+    silt_path : str
+        Path to the .tif file containing silt percentage values
+    output_path : str
+        Path to save the output classification .tif file
+    chunk_size : int
+        Size of chunks to process at once (default: 1024)
+    """
+    # Define soil types with their sand and clay percentages
+    # Comes from the Saxton and Rawls default parameter file of
+    # PnET Succession 5.1, in C:\Program Files\LANDIS-II-v7\extensions\Defaults\SaxtonAndRawlsParameters.txt
+    soil_types = {
+        "SAND": (0.85, 0.04),
+        "LOSA": (0.80, 0.05),
+        "SALO": (0.63, 0.10),
+        "LOAM": (0.41, 0.19),
+        "SILO": (0.15, 0.18),
+        "SILT": (0.05, 0.10),
+        "SNCL": (0.53, 0.26),
+        "CLLO": (0.29, 0.32),
+        "SLCL": (0.09, 0.32),
+        "SACL": (0.50, 0.40),
+        "SICL": (0.08, 0.47),
+        "CLAY": (0.13, 0.55),
+        "BEDR": (0.10, 0.10)
+    }
+
+    # Convert soil types to a numpy array for efficient distance calculation
+    soil_types_array = np.array(list(soil_types.values()))
+    soil_type_names = list(soil_types.keys())
+
+    # Open all input files
+    print("Opening all files")
+    with rasterio.open(sand_path) as sand_src, \
+         rasterio.open(clay_path) as clay_src:
+
+        # Get dimensions and profile from sand raster
+        height = sand_src.height
+        width = sand_src.width
+        profile = sand_src.profile
+
+        # Update profile for output
+        profile.update(
+            dtype=rasterio.uint8,
+            count=1,
+            nodata=0
+        )
+
+        # Create output file
+        print("Creating output")
+        with rasterio.open(output_path, 'w', **profile) as dst:
+            # Process the raster in chunks
+            for row in range(0, height, chunk_size):
+                row_end = min(row + chunk_size, height)
+                chunk_height = row_end - row
+
+                for col in range(0, width, chunk_size):
+                    col_end = min(col + chunk_size, width)
+                    chunk_width = col_end - col
+
+                    # Define the window for the current chunk
+                    window = Window(col, row, chunk_width, chunk_height)
+
+                    # print("reading data for current chunk")
+                    # Read data for the current window
+                    sand_chunk = sand_src.read(1, window=window)
+                    clay_chunk = clay_src.read(1, window=window)
+
+                    # Create a mask for valid data
+                    valid_mask = ~(np.isnan(sand_chunk) | np.isnan(clay_chunk) )
+
+                    # Initialize output chunk with zeros
+                    soil_classification_chunk = np.zeros_like(sand_chunk, dtype=np.uint8)
+
+                    # Process only valid cells in the chunk
+                    if np.any(valid_mask):
+                        # Get valid cell coordinates
+                        valid_indices = np.where(valid_mask)
+
+                        
+                        # Stack sand and clay percentages for valid cells
+                        # We divide by 100 as the values in the raster are in %,
+                        # but the values in the soil matrix from saxton and rawls parameters
+                        # are in decimals
+                        soil_composition = np.vstack((
+                            sand_chunk[valid_indices]/100,
+                            clay_chunk[valid_indices]/100
+                        )).T
+                        # print("Soil composition object :")
+                        # print(soil_composition)
+
+                        # Calculate distances and find closest soil type
+                        distances = cdist(soil_composition, soil_types_array)
+                        # print("Distances object :")
+                        # print(distances)
+                        # The +1 here is because the function returns the index of
+                        # the soil texture from the data matrix that is closest to 
+                        # the given cell. However, indexes go from 0 to 11 (as there
+                        # are 12 soils textures), but the script creates codes ranging
+                        # from 1 to 12 to put in the raster. Hence th + 1.
+                        # It's also because 0 is often the nodata value in rasters.
+                        closest_soil_indices = np.argmin(distances, axis=1) + 1
+                        # print("Closets soil indices object :")
+                        # print(closest_soil_indices)
+
+                        # Assign soil type indices to output chunk
+                        soil_classification_chunk[valid_indices] = closest_soil_indices
+                        
+                        # input("Press Enter to continue...")
+
+                    # Write the chunk to the output file
+                    dst.write(soil_classification_chunk, 1, window=window)
+
+                    # print(f"Processed chunk: Row {row}-{row_end}, Col {col}-{col_end}")
+
+    # Print soil type codes for reference
+    print("\nSoil Type Codes:")
+    for i, soil_type in enumerate(soil_type_names, 1):
+        print(f"{i}: {soil_type}")
+
+    print(f"\nClassification complete. Output saved to: {output_path}")
+
+def safe_convert_to_datetime(t):
+    # Check if date is within pandas' supported range
+    try:
+        # Create a datetime object directly
+        if hasattr(t, 'year') and hasattr(t, 'month') and hasattr(t, 'day'):
+            dt = datetime(t.year, t.month, t.day, 
+                          getattr(t, 'hour', 0), 
+                          getattr(t, 'minute', 0), 
+                          getattr(t, 'second', 0))
+
+            # Check if within pandas supported range (roughly)
+            if dt.year < 1678 or dt.year > 2261:
+                # For dates outside pandas range, return the datetime object
+                # but note these won't work with pandas time operations
+                return dt
+            else:
+                return pd.Timestamp(dt)
+        else:
+            # Fallback for other types
+            return pd.Timestamp(str(t))
+    except (ValueError, TypeError, OverflowError):
+        # If conversion fails, return the original object
+        # You might want to handle this differently based on your needs
+        print(f"Warning: Could not convert {t} to datetime")
+        return t
+
+import suncalc
+from datetime import datetime, timedelta
+import pytz
+
+def daylight_hour_average(rsds_24h_avg, latitude, longitude, year, month, day):
+    """
+    Converts a 24-hour average rsds (W/m² or other unit) to a daylight-hour average.
+
+    Args:
+        swd_24h_avg (float): 24-hour average SWD (W/m² or other unit of input)
+        latitude (float): Latitude in degrees
+        longitude (float): Longitude in degrees
+        year (int): Year (e.g., 2025)
+        month (int): Month (1-12)
+        day (int): Day (1-31)
+
+    Returns:
+        float: Daylight-hour average SWD (W/m²)
+    """
+    # Create a date object (local time, converted to UTC for suncalc)
+    date_local = datetime(year, month, day)
+    timezone = pytz.timezone('UTC')  # Adjust to your local timezone if needed
+    date_utc = timezone.localize(date_local)
+
+    # Get sunrise and sunset times
+    times = suncalc.get_times(date_utc, longitude, latitude)
+    sunrise = times['sunrise']
+    sunset = times['sunset']
+
+    # Handle polar day/night edge cases
+    if sunset < sunrise:
+        daylight_hours = (sunset + timedelta(days=1) - sunrise).seconds / 3600
+    else:
+        daylight_hours = (sunset - sunrise).seconds / 3600
+
+    # Calculate total daily energy (Wh/m²)
+    total_energy = rsds_24h_avg * 24
+
+    # Compute daylight-hour average (avoid division by zero)
+    if daylight_hours == 0:
+        return 0.0  # Polar night: no sunlight
+    else:
+        return total_energy / daylight_hours
+
+def GetDataFromESGFdatasets(catalogURL,
+                            yearStart,
+                            yearStop,
+                            pathOfShapefileForSubsetting,
+                            nameOfVariable,
+                            enableWarnings = True):
+    """
+    Used to read a data catalog from a ESGF node, loop around the .nc files in the catalog,
+    and for each file, keep the data only for the years of interest, subset the data in a polygon,
+    and get the values for the variables to then put them in a panda data frame.
+    """
+    
+    with warnings.catch_warnings():
+        if not enableWarnings:
+            warnings.simplefilter("ignore")  # Ignore all warnings
+        else:
+            warnings.simplefilter("default") # Use the default warning behavior
+    
+        # We load the ESGF catalog from the URL
+        cat = TDSCatalog(catalogURL)
+    
+        # We initialize the time coder to help xarray decode time using the "cftime" format
+        # It's the recommand approach based on the warning messages we get without it
+        print("Loading catalog")
+        time_coder = xr.coders.CFDatetimeCoder(use_cftime=True)
+        
+        # Create an empty DataFrame to store all results
+        all_data = pd.DataFrame(columns=["lat", "lon", "year", "month", "day", nameOfVariable])
+        
+        # Loop through each dataset
+        # We skip the 0 because it corresponds here to an entry that is not an .nc file
+        for datasetID in range(0, len(cat.datasets)):
+        
+            # There are sometimes other files in the dataset that do not correspond to .nc files;
+            # we don't deal with those.
+            if ".nc" in str(cat.datasets[datasetID]):
+                
+                print(f"Processing {cat.datasets[datasetID]}...")
+            
+                # Open the dataset
+                try:
+                    ds = xr.open_dataset(cat.datasets[datasetID].access_urls["OPENDAP"], decode_times=time_coder)
+            
+                    # print("Checking dataset " + str(os.path.basename(url)))
+                    # Handle time values properly
+                    # First, convert the time values to strings and then to datetime objects
+                    time_values = ds.time.values
+            
+                    # Check the type of time values and convert accordingly
+                    # Function to safely convert a cftime object to datetime
+            
+                    # Convert time values based on their type
+                    if hasattr(time_values[0], 'calendar'):
+                        # These are cftime objects
+                        time_dates = [safe_convert_to_datetime(t) for t in time_values]
+                    elif isinstance(time_values[0], (str, np.str_)):
+                        # If they're already strings, parse them directly
+                        time_dates = [pd.to_datetime(t) for t in time_values]
+                    elif isinstance(time_values[0], np.datetime64):
+                        # If they're numpy datetime64
+                        time_dates = pd.DatetimeIndex(time_values).to_pydatetime().tolist()
+                    else:
+                        # Fallback for other types
+                        time_dates = [safe_convert_to_datetime(t) for t in time_values]
+            
+                   # Get min and max dates
+                    time_min = min(time_dates)
+                    time_max = max(time_dates)
+            
+                    # Stopping if this file is not in the right range
+                    if time_max.year < yearStart or time_min.year > yearStop:
+                        print("Cancelling; dataset is before " + str(yearStart) + " or after " + str(yearStop))
+                    else:
+                        # Subset to the year range if needed
+                        if time_min.year < yearStart or time_max.year > yearStop:
+                            ds = ds.sel(time=slice(str(yearStart) + '-01-01', str(yearStop) + '-12-31'))
+                
+                        # print("Subsetting to polygon")
+                        # Subset with the polygon shape
+                        ds1 = subset.subset_shape(
+                            ds, shape=pathOfShapefileForSubsetting, buffer=1)
+                
+                        # print("Processing time")
+                        # Process the data
+                        time_values = ds1.time.values
+                        time_dates = []
+                        for t in time_values:
+                            # Handle cftime objects
+                            if hasattr(t, 'year') and hasattr(t, 'month') and hasattr(t, 'day'):
+                                time_dates.append(datetime(t.year, t.month, t.day))
+                            else:
+                                # Fallback for other formats
+                                time_dates.append(pd.to_datetime(str(t)))
+                
+                        # Create a list to store data rows
+                        data_rows = []
+                
+                        # Iterate through each grid cell
+                        for lat_val in ds1.lat.values:
+                            for lon_val in ds1.lon.values:
+                
+                                # print("Looking at grid cell " + str(lat_val) + ", " + str(lon_val))
+                                # Extract data for this grid cell
+                                cell_data = ds1.sel(lat=lat_val, lon=lon_val, method='nearest')
+                
+                                # print("Extracting values")
+                                # Extract rsds values for all times at this location
+                                variable_values = cell_data[nameOfVariable].values
+                
+                                # print("Creating rows in dataframe")
+                                # Create a row for each time point
+                                for i, time in enumerate(time_dates):
+                                    data_rows.append({
+                                        "lat": lat_val,
+                                        "lon": lon_val,
+                                        "year": time.year,
+                                        "month": time.month,
+                                        "day": time.day,
+                                        # Transforming downwelling shortwave radiation from W/m2 to umol.m2/s-1
+                                        # There was a misleading quote in the PnET user Guide that made me believe that PAR = Downwelling Shortwave Radiation.
+                                        # But that's not true at all. In fact, Downwelling shortwave radiation is often refered as global solar radiation.
+                                        # See https://library.wmo.int/viewer/68695/?offset=3#page=298&viewer=picture&o=search&n=0&q=shortwave . But other references exist.
+                                        # So, Downwelling shortave radiation is for wavelengths of 0.2–4.0 μm; PAR is for 0.4–0.7 μm.
+                                        # As such, to convert our Downwelling Shortwave Radiation in W/m2 to PAR in umol.m2/s-1, 
+                                        # we must multiply it by 2.02 as indicated in the user guide of PnET Succession.
+                                        nameOfVariable: variable_values[i]
+                                    })
+                
+                        # Convert to DataFrame and append to main DataFrame
+                        period_df = pd.DataFrame(data_rows)
+                        all_data = pd.concat([all_data, period_df], ignore_index=True)
+            
+                except Exception as e:
+                    print(f"Error processing {datasetID}: {e}")
+                    continue
+            else:
+                print("Not processing file " + str(cat.datasets[datasetID]) + " in dataset because it is not a .nc file")
+    return(all_data)
+
+def GetDataFromESGFdataset(datasetURL,
+                            yearStart,
+                            yearStop,
+                            pathOfShapefileForSubsetting,
+                            nameOfVariable,
+                            enableWarnings = True):
+    """
+    Used to read a data catalog from a ESGF node, but only for a single .nc file instead of a whole .gn catalog,
+    check if the data is only for the years of interest, subset the data in a polygon,
+    and get the values for the variables to then put them in a panda data frame.
+    """
+    
+    with warnings.catch_warnings():
+        if not enableWarnings:
+            warnings.simplefilter("ignore")  # Ignore all warnings
+        else:
+            warnings.simplefilter("default") # Use the default warning behavior
+    
+        # We initialize the time coder to help xarray decode time using the "cftime" format
+        # It's the recommand approach based on the warning messages we get without it
+        print("Loading catalog")
+        time_coder = xr.coders.CFDatetimeCoder(use_cftime=True)
+        
+        # Create an empty DataFrame to store all results
+        all_data = pd.DataFrame(columns=["lat", "lon", "year", "month", "day", nameOfVariable])
+        
+
+        
+        print(f"Processing {os.path.basename(datasetURL)}...")
+    
+        # Open the dataset
+        try:
+            ds = xr.open_dataset(datasetURL, decode_times=time_coder)
+    
+            # print("Checking dataset " + str(os.path.basename(url)))
+            # Handle time values properly
+            # First, convert the time values to strings and then to datetime objects
+            time_values = ds.time.values
+    
+            # Check the type of time values and convert accordingly
+            # Function to safely convert a cftime object to datetime
+    
+            # Convert time values based on their type
+            print(time_values[1])
+            if hasattr(time_values[0], 'calendar'):
+                print("CFTtime object detected")
+                # These are cftime objects
+                time_dates = [safe_convert_to_datetime(t) for t in time_values]
+            elif isinstance(time_values[0], (str, np.str_)):
+                print("Date string detected")
+                # If they're already strings, parse them directly
+                time_dates = [pd.to_datetime(t) for t in time_values]
+            elif isinstance(time_values[0], np.datetime64):
+                print("Numpy datetime64 detected")
+                # If they're numpy datetime64
+                time_dates = pd.DatetimeIndex(time_values).to_pydatetime().tolist()
+            else:
+                # Fallback for other types
+                time_dates = [safe_convert_to_datetime(t) for t in time_values]
+    
+           # Get min and max dates
+            time_min = min(time_dates)
+            time_max = max(time_dates)
+    
+            # Stopping if this file is not in the right range
+            if time_max.year < yearStart or time_min.year > yearStop:
+                print("Cancelling; dataset is before " + str(yearStart) + " or after " + str(yearStop))
+            else:
+                # Subset to the year range if needed
+                if time_min.year < yearStart or time_max.year > yearStop:
+                    ds = ds.sel(time=slice(str(yearStart) + '-01-01', str(yearStop) + '-12-31'))
+        
+                # print("Subsetting to polygon")
+                # Subset with the polygon shape
+                ds1 = subset.subset_shape(
+                    ds, shape=pathOfShapefileForSubsetting, buffer=1)
+        
+                # print("Processing time")
+                # Process the data
+                time_values = ds1.time.values
+                time_dates = []
+                for t in time_values:
+                    # Handle cftime objects
+                    if hasattr(t, 'year') and hasattr(t, 'month') and hasattr(t, 'day'):
+                        time_dates.append(datetime(t.year, t.month, t.day))
+                    else:
+                        # Fallback for other formats
+                        time_dates.append(pd.to_datetime(str(t)))
+        
+                # Create a list to store data rows
+                data_rows = []
+        
+                # Iterate through each grid cell
+                for lat_val in ds1.lat.values:
+                    for lon_val in ds1.lon.values:
+        
+                        # print("Looking at grid cell " + str(lat_val) + ", " + str(lon_val))
+                        # Extract data for this grid cell
+                        cell_data = ds1.sel(lat=lat_val, lon=lon_val, method='nearest')
+        
+                        # print("Extracting values")
+                        # Extract rsds values for all times at this location
+                        variable_values = cell_data[nameOfVariable].values
+        
+                        # print("Creating rows in dataframe")
+                        # Create a row for each time point
+                        for i, time in enumerate(time_dates):
+                            data_rows.append({
+                                "lat": lat_val,
+                                "lon": lon_val,
+                                "year": time.year,
+                                "month": time.month,
+                                "day": time.day,
+                                # Transforming downwelling shortwave radiation from W/m2 to umol.m2/s-1
+                                # There was a misleading quote in the PnET user Guide that made me believe that PAR = Downwelling Shortwave Radiation.
+                                # But that's not true at all. In fact, Downwelling shortwave radiation is often refered as global solar radiation.
+                                # See https://library.wmo.int/viewer/68695/?offset=3#page=298&viewer=picture&o=search&n=0&q=shortwave . But other references exist.
+                                # So, Downwelling shortave radiation is for wavelengths of 0.2–4.0 μm; PAR is for 0.4–0.7 μm.
+                                # As such, to convert our Downwelling Shortwave Radiation in W/m2 to PAR in umol.m2/s-1, 
+                                # we must multiply it by 2.02 as indicated in the user guide of PnET Succession.
+                                nameOfVariable: variable_values[i]
+                            })
+        
+                # Convert to DataFrame and append to main DataFrame
+                period_df = pd.DataFrame(data_rows)
+                all_data = pd.concat([all_data, period_df], ignore_index=True)
+            
+        except Exception as e:
+            print(f"Error processing {datasetID}: {e}")
+    return(all_data)
