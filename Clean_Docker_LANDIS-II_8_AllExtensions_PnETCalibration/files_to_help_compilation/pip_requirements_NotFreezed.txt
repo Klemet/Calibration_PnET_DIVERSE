@@ -132,3 +132,7 @@ xesmf
 folium
 pygam
 suncalc
+
+# Package to access ESGF data
+intake-esgf
+ipywidgets

@@ -1,0 +1,32 @@
+version: 1
+project:
+  title: Calibration of PnET Succession for the DIVERSE project
+  authors:
+    - name: Clément Hardy, PhD.
+  github: Klemet/Calibration_PnET_DIVERSE
+  bibliography:
+    - references.bib
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/book.pdf
+  toc:
+    - file: intro.md
+    - file: StartingCalibrationTest/Intro_CalibrationTest.ipynb
+      children:
+        - file: StartingCalibrationTest/1.Loading_functions.ipynb
+        - file: StartingCalibrationTest/2.Test_sim_functions.ipynb
+        - file: StartingCalibrationTest/3.Initial_Species_Parameters.ipynb
+        - file: StartingCalibrationTest/4.Setting_up_calibration_Landscape.ipynb
+        - file: StartingCalibrationTest/5.Other_important_data_before_starting.ipynb
+        - file: StartingCalibrationTest/6.Monoculture_ideal_conditions.ipynb
+site:
+  options:
+    logo: ../DIVERSE_PnET_Calibration_Logo.png
+    folders: true
+    only_build_toc_files: true
+    execute:
+      execute_notebooks : off
+      timeout: 9000
+  template: book-theme
+  

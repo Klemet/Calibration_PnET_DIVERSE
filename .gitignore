@@ -1,4 +1,6 @@
 .Trash-0
 .ipynb_checkpoints
 .virtual_documents
+calibrationJupyterBook/_build/templates
+calibrationJupyterBook/_build/template
 find * -size +100M

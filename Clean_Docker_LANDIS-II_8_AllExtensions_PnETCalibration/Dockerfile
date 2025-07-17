@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # to avoid putting them in the docker layerin system, freeing space
 RUN apt-get update -y && apt-get upgrade -y \
 && apt-get update && apt-get -y upgrade \
-&& apt-get install -y wget vim pip nano git python3 python-is-python3 \
+&& apt-get install -y wget vim pip nano git python3 python-is-python3 curl \
 #######################################################################################
 # WARNING : UNCOMMENT THE FOLLOWING LINE IF YOU ARE USING A JOB COMPUTER WITH A FIREWALL
 # THAT CREATES MAN-IN-THE-MIDDLE ATTACKS TO LISTEN TO YOUR CONNECTION, RESULTING IN A 
@@ -537,26 +537,27 @@ RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Tool-Console/src && dotnet build -c
 # INSTALLING THE FOREST VEGETATION SIMULATOR
 # This is not the latest version, as latest version as an issue that breaks the build; but should be good enough
 # See https://github.com/USDAForestService/ForestVegetationSimulator/issues/44 
+# Disabled for now, as it takes a lot of space and a lot of time to compile, and we're not using it anymore.
 ################################################################
 
-# Install system dependencies and clear cache
-RUN apt-get update && apt-get install -y \
-    gfortran \
-    cmake \
-    unixodbc-dev \
-    build-essential \
-    git \
-    && rm -rf /var/lib/apt/lists/* \
-    # Clone and compile FVS (3b09ae2 commit for stability)
-	&& cd /bin && git clone https://github.com/USDAForestService/ForestVegetationSimulator.git \
-    && cd /bin/ForestVegetationSimulator \
-    && git checkout 3b09ae2 \
-    # Compile the FVS binary, keeping this as a separate layer for caching
-	&& cd /bin/ForestVegetationSimulator/bin && make
+# # Install system dependencies and clear cache
+# RUN apt-get update && apt-get install -y \
+    # gfortran \
+    # cmake \
+    # unixodbc-dev \
+    # build-essential \
+    # git \
+    # && rm -rf /var/lib/apt/lists/* \
+    # # Clone and compile FVS (3b09ae2 commit for stability)
+	# && cd /bin && git clone https://github.com/USDAForestService/ForestVegetationSimulator.git \
+    # && cd /bin/ForestVegetationSimulator \
+    # && git checkout 3b09ae2 \
+    # # Compile the FVS binary, keeping this as a separate layer for caching
+	# && cd /bin/ForestVegetationSimulator/bin && make
 
-# Update PATH environment to include the FVS binary
-# For example, FVSon can be called with just "FVSon" from everywhere.
-ENV PATH="/bin/ForestVegetationSimulator/bin:$PATH"
+# # Update PATH environment to include the FVS binary
+# # For example, FVSon can be called with just "FVSon" from everywhere.
+# ENV PATH="/bin/ForestVegetationSimulator/bin:$PATH"
 
 
 # ################################################################
@@ -571,7 +572,14 @@ COPY ./files_to_help_compilation/pip_requirements.txt /tmp
 RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /tmp/pip_requirements.txt
 
 # Adding jupyter lab and book
-RUN pip install jupyterlab jupyter-book
+RUN pip install jupyterlab
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+RUN pip install --pre "jupyter-book==2.*"
+
 
 # Adding add-on "Variable explorer" for jupyter lab
 RUN pip install lckr-jupyterlab-variableinspector
