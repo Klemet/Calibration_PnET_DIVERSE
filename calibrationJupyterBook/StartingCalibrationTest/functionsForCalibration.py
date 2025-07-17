@@ -33,12 +33,14 @@ and I wanted this to be done as quickly as possible.
 """
 
 #%% PACKAGES NEEDED FOR THE FUNCTIONS
-
-import os, re, glob
+import os
+import re
+import glob
 import matplotlib.pyplot as plt
 import pandas as pd
 import subprocess
 import rasterio
+from rasterio.mask import mask
 import numpy as np
 import shutil
 import sqlite3
@@ -54,13 +56,20 @@ import cftime
 import requests
 from tqdm import tqdm
 import matplotlib.dates as mdates
-from matplotlib.colors import to_rgba
+from matplotlib.colors import to_rgba, LinearSegmentedColormap
 from matplotlib.gridspec import GridSpec
 from rasterio.windows import Window
 from scipy.spatial.distance import cdist
 from siphon.catalog import TDSCatalog
-from clisops.core import subset
+import clisops.core.subset
 import warnings
+import math
+from scipy import ndimage
+from scipy.signal import savgol_filter
+from scipy.interpolate import interp1d
+from itertools import cycle
+from pygam import LinearGAM, s, te
+
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -2205,29 +2214,42 @@ def process_co2_data(historical_ds, shapefile, df):
         print(f"Closest point to polygon centroid for historical data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
 
     # Fill in CO2 concentration for each year and month in the dataframe
+    # To speed up : If we're in same year/month, we avoid re-reading the data
+    year_previous = "-99"
+    month_previous = "-99"
+    value_previous = 0
     for index, row in df.iterrows():
-        year = int(row['Year'])
-        month = int(row['Month'])
+        year = int(row['year'])
+        month = int(row['month'])
 
-        if 1950 <= year <= 2013:
-            # Find the corresponding time in the historical dataset
-            time_str = f"{year}-{month:02d}-01"
-            try:
-                # Find the time index
-                time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
-
-                # Extract CO2 values for this time and apply the mask
-                co2_slice = historical_ds.value.isel(Times=time_idx).values
-                masked_values = co2_slice[hist_mask]
-
-                # Calculate the average if there are valid values
-                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
-            except (IndexError, KeyError):
-                print(f"Time {time_str} not found in historical dataset")
-
-        elif year == 2014:
-            print("You are outside of historical data ! Use process_co2_data_withFutureInterpolation to deal with future data from https://zenodo.org/records/5021361")
+        if year_previous == year and month_previous == month:
+            df.at[index, 'CO2_Concentration'] = value_previous
+        
+        else:
+            if 1950 <= year <= 2013:
+                # Find the corresponding time in the historical dataset
+                time_str = f"{year}-{month:02d}-01"
+                try:
+                    # Find the time index
+                    time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+    
+                    # Extract CO2 values for this time and apply the mask
+                    co2_slice = historical_ds.value.isel(Times=time_idx).values
+                    masked_values = co2_slice[hist_mask]
+    
+                    # Calculate the average if there are valid values
+                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                        df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
+    
+                    # We record this measurement to go faster next time
+                    year_previous = year
+                    month_previous = month
+                    value_previous = np.nanmean(masked_values)
+                except (IndexError, KeyError):
+                    print(f"Time {time_str} not found in historical dataset")
+    
+            elif year == 2014:
+                print("You are outside of historical data ! Use process_co2_data_withFutureInterpolation to deal with future data from https://zenodo.org/records/5021361")
 
     return df
 
@@ -2362,58 +2384,78 @@ def process_co2_data_withFutureInterpolation(historical_ds, future_ds, shapefile
         monthly_values_2014 = None
 
     # Fill in CO2 concentration for each year and month in the dataframe
+    # To speed up : If we're in same year/month, we avoid re-reading the data
+    year_previous = "-99"
+    month_previous = "-99"
+    value_previous = 0
     for index, row in df.iterrows():
         year = int(row['Year'])
         month = int(row['Month'])
 
-        if 1950 <= year <= 2013:
-            # Find the corresponding time in the historical dataset
-            time_str = f"{year}-{month:02d}-01"
-            try:
-                # Find the time index
-                time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+        if year_previous == year and month_previous == month:
+            df.at[index, 'CO2_Concentration'] = value_previous
 
-                # Extract CO2 values for this time and apply the mask
-                co2_slice = historical_ds.value.isel(Times=time_idx).values
-                masked_values = co2_slice[hist_mask]
+        else:
+            if 1950 <= year <= 2013:
+                # Find the corresponding time in the historical dataset
+                time_str = f"{year}-{month:02d}-01"
+                try:
+                    # Find the time index
+                    time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
+    
+                    # Extract CO2 values for this time and apply the mask
+                    co2_slice = historical_ds.value.isel(Times=time_idx).values
+                    masked_values = co2_slice[hist_mask]
+    
+                    # Calculate the average if there are valid values
+                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                        df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
 
-                # Calculate the average if there are valid values
-                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
-            except (IndexError, KeyError):
-                print(f"Time {time_str} not found in historical dataset")
-
-        elif year == 2014:
-            # Use the seasonally adjusted values for 2014
-            if monthly_values_2014 and month in monthly_values_2014:
-                df.at[index, 'CO2_Concentration'] = monthly_values_2014[month]
-            else:
-                # Fallback to simple linear interpolation if seasonal adjustment failed
-                if 'value' in monthly_values_2013.get(month, {}) and 'value' in monthly_values_2015.get(month, {}):
-                    interpolated_value = (monthly_values_2013[month] + monthly_values_2015[month]) / 2
-                    df.at[index, 'CO2_Concentration'] = interpolated_value
+                    # We record this measurement to go faster next time
+                    year_previous = year
+                    month_previous = month
+                    value_previous = np.nanmean(masked_values)
+                    
+                except (IndexError, KeyError):
+                    print(f"Time {time_str} not found in historical dataset")
+    
+            elif year == 2014:
+                # Use the seasonally adjusted values for 2014
+                if monthly_values_2014 and month in monthly_values_2014:
+                    df.at[index, 'CO2_Concentration'] = monthly_values_2014[month]
                 else:
-                    print(f"Cannot interpolate for 2014-{month:02d}, missing data")
+                    # Fallback to simple linear interpolation if seasonal adjustment failed
+                    if 'value' in monthly_values_2013.get(month, {}) and 'value' in monthly_values_2015.get(month, {}):
+                        interpolated_value = (monthly_values_2013[month] + monthly_values_2015[month]) / 2
+                        df.at[index, 'CO2_Concentration'] = interpolated_value
+                    else:
+                        print(f"Cannot interpolate for 2014-{month:02d}, missing data")
+    
+            elif 2014 <= year <= 2100:
+                # Find the corresponding time in the future dataset
+                time_str = f"{year}-{month:02d}-01"
+                try:
+                    # Find the time index
+                    # Different here, as this file uses cftime format.
+                    # Plus, don't ask me why, they put the day for the timestep at 15
+                    time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(year, month, 15, 0, 0, 0, 0))[0][0]
+    
+                    # Extract CO2 values for this time and apply the mask
+                    # Here again, dimension names and all are different
+                    co2_slice = future_ds.CO2.isel(time=time_idx).values
+                    masked_values = co2_slice[future_mask]
+    
+                    # Calculate the average if there are valid values
+                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                        df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
 
-        elif 2014 <= year <= 2100:
-            # Find the corresponding time in the future dataset
-            time_str = f"{year}-{month:02d}-01"
-            try:
-                # Find the time index
-                # Different here, as this file uses cftime format.
-                # Plus, don't ask me why, they put the day for the timestep at 15
-                time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(year, month, 15, 0, 0, 0, 0))[0][0]
-
-                # Extract CO2 values for this time and apply the mask
-                # Here again, dimension names and all are different
-                co2_slice = future_ds.CO2.isel(time=time_idx).values
-                masked_values = co2_slice[future_mask]
-
-                # Calculate the average if there are valid values
-                if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                    df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
-            except (IndexError, KeyError):
-                print(f"Time {time_str} not found in future dataset")
+                    # We record this measurement to go faster next time
+                    year_previous = year
+                    month_previous = month
+                    value_previous = np.nanmean(masked_values)
+                        
+                except (IndexError, KeyError):
+                    print(f"Time {time_str} not found in future dataset")
 
     return df
 
@@ -3182,7 +3224,7 @@ def GetDataFromESGFdatasets(catalogURL,
     
         # We initialize the time coder to help xarray decode time using the "cftime" format
         # It's the recommand approach based on the warning messages we get without it
-        print("Loading catalog")
+        # print("Loading catalog")
         time_coder = xr.coders.CFDatetimeCoder(use_cftime=True)
         
         # Create an empty DataFrame to store all results
@@ -3303,6 +3345,7 @@ def GetDataFromESGFdataset(datasetURL,
                             yearStop,
                             pathOfShapefileForSubsetting,
                             nameOfVariable,
+                            verbose = False,
                             enableWarnings = True):
     """
     Used to read a data catalog from a ESGF node, but only for a single .nc file instead of a whole .gn catalog,
@@ -3318,15 +3361,15 @@ def GetDataFromESGFdataset(datasetURL,
     
         # We initialize the time coder to help xarray decode time using the "cftime" format
         # It's the recommand approach based on the warning messages we get without it
-        print("Loading catalog")
+        # print("Loading catalog")
         time_coder = xr.coders.CFDatetimeCoder(use_cftime=True)
         
         # Create an empty DataFrame to store all results
         all_data = pd.DataFrame(columns=["lat", "lon", "year", "month", "day", nameOfVariable])
         
 
-        
-        print(f"Processing {os.path.basename(datasetURL)}...")
+        if verbose:
+            print(f"Processing {os.path.basename(datasetURL)}...")
     
         # Open the dataset
         try:
@@ -3341,17 +3384,17 @@ def GetDataFromESGFdataset(datasetURL,
             # Function to safely convert a cftime object to datetime
     
             # Convert time values based on their type
-            print(time_values[1])
+            # print(time_values[1])
             if hasattr(time_values[0], 'calendar'):
-                print("CFTtime object detected")
+                # print("CFTtime object detected")
                 # These are cftime objects
                 time_dates = [safe_convert_to_datetime(t) for t in time_values]
             elif isinstance(time_values[0], (str, np.str_)):
-                print("Date string detected")
+                # print("Date string detected")
                 # If they're already strings, parse them directly
                 time_dates = [pd.to_datetime(t) for t in time_values]
             elif isinstance(time_values[0], np.datetime64):
-                print("Numpy datetime64 detected")
+                # print("Numpy datetime64 detected")
                 # If they're numpy datetime64
                 time_dates = pd.DatetimeIndex(time_values).to_pydatetime().tolist()
             else:
@@ -3364,7 +3407,8 @@ def GetDataFromESGFdataset(datasetURL,
     
             # Stopping if this file is not in the right range
             if time_max.year < yearStart or time_min.year > yearStop:
-                print("Cancelling; dataset is before " + str(yearStart) + " or after " + str(yearStop))
+                if verbose:
+                    print("Cancelling; dataset is before " + str(yearStart) + " or after " + str(yearStop))
             else:
                 # Subset to the year range if needed
                 if time_min.year < yearStart or time_max.year > yearStop:
@@ -3391,6 +3435,8 @@ def GetDataFromESGFdataset(datasetURL,
                 data_rows = []
         
                 # Iterate through each grid cell
+                # print("Lat values : " + str(ds1.lat.values))
+                # print("Lon values : " + str(ds1.lon.values))
                 for lat_val in ds1.lat.values:
                     for lon_val in ds1.lon.values:
         
@@ -3401,6 +3447,7 @@ def GetDataFromESGFdataset(datasetURL,
                         # print("Extracting values")
                         # Extract rsds values for all times at this location
                         variable_values = cell_data[nameOfVariable].values
+                        # print("Variable values :" + str(variable_values))
         
                         # print("Creating rows in dataframe")
                         # Create a row for each time point
@@ -3426,5 +3473,1574 @@ def GetDataFromESGFdataset(datasetURL,
                 all_data = pd.concat([all_data, period_df], ignore_index=True)
             
         except Exception as e:
-            print(f"Error processing {datasetID}: {e}")
+            print(f"Error processing {os.path.basename(datasetURL)}: {e}")
     return(all_data)
+
+
+def extract_unique_coordinates(dataframe):
+    """
+    Extract unique (latitude, longitude) pairs from a DataFrame with 'lat' and 'lon' columns.
+
+    Args:
+        dataframe (pd.DataFrame): DataFrame containing 'lat' and 'lon' columns
+
+    Returns:
+        list: List of unique (latitude, longitude) tuples
+    """
+    # Check if required columns exist
+    if 'lat' not in dataframe.columns or 'lon' not in dataframe.columns:
+        raise ValueError("DataFrame must contain 'lat' and 'lon' columns")
+
+    # Extract unique coordinate pairs
+    unique_coords = dataframe[['lat', 'lon']].drop_duplicates().values.tolist()
+
+    # Convert to list of tuples
+    return [tuple(coord) for coord in unique_coords]
+
+def find_closest_coordinate_to_polygon_center(shapefile_path, coordinates_list):
+    """
+    Find the coordinate from a list that is closest to the center of a polygon in a shapefile.
+
+    Args:
+        shapefile_path (str): Path to the shapefile containing the polygon
+        coordinates_list (list): List of (latitude, longitude) tuples
+
+    Returns:
+        tuple: The (latitude, longitude) coordinate closest to the polygon center
+    """
+    # Read the shapefile
+    gdf = gpd.read_file(shapefile_path)
+
+    # Ensure the shapefile has at least one polygon
+    if len(gdf) == 0:
+        raise ValueError("Shapefile contains no polygons")
+
+    # Get the first polygon (or you could iterate through multiple polygons)
+    polygon = gdf.geometry.iloc[0]
+
+    # Calculate the centroid of the polygon
+    centroid = polygon.centroid
+    centroid_lat, centroid_lon = centroid.y, centroid.x
+
+    # Function to calculate Haversine distance (in km) between two coordinates
+    def haversine_distance(lat1, lon1, lat2, lon2):
+        # Convert decimal degrees to radians
+        lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+
+        # Haversine formula
+        dlon = lon2 - lon1
+        dlat = lat2 - lat1
+        a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+        c = 2 * math.asin(math.sqrt(a))
+        r = 6371  # Radius of Earth in kilometers
+        return c * r
+
+    # Find the closest coordinate to the centroid
+    min_distance = float('inf')
+    closest_coordinate = None
+
+    for coord in coordinates_list:
+        lat, lon = coord
+        distance = haversine_distance(lat, lon, centroid_lat, centroid_lon)
+
+        if distance < min_distance:
+            min_distance = distance
+            closest_coordinate = coord
+
+    return closest_coordinate
+
+def transform_to_historical_averages_vectorized(df):
+    # Group by month, day, and variable name to calculate historical averages
+    historical_averages = df.groupby(['month', 'day', 'Variable'])['eco1'].transform('mean')
+
+    # Create a new dataframe with the transformed values
+    df_transformed = df.copy()
+    df_transformed['eco1'] = historical_averages
+
+    return df_transformed
+
+
+def plottingNFISpeciesUpperBiomassByProvince(species_path,
+                 age_path,
+                 biomass_path,
+                 speciesName,
+                 dictOfMasks):
+    """
+    This function is used to plot data from the National Forest Inventory (NFI) of Canada.
+    It reads a raster containing the age of the forest pixels; another with the aboveground biomass
+    of the forest pixels; and another with the % of biomass abundance of a species of interest.
+    It then reads "mask" rasters corresponding to the canadian province.
+    The function then use the other function "process_NFI_rasters_to_arraysForPlot" to select
+    the points that have the most biomass for a set of age windows, removing any point with low values
+    for better visibility. It then plots the selected points on an easy-to-read plot.
+    
+    Parameters:
+    -----------
+    species_path : str
+        Path to the species prevalence raster file (values 0-100%).
+    age_path : str
+        Path to the forest age raster file (years).
+    biomass_path : str
+        Path to the total biomass raster file (tons/ha).
+    speciesName : str
+        Name of the species being analyzed (used for labeling and output).
+    dictOfMasks : dict
+        Dictionnary containing the path to the different provinces, associated to the code for each province (e.g. QC, BC, etc.)
+    """
+    # We create the dictionnary in which we will temporarely put the selected points
+    dictOfPointsSelected = {key: "" for key in dictOfMasks}
+    
+    # We read the rasters and extract the points thanks to a special function
+    with rasterio.open(species_path) as src_species:
+        with rasterio.open(age_path) as src_age:
+            with rasterio.open(biomass_path) as src_biomass:
+                print("Reading species raster...")
+                species_data = src_species.read(1)
+                profile = src_species.profile
+                print("Reading age raster...")
+                age_data = src_age.read(1)
+                print("Reading biomass raster...")
+                biomass_data = src_biomass.read(1)
+            
+                for province in dictOfMasks:
+                    # Process the rasters
+                    print("Dealing with "+ str(province))
+                    age_sample, abies_biomass_sample = process_NFI_rasters_to_arraysForPlot(
+                        species_data, age_data, biomass_data, dictOfMasks[province], thresholdMaximumBiomass = 0.90, thresholdMinimumPercentBiomass = 0, verbose = False
+                    )
+                    # Convert the tons per hectares of the values into g/m2 for easy comparison with LANDIS-II outputs
+                    abies_biomass_sample = abies_biomass_sample * 100
+                    # Save the results
+                    dictOfPointsSelected[province] = [age_sample, abies_biomass_sample]
+    
+    # Now, we plot the selected points on a graph, with colors for each province
+    # We create the scatter plot
+    # First, we create the color cycler
+    colours = cycle(['#a3be8c', '#5e81ac', '#bf616a', '#d08770', '#ebcb8b', '#2e3440', '#8fbcbb'])
+    plt.figure(figsize=(10, 8))
+    # Then, we plot the points
+    for province in dictOfPointsSelected:
+        plt.scatter(dictOfPointsSelected[province][0], dictOfPointsSelected[province][1], alpha=0.6, s=8, c=next(colours), label = province)
+    plt.xlabel('Forest Age (years)')
+    plt.ylabel(str(speciesName) + ' Biomass (g/m2)')
+    plt.title('Relationship between Forest Age and ' + str(speciesName) + ' Biomass')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend()
+    plt.tight_layout()
+    # plt.savefig('age_vs_abies_biomass.png', dpi=300)
+    plt.show()
+
+def process_NFI_rasters_to_arraysForPlot(species_data, age_data, biomass_data, mask_path=None, thresholdMaximumBiomass=0.90, thresholdMinimumPercentBiomass = 0, verbose = False):
+    """
+    Takes the rasters from the National Forest Inventory of Canada (see https://open.canada.ca/data/en/dataset/ec9e2659-1c29-4ddb-87a2-6aced147a990
+    ; forest age, aboveground biomass, and % of aboveground biomass for a given species), to then return flattenned arrays
+    containing data only from pixels in a mask array, and only the pixels with the most biomass
+    for the species in 3 years age intervalls. Can also remove any pixel where the species is not
+    very present.
+
+    thresholdMaximumBiomass keeps only points (pixels) who's biomass is above thresholdMaximumBiomass*(maximum-minimum) for each 3 year window.
+    This allows us to keep only the points with the largest biomass relative to the window.
+
+    thresholdMinimumPercentBiomass keeps only points where the species has a certain amount of relative biomass in the cell (> thresholdMinimumPercentBiomass).
+    This allows us to keep only points where the species is sufficiently abundant.
+
+    Returns : age_sample, species_biomass_sample
+    Both age_sample and species_biomass_sample can be used to easily plot the values for the filtered pixels.
+    """
+    
+    # # Step 1: Read the rasters
+    # with rasterio.open(species_path) as src:
+    #     species_data = src.read(1)
+    #     profile = src.profile
+
+    # with rasterio.open(age_path) as src:
+    #     age_data = src.read(1)
+
+    # with rasterio.open(biomass_path) as src:
+    #     biomass_data = src.read(1)
+
+    # Step 2: Mask values where the species below the threshold of biomass percentage
+    mask_no_species = species_data <= thresholdMinimumPercentBiomass
+
+    # Step 3: Apply additional mask if provided
+    if mask_path:
+        if isinstance(mask_path, str):
+            with rasterio.open(mask_path) as src:
+                additional_mask = src.read(1)
+                additional_mask_bool = additional_mask == 0
+                combined_mask = np.logical_or(mask_no_species, additional_mask_bool)
+        elif isinstance(mask_path, list):
+            for maskRasterPath in mask_path:
+                try:
+                    with rasterio.open(maskRasterPath) as src:
+                        additional_mask_toadd = src.read(1)
+                        additional_mask += additional_mask_toadd
+                except:
+                    with rasterio.open(maskRasterPath) as src:
+                        additional_mask = src.read(1)
+            additional_mask_bool = additional_mask == 0
+            combined_mask = np.logical_or(mask_no_species, additional_mask_bool)
+                    
+
+    else:
+        combined_mask = mask_no_species
+
+    # Create masked arrays
+    species_masked = np.ma.array(species_data, mask=combined_mask)
+    age_masked = np.ma.array(age_data, mask=combined_mask)
+    biomass_masked = np.ma.array(biomass_data, mask=combined_mask)
+
+    # Step 4: Calculate biomass of species of interest
+    species_proportion = species_masked / 100.0
+    species_biomass = species_proportion * biomass_masked
+
+    # Step 5: Prepare data for plotting
+    age_flat = age_masked.compressed()
+    species_biomass_flat = species_biomass.compressed()
+
+    # Remove pixels with zero biomass for the species
+    non_zero_mask = species_biomass_flat > 0
+    age_filtered = age_flat[non_zero_mask]
+    species_biomass_filtered = species_biomass_flat[non_zero_mask]
+
+    # Filter points above value of biomass per 3-year age range
+    if len(age_filtered) > 0:
+        # Create age bins (vectorized)
+        age_bins = (age_filtered // 3).astype(int)
+        unique_bins = np.unique(age_bins)
+
+        # Pre-allocate arrays for efficiency
+        sample_indices = []
+
+        for bin_val in unique_bins:
+            bin_mask = age_bins == bin_val
+            bin_indices = np.where(bin_mask)[0]
+
+            if len(bin_indices) > 0:
+                # Get biomass values for this bin
+                bin_biomass = species_biomass_filtered[bin_indices]
+
+                # Calculate threshold based on maximum value
+                percent_Maximum = thresholdMaximumBiomass*(np.max(bin_biomass)-np.min(bin_biomass))
+
+                # Get indices where biomass is above a percentage of the maximum
+                above_percentile_mask = bin_biomass >= percent_Maximum
+                selected_local_indices = np.where(above_percentile_mask)[0]
+
+                # Convert back to global indices
+                sample_indices.extend(bin_indices[selected_local_indices])
+
+        # Extract sampled data
+        sample_indices = np.array(sample_indices)
+        age_sample = age_filtered[sample_indices]
+        species_biomass_sample = species_biomass_filtered[sample_indices]
+    else:
+        age_sample = np.array([])
+        species_biomass_sample = np.array([])
+
+    if verbose:
+        print(f"Total pixels after initial masking: {len(age_flat):,}")
+        print(f"Pixels with non-zero species biomass: {len(age_filtered):,}")
+        print(f"Age range: {int(np.min(age_filtered)) if len(age_filtered) > 0 else 0} - {int(np.max(age_filtered)) if len(age_filtered) > 0 else 0} years")
+        # print(f"Sample size (top {points_per_interval} per 3-year range): {len(age_sample):,}")
+
+    return age_sample, species_biomass_sample
+
+
+def processNFI_RastersIntoDataFrameForGAM(age_raster_path, biomass_raster_path, abundance_raster_path, mask_raster_path="None"):
+    """
+    Process forest rasters and create dataframe with biomass analysis using pandas groupby optimization
+    """
+
+    # Read rasters into numpy arrays
+    with rasterio.open(age_raster_path) as src:
+        age_data = src.read(1).astype(np.float32)
+
+    with rasterio.open(biomass_raster_path) as src:
+        biomass_data = src.read(1).astype(np.float32)
+
+    with rasterio.open(abundance_raster_path) as src:
+        abundance_data = src.read(1).astype(np.float32)
+
+    if mask_raster_path != "None":
+        with rasterio.open(mask_raster_path) as src:
+            mask_data = src.read(1).astype(np.int32)
+
+    # Apply mask - only process pixels where mask = 1
+    if mask_raster_path != "None":
+        valid_mask = mask_data == 1
+    else:
+        valid_mask = age_data != -9999
+
+    # Round age values to 3-year windows (0-3 -> 0, 3-6 -> 3, etc.)
+    age_rounded = np.floor(age_data / 3) * 3
+    age_rounded = age_rounded.astype(np.int32)
+
+    # Round abundance to nearest percentage
+    abundance_rounded = np.round(abundance_data).astype(np.int32)
+
+    # Calculate aboveground biomass for species (biomass * abundance%)
+    species_biomass = biomass_data * (abundance_data / 100.0)
+
+    # Get province name from mask raster filename
+    if mask_raster_path != "None":
+        province_name = os.path.splitext(os.path.basename(mask_raster_path))[0]
+    else:
+        province_name = "All of Canada"
+
+    # Create valid data mask
+    biomass_valid = (
+        valid_mask & 
+        ~np.isnan(species_biomass) & 
+        (species_biomass >= 0) &
+        ~np.isnan(age_rounded) &
+        ~np.isnan(abundance_rounded) &
+        (abundance_rounded >= 0)
+    )
+
+    print(f"Processing {np.sum(biomass_valid)} valid pixels out of {biomass_valid.size} total pixels")
+
+    # Create DataFrame with valid pixels only
+    df_pixels = pd.DataFrame({
+        'age': age_rounded[biomass_valid],
+        'abundance': abundance_rounded[biomass_valid],
+        'biomass': species_biomass[biomass_valid]
+    })
+
+    print(f"Created pixel dataframe with {len(df_pixels)} rows")
+
+    results = []
+
+    # Group by age and abundance combinations
+    grouped = df_pixels.groupby(['age', 'abundance'])['biomass']
+
+    print(f"Found {len(grouped)} unique age-abundance combinations")
+
+    for (age_val, abundance_val), group in tqdm(grouped, desc="Processing groups"):
+        selected_biomass = group.values
+
+        # Handle single pixel case
+        if len(selected_biomass) == 1:
+            upper_biomass_value = selected_biomass[0]
+        else:
+            # Remove pixels above 99.5th percentile
+            percentile_99_5 = np.percentile(selected_biomass, 99.5)
+            filtered_biomass = selected_biomass[selected_biomass <= percentile_99_5]
+
+            # Skip if no pixels remain after filtering
+            if len(filtered_biomass) == 0:
+                continue
+
+            # Calculate 95% of maximum value from filtered pixels (without the top outliers)
+            # This is the value we will put in the row
+            max_value = np.max(filtered_biomass)
+            upper_biomass_value = max_value * 0.95
+
+        # Add row to results
+        results.append({
+            'Age': int(age_val),
+            'Province': province_name,
+            '% Biomass of species': int(abundance_val),
+            'Upper Biomass value': upper_biomass_value
+        })
+
+    # Create final dataframe from results
+    result_df = pd.DataFrame(results)
+
+    print(f"Generated final dataframe with {len(result_df)} rows")
+
+    return result_df
+
+def analyze_species_growth_curves(
+    prevalence_raster_path,
+    age_raster_path,
+    biomass_raster_path,
+    species_name,
+    output_csv_path,
+    prevalence_thresholds=[100, 80, 60, 40, 20],
+    peak_age_min=0,
+    peak_age_max=10,
+    senescence_age_window=5,
+    outlier_age_window=5,
+    outlier_percentile=99.80,
+    smoothing_window=21,
+    smoothing_polyorder=3,
+    n_sample_plot=2000000,
+    create_plot=True,
+    plot_figsize=(20, 8)
+):
+    """
+    Analyze species growth curves across different prevalence thresholds using raster data.
+
+    This function processes forest raster data to construct growth curves showing how biomass 
+    changes with forest age for a given species. It creates multiple curves based on different 
+    prevalence thresholds to understand how species dominance affects growth patterns. The 
+    analysis includes outlier removal, curve construction with growth and senescence phases, 
+    interpolation to yearly intervals, and smoothing. Results are saved as CSV and optionally 
+    visualized in plots.
+
+    Parameters:
+    -----------
+    prevalence_raster_path : str
+        Path to the species prevalence raster file (values 0-100%).
+    age_raster_path : str
+        Path to the forest age raster file (years).
+    biomass_raster_path : str
+        Path to the total biomass raster file (tons/ha).
+    species_name : str
+        Name of the species being analyzed (used for labeling and output).
+    output_csv_path : str
+        Path where the output CSV file will be saved.
+    prevalence_thresholds : list of float, default=[100, 80, 50, 30, 20]
+        List of prevalence thresholds (%) to analyze. For each threshold, only pixels 
+        with prevalence ≤ threshold will be included in the analysis.
+    peak_age_min : float, default=0
+        Minimum age (years) to search for peak biomass.
+    peak_age_max : float, default=10
+        Maximum age (years) to search for peak biomass.
+    senescence_age_window : float, default=5
+        Age window (years) for selecting points in the senescence phase.
+    outlier_age_window : float, default=5
+        Age window (years) for outlier removal using discrete age bins.
+    outlier_percentile : float, default=99.80
+        Percentile threshold for outlier removal within each age window.
+    smoothing_window : int, default=21
+        Window length for Savitzky-Golay smoothing (must be odd).
+    smoothing_polyorder : int, default=3
+        Polynomial order for Savitzky-Golay smoothing.
+    n_sample_plot : int, default=2000000
+        Maximum number of points to sample for visualization.
+    create_plot : bool, default=True
+        Whether to create and display the visualization plots.
+    plot_figsize : tuple, default=(20, 8)
+        Figure size for the plots (width, height).
+
+    Returns:
+    --------
+    dict
+        Dictionary containing the analysis results with keys:
+        - 'curves_data': Dictionary with curve data for each threshold
+        - 'summary_stats': Summary statistics for each curve
+        - 'processing_time': Total processing time in seconds
+        - 'n_pixels_processed': Number of pixels processed
+        - 'output_csv_path': Path to the saved CSV file
+
+    Output CSV Structure:
+    --------------------
+    The CSV file contains columns:
+    - 'age': Forest age in years (integer values)
+    - For each threshold T: 'raw_curve_T%' and 'smoothed_curve_T%' columns
+      containing biomass values (tons/ha) for that threshold
+    """
+
+    def read_rasters():
+        """Read the three raster files and return their data arrays"""
+        print("Reading raster files...")
+
+        with rasterio.open(prevalence_raster_path) as src:
+            prevalence = src.read(1).astype(np.float32)
+            prevalence[prevalence < 0] = np.nan
+
+        with rasterio.open(age_raster_path) as src:
+            age = src.read(1).astype(np.float32)
+            age[age <= 0] = np.nan
+
+        with rasterio.open(biomass_raster_path) as src:
+            biomass = src.read(1).astype(np.float32)
+            biomass[biomass < 0] = np.nan
+
+        print("✓ Rasters loaded successfully")
+        return prevalence, age, biomass
+
+    def process_data(prevalence, age, biomass):
+        """Process the data and create masks"""
+        print("Processing data and applying masks...")
+
+        # Mask pixels with no species presence
+        mask = (prevalence > 0) & (~np.isnan(prevalence)) & (~np.isnan(age)) & (~np.isnan(biomass))
+
+        # Calculate species biomass (prevalence as proportion * total biomass)
+        species_biomass = (prevalence / 100.0) * biomass
+
+        # Flatten arrays and apply mask
+        age_flat = age[mask]
+        species_biomass_flat = species_biomass[mask]
+        prevalence_flat = prevalence[mask]
+
+        print(f"✓ {len(age_flat)} valid pixels found")
+        return age_flat, species_biomass_flat, prevalence_flat
+
+    def remove_outliers_fast(age_data, biomass_data, prevalence_data, age_window, percentile):
+        """Remove outliers using discrete age windows - FAST METHOD"""
+        print(f"Removing outliers (age window: {age_window} years, percentile: {percentile}%)...")
+
+        df = pd.DataFrame({
+            'age': age_data,
+            'biomass': biomass_data,
+            'prevalence': prevalence_data
+        })
+
+        # Create discrete age bins
+        min_age = df['age'].min()
+        max_age = df['age'].max()
+        age_bins = np.arange(min_age, max_age + age_window, age_window)
+
+        print(f"Processing {len(age_bins)-1} age windows...")
+
+        # Assign each point to an age bin
+        df['age_bin'] = pd.cut(df['age'], bins=age_bins, include_lowest=True, right=False)
+
+        outlier_mask = np.ones(len(df), dtype=bool)
+
+        # Process each age bin
+        for bin_label in tqdm(df['age_bin'].cat.categories, desc="Processing age windows"):
+            bin_mask = df['age_bin'] == bin_label
+
+            if bin_mask.sum() > 0:
+                bin_data = df[bin_mask]
+                threshold = np.percentile(bin_data['biomass'], percentile)
+
+                # Mark outliers in this bin
+                outlier_indices = bin_data[bin_data['biomass'] > threshold].index
+                outlier_mask[outlier_indices] = False
+
+        filtered_df = df[outlier_mask]
+        print(f"✓ {len(filtered_df)} pixels remaining after outlier removal")
+
+        return filtered_df['age'].values, filtered_df['biomass'].values, filtered_df['prevalence'].values
+
+    def filter_by_prevalence_threshold(age_data, biomass_data, prevalence_data, threshold):
+        """Filter data to only include points below the prevalence threshold"""
+        mask = prevalence_data <= threshold
+        filtered_age = age_data[mask]
+        filtered_biomass = biomass_data[mask]
+        filtered_prevalence = prevalence_data[mask]
+
+        print(f"  Threshold {threshold}%: {len(filtered_age)} points remaining ({len(filtered_age)/len(age_data)*100:.1f}% of original)")
+
+        return filtered_age, filtered_biomass, filtered_prevalence
+
+    def find_peak_in_age_range(age_data, biomass_data, age_min, age_max):
+        """Find peak by looking in a specific age range"""
+        # Filter data to specified age range
+        age_mask = (age_data >= age_min) & (age_data <= age_max)
+
+        if not np.any(age_mask):
+            print(f"    Warning: No data found in age range {age_min}-{age_max}. Using global maximum.")
+            peak_idx = np.argmax(biomass_data)
+            peak_age = age_data[peak_idx]
+            peak_biomass = biomass_data[peak_idx]
+        else:
+            range_biomass = biomass_data[age_mask]
+            range_ages = age_data[age_mask]
+
+            peak_idx = np.argmax(range_biomass)
+            peak_age = range_ages[peak_idx]
+            peak_biomass = range_biomass[peak_idx]
+
+        return peak_age, peak_biomass
+
+    def construct_growth_curve(age_data, biomass_data, peak_age_min, peak_age_max, senescence_age_window):
+        """Construct the raw growth curve with three phases"""
+
+        if len(age_data) == 0:
+            print("    Warning: No data available for curve construction")
+            return np.array([[0, 0]])
+
+        df = pd.DataFrame({'age': age_data, 'biomass': biomass_data})
+        df = df.sort_values('age').reset_index(drop=True)
+
+        # Find peak using specified age range
+        peak_age, peak_biomass = find_peak_in_age_range(age_data, biomass_data, peak_age_min, peak_age_max)
+
+        curve_points = []
+
+        # Phase 1: Initial growth (0,0 to peak)
+        curve_points.append((0, 0))
+
+        current_biomass = 0
+        current_age = 0
+
+        # Pre-filter data for growth phase
+        growth_data = df[df['age'] <= peak_age].copy()
+
+        while current_age < peak_age:
+            # Find next point: closest age but higher biomass
+            candidates = growth_data[(growth_data['age'] > current_age) & 
+                                    (growth_data['biomass'] > current_biomass)]
+
+            if len(candidates) == 0:
+                break
+
+            # Select closest in age
+            next_idx = candidates['age'].idxmin()
+            next_point = candidates.loc[next_idx]
+            curve_points.append((next_point['age'], next_point['biomass']))
+            current_age = next_point['age']
+            current_biomass = next_point['biomass']
+
+        # Add peak if not already included
+        if current_age != peak_age:
+            curve_points.append((peak_age, peak_biomass))
+
+        # Phase 2: Senescence with age window constraint
+        current_biomass = peak_biomass
+        current_age = peak_age
+
+        # Pre-filter data for senescence phase
+        senescence_data = df[df['age'] >= peak_age].copy()
+
+        iteration_count = 0
+        max_iterations = 1000  # Safety limit
+
+        while iteration_count < max_iterations:
+            # Find next point: lower biomass, within age window, closest to current biomass
+            candidates = senescence_data[
+                (senescence_data['age'] > current_age) & 
+                (senescence_data['age'] <= current_age + senescence_age_window) &  # Age window constraint
+                (senescence_data['biomass'] < current_biomass)
+            ]
+
+            if len(candidates) == 0:
+                break
+
+            # Select point closest in biomass (but lower)
+            candidates = candidates.copy()
+            candidates['biomass_diff'] = abs(candidates['biomass'] - current_biomass)
+
+            # Find the point with biomass closest to current biomass (but lower)
+            next_idx = candidates['biomass_diff'].idxmin()
+            next_point = candidates.loc[next_idx]
+            curve_points.append((next_point['age'], next_point['biomass']))
+            current_age = next_point['age']
+            current_biomass = next_point['biomass']
+
+            iteration_count += 1
+
+        curve_array = np.array(curve_points)
+
+        return curve_array
+
+    def interpolate_curve_yearly(curve_points):
+        """Interpolate the curve to have one point per year"""
+
+        if len(curve_points) < 2:
+            return curve_points
+
+        # Sort by age to ensure proper interpolation
+        sorted_indices = np.argsort(curve_points[:, 0])
+        sorted_curve = curve_points[sorted_indices]
+
+        # Define age range for interpolation (integer years)
+        min_age = int(np.floor(sorted_curve[0, 0]))
+        max_age = int(np.ceil(sorted_curve[-1, 0]))
+
+        # Create yearly age points
+        yearly_ages = np.arange(min_age, max_age + 1)
+
+        # Interpolate biomass values
+        interp_func = interp1d(sorted_curve[:, 0], sorted_curve[:, 1], 
+                              kind='linear', bounds_error=False, fill_value='extrapolate')
+        yearly_biomass = interp_func(yearly_ages)
+
+        # Combine into interpolated curve
+        interpolated_curve = np.column_stack([yearly_ages, yearly_biomass])
+
+        return interpolated_curve
+
+    def smooth_curve_savgol(curve_points, window_length, polyorder):
+        """Apply Savitzky-Golay filtering to smooth the curve"""
+
+        if len(curve_points) < 4:
+            return curve_points
+
+        if len(curve_points) < window_length:
+            # Use maximum possible window length (must be odd)
+            window_length = max(3, (len(curve_points) // 2) * 2 - 1)
+
+        # Ensure window_length is odd
+        if window_length % 2 == 0:
+            window_length += 1
+
+        # Ensure polyorder is less than window_length
+        polyorder = min(polyorder, window_length - 1)
+
+        # Apply Savitzky-Golay filter to biomass values
+        smoothed_biomass = savgol_filter(curve_points[:, 1], window_length, polyorder)
+
+        # Keep original ages
+        smoothed_points = np.column_stack([curve_points[:, 0], smoothed_biomass])
+
+        return smoothed_points
+
+    def weighted_sample_points(age_data, biomass_data, prevalence_data, n_sample):
+        """Sample points with probability weights based on prevalence"""
+        if len(age_data) <= n_sample:
+            print(f"Using all {len(age_data)} points for visualization")
+            return age_data, biomass_data, prevalence_data
+
+        print(f"Sampling {n_sample} points with prevalence-based weighting...")
+
+        # Use prevalence as probability weights
+        weights = prevalence_data / prevalence_data.sum()
+
+        # Sample indices based on weights
+        sample_idx = np.random.choice(len(age_data), n_sample, replace=False, p=weights)
+
+        age_sample = age_data[sample_idx]
+        biomass_sample = biomass_data[sample_idx]
+        prevalence_sample = prevalence_data[sample_idx]
+
+        print(f"✓ Sampled {len(age_sample)} points (avg prevalence: {prevalence_sample.mean():.1f}%)")
+
+        return age_sample, biomass_sample, prevalence_sample
+
+    # Main execution
+    print(f"=== {species_name} Growth Curve Analysis with Prevalence Thresholds ===")
+    start_time = time.time()
+
+    print(f"Parameters:")
+    print(f"  Peak search range: {peak_age_min}-{peak_age_max} years")
+    print(f"  Senescence age window: {senescence_age_window} years")
+    print(f"  Outlier removal: {outlier_age_window}-year windows, {outlier_percentile}% threshold")
+    print(f"  Smoothing window: {smoothing_window} points")
+    print(f"  Prevalence thresholds: {prevalence_thresholds}")
+
+    # Read data
+    prevalence, age, biomass = read_rasters()
+
+    # Process data
+    age_flat, species_biomass_flat, prevalence_flat = process_data(prevalence, age, biomass)
+
+    # Remove outliers using fast method
+    age_clean, biomass_clean, prevalence_clean = remove_outliers_fast(
+        age_flat, species_biomass_flat, prevalence_flat, 
+        age_window=outlier_age_window, 
+        percentile=outlier_percentile
+    )
+
+    # Store curves for each threshold
+    curves_data = {}
+    colors = plt.cm.viridis(np.linspace(0, 1, len(prevalence_thresholds)))
+
+    print(f"\nProcessing curves for each prevalence threshold...")
+
+    for i, threshold in enumerate(prevalence_thresholds):
+        print(f"\n--- Processing threshold {threshold}% ---")
+
+        # Filter data by prevalence threshold
+        age_thresh, biomass_thresh, prevalence_thresh = filter_by_prevalence_threshold(
+            age_clean, biomass_clean, prevalence_clean, threshold
+        )
+
+        if len(age_thresh) == 0:
+            print(f"  No data available for threshold {threshold}%. Skipping.")
+            continue
+
+        # Construct growth curve
+        print(f"  Constructing growth curve...")
+        raw_curve = construct_growth_curve(
+            age_thresh, biomass_thresh, 
+            peak_age_min=peak_age_min, 
+            peak_age_max=peak_age_max, 
+            senescence_age_window=senescence_age_window
+        )
+
+        # Interpolate curve to yearly intervals
+        print(f"  Interpolating to yearly intervals...")
+        interpolated_curve = interpolate_curve_yearly(raw_curve)
+
+        # Smooth the interpolated curve
+        print(f"  Smoothing curve...")
+        smoothed_curve = smooth_curve_savgol(
+            interpolated_curve, 
+            window_length=smoothing_window, 
+            polyorder=smoothing_polyorder
+        )
+
+        # Store results
+        curves_data[threshold] = {
+            'raw_curve': raw_curve,
+            'interpolated_curve': interpolated_curve,
+            'smoothed_curve': smoothed_curve,
+            'color': colors[i],
+            'n_points': len(age_thresh)
+        }
+
+        print(f"  ✓ Threshold {threshold}%: {len(raw_curve)} raw points, {len(smoothed_curve)} smoothed points")
+
+    # Create CSV output
+    print(f"\nCreating CSV output...")
+
+    # Find the full age range across all curves
+    all_ages = set()
+    for threshold, data in curves_data.items():
+        all_ages.update(data['smoothed_curve'][:, 0].astype(int))
+
+    age_range = sorted(all_ages)
+
+    # Create DataFrame
+    csv_data = {'age': age_range}
+
+    for threshold in sorted(curves_data.keys()):
+        data = curves_data[threshold]
+
+        # Create dictionaries for quick lookup
+        raw_dict = {int(age): biomass for age, biomass in data['interpolated_curve']}
+        smooth_dict = {int(age): biomass for age, biomass in data['smoothed_curve']}
+
+        # Fill columns
+        csv_data[f'raw_curve_{threshold}%'] = [raw_dict.get(age, np.nan) for age in age_range]
+        csv_data[f'smoothed_curve_{threshold}%'] = [smooth_dict.get(age, np.nan) for age in age_range]
+
+    df_output = pd.DataFrame(csv_data)
+
+    # Create output directory if it doesn't exist
+    os.makedirs(os.path.dirname(output_csv_path), exist_ok=True)
+
+    # Save CSV
+    df_output.to_csv(output_csv_path, index=False)
+    print(f"✓ CSV saved to: {output_csv_path}")
+
+    # Create visualization if requested
+    if create_plot:
+        # Sample points for visualization (using all data)
+        age_plot, biomass_plot, prevalence_plot = weighted_sample_points(
+            age_clean, biomass_clean, prevalence_clean, n_sample=n_sample_plot
+        )
+
+        print("\nCreating visualization...")
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=plot_figsize)
+
+        # Left plot: Raw curves
+        scatter1 = ax1.scatter(age_plot, biomass_plot, c=prevalence_plot, 
+                              cmap='RdYlGn', alpha=0.4, s=0.5, vmin=0, vmax=100)
+
+        for threshold, data in curves_data.items():
+            ax1.plot(data['interpolated_curve'][:, 0], data['interpolated_curve'][:, 1], 
+                     color=data['color'], linewidth=2, alpha=0.8,
+                     label=f'Raw curve ≤{threshold}% (n={data["n_points"]})')
+
+        ax1.set_xlabel('Forest Age (years)')
+        ax1.set_ylabel(f'{species_name} Biomass (tons/ha)')
+        ax1.set_title(f'{species_name} - Raw Growth Curves by Prevalence Threshold')
+        ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        ax1.grid(True, alpha=0.3)
+
+        # Right plot: Smoothed curves
+        scatter2 = ax2.scatter(age_plot, biomass_plot, c=prevalence_plot, 
+                              cmap='RdYlGn', alpha=0.4, s=0.5, vmin=0, vmax=100)
+
+        for threshold, data in curves_data.items():
+            ax2.plot(data['smoothed_curve'][:, 0], data['smoothed_curve'][:, 1], 
+                     color=data['color'], linewidth=3, alpha=0.9,
+                     label=f'Smoothed curve ≤{threshold}% (n={data["n_points"]})')
+
+        ax2.set_xlabel('Forest Age (years)')
+        ax2.set_ylabel(f'{species_name} Biomass (tons/ha)')
+        ax2.set_title(f'{species_name} - Smoothed Growth Curves by Prevalence Threshold')
+        ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        ax2.grid(True, alpha=0.3)
+
+        # Add colorbars
+        cbar1 = plt.colorbar(scatter1, ax=ax1)
+        cbar1.set_label(f'{species_name} Prevalence (%)')
+        cbar2 = plt.colorbar(scatter2, ax=ax2)
+        cbar2.set_label(f'{species_name} Prevalence (%)')
+
+        plt.tight_layout()
+        plt.show()
+
+    # Calculate summary statistics
+    summary_stats = {}
+    for threshold, data in curves_data.items():
+        peak_idx = np.argmax(data['smoothed_curve'][:, 1])
+        peak_biomass = data['smoothed_curve'][peak_idx, 1]
+        peak_age = data['smoothed_curve'][peak_idx, 0]
+
+        summary_stats[threshold] = {
+            'peak_biomass': peak_biomass,
+            'peak_age': peak_age,
+            'n_points': data['n_points'],
+            'age_range': (data['smoothed_curve'][0, 0], data['smoothed_curve'][-1, 0])
+        }
+
+    # Summary output
+    end_time = time.time()
+    processing_time = end_time - start_time
+
+    print(f"\n=== Analysis Complete ===")
+    print(f"Total processing time: {processing_time:.1f} seconds")
+    print(f"Processed {len(age_clean)} pixels total")
+    print(f"CSV saved to: {output_csv_path}")
+
+    print(f"\nCurve Summary:")
+    for threshold in sorted(summary_stats.keys()):
+        stats = summary_stats[threshold]
+        print(f"  Threshold ≤{threshold}%: Peak {stats['peak_biomass']:.2f} tons/ha at age {stats['peak_age']:.1f} ({stats['n_points']} points)")
+
+    # Return results
+    return {
+        'curves_data': curves_data,
+        'summary_stats': summary_stats,
+        'processing_time': processing_time,
+        'n_pixels_processed': len(age_clean),
+        'output_csv_path': output_csv_path
+    }
+
+def prepareNFIDataForGAMs(abundance_path,
+                          age_path,
+                          biomass_path,
+                          speciesName,
+                          age_window = 5,
+                          abundance_window = 10,
+                          percentile = 100,
+                          mask_path = None,
+                         printPlot = False):
+    """
+    Prepare Canadian National Forest Inventory (NFI) raster data for Generalized Additive Model (GAM) analysis.
+
+    This function processes three co-registered NFI rasters (species abundance, forest age, and total forest aboveground biomass)
+    to create a windowed dataset suitable for GAM modeling. The function applies spatial masking,
+    calculates a new raster of species biomass using the 3 NFI raster,
+    creates discrete age and abundance windows and computes the highest percentile of biomass for each of them while enforcing
+    monotonic constraints to ensure biological realism (and to simplify the fitting of GAMs afterward).
+
+    Parameters
+    ----------
+    abundance_path : str
+        Path to the species abundance raster file (0-100% values representing species abundance
+        relative to other tree species in each pixel) from the NFI.
+    age_path : str
+        Path to the forest age raster file (values indicating forest age in years, 0 or nodata
+        for non-forest pixels) from the NFI.
+    biomass_path : str
+        Path to the total aboveground biomass raster file (values in tons per hectare) from the NFI.
+    speciesName : str
+        Name of the target species for labeling plots and outputs.
+    age_window : int, optional
+        Size of discrete, non-overlapping age windows in years (default: 5). Used to find the high percentile in each window.
+    abundance_window : int, optional
+        Size of discrete, non-overlapping abundance windows in percentage points (default: 10). Used to find the high percentile in each window.
+    percentile : int or float, optional
+        Percentile value (0-100) to calculate for biomass within each age-abundance window
+        (default: 100, i.e., maximum value).
+    mask_path : str or None, optional
+        Path to a mask raster file. Pixels with values < 1 are kept, pixels with values >= 1
+        are excluded from analysis (default: None, no masking applied). WARNING : It's an inverted mask to exclude provinces.
+
+    Returns
+    -------
+    None
+        The function generates plots and prints processing information.
+        The function then returns a panda dataframe with the processed (windowed) data.
+
+    Processing Steps
+    ----------------
+    1. **Raster Reading**: Loads abundance, age, biomass, and optional mask rasters using rasterio.
+    2. **Data Validation**: Handles nodata values and applies validity masks.
+    3. **Species Biomass Calculation**: Computes species-specific biomass by multiplying 
+       abundance percentage with total biomass.
+    4. **Spatial Masking**: Applies optional mask to exclude unwanted pixels.
+    5. **Windowing**: Creates discrete, non-overlapping windows for age and abundance ranges.
+    6. **Statistical Aggregation**: Calculates specified percentile of biomass within each window.
+    7. **Monotonic Constraint**: Ensures biomass values increase (or remain constant) with 
+       increasing abundance within each age window.
+    8. **Zero-Point Addition**: Adds artificial data points at age 0 with biomass 0 for all 
+       abundance levels to enforce biological realism. This is use to push the GAMs done afterward
+       to pass through 0 at age 0 (intercept).
+    9. **Visualization**: Generates scatter plots showing age vs. biomass relationships.
+
+    Notes
+    -----
+    - All input rasters must have the same projection, extent, and resolution.
+    - Pixels with zero species abundance are excluded from analysis.
+    - The monotonic constraint prevents biologically unrealistic scenarios where higher
+      species abundance results in lower species biomass.
+    - Zero-point addition helps constrain GAM models to pass through the origin, reflecting
+      the biological reality that forests of age 0 have zero biomass.
+    - The function includes diagnostic prints showing data processing statistics.
+    """
+
+    # Read the three rasters
+    def read_rasters(abundance_path,
+                    age_path,
+                    biomass_path,
+                    mask_path=None):
+        """Read the three raster files and return their data arrays"""
+    
+        # Read abundance raster
+        with rasterio.open(abundance_path) as src:
+            abundance = src.read(1).astype(np.float32)
+            abundance[abundance < 0] = np.nan  # Handle nodata values
+    
+        # Read age raster
+        with rasterio.open(age_path) as src:
+            age = src.read(1).astype(np.float32)
+            age[age <= 0] = np.nan  # Handle nodata values
+    
+        # Read biomass raster
+        with rasterio.open(biomass_path) as src:
+            biomass = src.read(1).astype(np.float32)
+            biomass[biomass < 0] = np.nan  # Handle nodata values
+    
+        # Read mask raster if provided
+        mask = None
+        if mask_path is not None:
+            with rasterio.open(mask_path) as src:
+                mask = src.read(1).astype(np.float32)
+    
+        return abundance, age, biomass, mask
+    
+    # Process data and create initial dataframe
+    def create_initial_dataframe(abundance, age, biomass, mask=None):
+        """Create initial dataframe with pixel data"""
+    
+        # Calculate species biomass
+        abies_biomass = (abundance / 100.0) * biomass
+    
+        # Create masks for valid data
+        valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0)
+    
+        # Apply additional mask if provided (keep pixels with value 0, exclude pixels with value > 1)
+        if mask is not None:
+            print("Mask has been detected. Masking...")
+            values, counts = np.unique(mask, return_counts=True)
+            print("Values:", values)
+            print("Counts:", counts)
+            valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0) & (mask < 1)
+            values, counts = np.unique((mask < 1), return_counts=True)
+            print("Values:", values)
+            print("Counts:", counts)
+        else:
+            valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0)
+    
+    
+        # Extract valid pixels
+        valid_abundance = abundance[valid_mask]
+        valid_age = age[valid_mask]
+        valid_abies_biomass = abies_biomass[valid_mask]
+    
+        # Create dataframe
+        df = pd.DataFrame({
+            'Age': valid_age,
+            'Abundance': valid_abundance,
+            'Biomass_Abies': valid_abies_biomass
+        })
+    
+        return df
+    
+    # Create windowed statistics dataframe with monotonic constraint
+    def create_windowed_dataframe(df, age_window=5, abundance_window=5, percentile=99):
+        """Create windowed statistics dataframe with monotonic abundance constraint"""
+    
+        # Define age windows
+        min_age = int(df['Age'].min())
+        max_age = int(df['Age'].max())
+        age_bins = range(min_age, max_age + age_window, age_window)
+    
+        # Define abundance windows
+        abundance_bins = range(0, 101, abundance_window)
+    
+        windowed_data = []
+    
+        for i in range(len(age_bins) - 1):
+            age_start = age_bins[i]
+            age_end = age_bins[i + 1]
+            age_middle = (age_start + age_end) / 2
+    
+            # Filter data for current age window
+            age_mask = (df['Age'] >= age_start) & (df['Age'] < age_end)
+            age_subset = df[age_mask]
+    
+            if len(age_subset) == 0:
+                continue
+    
+            # Track previous biomass value for monotonic constraint
+            previous_biomass = None
+    
+            for j in range(len(abundance_bins) - 1):
+                abundance_start = abundance_bins[j]
+                abundance_end = abundance_bins[j + 1]
+                abundance_middle = (abundance_start + abundance_end) / 2
+    
+                # Filter data for current abundance window
+                abundance_mask = (age_subset['Abundance'] >= abundance_start) & (age_subset['Abundance'] < abundance_end)
+                window_subset = age_subset[abundance_mask]
+    
+                if len(window_subset) == 0:
+                    continue
+    
+                # Calculate percentile
+                biomass_percentile = np.percentile(window_subset['Biomass_Abies'], percentile)
+    
+                # Check monotonic constraint: current biomass should be >= previous biomass
+                if previous_biomass is not None and biomass_percentile < previous_biomass:
+                    # print(f"Skipping entry - Age: {age_middle:.1f}, Abundance: {abundance_middle:.1f}% "
+                          # f"(Biomass {biomass_percentile:.2f} < previous {previous_biomass:.2f})")
+                    continue  # Skip this entry as it violates monotonic constraint
+    
+                # Add entry to windowed data
+                windowed_data.append({
+                    'Age': age_middle,
+                    'Abundance': abundance_middle,
+                    'Biomass_Abies': biomass_percentile
+                })
+    
+                # Update previous biomass for next iteration
+                previous_biomass = biomass_percentile
+    
+        # We end up by creating an entry that will represent a 0 point for all abondance window
+        # This will later force the GAM to pass by 0 as much as possible for an intercept, and represents
+        # a biological reality : a forest of age 0 must have a biomass of 0, no matter its composition
+        for j in range(len(abundance_bins) - 1):
+            abundance_start = abundance_bins[j]
+            abundance_end = abundance_bins[j + 1]
+            abundance_middle = (abundance_start + abundance_end) / 2
+    
+            windowed_data.append({
+                'Age': 0,
+                'Abundance': abundance_middle,
+                'Biomass_Abies': 0
+            })
+    
+    
+        print(f"Applied monotonic abundance constraint - kept {len(windowed_data)} entries")
+        return pd.DataFrame(windowed_data)
+    
+    # Plot the results
+    def plot_results(windowed_df):
+        """Create the Age vs Biomass plot with abundance-based coloring"""
+    
+        plt.figure(figsize=(12, 8))
+    
+        # Create custom colormap (red to green)
+        colors = ['red', 'yellow', 'green']
+        n_bins = 100
+        cmap = LinearSegmentedColormap.from_list('abundance', colors, N=n_bins)
+    
+        # Create scatter plot without edge colors
+        scatter = plt.scatter(windowed_df['Age'], windowed_df['Biomass_Abies'], 
+                             c=windowed_df['Abundance'], cmap=cmap, 
+                             s=60, alpha=0.7)
+    
+        # Add colorbar
+        cbar = plt.colorbar(scatter)
+        cbar.set_label('Abundance of ' + str(speciesName) + ' (%)', fontsize=12)
+    
+        # Set labels and title
+        plt.xlabel('Age (years)', fontsize=12)
+        plt.ylabel('Biomass of ' + str(speciesName) + ' (tons/ha)', fontsize=12)
+        plt.title('Age vs Biomass of ' + str(speciesName) + '\n(Colored by Abundance)', fontsize=14)
+    
+        # Add grid
+        plt.grid(True, alpha=0.3)
+    
+        # Adjust layout
+        plt.tight_layout()
+        plt.show()
+    
+    # Plot the initial dataframe results
+    def plot_initial_results(df):
+        """Create the Age vs Biomass plot for initial dataframe with abundance-based coloring"""
+    
+        plt.figure(figsize=(12, 8))
+    
+        # Create custom colormap (red to green)
+        colors = ['red', 'yellow', 'green']
+        n_bins = 100
+        cmap = LinearSegmentedColormap.from_list('abundance', colors, N=n_bins)
+    
+        # Create scatter plot without edge colors
+        scatter = plt.scatter(df['Age'], df['Biomass_Abies'], 
+                             c=df['Abundance'], cmap=cmap, 
+                             s=60, alpha=0.7)
+    
+        # Add colorbar
+        cbar = plt.colorbar(scatter)
+        cbar.set_label('Abundance of ' + str(speciesName) + ' (%)', fontsize=12)
+    
+        # Set labels and title
+        plt.xlabel('Age (years)', fontsize=12)
+        plt.ylabel('Biomass of ' + str(speciesName)+ ' (tons/ha)', fontsize=12)
+        plt.title('Age vs Biomass of ' + str(speciesName) + ' - All Pixels\n(Colored by Abundance)', fontsize=14)
+    
+        # Add grid
+        plt.grid(True, alpha=0.3)
+    
+        # Adjust layout
+        plt.tight_layout()
+        plt.show()
+    
+        
+    # Execute the workflow
+    print("Reading raster data...")
+    abundance, age, biomass, mask = read_rasters(abundance_path,
+                                                 age_path,
+                                                 biomass_path,
+                                                 mask_path)
+    
+    print("Creating initial dataframe...")
+    df = create_initial_dataframe(abundance, age, biomass, mask)
+    print(f"Initial dataframe shape: {df.shape}")
+    print(f"Age range: {df['Age'].min():.1f} - {df['Age'].max():.1f}")
+    print(f"Abundance range: {df['Abundance'].min():.1f} - {df['Abundance'].max():.1f}")
+    
+    print(f"\nProcessing with parameters:")
+    print(f"Age window: {age_window}")
+    print(f"Abundance window: {abundance_window}")
+    print(f"Percentile: {percentile}")
+    
+    print("\nCreating windowed dataframe...")
+    windowed_df = create_windowed_dataframe(df, age_window, abundance_window, percentile)
+    print(f"Windowed dataframe shape: {windowed_df.shape}")
+    
+    # Plot the initial dataframe
+    # if len(df) > 0:
+    #     print("\nCreating initial dataframe plot...")
+    #     plot_initial_results(df)
+    
+    if len(windowed_df) > 0 and printPlot:
+        print("\nCreating plot...")
+        plot_results(windowed_df)
+    
+        # Display sample of windowed data
+        # print("\nSample of windowed data:")
+        # print(windowed_df.head(10))
+    else:
+        print("No data points found in the specified windows!")
+
+    return(windowed_df)
+
+
+def createGAMsAndPredictionsForNFIDataGrowthCurves(windowed_df,
+                                                   csvOutputName,
+                                                   speciesName,
+                                                   cutoff_age = 150,
+                                                   abundance_levels = [100, 80, 60, 40, 20],
+                                                   printPlot = False):
+    """
+    Create an Generalized Additive Model (GAM) on the Canadian National Forest Inventory (NFI) processed
+    by the function prepareNFIDataForGAMs in order to generate predicted growth curves for different
+    levels of species abundance. It then exports the curves to a CSV file so that they can be re-used
+    to calibrate PnET-Succession later.
+
+    Parameters
+    ----------
+    windowed_df : pandas.DataFrame
+        Input dataframe generated by the function prepareNFIDataForGAMscontaining windowed forest data with columns:
+        - 'Age': Forest age in years
+        - 'Abundance': Species abundance percentage (0-100%)
+        - 'Biomass_Abies': Species biomass in tons per hectare
+    csvOutputName : str
+        Filename for the CSV output containing prediction curves.
+    speciesName : str
+        Name of the target species for labeling plots and outputs.
+    cutoff_age : int or float, optional
+        Maximum age threshold for model fitting. Only data points with age < cutoff_age
+        are used for GAM training (default: 150 years).
+    abundance_levels : list of int or float, optional
+        List of abundance percentages for which to generate prediction curves
+        (default: [100, 80, 60, 40, 20]).
+    printPlot : bool, optional
+        Whether to display the GAM results plot (default: False).
+
+    Returns
+    -------
+    None
+        The function generates plots (if requested), exports CSV files, and prints processing
+        information but does not return values.
+
+    Model Specifications
+    --------------------
+    The GAM model includes:
+    - **Age Effect**: Smooth spline with concave constraint (s(0, constraints='concave'))
+    - **Interaction Effect**: Tensor product of age and abundance with concave constraint
+    - **Abundance Weighting**: Observations weighted by (abundance/100)² to emphasize
+      high abundance data points
+
+    You can edit the GAM structure to your liking to better fit your data; this is just what
+    worked best in my case after trying several structures.
+
+    Output CSV Structure
+    --------------------
+    The exported CSV contains:
+    - 'Age' column: Age values from 0 to cutoff_age (100 points)
+    - 'GAM_Prediction_X%Abundance' columns: Predicted biomass for each abundance level
+
+    Notes
+    -----
+    - The model uses pygam's LinearGAM with tensor product interactions
+    - Abundance weighting helps ensure a better fit for high abundance predictions (for which we have less points)
+    - The concave constraint reflects typical forest growth patterns
+    - Model diagnostics including R-squared and constraint information are printed
+    - Age range for predictions spans from 0 to the specified cutoff age
+    """
+    
+    # Filter data based on age cutoff
+    def filter_data_by_age(windowed_df, cutoff_age):
+        """Filter dataframe to keep only pixels younger than cutoff age"""
+    
+        filtered_df = windowed_df[windowed_df['Age'] < cutoff_age].copy()
+    
+        print(f"Original dataframe shape: {windowed_df.shape}")
+        print(f"Filtered dataframe shape (Age < {cutoff_age}): {filtered_df.shape}")
+    
+        if len(filtered_df) > 0:
+            print(f"Filtered age range: {filtered_df['Age'].min():.1f} - {filtered_df['Age'].max():.1f}")
+            print(f"Filtered abundance range: {filtered_df['Abundance'].min():.1f} - {filtered_df['Abundance'].max():.1f}")
+    
+        return filtered_df
+    
+    # Fit GAM model with constraints and weights
+    def fit_gam_model(df):
+        """Fit a Generalized Additive Model with constraints and abundance weighting"""
+    
+        if len(df) == 0:
+            print("No data available for GAM fitting!")
+            return None
+    
+        # Prepare data
+        X = df[['Age', 'Abundance']].values
+        y = df['Biomass_Abies'].values
+    
+        # Create weights that emphasize higher abundance observations
+        weights = (df['Abundance'] / 100.0) ** 2  # Square to really emphasize high abundance
+    
+        # Fit GAM with:
+        # - Smooth term for age with concave constraint
+        # - Tensor product interaction with concave constraint
+        gam = LinearGAM(
+            s(0, n_splines=10, constraints='concave') +  # Age: concave
+            te(0, 1, constraints='concave'),  # Tensor product interaction: concave
+            fit_intercept=False  
+        )
+    
+        # Fit the model with weights
+        gam.fit(X, y, weights=weights)
+    
+        print(f"GAM fitted successfully with constraints and abundance weighting!")
+        print(f"GAM summary:")
+        print(f"  - Number of observations: {len(y)}")
+        print(f"  - R-squared (pseudo): {gam.statistics_['pseudo_r2']['explained_deviance']:.3f}")
+        print(f"  - Constraints applied:")
+        print(f"    * Age effect: concave")
+        print(f"    * Tensor product interaction: concave")
+        print(f"    * Intercept forced to 0")
+        print(f"    * Weighted toward high abundance observations")
+    
+        return gam
+    
+    # Generate predictions for multiple abundance levels
+    def generate_multiple_predictions(gam, cutoff_age, abundance_levels):
+        """Generate GAM predictions for multiple abundance levels across age range"""
+    
+        if gam is None:
+            return None, None
+    
+        # Create age range from 0 to cutoff
+        age_range = np.linspace(0, cutoff_age, 100)
+    
+        predictions_dict = {}
+    
+        for abundance_level in abundance_levels:
+            # Create prediction data with constant abundance
+            pred_data = np.column_stack([age_range, np.full(len(age_range), abundance_level)])
+    
+            # Generate predictions
+            predictions = gam.predict(pred_data)
+    
+            predictions_dict[abundance_level] = predictions
+    
+            print(f"Generated predictions for {abundance_level}% abundance:")
+            print(f"  - Biomass range: {predictions.min():.2f} - {predictions.max():.2f}")
+            print(f"  - Value at age 0: {predictions[0]:.6f}")
+    
+        return age_range, predictions_dict
+    
+    # Plot results with multiple GAM curves
+    def plot_gam_results(df, age_range=None, predictions_dict=None, abundance_levels=None):
+        """Plot the filtered data points with multiple GAM prediction curves"""
+    
+        plt.figure(figsize=(16, 10))
+    
+        # Create custom colormap (red to green)
+        colors = ['red', 'yellow', 'green']
+        n_bins = 100
+        cmap = LinearSegmentedColormap.from_list('abundance', colors, N=n_bins)
+    
+        # Plot data points
+        scatter = plt.scatter(df['Age'], df['Biomass_Abies'], 
+                             c=df['Abundance'], cmap=cmap, 
+                             s=60, alpha=0.7, label='Observed data')
+    
+        # Plot GAM prediction curves if available
+        if age_range is not None and predictions_dict is not None and abundance_levels is not None:
+            # Create color palette for curves
+            curve_colors = plt.cm.viridis(np.linspace(0, 1, len(abundance_levels)))
+    
+            for i, abundance_level in enumerate(abundance_levels):
+                if abundance_level in predictions_dict:
+                    plt.plot(age_range, predictions_dict[abundance_level], 
+                            color=curve_colors[i], linewidth=3, 
+                            label=f'GAM prediction ({abundance_level}% abundance)')
+    
+        # Add colorbar positioned in the bottom half
+        cbar = plt.colorbar(scatter, shrink=0.5, pad=0.12, anchor=(0.0, 0.0))
+        cbar.set_label('Abundance of ' + str(speciesName) + ' (%)', fontsize=12)
+    
+        # Set labels and title
+        plt.xlabel('Age (years)', fontsize=12)
+        plt.ylabel('Biomass of ' + str(speciesName)+ ' (tons/ha)', fontsize=12)
+        plt.title('Weighted GAM Model: Age vs Biomass of ' + str(speciesName) + '\n(Multiple Abundance Levels)', fontsize=14)
+    
+        # Add legend positioned in the top half
+        plt.legend(fontsize=10, bbox_to_anchor=(1.02, 1.0), loc='upper left')
+    
+        # Add grid
+        plt.grid(True, alpha=0.3)
+    
+        # Adjust layout to prevent overlap
+        plt.tight_layout()
+        plt.subplots_adjust(right=0.75)  # Make room for colorbar and legend
+        plt.show()
+    
+    def export_predictions_to_csv(age_range, predictions_dict, abundance_levels, filename='gam_predictions.csv'):
+        """Export GAM prediction curves to CSV file"""
+    
+        if age_range is None or predictions_dict is None:
+            print("No predictions available to export!")
+            return
+    
+        # Create dataframe with age as first column
+        export_df = pd.DataFrame({'Age': age_range})
+    
+        # Add prediction columns for each abundance level
+        for abundance_level in abundance_levels:
+            if abundance_level in predictions_dict:
+                column_name = f'GAM_Prediction_{abundance_level}%Abundance'
+                export_df[column_name] = predictions_dict[abundance_level]
+    
+        # Export to CSV
+        export_df.to_csv(filename, index=False)
+    
+        print(f"Predictions exported to {filename}")
+        print(f"Shape: {export_df.shape}")
+        print(f"Columns: {list(export_df.columns)}")
+        print(f"Age range: {export_df['Age'].min():.1f} - {export_df['Age'].max():.1f}")
+    
+        # Display first few rows as preview
+        print("\nPreview of exported data:")
+        print(export_df.head())
+    
+        return export_df
+    
+    # Execute GAM workflow
+    print("Filtering data by age cutoff...")
+    filtered_df = filter_data_by_age(windowed_df, cutoff_age)
+    
+    if len(filtered_df) > 0:
+        print("\nFitting weighted GAM model...")
+        gam_model = fit_gam_model(filtered_df)
+    
+        if gam_model is not None:
+            print(f"\nGenerating predictions for abundance levels: {abundance_levels}")
+            pred_ages, pred_biomass_dict = generate_multiple_predictions(gam_model, cutoff_age, abundance_levels)
+
+            if printPlot:
+                print("\nCreating plot with multiple GAM predictions...")
+                plot_gam_results(filtered_df, pred_ages, pred_biomass_dict, abundance_levels)
+    
+            # Display model statistics
+            print("\nGAM Model Information:")
+            print(f"Cutoff age used: {cutoff_age} years")
+            print(f"Data points used for fitting: {len(filtered_df)}")
+            print(f"Prediction curves: 0-{cutoff_age} years for {len(abundance_levels)} abundance levels")
+            print(f"Model constraints and weighting applied successfully")
+        else:
+            print("GAM fitting failed!")
+    else:
+        print("No data available after age filtering!")
+
+    # Export predictions to CSV
+    if pred_ages is not None and pred_biomass_dict is not None:
+        export_df = export_predictions_to_csv(pred_ages, pred_biomass_dict, abundance_levels, 
+                                             filename= csvOutputName)
+
+def plotNFICurvesFromGAMAndFromAlgorithmTogether(pathOfCsvFileWithGAMPredictions,
+                                                 pathOfCsvFileWithAlgorithmPrediction):
+    """
+    Compare and visualize forest growth curves from GAM predictions (generated by the function
+    createGAMsAndPredictionsForNFIData) and algorithm predictions (generated by analyze_species_growth_curves).
+
+    This function creates a comparative plot displaying biomass growth curves generated by two
+    different methods: Generalized Additive Models (GAM) and an alternative algorithm. The plot
+    allows visual comparison of prediction methods for forest biomass estimation across different
+    abundance levels and age ranges.
+
+    Parameters
+    ----------
+    pathOfCsvFileWithGAMPredictions : str
+        File path to CSV containing GAM prediction curves. Expected structure:
+        - First column: Age values (years)
+        - Subsequent columns: Biomass predictions for different abundance levels
+          (e.g., 'GAM_Prediction_100%Abundance', 'GAM_Prediction_80%Abundance', etc.)
+    pathOfCsvFileWithAlgorithmPrediction : str
+        File path to CSV containing algorithm prediction curves. Expected structure:
+        - First column: Age values (years)
+        - Subsequent columns: Various prediction outputs, including columns with 'smoothed'
+          in their names which will be plotted
+
+    Returns
+    -------
+    None
+        The function generates and displays a matplotlib plot but does not return values.
+
+    Plot Features
+    -------------
+    - **GAM Curves**: Plotted as solid lines using viridis colormap (purple to yellow)
+    - **Algorithm Curves**: Plotted as dashed lines using inverted viridis colormap (yellow to purple;
+    inverted as the column names are inverted for this one, because of how previous functions are written.)
+    - **Selective Plotting**: Only plots 'smoothed' columns from the algorithm predictions, avoiding the raw curves. 
+    - **Grid**: Light grid overlay for easier value reading
+    """
+
+    # Read the two CSV files
+    pathOfCsvFileWithGAMPredictions = pd.read_csv(pathOfCsvFileWithGAMPredictions)
+    pathOfCsvFileWithAlgorithmPrediction = pd.read_csv(pathOfCsvFileWithAlgorithmPrediction)
+    
+    # Create the plot
+    plt.figure(figsize=(12, 8))
+    
+    # Get age column (assuming first column is age)
+    age_col1 = pathOfCsvFileWithGAMPredictions.iloc[:, 0]
+    age_col2 = pathOfCsvFileWithAlgorithmPrediction.iloc[:, 0]
+    
+    # Plot curves from first CSV file
+    biomass_cols1 = pathOfCsvFileWithGAMPredictions.columns[1:]  # All columns except age
+    n_curves1 = len(biomass_cols1)
+    viridis_colors1 = plt.cm.viridis(np.linspace(0, 1, n_curves1))
+    
+    for i, col in enumerate(biomass_cols1):
+        plt.plot(age_col1, pathOfCsvFileWithGAMPredictions[col], color=viridis_colors1[i], label=col, linewidth=2)
+    
+    # Plot curves from second CSV file (only "Smoothed" columns)
+    smoothed_cols = [col for col in pathOfCsvFileWithAlgorithmPrediction.columns[1:] if 'smoothed' in col]
+    n_curves2 = len(smoothed_cols)
+    
+    if n_curves2 > 0:
+        # Inverted viridis palette (yellow to purple)
+        viridis_colors2 = plt.cm.viridis(np.linspace(1, 0, n_curves2))
+    
+        for i, col in enumerate(smoothed_cols):
+            plt.plot(age_col2, pathOfCsvFileWithAlgorithmPrediction[col], color=viridis_colors2[i], 
+                    label=col, linestyle='--', linewidth=2)
+    
+    # Customize the plot
+    plt.xlabel('Age')
+    plt.ylabel('Biomass')
+    plt.title('Biomass vs Age Curves from GAM (solid) and from algorithm (Dashed) - Abies balsamea')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()

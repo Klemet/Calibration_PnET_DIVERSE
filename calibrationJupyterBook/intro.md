@@ -6,7 +6,7 @@ This [Jupyter book](https://jupyterbook.org) was created by [Clement Hardy](http
 
 The objective here is to calibrate the [PnET Succession extension](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession) for the [LANDIS-II model](https://www.landis-ii.org/), in the context of the different landscape that will be simulated for the [DIVERSE project](https://diverseproject.uqo.ca/).
 
-PnET Succession is one of the most complex extensions of LANDIS-II, based on the PnET familly of eco-physiological models. To be certain that the vegetation dynamics that it simulates will be realistic, we need to calibrate it carefully.
+PnET-Succession is one of the most complex extensions of LANDIS-II, based on the PnET familly of eco-physiological models. To be certain that the vegetation dynamics that it simulates will be realistic, we need to calibrate it carefully.
 
 The [PnET succession User Guide](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/blob/master/deploy/docs/LANDIS-II%20PnET-Succession%20v5.1%20User%20Guide.pdf) contains a lengthy section of calibration tips by [Eric Gustafson](https://research.fs.usda.gov/about/people/gustafson) that I will use as a guide for this calibration process.
 
@@ -17,9 +17,11 @@ One of the main goals of this documentation is to translate the calibration tips
 
 ## 🪜 Steps of the calibration
 
-```{note}
-These steps are based on my own understanding of the [calibration tips of Eric Gustafson](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/blob/master/deploy/docs/LANDIS-II%20PnET-Succession%20v5.1%20User%20Guide.pdf) and will surely be subject to change as I keep working on the procedure.
-```
+There are many ways to calibrate a model like PnET-Succession. It can be difficult to choose which one to use. Here, I propose an approach based my own understanding of the [calibration tips of Eric Gustafson](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/blob/master/deploy/docs/LANDIS-II%20PnET-Succession%20v5.1%20User%20Guide.pdf).
+
+This approach is a multi-step procedure that focuses on calibrating certain parameters one after the others, in simulated conditions of increasing complexity. By doing this, we can isolate as much as possible the counfounding effect of different parameters and focus on one type of output/outcome at a time while keeping other parameters fixed.
+
+The different phases are :
 
 - Phase 1 🌳 : Calibration of species in optimal conditions (monoculture + mesic soil + average and unchanging climate).
     - Sub-phase 1 : Calibration of the peak of the growth curve
