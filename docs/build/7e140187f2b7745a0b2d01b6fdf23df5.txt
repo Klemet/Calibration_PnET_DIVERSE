@@ -1,0 +1,734 @@
+Launching LANDIS-II simulation with command : /bin/bash -c "cd /tmp/TestScenarioPnET/ && dotnet $LANDIS_CONSOLE scenario.txt"
+[?1h=LANDIS-II 8.0 (8)
+
+Loading scenario from file "scenario.txt" ...
+Initialized random number generator with user-supplied seed = 1,111
+Loading species data from file "species.txt" ...
+Loading ecoregions from file "ecoregion.txt" ...
+Core metadata:
+
+Initializing landscape from ecoregions map "ecoregion.img" ...
+Cell length = 30 m, cell area = 0.09 ha
+Map dimensions: 17 rows by 17 columns = 289 cells
+Sites: 1 active (0.3 %), 288 inactive (99.7 %)
+  reading in ecoregion from ecoregion.img 
+Loading PnET-Succession extension ...
+Initializing PnET-Succession version 6.0.3.0
+   Registering Data:  Succession.WoodyDebris.
+   Registering Data:  Succession.SoilFieldCapacity.
+  No ClimateConfigFile provided. Using climate files in ecoregion parameters: EcoregionParameters.txt.
+Eco	Soiltype	WiltPnt		FieldCap	FC-WP		Porosity
+eco1	SAND		0.039998654	0.097845525	0.05784687	0.45445505
+Using PAR units of umol/m2/s.
+   Registering Data:  Shade.
+   Dispersal:  NeighborRadius=3015, CellLength=30, numCellRadius=100
+Spinning up biomass or reading from maps...
+   Loading initial communities from file "initial-communities.csv" ...
+   Reading initial communities map "initial-communities.img" ...
+	Progress = 100% Elapsed time 0s EstimatedTotalTime 0s
+   Registering Data:  Succession.CohortsPnET.
+Loading Output-PnET extension ...
+   Generating summary table...
+
+Running Output-PnET ...
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-0.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-0.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-0.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-0.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-0.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-0.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-0.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-0.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-0.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-0.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-0.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-0.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-0.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-0.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-0.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-0.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-0.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-0.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-0.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-0.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-0.img ...
+dataset created: output/NSC/querrubr/NSC-0.img
+   Writing pinubank map to output/NSC/pinubank/NSC-0.img ...
+dataset created: output/NSC/pinubank/NSC-0.img
+dataset created: output/NSC/AllSpecies/NSC-0.img
+Updating output variable: PET
+dataset created: output/PET//PET-0.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-0.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-0.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-0.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-0.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-0.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-0.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-0.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-0.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-0.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-0.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-0.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-0dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-0dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-0dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-0nov.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-0.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-0.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-0.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-0.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-0.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-0.img
+Updating output variable: SpeciesEstablishment
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-0.img
+Updating output variable: Water
+dataset created: output/Water/Water-0.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-0.img
+Updating output variable: WoodyDebris
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-0.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Running PnET-Succession ...
+growing cohorts ...
+% done:   0%  10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+Progress: 
+Progress: +
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Computing shade ...
+Progress: +
+Progress: ++++++++
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: +
+Updating output variable: LAI
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-10.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-10.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-10.img
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-10.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-10.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-10.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-10.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-10.img
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-10.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-10.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-10.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-10.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-10.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-10.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-10.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-10.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-10.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-10.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-10.img ...
+dataset created: output/NSC/querrubr/NSC-10.img
+   Writing pinubank map to output/NSC/pinubank/NSC-10.img ...
+dataset created: output/NSC/pinubank/NSC-10.img
+dataset created: output/NSC/AllSpecies/NSC-10.img
+Updating output variable: PET
+dataset created: output/PET//PET-10.img
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-10.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-10.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-10.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-10.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-10.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-10.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-10.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-10.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-10.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-10.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-10.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-10dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-10dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-10dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-10dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-10.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-10.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-10.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-10.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-10.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-10.img ...
+dataset created: output/Establishment/querrubr/Establishment-10.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-10.img ...
+dataset created: output/Establishment/pinubank/Establishment-10.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-10.img
+Updating output variable: Water
+dataset created: output/Water/Water-10.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-10.img
+Updating output variable: WoodyDebris
+Updating output variable: AgeDistribution
+Updating output variable: overalloutputs
+Updating output variable: MortalityTable
+Running PnET-Succession ...
+Progress: +
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-20.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-20.img
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-20.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-20.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-20.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-20.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-20.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-20.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-20.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-20.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-20.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-20.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-20.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-20.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-20.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-20.img ...
+dataset created: output/NSC/querrubr/NSC-20.img
+   Writing pinubank map to output/NSC/pinubank/NSC-20.img ...
+dataset created: output/NSC/pinubank/NSC-20.img
+Updating output variable: PET
+dataset created: output/PET//PET-20.img
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-20.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-20.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-20.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-20.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-20.img
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-20.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-20.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-20.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-20.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-20.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-20.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-20dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-20dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-20dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-20dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-20.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-20.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-20.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-20.img
+Updating output variable: SpeciesEstablishment
+   Writing querrubr map to output/Establishment/querrubr/Establishment-20.img ...
+dataset created: output/Establishment/querrubr/Establishment-20.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-20.img ...
+dataset created: output/Establishment/pinubank/Establishment-20.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-20.img
+Updating output variable: Water
+dataset created: output/Water/Water-20.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-20.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-20.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-20.img
+Updating output variable: overalloutputs
+Updating output variable: establishmentTable
+Updating output variable: MortalityTable
+Current time: 30
+Progress: +
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: +++++++++++++++++++++++++++++++++++++++++++++++++++
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-30.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-30.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-30.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-30.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-30.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-30.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-30.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-30.img
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-30.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-30.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-30.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-30.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-30.img
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-30.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-30.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-30.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-30.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-30.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-30.img ...
+   Writing pinubank map to output/NSC/pinubank/NSC-30.img ...
+dataset created: output/NSC/pinubank/NSC-30.img
+Updating output variable: PET
+dataset created: output/PET//PET-30.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-30.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-30.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-30.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-30.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-30.img
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-30.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-30.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-30.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-30.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-30.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-30.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-30dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-30dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-30dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-30nov.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-30.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-30.img
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-30.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-30.img
+   Writing querrubr map to output/Establishment/querrubr/Establishment-30.img ...
+dataset created: output/Establishment/querrubr/Establishment-30.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-30.img ...
+dataset created: output/Establishment/pinubank/Establishment-30.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-30.img
+Updating output variable: Water
+dataset created: output/Water/Water-30.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-30.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-30.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-30.img
+Updating output variable: overalloutputs
+Updating output variable: MortalityTable
+Progress: +
+Progress: +
+Updating output variable: LAI
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-40.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-40.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-40.img
+Updating output variable: WoodBiomass
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-40.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-40.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-40.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-40.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-40.img
+Updating output variable: Root Biomass
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-40.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-40.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-40.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-40.img
+dataset created: output/RootBiomass/AllSpecies/RootBiomass-40.img
+Updating output variable: FoliageBiomass
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-40.img ...
+dataset created: output/FoliageBiomass/querrubr/FoliageBiomass-40.img
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-40.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-40.img
+dataset created: output/FoliageBiomass/AllSpecies/FoliageBiomass-40.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-40.img ...
+dataset created: output/NSC/querrubr/NSC-40.img
+   Writing pinubank map to output/NSC/pinubank/NSC-40.img ...
+dataset created: output/NSC/pinubank/NSC-40.img
+dataset created: output/NSC/AllSpecies/NSC-40.img
+Updating output variable: PET
+dataset created: output/PET//PET-40.img
+Updating output variable: Woody Senescence
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-40.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-40.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-40.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-40.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-40.img
+Updating output variable: Foliage Senescence
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-40.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-40.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-40.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-40.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-40.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-40.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-40dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-40dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-40dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-40dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-40.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-40.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-40.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-40.img
+   Writing querrubr map to output/Establishment/querrubr/Establishment-40.img ...
+dataset created: output/Establishment/querrubr/Establishment-40.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-40.img ...
+Updating output variable: AnnualPsn
+Updating output variable: Water
+dataset created: output/Water/Water-40.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-40.img
+Updating output variable: WoodyDebris
+Updating output variable: AgeDistribution
+Updating output variable: overalloutputs
+Updating output variable: MortalityTable
+Current time: 50
+Progress: +
+Progress: ++++++++++++++++++++++
+   Writing querrubr map to output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img ...
+dataset created: output/LeafAreaIndex/querrubr/LeafAreaIndex-50.img
+   Writing pinubank map to output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img ...
+dataset created: output/LeafAreaIndex/pinubank/LeafAreaIndex-50.img
+dataset created: output/LeafAreaIndex/AllSpecies/LeafAreaIndex-50.img
+   Writing querrubr map to output/WoodBiomass/querrubr/WoodBiomass-50.img ...
+dataset created: output/WoodBiomass/querrubr/WoodBiomass-50.img
+   Writing pinubank map to output/WoodBiomass/pinubank/WoodBiomass-50.img ...
+dataset created: output/WoodBiomass/pinubank/WoodBiomass-50.img
+dataset created: output/WoodBiomass/AllSpecies/WoodBiomass-50.img
+   Writing querrubr map to output/RootBiomass/querrubr/RootBiomass-50.img ...
+dataset created: output/RootBiomass/querrubr/RootBiomass-50.img
+   Writing pinubank map to output/RootBiomass/pinubank/RootBiomass-50.img ...
+dataset created: output/RootBiomass/pinubank/RootBiomass-50.img
+   Writing querrubr map to output/FoliageBiomass/querrubr/FoliageBiomass-50.img ...
+   Writing pinubank map to output/FoliageBiomass/pinubank/FoliageBiomass-50.img ...
+dataset created: output/FoliageBiomass/pinubank/FoliageBiomass-50.img
+Updating output variable: NSC
+   Writing querrubr map to output/NSC/querrubr/NSC-50.img ...
+dataset created: output/NSC/querrubr/NSC-50.img
+   Writing pinubank map to output/NSC/pinubank/NSC-50.img ...
+dataset created: output/NSC/pinubank/NSC-50.img
+dataset created: output/NSC/AllSpecies/NSC-50.img
+Updating output variable: PET
+dataset created: output/PET//PET-50.img
+   Writing querrubr map to output/WoodySenescence/querrubr/WoodySenescence-50.img ...
+dataset created: output/WoodySenescence/querrubr/WoodySenescence-50.img
+   Writing pinubank map to output/WoodySenescence/pinubank/WoodySenescence-50.img ...
+dataset created: output/WoodySenescence/pinubank/WoodySenescence-50.img
+dataset created: output/WoodySenescence/AllSpecies/WoodySenescence-50.img
+   Writing querrubr map to output/FoliageSenescence/querrubr/FoliageSenescence-50.img ...
+dataset created: output/FoliageSenescence/querrubr/FoliageSenescence-50.img
+   Writing pinubank map to output/FoliageSenescence/pinubank/FoliageSenescence-50.img ...
+dataset created: output/FoliageSenescence/pinubank/FoliageSenescence-50.img
+dataset created: output/FoliageSenescence/AllSpecies/FoliageSenescence-50.img
+Updating output variable: AETAvg
+dataset created: output/AETAvg//AETAvg-50.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jan.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50feb.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50mar.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50apr.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50may.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jun.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50jul.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50aug.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50sep.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50oct.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50nov.img
+dataset created: output/MonthlyFolResp/MonthlyFolResp-50dec.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jan.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50feb.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50mar.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50apr.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50may.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jun.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50jul.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50aug.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50sep.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50oct.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50nov.img
+dataset created: output/MonthlyGrossPsn/MonthlyGrossPsn-50dec.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jan.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50feb.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50mar.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50apr.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50may.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jun.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50jul.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50aug.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50sep.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50oct.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50nov.img
+dataset created: output/MonthlyNetPsn/MonthlyNetPsn-50dec.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jan.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50feb.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50mar.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50apr.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50may.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jun.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50jul.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50aug.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50sep.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50oct.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50nov.img
+dataset created: output/MonthlyMaintResp/MonthlyMaintResp-50dec.img
+Updating output variable: CohortsPerSpc
+dataset created: output/CohortsPerSpecies/querrubr/CohortsPerSpecies-50.img
+dataset created: output/CohortsPerSpecies/pinubank/CohortsPerSpecies-50.img
+Updating output variable: EstablishmentProbability
+   Writing querrubr map to output/EstablishmentProbability/querrubr/EstablishmentProbability-50.img ...
+dataset created: output/EstablishmentProbability/querrubr/EstablishmentProbability-50.img
+   Writing pinubank map to output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img ...
+dataset created: output/EstablishmentProbability/pinubank/EstablishmentProbability-50.img
+   Writing querrubr map to output/Establishment/querrubr/Establishment-50.img ...
+dataset created: output/Establishment/querrubr/Establishment-50.img
+   Writing pinubank map to output/Establishment/pinubank/Establishment-50.img ...
+dataset created: output/Establishment/pinubank/Establishment-50.img
+Updating output variable: AnnualPsn
+dataset created: output/AnnualPsn//AnnualPsn-50.img
+Updating output variable: Water
+dataset created: output/Water/Water-50.img
+Updating output variable: SubCanopyPAR
+dataset created: output/SubCanopyPAR/SubCanopyPAR-50.img
+Updating output variable: WoodyDebris
+dataset created: output/WoodyDebris/WoodyDebris-50.img
+Updating output variable: AgeDistribution
+dataset created: output/AgeDistribution//AgeDistribution-50.img
+Updating output variable: overalloutputs
+Updating output variable: MortalityTable
+Model run is complete.
+The LANDIS-II simulation has finished properly!
