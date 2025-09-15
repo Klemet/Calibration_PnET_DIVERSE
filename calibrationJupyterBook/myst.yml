@@ -14,11 +14,12 @@ project:
     - file: intro.md
     - file: StartingCalibrationTest/Intro_CalibrationTest.ipynb
       children:
+        - file: StartingCalibrationTest/0.Some_important_notions.ipynb
         - file: StartingCalibrationTest/1.Loading_functions.ipynb
         - file: StartingCalibrationTest/2.Test_sim_functions.ipynb
         - file: StartingCalibrationTest/3.Initial_Species_Parameters.ipynb
-        - file: StartingCalibrationTest/4.Setting_up_calibration_Landscape.ipynb
-        - file: StartingCalibrationTest/5.Other_important_data_before_starting.ipynb
+        - file: StartingCalibrationTest/4.Getting_the_empirical_data.ipynb
+        - file: StartingCalibrationTest/5.Getting_climate_and_soil_data.ipynb
         - file: StartingCalibrationTest/6.Monoculture_ideal_conditions.ipynb
 site:
   options:

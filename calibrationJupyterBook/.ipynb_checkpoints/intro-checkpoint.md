@@ -12,7 +12,7 @@ The [PnET succession User Guide](https://github.com/LANDIS-II-Foundation/Extensi
 
 ```{admonition} Making the calibration of PnET easier for everyone
 :class: tip
-One of the main goals of this documentation is to translate the calibration tips of Gustafson into a replicable and entirely documented procedure. As such, any research team should find here a calibration of PnET Succession from A to Z that can be replicated and reused freely.
+One of the main goals of this documentation is to translate the calibration tips of Eric Gustafson into a replicable and entirely documented procedure. As such, any research team should find here a calibration of PnET Succession from A to Z that can be replicated and reused freely.
 ```
 
 ## 🪜 Steps of the calibration
@@ -32,6 +32,8 @@ The different phases are :
 - Phase 4 🌡️ : Calibration of the effect of the temperature (monoculture stands + changing temperatures + mesic soil and average precipitations) via a matrix of expected outcomes for each species in conditions of increasing temperatures (i.e. regular growth, decrease in growth, strong decrease in growth, death). Landscape-scale simulation might also be used to see if expected processes (e.g. increase in deciduous species, decrease in coniferous species) is observed at this larger scale.
 - Phase 5 🌱 : Calibration of landscape-scale establishment (one species at a time in the landscape to simulate + average temperatures and precipitations) by monitoring the number of cohorts produced at each time step via dispersion/reproduction of the species, and comparing to expected values.
 
+**Phase 1 will most likely be the most time-consuming and important**, as this is where we will calibrate some of the most important and sensitive parameters of PnET-Succession. The calibration in the successive steps should be minimal if the instructions of step 1 have been followed, and if the initial parameters you are using are good at representing the differences between species.
+
 ## 📖 Format of this documentation
 
 This documentation is a Jupyter Book, composed of several files (markdown files and Jupyter notebooks) that you can find in [the repository that contains the book](https://github.com/Klemet/Calibration_PnET_DIVERSE).
@@ -42,7 +44,7 @@ This means that you can replicate the whole process easily on your own computer.
 
 ➡️ **📖 If you simply want to inform yourself as to the calibration process, just keep reading !**
 
-➡️ **💻 If you want to run the code used for this calibration process on your own computer (for example, to calibrate new species for your own study area), read the instructions of [the readme of the repository](https://github.com/Klemet/Calibration_PnET_DIVERSE/blob/main/README.md)**. They will help you deploy a Docker image on your computer that will contains the entire environment (including LANDIS-II) used for this calibration in a couple of minutes. 
+➡️ **💻 If you want to run the code used for this calibration process on your own computer (for example, to calibrate new species for your own study area), read the instructions of [the readme of the repository](https://github.com/Klemet/Calibration_PnET_DIVERSE/blob/main/README.md)**. They will help you deploy a Docker image on your computer that will contains the entire environment (including LANDIS-II) used for this calibration within minutes. 
 
 **📖 Happy reading !**
 
