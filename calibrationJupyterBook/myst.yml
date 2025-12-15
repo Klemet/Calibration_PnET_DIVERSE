@@ -30,4 +30,3 @@ site:
       execute_notebooks : off
       timeout: 9000
   template: book-theme
-  

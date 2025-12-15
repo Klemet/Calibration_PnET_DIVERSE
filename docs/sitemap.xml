@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://localhost:3000/sitemap_style.xsl" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://localhost:3000</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/intro-calibrationtest</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/some-important-notions</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/loading-functions</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/test-sim-functions</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/initial-species-parameters</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/getting-the-empirical-data</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/getting-climate-and-soil-data</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/monoculture-ideal-conditions</loc>
+  </url>
+</urlset>
