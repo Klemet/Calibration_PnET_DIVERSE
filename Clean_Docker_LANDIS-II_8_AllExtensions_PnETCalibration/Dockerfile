@@ -89,7 +89,18 @@ COPY ./files_to_help_compilation/editing_csproj_LANDIS-II_files.py /bin/LANDIS_L
 
 # Transfering the sh script that allows us to only download one folder from one commit from github
 COPY ./files_to_help_compilation/downloadSpecificGitCommitAndFolder.sh /bin/LANDIS_Linux/Core-Model-v8-LINUX
-RUN chmod +x /bin/LANDIS_Linux/Core-Model-v8-LINUX/downloadSpecificGitCommitAndFolder.sh
+
+# Making sure both scripts have LF EOL to avoid errors in the linux environment of the build
+# by installing the converter program dos2unix temporarely, changing the EOL, and then uninstalling/
+# purging to avoid adding space to the Docker image.
+# Also making sure that the script is executable.
+RUN apt-get update \
+    && apt-get install -y dos2unix \
+    && find /bin/LANDIS_Linux/Core-Model-v8-LINUX/ -type f -name "*.sh" -exec dos2unix {} + \
+    && find /bin/LANDIS_Linux/Core-Model-v8-LINUX/ -type f -name "*.sh" -exec chmod +x {} + \
+    && apt-get purge -y dos2unix \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
 ###### COMPILING AND REGISTERING EXTENSIONS 
 # INFO: The files necessary for the compilation are downloaded through the script downloadSpecificGitCommitAndFolder.sh
@@ -588,7 +599,7 @@ RUN pip install lckr-jupyterlab-variableinspector
 RUN pip install jupyterlab_myst
 
 # We install zenovo-get, which allows for fast download from Zenovo data. See https://github.com/dvolgyes/zenodo_get
-RUN pip3 install git+https://github.com/dvolgyes/zenodo_get
+RUN pip install zenodo-get
 
 # Enable JupyterLab
 ENV JUPYTER_ENABLE_LAB=yes
