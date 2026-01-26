@@ -36,6 +36,10 @@ RUN apt-get update -y && apt-get upgrade -y \
 && apt-get install -y ssl-cert ca-certificates \
 # Axel is not for LANDIS-II, it's for fast downloads
 && apt-get install -y axel \
+# dos2unix is to avoid EOL issues steming from windows
+&& apt-get install -y dos2unix \
+# Needed to unzip files
+&& apt-get install -y unzip \
 # Installing libssl1 sometimes needed for Dotnet
 && wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
 && dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb \
@@ -66,23 +70,9 @@ ENV LANDIS_EXTENSIONS_TOOL="/bin/LANDIS_Linux/Core-Model-v8-LINUX/build/Release/
 ENV LANDIS_CONSOLE="/bin/LANDIS_Linux/Core-Model-v8-LINUX/build/Release/Landis.Console.dll"
 ENV LANDIS_FOLDER="/bin/LANDIS_Linux/Core-Model-v8-LINUX/"
 
-################################################################
-# COMPILING LANDIS-II
-################################################################
-
-###### COMPILING THE CORE 
-
-RUN mkdir /bin/LANDIS_Linux \
-&& cd /bin/LANDIS_Linux && git clone https://github.com/LANDIS-II-Foundation/Core-Model-v8-LINUX.git \
-&& cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Tool-Console/src && dotnet build -c Release 
-
-# Downloading support libraries and installing them
-# We fix the commit that is used to avoid breaking the build of the Docker image
-# because of updates to the repository
-RUN cd /bin/LANDIS_Linux && git clone https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v8.git \
-&& cd /bin/LANDIS_Linux/Support-Library-Dlls-v8/ && git checkout f8178b2a8f8d39bf8c4f1884cc446e4e34fee1ff \
-&& mv /bin/LANDIS_Linux/Support-Library-Dlls-v8/* /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/extensions \
-&& rm -r /bin/LANDIS_Linux/Support-Library-Dlls-v8
+# COPYING SCRIPTS
+# We create the place where the core and extensions will be compiled
+RUN mkdir /bin/LANDIS_Linux/ && mkdir /bin/LANDIS_Linux/Core-Model-v8-LINUX
 
 # Transfering the python script that helps the compilation of the extensions
 COPY ./files_to_help_compilation/editing_csproj_LANDIS-II_files.py /bin/LANDIS_Linux/Core-Model-v8-LINUX
@@ -90,17 +80,29 @@ COPY ./files_to_help_compilation/editing_csproj_LANDIS-II_files.py /bin/LANDIS_L
 # Transfering the sh script that allows us to only download one folder from one commit from github
 COPY ./files_to_help_compilation/downloadSpecificGitCommitAndFolder.sh /bin/LANDIS_Linux/Core-Model-v8-LINUX
 
-# Making sure both scripts have LF EOL to avoid errors in the linux environment of the build
-# by installing the converter program dos2unix temporarely, changing the EOL, and then uninstalling/
-# purging to avoid adding space to the Docker image.
+# Making sure both scripts have LF EOL to avoid errors in the linux environment of the build by using the converter program dos2unix 
 # Also making sure that the script is executable.
-RUN apt-get update \
-    && apt-get install -y dos2unix \
-    && find /bin/LANDIS_Linux/Core-Model-v8-LINUX/ -type f -name "*.sh" -exec dos2unix {} + \
+RUN find /bin/LANDIS_Linux/Core-Model-v8-LINUX/ -type f -name "*.sh" -exec dos2unix {} + \
     && find /bin/LANDIS_Linux/Core-Model-v8-LINUX/ -type f -name "*.sh" -exec chmod +x {} + \
     && apt-get purge -y dos2unix \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
+
+################################################################
+# COMPILING LANDIS-II
+################################################################
+
+###### COMPILING THE CORE 
+RUN cd /bin/LANDIS_Linux && ./Core-Model-v8-LINUX/downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Core-Model-v8-LINUX.git 8725da5cd7bfdf3ae28bbd59b1353ec442783d68 / \
+&& cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Tool-Console/src && dotnet build -c Release 
+
+# Downloading support libraries and installing them
+# We fix the commit that is used to avoid breaking the build of the Docker image
+# because of updates to the repository
+RUN cd /bin/LANDIS_Linux && ./Core-Model-v8-LINUX/downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Support-Library-Dlls-v8.git 77792cc558b0fa3f7b9add8f7b60e48dc39a5edc / \
+&& cd /bin/LANDIS_Linux/Support-Library-Dlls-v8/ \
+&& mv /bin/LANDIS_Linux/Support-Library-Dlls-v8/* /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/extensions \
+&& rm -r /bin/LANDIS_Linux/Support-Library-Dlls-v8
 
 ###### COMPILING AND REGISTERING EXTENSIONS 
 # INFO: The files necessary for the compilation are downloaded through the script downloadSpecificGitCommitAndFolder.sh

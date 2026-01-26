@@ -11,29 +11,72 @@ REPO_URL=$1
 COMMIT_HASH=$2
 FOLDER_PATH=$3
 
-# Extract repository name from URL
+# Extract repository owner and name from URL
+# Handles both https://github.com/owner/repo and https://github.com/owner/repo.git
+REPO_OWNER=$(echo $REPO_URL | sed -E 's|https?://github.com/([^/]+)/.*|\1|')
 REPO_NAME=$(basename -s .git $REPO_URL)
 
-# Create and enter the repository directory
-mkdir $REPO_NAME
-cd $REPO_NAME
+# Create temporary directory for download
+TEMP_DIR="${REPO_NAME}_temp"
+mkdir -p $TEMP_DIR
 
-# Initialize a new Git repository
-git init
+echo "Downloading commit $COMMIT_HASH from $REPO_OWNER/$REPO_NAME..."
 
-# Add the remote repository
-git remote add origin $REPO_URL
+# Download specific commit as archive with retry logic
+MAX_RETRIES=5
+RETRY_COUNT=0
+SUCCESS=false
 
-# Enable sparse checkout
-git config core.sparseCheckout true
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+    if curl -L -f -o "$TEMP_DIR/archive.zip" \
+        "https://github.com/${REPO_OWNER}/${REPO_NAME}/archive/${COMMIT_HASH}.zip"; then
+        SUCCESS=true
+        echo "Download successful"
+        break
+    else
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        echo "Download failed. Retry $RETRY_COUNT of $MAX_RETRIES..."
+        sleep 3
+    fi
+done
 
-# Specify the folder to checkout
-echo "$FOLDER_PATH" > .git/info/sparse-checkout
+if [ "$SUCCESS" = false ]; then
+    echo "Failed to download after $MAX_RETRIES attempts"
+    rm -rf $TEMP_DIR
+    exit 1
+fi
 
-# Fetch the specific commit
-git fetch --depth 1 origin $COMMIT_HASH
+# Extract archive
+echo "Extracting archive..."
+unzip -q "$TEMP_DIR/archive.zip" -d $TEMP_DIR
 
-# Checkout the specified commit
-git checkout $COMMIT_HASH
+# Find extracted directory (GitHub names it as REPO_NAME-COMMIT_HASH)
+EXTRACTED_DIR=$(find $TEMP_DIR -maxdepth 1 -type d -name "${REPO_NAME}-*" | head -n 1)
 
-echo "Sparse checkout completed for $FOLDER_PATH from commit $COMMIT_HASH"
+if [ -z "$EXTRACTED_DIR" ]; then
+    echo "Error: Could not find extracted directory"
+    rm -rf $TEMP_DIR
+    exit 1
+fi
+
+# Create target directory
+mkdir -p $REPO_NAME
+
+# Check if we should keep everything or just a specific folder
+if [ "$FOLDER_PATH" = "/" ]; then
+    echo "Extracting entire repository..."
+    cp -r "$EXTRACTED_DIR"/* "$REPO_NAME/"
+    echo "Successfully extracted all files from commit $COMMIT_HASH"
+elif [ -d "$EXTRACTED_DIR/$FOLDER_PATH" ]; then
+    cp -r "$EXTRACTED_DIR/$FOLDER_PATH" "$REPO_NAME/"
+    echo "Successfully extracted $FOLDER_PATH from commit $COMMIT_HASH"
+else
+    echo "Warning: Folder path $FOLDER_PATH not found in commit"
+    echo "Extracting entire repository instead..."
+    cp -r "$EXTRACTED_DIR"/* "$REPO_NAME/"
+fi
+
+# Cleanup
+rm -rf $TEMP_DIR
+
+echo "Download and extraction completed"
