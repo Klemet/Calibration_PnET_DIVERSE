@@ -50,7 +50,7 @@ import pexpect
 import nbformat
 from shapely.geometry import Point
 import xarray as xr
-from datetime import datetime
+from datetime import datetime, timedelta
 import geopandas as gpd
 import cftime
 import requests
@@ -59,6 +59,7 @@ import matplotlib.dates as mdates
 from matplotlib.colors import to_rgba, LinearSegmentedColormap
 from matplotlib.gridspec import GridSpec
 from rasterio.windows import Window
+from rasterio.warp import transform
 from scipy.spatial.distance import cdist
 from siphon.catalog import TDSCatalog
 import clisops.core.subset
@@ -69,7 +70,13 @@ from scipy.signal import savgol_filter
 from scipy.interpolate import interp1d
 from itertools import cycle
 from pygam import LinearGAM, s, te
-
+from collections import defaultdict
+import calendar
+from datetime import date
+from dateutil.relativedelta import relativedelta
+import pytz
+import suncalc
+from suncalc import get_times
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -1414,7 +1421,7 @@ def plot_TimeSeries_RasterPnETOutputs(data_dict, outputs_unit_dict, timestep, si
 #                 int(PnETGitHub_OneCellSim["scenario.txt"]["Duration"]))
 
 
-def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference - FVS", labelOfFirstCurve = ""):
+def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference curve", labelOfFirstCurve = ""):
     """
     Plots the outputs made by the extension PnET Sites output and read
     by the function parse_CSVFiles_PnET_SitesOutput as Matplotlib plots.
@@ -2219,8 +2226,8 @@ def process_co2_data(historical_ds, shapefile, df):
     month_previous = "-99"
     value_previous = 0
     for index, row in df.iterrows():
-        year = int(row['year'])
-        month = int(row['month'])
+        year = int(row['Year'])
+        month = int(row['Month'])
 
         if year_previous == year and month_previous == month:
             df.at[index, 'CO2_Concentration'] = value_previous
@@ -2253,6 +2260,124 @@ def process_co2_data(historical_ds, shapefile, df):
 
     return df
 
+
+def process_co2_data_monthly(historical_ds, shapefile, df):
+    # Add CO2_Concentration column to dataframe
+    df['CO2_Concentration'] = np.nan
+
+    # Load the shapefile
+    gdf = gpd.read_file(shapefile)
+    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
+    if gdf.crs != 'EPSG:4326':
+        gdf = gdf.to_crs('EPSG:4326')
+    # Get the polygon from the shapefile (assuming first polygon if multiple)
+    polygon = gdf.geometry.iloc[0]
+    # Get the centroid of the polygon
+    polygon_centroid = polygon.centroid
+
+    # Process historical data (1950-2013)
+    # Create a mask for points inside the polygon for historical data
+    lon_values = historical_ds.Longitude.values
+    lat_values = historical_ds.Latitude.values
+    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
+    hist_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
+
+    # Check each point if it's inside the polygon
+    for i in range(len(lat_values)):
+        for j in range(len(lon_values)):
+            point = Point(lon_grid[i, j], lat_grid[i, j])
+            hist_mask[i, j] = polygon.contains(point)
+
+    # If no points are inside the polygon, find the closest point to the polygon centroid
+    if not np.any(hist_mask):
+        print("No points found inside the polygon for historical data. Finding closest point...")
+        min_dist = float('inf')
+        closest_i, closest_j = 0, 0
+
+        for i in range(len(lat_values)):
+            for j in range(len(lon_values)):
+                point = Point(lon_grid[i, j], lat_grid[i, j])
+                dist = point.distance(polygon_centroid)
+                if dist < min_dist:
+                    min_dist = dist
+                    closest_i, closest_j = i, j
+
+        hist_mask[closest_i, closest_j] = True
+        print(f"Closest point to polygon centroid for historical data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
+
+    # Fill in CO2 concentration for each year and month in the dataframe
+    for index, row in df.iterrows():
+        year = int(row['Year'])
+        month = int(row['Month'])
+
+        if 1950 <= year <= 2013:
+            # Get all days in this month from the historical dataset
+            start_date = f"{year}-{month:02d}-01"
+            # Determine last day of month
+            if month == 12:
+                end_date = f"{year}-{month:02d}-31"
+            else:
+                next_month = month + 1
+                end_date = f"{year}-{next_month:02d}-01"
+
+            try:
+                # Select all time steps for this month
+                month_data = historical_ds.sel(Times=slice(start_date, end_date))
+
+                # Extract CO2 values for all days in the month and apply the mask
+                co2_month = month_data.value.values
+
+                # Apply spatial mask and calculate mean across space and time
+                monthly_values = []
+                for time_idx in range(co2_month.shape[0]):
+                    masked_values = co2_month[time_idx][hist_mask]
+                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                        monthly_values.append(np.nanmean(masked_values))
+
+                # Calculate monthly average
+                if len(monthly_values) > 0:
+                    df.at[index, 'CO2_Concentration'] = np.mean(monthly_values)
+
+            except (IndexError, KeyError, ValueError) as e:
+                print(f"Error processing {year}-{month:02d}: {e}")
+
+        elif year == 2014:
+            print("You are outside of historical data! Use process_co2_data_withFutureInterpolation to deal with future data from https://zenodo.org/records/5021361")
+            print("For now, will use values from the latest year to deal with this row")
+            # Get all days in this month from the historical dataset
+            start_date = f"{2013}-{month:02d}-01"
+            # Determine last day of month
+            if month == 12:
+                end_date = f"{2013}-{month:02d}-31"
+            else:
+                next_month = month + 1
+                end_date = f"{2013}-{next_month:02d}-01"
+
+            try:
+                # Select all time steps for this month
+                month_data = historical_ds.sel(Times=slice(start_date, end_date))
+
+                # Extract CO2 values for all days in the month and apply the mask
+                co2_month = month_data.value.values
+
+                # Apply spatial mask and calculate mean across space and time
+                monthly_values = []
+                for time_idx in range(co2_month.shape[0]):
+                    masked_values = co2_month[time_idx][hist_mask]
+                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
+                        monthly_values.append(np.nanmean(masked_values))
+
+                # Calculate monthly average
+                if len(monthly_values) > 0:
+                    df.at[index, 'CO2_Concentration'] = np.mean(monthly_values)
+
+            except (IndexError, KeyError, ValueError) as e:
+                print(f"Error processing {year}-{month:02d}: {e}")
+
+    return df
+
+
+    
 # Function to process CO2 data and fill the dataframe
 # Based on datasets from https://zenodo.org/records/5021361
 # But this time, takes into account future data coming from
@@ -3157,9 +3282,6 @@ def safe_convert_to_datetime(t):
         print(f"Warning: Could not convert {t} to datetime")
         return t
 
-import suncalc
-from datetime import datetime, timedelta
-import pytz
 
 def daylight_hour_average(rsds_24h_avg, latitude, longitude, year, month, day):
     """
@@ -3200,6 +3322,95 @@ def daylight_hour_average(rsds_24h_avg, latitude, longitude, year, month, day):
         return 0.0  # Polar night: no sunlight
     else:
         return total_energy / daylight_hours
+
+def convert_to_daylight_average(ds, variable_name):
+    """
+    Converts monthly average values (over all hours) to daylight-hour averages for a given variable.
+
+    Args:
+        ds (xr.Dataset): xarray Dataset containing the variable to convert
+        variable_name (str): Name of the variable to convert (e.g., 'rsds')
+
+    Returns:
+        xr.Dataset: Original dataset with new variable '{variable_name}_MonthlyDaytime' added
+    """
+    da = ds[variable_name]
+
+    time_coord = da.time.values
+    lat_coord = da.rlat.values
+    lon_coord = da.rlon.values
+
+    n_time = len(time_coord)
+    n_lat = len(lat_coord)
+    n_lon = len(lon_coord)
+
+    print(f"Processing {n_time} time steps, {n_lat} latitudes, {n_lon} longitudes")
+
+    daylight_hours_array = np.zeros((n_time, n_lat, n_lon))
+    days_in_month_array = np.zeros(n_time)
+
+    # Create meshgrid of all lat/lon combinations once
+    lon_grid, lat_grid = np.meshgrid(lon_coord, lat_coord)
+    lon_flat = lon_grid.flatten()
+    lat_flat = lat_grid.flatten()
+
+    for t_idx, time_val in enumerate(tqdm(time_coord, desc="Processing months")):
+        dt = np.datetime64(time_val, 'D').astype(datetime)
+        year = dt.year
+        month = dt.month
+        days_in_month = calendar.monthrange(year, month)[1]
+        days_in_month_array[t_idx] = days_in_month
+
+        # Accumulate daylight hours for all days in month
+        monthly_daylight = np.zeros((n_lat, n_lon))
+
+        for day in range(1, days_in_month + 1):
+            date = datetime(year, month, day)
+
+            # Vectorized call: pass arrays of dates, lons, lats
+            dates = np.full(len(lon_flat), date)
+            times_df = get_times(dates, lon_flat, lat_flat)
+
+            # Calculate daylight hours
+            sunrise = times_df['sunrise'].values
+            sunset = times_df['sunset'].values
+
+            # Handle cases where sunset < sunrise (crosses midnight)
+            daylight_seconds = (sunset - sunrise).astype('timedelta64[s]').astype(float)
+            daylight_hours = daylight_seconds / 3600.0
+
+            # Reshape back to grid
+            daylight_grid = daylight_hours.reshape(n_lat, n_lon)
+            monthly_daylight += daylight_grid
+
+        daylight_hours_array[t_idx, :, :] = monthly_daylight
+
+    print("\nCalculating daylight averages...")
+
+    # Vectorized calculation
+    total_hours = (days_in_month_array * 24).reshape(-1, 1, 1)
+    total_energy = da.values * total_hours
+
+    output_data = np.where(
+        daylight_hours_array > 0,
+        total_energy / daylight_hours_array,
+        0.0
+    )
+
+    output_data = np.where(np.isnan(da.values), np.nan, output_data)
+
+    # Create new DataArray
+    new_var_name = f"{variable_name}_MonthlyDaytime"
+    ds[new_var_name] = xr.DataArray(
+        output_data,
+        coords=da.coords,
+        dims=da.dims,
+        attrs={**da.attrs, 'description': f'Daylight-hour average of {variable_name}'}
+    )
+
+    print("Done!")
+    return ds
+
 
 def GetDataFromESGFdatasets(catalogURL,
                             yearStart,
@@ -3867,7 +4078,8 @@ def analyze_species_growth_curves(
     smoothing_polyorder=3,
     n_sample_plot=2000000,
     create_plot=True,
-    plot_figsize=(20, 8)
+    plot_figsize=(20, 8),
+    maskPath="NONE"
 ):
     """
     Analyze species growth curves across different prevalence thresholds using raster data.
@@ -3949,10 +4161,16 @@ def analyze_species_growth_curves(
             biomass = src.read(1).astype(np.float32)
             biomass[biomass < 0] = np.nan
 
-        print("✓ Rasters loaded successfully")
-        return prevalence, age, biomass
+        if maskPath != "NONE": 
+            with rasterio.open(maskPath) as src:
+                maskRaster = src.read(1).astype(np.float32)
+        else:
+            maskRaster = "NONE"
 
-    def process_data(prevalence, age, biomass):
+        print("✓ Rasters loaded successfully")
+        return prevalence, age, biomass, maskRaster
+
+    def process_data(prevalence, age, biomass, maskRaster, maskPath):
         """Process the data and create masks"""
         print("Processing data and applying masks...")
 
@@ -3962,11 +4180,20 @@ def analyze_species_growth_curves(
         # Calculate species biomass (prevalence as proportion * total biomass)
         species_biomass = (prevalence / 100.0) * biomass
 
+        # We further mask the data with a raster mask
+        if maskPath != "NONE":
+            # Create combined mask
+            # print("maskRaster :")
+            # print(str(maskRaster))
+            # print("Mask :")
+            # print(str(mask))
+            mask = (maskRaster > 0) & (mask > 0)
+        
         # Flatten arrays and apply mask
         age_flat = age[mask]
         species_biomass_flat = species_biomass[mask]
         prevalence_flat = prevalence[mask]
-
+        
         print(f"✓ {len(age_flat)} valid pixels found")
         return age_flat, species_biomass_flat, prevalence_flat
 
@@ -4207,10 +4434,10 @@ def analyze_species_growth_curves(
     print(f"  Prevalence thresholds: {prevalence_thresholds}")
 
     # Read data
-    prevalence, age, biomass = read_rasters()
+    prevalence, age, biomass, maskRaster = read_rasters()
 
     # Process data
-    age_flat, species_biomass_flat, prevalence_flat = process_data(prevalence, age, biomass)
+    age_flat, species_biomass_flat, prevalence_flat = process_data(prevalence, age, biomass, maskRaster, maskPath)
 
     # Remove outliers using fast method
     age_clean, biomass_clean, prevalence_clean = remove_outliers_fast(
@@ -4502,14 +4729,14 @@ def prepareNFIDataForGAMs(abundance_path,
         # Create masks for valid data
         valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0)
     
-        # Apply additional mask if provided (keep pixels with value 0, exclude pixels with value > 1)
+        # Apply additional mask if provided (keep pixels with value 1, exclude pixels with value 0)
         if mask is not None:
             print("Mask has been detected. Masking...")
             values, counts = np.unique(mask, return_counts=True)
             print("Values:", values)
             print("Counts:", counts)
-            valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0) & (mask < 1)
-            values, counts = np.unique((mask < 1), return_counts=True)
+            valid_mask = (~np.isnan(abundance)) & (~np.isnan(age)) & (~np.isnan(biomass)) & (abundance > 0) & (mask > 0)
+            values, counts = np.unique((mask > 0), return_counts=True)
             print("Values:", values)
             print("Counts:", counts)
         else:
@@ -4603,6 +4830,13 @@ def prepareNFIDataForGAMs(abundance_path,
                 'Abundance': abundance_middle,
                 'Biomass_Abies': 0
             })
+
+            # We do the same to add an "enpoint", approximatly after the closest point to 0
+            # windowed_data.append({
+            #     'Age': df["Age"].max() * 1.1,
+            #     'Abundance': abundance_middle,
+            #     'Biomass_Abies': 0
+            # })
     
     
         print(f"Applied monotonic abundance constraint - kept {len(windowed_data)} entries")
@@ -4815,10 +5049,40 @@ def createGAMsAndPredictionsForNFIDataGrowthCurves(windowed_df,
             te(0, 1, constraints='concave'),  # Tensor product interaction: concave
             fit_intercept=False  
         )
+
+        # gam = LinearGAM(
+        #     s(0, n_splines=10) +  # Age: concave
+        #     te(0, 1),  # Tensor product interaction: concave
+        #     fit_intercept=False  
+        # )
+
+        # gam = LinearGAM(
+        # te(0, 1, n_splines=50),
+        # fit_intercept=True  # Add intercept back
+        # )
+    
     
         # Fit the model with weights
         gam.fit(X, y, weights=weights)
-    
+
+        # Create separate plots for each term
+        # for i, term in enumerate(gam.terms):
+        #     if not term.isintercept:
+        #         fig, ax = plt.subplots(figsize=(8, 6))
+        #         XX = gam.generate_X_grid(term=i)
+        #         pdep, confi = gam.partial_dependence(term=i, X=XX, width=0.95)
+        
+        #         ax.plot(XX[:, term.feature], pdep, label='Partial Dependence')
+        #         ax.fill_between(XX[:, term.feature], confi[:, 0], confi[:, 1], 
+        #                         alpha=0.3, label='95% CI')
+        #         ax.set_title(f'Partial Dependence - Feature {term.feature}')
+        #         ax.set_xlabel(f'Feature {term.feature}')
+        #         ax.set_ylabel('Partial Dependence')
+        #         ax.legend()
+        #         plt.tight_layout()
+        #         plt.show()
+
+
         print(f"GAM fitted successfully with constraints and abundance weighting!")
         print(f"GAM summary:")
         print(f"  - Number of observations: {len(y)}")
@@ -5042,5 +5306,884 @@ def plotNFICurvesFromGAMAndFromAlgorithmTogether(pathOfCsvFileWithGAMPredictions
     plt.title('Biomass vs Age Curves from GAM (solid) and from algorithm (Dashed) - Abies balsamea')
     plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+
+
+def plot_species_biomass_age_comparison(prevalence_path, age_path, biomass_path, 
+                                        mask1_path, mask2_path, species_name):
+    """
+    Plot species-specific biomass vs forest age for two different spatial masks.
+
+    This function creates a scatter plot comparing the relationship between forest age
+    and species-specific biomass across two different spatial regions. Each point is
+    color-coded by species prevalence (red=0%, green=100%), with mask1 points appearing
+    lighter than mask2 points for visual distinction.
+
+    Parameters
+    ----------
+    prevalence_path : str
+        Path to raster file containing species prevalence values (0-100%).
+        Values represent the percentage of the species in each pixel.
+    age_path : str
+        Path to raster file containing forest stand age values (years).
+        Non-forest pixels should be 0 or nodata.
+    biomass_path : str
+        Path to raster file containing total live aboveground biomass (tons/ha).
+    mask1_path : str
+        Path to first spatial mask raster. Points within this mask will be
+        plotted with lighter colors.
+    mask2_path : str
+        Path to second spatial mask raster. Points within this mask will be
+        plotted with darker colors for comparison.
+    species_name : str
+        Name of the species for plot labels and title (e.g., 'Abies balsamea').
+
+    Returns
+    -------
+    tuple
+        (n_points_mask1, n_points_mask2) - Number of valid points in each mask.
+
+    Notes
+    -----
+    - All input rasters must have the same projection, extent, and resolution.
+    - Species-specific biomass is calculated as: (prevalence/100) * total_biomass
+    - Only pixels with prevalence > 0 and age > 0 are included in the analysis.
+    - If more than 3000 points exist per mask, sampling is performed with bias toward
+      higher prevalence values.
+    """
+
+    def read_raster(filepath):
+        """Read raster and return data array"""
+        with rasterio.open(filepath) as src:
+            return src.read(1)
+
+    def lighten_color(prevalence, factor=0.5):
+        """Convert prevalence (0-100) to RGB with lightening factor"""
+        norm_prev = prevalence / 100.0
+        r = 1.0 - norm_prev + (norm_prev) * factor
+        g = norm_prev + (1.0 - norm_prev) * factor
+        b = 0.0 + (1.0) * factor
+        return (r, g, b)
+
+    def weighted_sample_points(age_data, biomass_data, prevalence_data, n_sample):
+        """Sample points with probability weights based on prevalence"""
+        if len(age_data) <= n_sample:
+            print(f"Using all {len(age_data)} points for visualization")
+            return age_data, biomass_data, prevalence_data
+
+        print(f"Sampling {n_sample} points with prevalence-based weighting...")
+
+        # Use prevalence as probability weights
+        weights = prevalence_data / prevalence_data.sum()
+
+        # Sample indices based on weights
+        sample_idx = np.random.choice(len(age_data), n_sample, replace=False, p=weights)
+
+        age_sample = age_data[sample_idx]
+        biomass_sample = biomass_data[sample_idx]
+        prevalence_sample = prevalence_data[sample_idx]
+
+        print(f"✓ Sampled {len(age_sample)} points (avg prevalence: {prevalence_sample.mean():.1f}%)")
+
+        return age_sample, biomass_sample, prevalence_sample
+
+    def get_filename_without_extension(filepath):
+        """Extract filename without path and extension"""
+        return os.path.splitext(os.path.basename(filepath))[0]
+
+    # Read input rasters
+    print("Reading rasters...")
+    prevalence = read_raster(prevalence_path)
+    age = read_raster(age_path)
+    biomass = read_raster(biomass_path)
+    mask1 = read_raster(mask1_path)
+    mask2 = read_raster(mask2_path)
+
+    # Get mask labels from filenames
+    print("Masking rasters...")
+    mask1_label = get_filename_without_extension(mask1_path)
+    mask2_label = get_filename_without_extension(mask2_path)
+
+    # Mask pixels with no species presence
+    valid_species = prevalence > 0
+
+    # Calculate species-specific biomass
+    species_biomass = (prevalence / 100.0) * biomass
+
+    # Create combined masks
+    mask1_combined = valid_species & (age > 0) & (mask1 > 0)
+    mask2_combined = valid_species & (age > 0) & (mask2 > 0)
+
+    # Extract data for mask1
+    age_mask1 = age[mask1_combined]
+    biomass_mask1 = species_biomass[mask1_combined]
+    prevalence_mask1 = prevalence[mask1_combined]
+
+    # Extract data for mask2
+    age_mask2 = age[mask2_combined]
+    biomass_mask2 = species_biomass[mask2_combined]
+    prevalence_mask2 = prevalence[mask2_combined]
+
+    # Sample points if needed
+    print("Sampling points if needed...")
+    print(f"\n{mask1_label}:")
+    age_mask1, biomass_mask1, prevalence_mask1 = weighted_sample_points(
+        age_mask1, biomass_mask1, prevalence_mask1, 500000
+    )
+
+    print(f"\n{mask2_label}:")
+    age_mask2, biomass_mask2, prevalence_mask2 = weighted_sample_points(
+        age_mask2, biomass_mask2, prevalence_mask2, 500000
+    )
+
+    # Create figure
+    print("Creating figure...")
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    # Plot mask1 (lighter colors)
+    colors_mask1 = [lighten_color(p, factor=0.6) for p in prevalence_mask1]
+    ax.scatter(age_mask1, biomass_mask1, c=colors_mask1, s=1, alpha=0.6, label=mask1_label)
+
+    # Plot mask2 (darker colors)
+    colors_mask2 = [lighten_color(p, factor=0.0) for p in prevalence_mask2]
+    ax.scatter(age_mask2, biomass_mask2, c=colors_mask2, s=1, alpha=0.6, label=mask2_label)
+
+    # Labels and title
+    ax.set_xlabel('Forest Age (years)', fontsize=12)
+    ax.set_ylabel(f'{species_name} Biomass (tons/ha)', fontsize=12)
+    ax.set_title(f'{species_name} Biomass vs Age\n(Color: Red=0% prevalence, Green=100% prevalence)', 
+                 fontsize=14)
+    ax.legend(loc='upper right')
+    ax.grid(True, alpha=0.3)
+
+    # Create colorbar
+    cmap = LinearSegmentedColormap.from_list('prevalence', ['red', 'green'])
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=0, vmax=100))
+    sm.set_array([])
+    cbar = plt.colorbar(sm, ax=ax, label=f'{species_name} Prevalence (%)')
+
+    plt.tight_layout()
+    plt.show()
+
+    n_mask1 = len(age_mask1)
+    n_mask2 = len(age_mask2)
+    print(f"\nFinal point counts:")
+    print(f"{mask1_label}: {n_mask1} points")
+    print(f"{mask2_label}: {n_mask2} points")
+
+    return n_mask1, n_mask2
+
+
+def extract_try_traits(filepath, encoding='latin-1'):
+    """
+    Extract plant functional trait data from TRY database file into a nested dictionary.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the TRY database text file (tab-separated format).
+    encoding : str, optional
+        Character encoding of the file. Default is 'latin-1'.
+        Common alternatives: 'utf-8', 'iso-8859-1', 'cp1252'.
+
+    Returns
+    -------
+    dict
+        Nested dictionary with structure:
+        {species_name: {trait_name: [list of trait values]}}
+        where species_name is from AccSpeciesName column,
+        trait_name is from TraitName column,
+        and values are from OrigValueStr column.
+
+    Notes
+    -----
+    The string "none" is preserved as a valid trait value and not treated as missing data.
+
+    Examples
+    --------
+    >>> data = extract_try_traits('try_data.txt')
+    >>> data['Quercus robur']['Leaf area']
+    ['45.2', '52.1', '48.7']
+
+    >>> data = extract_try_traits('try_data.txt', encoding='utf-8')
+    """
+    # Read tab-separated file with specified encoding
+    # keep_default_na=False prevents "none" from being converted to NaN
+    df = pd.read_csv(filepath, sep='\t', encoding=encoding, 
+                     keep_default_na=False, na_values=['nan', 'NaN'], low_memory=False)
+
+    # Remove rows with missing TraitName (empty strings after our na_values setting)
+    df = df[df['TraitName'] != '']
+
+    # Initialize nested dictionary with automatic list creation
+    trait_dict = defaultdict(lambda: defaultdict(list))
+
+    # Populate the nested dictionary
+    for _, row in df.iterrows():
+        species = row['AccSpeciesName']
+        trait = row['TraitName']
+        value = row['OrigValueStr']
+
+        trait_dict[species][trait].append(value)
+
+    # Convert to regular dict for cleaner output
+    return {species: dict(traits) for species, traits in trait_dict.items()}
+
+def average_tolerance_traits(trait_dict):
+    """
+    Calculate average tolerance trait values for each species from TRY trait dictionary.
+
+    Parameters
+    ----------
+    trait_dict : dict
+        Nested dictionary from extract_try_traits() with structure:
+        {species_name: {trait_name: [list of trait values]}}
+        Made by extract_try_traits().
+
+    Returns
+    -------
+    dict
+        Dictionary with structure:
+        {species_name: {trait_name: average_value}}
+        containing only tolerance traits with numeric averages.
+
+    Notes
+    -----
+    Conversion rules for trait values:
+    - Numeric 1-5: kept as is
+    - 0 or "none"/"no": converted to 1
+    - "low": converted to 1.5
+    - "medium": converted to 2.5
+    - "tolerant": converted to 3.5
+    - Values > 5: capped at 5
+    - Unrecognized values: ignored and reported
+
+    Examples
+    --------
+    >>> raw_data = extract_try_traits('try_data.txt')
+    >>> avg_data = average_tolerance_traits(raw_data)
+    >>> avg_data['Quercus robur']['Waterlogging tolerance']
+    2.75
+    """
+    # Mapping for text values to numeric scores
+    value_mapping = {
+        'none': 1,
+        'no': 1,
+        'low': 1.5,
+        'medium': 2.5,
+        'tolerant': 3.5,
+        'intolerant': 1.5,
+        'late-successional': 3.5
+    }
+
+    result_dict = {}
+    ignored_values = set()
+
+    for species, traits in trait_dict.items():
+        species_tolerances = {}
+
+        for trait_name, values in traits.items():
+            # Only process traits with "tolerance" in the name
+            if 'tolerance' not in trait_name.lower():
+                continue
+
+            numeric_values = []
+
+            for value in values:
+                # Convert to string and lowercase for consistent processing
+                value_str = str(value).strip().lower()
+
+                # Try to convert to float first
+                try:
+                    num_value = float(value_str)
+
+                    # Apply conversion rules
+                    if num_value == 0:
+                        numeric_values.append(1)
+                    elif num_value > 5:
+                        numeric_values.append(5)
+                    else:
+                        numeric_values.append(num_value)
+
+                except ValueError:
+                    # Handle text values
+                    if value_str in value_mapping:
+                        numeric_values.append(value_mapping[value_str])
+                    else:
+                        # Ignore and track unrecognized values
+                        ignored_values.add(value)
+
+            # Calculate average if we have valid numeric values
+            if numeric_values:
+                species_tolerances[trait_name] = sum(numeric_values) / len(numeric_values)
+
+        # Only add species if they have tolerance traits
+        if species_tolerances:
+            result_dict[species] = species_tolerances
+
+    # Print ignored values if any
+    if ignored_values:
+        print("Ignored values (unrecognized):")
+        for val in sorted(ignored_values):
+            print(f"  - {val}")
+
+    return result_dict
+
+def plot_competition_matrices(avg_trait_dict):
+    """
+    Plot competition probability matrices for each tolerance trait.
+
+    Creates one heatmap per trait showing the probability that each species
+    (challenger, rows) wins against each other species (opponent, columns)
+    based on their tolerance values.
+
+    Parameters
+    ----------
+    avg_trait_dict : dict
+        Dictionary from average_tolerance_traits() with structure:
+        {species_name: {trait_name: average_value}}
+
+    Returns
+    -------
+    None
+        Displays matplotlib figures with competition matrices.
+
+    Notes
+    -----
+    Competition probability calculation:
+    - Challenger tolerance 1 vs Opponent tolerance 5: 0% win probability
+    - Challenger tolerance 5 vs Opponent tolerance 1: 100% win probability
+    - Equal tolerances: 50% win probability
+    - Other combinations: linear interpolation
+    - Diagonal (species vs itself): displayed as white with no probability
+
+    Formula: P(win) = 0.5 + 0.125 * (challenger_tolerance - opponent_tolerance)
+
+    Examples
+    --------
+    >>> avg_data = average_tolerance_traits(raw_data)
+    >>> plot_competition_matrices(avg_data)
+    """
+    # Organize data by trait
+    trait_data = {}
+    for species, traits in avg_trait_dict.items():
+        for trait_name, trait_value in traits.items():
+            if trait_name not in trait_data:
+                trait_data[trait_name] = {}
+            trait_data[trait_name][species] = trait_value
+
+    # Create one plot per trait
+    for trait_name, species_values in trait_data.items():
+        # Get sorted species list for consistent ordering
+        species_list = sorted(species_values.keys())
+        n_species = len(species_list)
+
+        # Initialize probability matrix with NaN for diagonal
+        prob_matrix = np.zeros((n_species, n_species))
+
+        # Calculate win probabilities
+        for i, challenger in enumerate(species_list):
+            for j, opponent in enumerate(species_list):
+                if i == j:
+                    # Set diagonal to NaN for masking
+                    prob_matrix[i, j] = np.nan
+                    continue
+
+                challenger_tol = species_values[challenger]
+                opponent_tol = species_values[opponent]
+
+                # Linear interpolation formula
+                diff = challenger_tol - opponent_tol
+                prob_win = 0.5 + 0.125 * diff
+
+                # Ensure probability is within [0, 1]
+                prob_win = np.clip(prob_win, 0, 1)
+
+                prob_matrix[i, j] = prob_win
+
+        # Create figure
+        fig, ax = plt.subplots(figsize=(max(5, n_species * 0.5), max(4, n_species * 0.4)))
+
+        # Create masked array to handle NaN values (diagonal)
+        masked_matrix = np.ma.masked_invalid(prob_matrix)
+
+        # Create heatmap with red-to-blue colormap
+        im = ax.imshow(masked_matrix, cmap='RdBu', aspect='auto', vmin=0, vmax=1)
+
+        # Set background color for masked cells (diagonal) to white
+        ax.set_facecolor('white')
+
+        # Set ticks and labels
+        ax.set_xticks(np.arange(n_species))
+        ax.set_yticks(np.arange(n_species))
+        ax.set_xticklabels(species_list, rotation=45, ha='right', fontsize=8)
+        ax.set_yticklabels(species_list, fontsize=8)
+
+        # Add labels
+        ax.set_xlabel('Opponent', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Challenger', fontsize=12, fontweight='bold')
+        ax.set_title(f'Competition Matrix: {trait_name}', fontsize=14, fontweight='bold', pad=20)
+
+        # Add probability values in cells (skip diagonal)
+        for i in range(n_species):
+            for j in range(n_species):
+                if i != j:  # Skip diagonal
+                    ax.text(j, i, f'{prob_matrix[i, j]:.2f}',
+                           ha='center', va='center', color='black', fontsize=9)
+
+        # Add colorbar
+        cbar = plt.colorbar(im, ax=ax)
+        cbar.set_label('Win Probability', rotation=270, labelpad=20, fontsize=11)
+
+        plt.tight_layout()
+        plt.show()
+
+def plot_competition_matrices_with_shade(avg_trait_dict, shade_weight=1.0):
+    """
+    Plot competition probability matrices for each tolerance trait, incorporating shade tolerance.
+
+    Creates one heatmap per trait showing the probability that each species
+    (challenger, rows) wins against each other species (opponent, columns).
+    For non-shade tolerances, the probability is a weighted average of the
+    specific tolerance and shade tolerance probabilities.
+
+    Parameters
+    ----------
+    avg_trait_dict : dict
+        Dictionary from average_tolerance_traits() with structure:
+        {species_name: {trait_name: average_value}}
+    shade_weight : float, optional
+        Weight for shade tolerance in the weighted average. Default is 1.0.
+        - 1.0: equal weight (1:1 ratio)
+        - 2.0: shade tolerance weighted twice as much (2:1 ratio)
+        - 0.5: shade tolerance weighted half as much (1:2 ratio)
+
+    Returns
+    -------
+    None
+        Displays matplotlib figures with competition matrices.
+
+    Notes
+    -----
+    Competition probability calculation:
+    - For shade tolerance: standard calculation only
+    - For other tolerances: weighted average of trait probability and shade probability
+    - Formula: P(win) = (shade_weight × P_shade + P_trait) / (shade_weight + 1)
+    - Diagonal (species vs itself): displayed as white with no probability
+
+    Examples
+    --------
+    >>> avg_data = average_tolerance_traits(raw_data)
+    >>> plot_competition_matrices_with_shade(avg_data, shade_weight=2.0)
+    """
+    # Organize data by trait
+    trait_data = {}
+    for species, traits in avg_trait_dict.items():
+        for trait_name, trait_value in traits.items():
+            if trait_name not in trait_data:
+                trait_data[trait_name] = {}
+            trait_data[trait_name][species] = trait_value
+
+    # Find shade tolerance trait
+    shade_trait_name = None
+    for trait_name in trait_data.keys():
+        if 'shade' in trait_name.lower():
+            shade_trait_name = trait_name
+            break
+
+    if shade_trait_name is None:
+        print("Warning: No shade tolerance trait found. Using standard calculation for all traits.")
+
+    # Calculate shade probability matrix once if it exists
+    shade_prob_matrix = None
+    species_list = None
+
+    if shade_trait_name:
+        species_list = sorted(trait_data[shade_trait_name].keys())
+        n_species = len(species_list)
+        shade_prob_matrix = np.zeros((n_species, n_species))
+
+        for i, challenger in enumerate(species_list):
+            for j, opponent in enumerate(species_list):
+                if i == j:
+                    shade_prob_matrix[i, j] = np.nan
+                    continue
+
+                challenger_tol = trait_data[shade_trait_name][challenger]
+                opponent_tol = trait_data[shade_trait_name][opponent]
+                diff = challenger_tol - opponent_tol
+                prob_win = 0.5 + 0.125 * diff
+                shade_prob_matrix[i, j] = np.clip(prob_win, 0, 1)
+
+    # Create one plot per trait
+    for trait_name, species_values in trait_data.items():
+        # Get sorted species list for consistent ordering
+        if species_list is None:
+            species_list = sorted(species_values.keys())
+
+        # Filter to only species present in current trait
+        current_species = sorted(species_values.keys())
+        n_species = len(current_species)
+
+        # Initialize probability matrix
+        prob_matrix = np.zeros((n_species, n_species))
+
+        # Initialize output dictionnary
+        competitionDict = dict()
+
+        # Calculate win probabilities
+        for i, challenger in enumerate(current_species):
+            for j, opponent in enumerate(current_species):
+                if i == j:
+                    prob_matrix[i, j] = np.nan
+                    continue
+
+                challenger_tol = species_values[challenger]
+                opponent_tol = species_values[opponent]
+                diff = challenger_tol - opponent_tol
+                prob_win = 0.5 + 0.125 * diff
+                prob_win = np.clip(prob_win, 0, 1)
+
+                # If not shade tolerance and shade data exists, apply weighted average
+                if trait_name != shade_trait_name and shade_prob_matrix is not None:
+                    # Find indices in shade matrix
+                    if challenger in trait_data[shade_trait_name] and opponent in trait_data[shade_trait_name]:
+                        shade_i = species_list.index(challenger)
+                        shade_j = species_list.index(opponent)
+                        shade_prob = shade_prob_matrix[shade_i, shade_j]
+
+                        if not np.isnan(shade_prob):
+                            # Weighted average: (shade_weight * P_shade + P_trait) / (shade_weight + 1)
+                            prob_win = (shade_weight * shade_prob + prob_win) / (shade_weight + 1)
+
+                prob_matrix[i, j] = prob_win
+                if challenger not in competitionDict.keys():
+                    competitionDict[challenger] = dict()
+                competitionDict[challenger][opponent] = prob_win
+
+        # Create figure
+        fig, ax = plt.subplots(figsize=(max(5, n_species * 0.5), max(4, n_species * 0.4)))
+
+        # Create masked array to handle NaN values (diagonal)
+        masked_matrix = np.ma.masked_invalid(prob_matrix)
+
+        # Create heatmap with red-to-blue colormap
+        im = ax.imshow(masked_matrix, cmap='RdBu', aspect='auto', vmin=0, vmax=1)
+
+        # Set background color for masked cells (diagonal) to white
+        ax.set_facecolor('white')
+
+        # Set ticks and labels
+        ax.set_xticks(np.arange(n_species))
+        ax.set_yticks(np.arange(n_species))
+        ax.set_xticklabels(current_species, rotation=45, ha='right', fontsize=8)
+        ax.set_yticklabels(current_species, fontsize=8)
+
+        # Add labels
+        ax.set_xlabel('Opponent', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Challenger', fontsize=12, fontweight='bold')
+
+        # Add shade weight info to title for non-shade traits
+        title = f'Competition Matrix: {trait_name}'
+        if trait_name != shade_trait_name and shade_trait_name:
+            title += f' (Shade weight: {shade_weight})'
+        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
+
+        # Add probability values in cells (skip diagonal)
+        for i in range(n_species):
+            for j in range(n_species):
+                if i != j:
+                    ax.text(j, i, f'{prob_matrix[i, j]:.2f}',
+                           ha='center', va='center', color='black', fontsize=9)
+
+        # Add colorbar
+        cbar = plt.colorbar(im, ax=ax)
+        cbar.set_label('Win Probability', rotation=270, labelpad=20, fontsize=11)
+
+        plt.tight_layout()
+        plt.show()
+
+    return competitionDict
+
+def convert_monthly_precip_to_cm(precip_series, start_date, end_date):
+    """
+    Convert monthly precipitation time series from kg m-2 s-1 to cm.
+
+    Parameters:
+    -----------
+    precip_series : list
+        List of precipitation values in kg m-2 s-1 (monthly averages)
+    start_date : tuple
+        (year, month) of first value in series
+    end_date : tuple
+        (year, month) of last value in series
+
+    Returns:
+    --------
+    list
+        Precipitation values in cm (monthly totals)
+    """
+
+    # Generate list of (year, month) tuples for the entire period
+    start = date(start_date[0], start_date[1], 1)
+    end = date(end_date[0], end_date[1], 1)
+
+    months = []
+    current = start
+    while current <= end:
+        months.append((current.year, current.month))
+        current += relativedelta(months=1)
+
+    # Verify length matches
+    if len(precip_series) != len(months):
+        raise ValueError(f"Series length ({len(precip_series)}) doesn't match date range ({len(months)} months)")
+
+    # Convert each value
+    precip_cm = []
+    for precip_rate, (year, month) in zip(precip_series, months):
+        days_in_month = calendar.monthrange(year, month)[1]
+        seconds_in_month = days_in_month * 24 * 3600
+
+        # kg m-2 s-1 * seconds = kg m-2 = mm, then / 10 = cm
+        monthly_cm = (precip_rate * seconds_in_month) / 10
+        precip_cm.append(monthly_cm)
+
+    return precip_cm
+
+
+def average_climate_data_by_month(input_filepath):
+    """Used to create monthly averaged files for the climate
+    from monthly measurements. In the monthly averaged version,
+    the value for each month is the same accross all years, and is
+    the average of all values for this month and variable accross all years.
+
+    We do this because while we could use the Monthly_AverageAllYears statement
+    from the climate library to do this, this seems to create a problem in PnET-Cohort
+    which is not adapted to deal with the year values that the climate library
+    return in that case. See https://github.com/LANDIS-II-Foundation/Library-PnET-Cohort/issues/7
+    Instead of fixing the code, it's simpler to just modify
+    our input files."""
+    # Read the CSV file
+    df = pd.read_csv(input_filepath)
+
+    # Group by Month and Variable, calculate mean of eco1
+    monthly_avg = df.groupby(['Month', 'Variable'], as_index=False)['eco1'].mean()
+
+    # Create a complete dataframe with all Year/Month/Variable combinations
+    # using the original years but with averaged values
+    years = df['Year'].unique()
+    result = []
+
+    for year in years:
+        temp_df = monthly_avg.copy()
+        temp_df['Year'] = year
+        result.append(temp_df)
+
+    # Concatenate and reorder columns
+    df_averaged = pd.concat(result, ignore_index=True)
+    df_averaged = df_averaged[['Year', 'Month', 'Variable', 'eco1']]
+
+    # Sort by Year, Month, Variable for consistency
+    df_averaged = df_averaged.sort_values(['Year', 'Month', 'Variable']).reset_index(drop=True)
+    
+    # We sort the rows
+    df_averaged = df_averaged.sort_values(by=['Variable', 'Year', 'Month'], ascending=[True, True, True])
+    
+    # Generate output filename
+    output_filepath = input_filepath.replace('.csv', '_MonthlyAveraged.csv')
+
+    # Save to CSV
+    df_averaged.to_csv(output_filepath, index=False)
+
+    return output_filepath
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+import numpy as np
+from collections import defaultdict
+
+def plot_all_cohort_results(output_folder):
+    """
+    Plot vegetation model results for multiple cohorts.
+
+    Parameters:
+    -----------
+    output_folder : str or Path
+        Path to folder containing cohort CSV files
+    """
+
+    # Step 1: Load all cohort files
+    output_path = Path(output_folder)
+    cohort_files = list(output_path.glob("Cohort_*.csv"))
+
+    if not cohort_files:
+        print(f"No cohort files found in {output_folder}")
+        return
+
+    # Step 2: Parse filenames and load data
+    cohorts_data = []
+    species_cohorts = defaultdict(list)
+
+    for file in cohort_files:
+        # Extract species and implant year from filename
+        parts = file.stem.split('_')
+        species = parts[1]
+        implant_year = int(parts[2])
+        label = f"{species}_{implant_year}"
+
+        # Load data
+        df = pd.read_csv(file)
+        df['Cohort'] = label
+        df['Species'] = species
+        df['ImplantYear'] = implant_year
+        df['AbovegroundBiomass'] = df['Wood(gDW)'] + df['Fol(gDW)']
+
+        cohorts_data.append(df)
+        species_cohorts[species].append((implant_year, label))
+
+    # Step 3: Combine all data
+    all_data = pd.concat(cohorts_data, ignore_index=True)
+
+    # Step 4: Determine time range
+    min_year = all_data['Year'].min()
+    max_year = all_data['Year'].max()
+
+    # Step 5: Assign colors to species and cohorts
+    species_list = sorted(species_cohorts.keys())
+    base_colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
+    species_colors = {species: base_colors[idx % 3] for idx, species in enumerate(species_list)}
+
+    cohort_colors = {}
+    for idx, species in enumerate(species_list):
+        cohorts = sorted(species_cohorts[species])
+        n_cohorts = len(cohorts)
+
+        # Create gradient for this species
+        base_color = base_colors[idx % 3]
+        base_rgb = plt.matplotlib.colors.to_rgb(base_color)
+
+        for i, (implant_year, label) in enumerate(cohorts):
+            # Vary brightness from 0.4 to 1.0
+            brightness = 0.4 + 0.6 * (i / max(1, n_cohorts - 1))
+            cohort_colors[label] = tuple(c * brightness for c in base_rgb)
+
+    # Step 6: Prepare data for stackplots
+    # Aggregate aboveground biomass by species and year
+    species_biomass = all_data.groupby(['Year', 'Species'])['AbovegroundBiomass'].sum().unstack(fill_value=0)
+    years = species_biomass.index.values
+
+    # Prepare data arrays for stackplot
+    biomass_arrays = [species_biomass[species].values if species in species_biomass.columns else np.zeros(len(years)) 
+                      for species in species_list]
+
+    # Calculate relative proportions
+    total_biomass = np.sum(biomass_arrays, axis=0)
+    total_biomass[total_biomass == 0] = 1  # Avoid division by zero
+    proportion_arrays = [(biomass / total_biomass * 100) for biomass in biomass_arrays]
+
+    # Step 7: Create plots
+    variables = ['Wood(gDW)', 'LAI(m2)', 'NSC(gC)']
+    fig, axes = plt.subplots(5, 1, figsize=(12, 16))
+
+    # Individual cohort plots
+    for ax, var in zip(axes[:3], variables):
+        for cohort_label in sorted(cohort_colors.keys()):
+            cohort_df = all_data[all_data['Cohort'] == cohort_label]
+            ax.plot(cohort_df['Year'], cohort_df[var], 
+                   label=cohort_label, 
+                   color=cohort_colors[cohort_label],
+                   linewidth=1.5,
+                   alpha=0.6)
+
+        ax.set_xlabel('Year')
+        ax.set_ylabel(var)
+        ax.set_title(f'{var} over time')
+        ax.set_xlim(min_year, max_year)
+        ax.grid(True, alpha=0.3)
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+
+    # Absolute aboveground biomass stackplot
+    axes[3].stackplot(years, *biomass_arrays, 
+                      labels=species_list,
+                      colors=[species_colors[sp] for sp in species_list],
+                      alpha=0.7)
+    axes[3].set_xlabel('Year')
+    axes[3].set_ylabel('Aboveground Biomass (gDW)')
+    axes[3].set_title('Total Aboveground Biomass by Species')
+    axes[3].set_xlim(min_year, max_year)
+    axes[3].grid(True, alpha=0.3)
+    axes[3].legend(loc='upper left', fontsize=8)
+
+    # Relative aboveground biomass stackplot
+    axes[4].stackplot(years, *proportion_arrays,
+                      labels=species_list,
+                      colors=[species_colors[sp] for sp in species_list],
+                      alpha=0.7)
+    axes[4].set_xlabel('Year')
+    axes[4].set_ylabel('Relative Proportion (%)')
+    axes[4].set_title('Relative Aboveground Biomass by Species')
+    axes[4].set_xlim(min_year, max_year)
+    axes[4].set_ylim(0, 100)
+    axes[4].grid(True, alpha=0.3)
+    axes[4].legend(loc='upper left', fontsize=8)
+
+    plt.subplots_adjust(hspace=0.4)
+    plt.show()
+
+    return all_data
+
+
+def plot_single_cohort_results(csv_path, monthsToKeep=None):
+    """Plot results of PnET Site Outputs for a single cohort (a single .csv file)
+    to better understand the dynamic of cohorts."""
+    
+    # Read the CSV file
+    df = pd.read_csv(csv_path)
+
+    # Filter data by monthsToKeep if specified
+    if monthsToKeep is not None:
+        df = df.iloc[0:monthsToKeep]
+
+    # Create figure with 4 subplots
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig.suptitle(f'Cohort Results: {csv_path.split("/")[-1]}', fontsize=14, fontweight='bold')
+
+    # Subplot 1: Wood biomass
+    axes[0, 0].plot(df['Time'], df['Wood(gDW)'], color='#8B4513', linewidth=2)
+    axes[0, 0].set_xlabel('Time (year)')
+    axes[0, 0].set_ylabel('Wood (gDW)')
+    axes[0, 0].set_title('Wood Biomass Evolution')
+    axes[0, 0].grid(True, alpha=0.3)
+
+    # Subplot 2: LAI
+    axes[0, 1].plot(df['Time'], df['LAI(m2)'], color='#228B22', linewidth=2)
+    axes[0, 1].set_xlabel('Time (year)')
+    axes[0, 1].set_ylabel('LAI (m²)')
+    axes[0, 1].set_title('Leaf Area Index Evolution')
+    axes[0, 1].grid(True, alpha=0.3)
+
+    # Subplot 3: NSC
+    axes[1, 0].plot(df['Time'], df['NSC(gC)'], color='#FF8C00', linewidth=2)
+    axes[1, 0].set_xlabel('Time (year)')
+    axes[1, 0].set_ylabel('NSC (gC)')
+    axes[1, 0].set_title('Non-Structural Carbohydrates Evolution')
+    axes[1, 0].grid(True, alpha=0.3)
+
+    # Subplot 4: Environmental factors (0-1 range)
+    axes[1, 1].plot(df['Time'], df['fWater(-)'], color='#1E90FF', linewidth=2, alpha=0.8, label='fWater')
+    axes[1, 1].plot(df['Time'], df['fRad(-)'], color='#FFD700', linewidth=2, alpha=0.8, label='fRad')
+    axes[1, 1].plot(df['Time'], df['fTemp_psn(-)'], color='#DC143C', linewidth=2, alpha=0.8, label='fTemp_psn')
+    axes[1, 1].plot(df['Time'], df['fage(-)'], color='#9370DB', linewidth=2, alpha=0.8, label='fage')
+    axes[1, 1].set_xlabel('Time (year)')
+    axes[1, 1].set_ylabel('Factor value (-)')
+    axes[1, 1].set_title('Environmental and Age Factors')
+    axes[1, 1].set_ylim(-0.05, 1.05)
+    axes[1, 1].legend(loc='best', framealpha=0.9)
+    axes[1, 1].grid(True, alpha=0.3)
+
     plt.tight_layout()
     plt.show()
