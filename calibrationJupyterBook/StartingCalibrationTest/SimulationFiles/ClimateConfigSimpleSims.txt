@@ -1,0 +1,10 @@
+LandisData "Climate Config"
+
+ClimateTimeSeries Monthly_SequencedYears
+ClimateFile dataFrameClimate_historicalMonthly_Ouranos.csv
+
+SpinUpClimateTimeSeries Monthly_SequencedYears
+SpinUpClimateFile dataFrameClimate_SpinupMonthly_Ouranos.csv
+
+GenerateClimateOutputFiles no
+UsingFireClimate no

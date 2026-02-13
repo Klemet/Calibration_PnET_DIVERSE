@@ -1,0 +1,1893 @@
+"species","species_code","tile","max_biomass_tonnes_ha"
+"Generic","Generic","V6",39.6768163685922
+"Generic","Generic","V5",36.2891926610213
+"Generic","Generic","U7",43.8155798697039
+"Generic","Generic","U6",49.1779897545922
+"Generic","Generic","U5",47.0378182993436
+"Generic","Generic","U4",54.1105148174983
+"Generic","Generic","T8",28.3634710225022
+"Generic","Generic","T7",39.9738601469467
+"Generic","Generic","T6",57.8445453809658
+"Generic","Generic","T5",54.4611764265705
+"Generic","Generic","T4",48.1059820698477
+"Generic","Generic","T3",50.8967477499601
+"Generic","Generic","S8",25.3740775993097
+"Generic","Generic","S7",38.8477082330439
+"Generic","Generic","S6",51.3307592322512
+"Generic","Generic","S5",44.5333203468533
+"Generic","Generic","S4",35.1207148509437
+"Generic","Generic","S3",61.3416419842905
+"Generic","Generic","S2",67.707824286921
+"Generic","Generic","R10",22.526338566921
+"Generic","Generic","R9",22.1049704398718
+"Generic","Generic","R8",19.7478991822124
+"Generic","Generic","R7",37.4918701376445
+"Generic","Generic","R6",40.6016489804072
+"Generic","Generic","R5",33.7760442214172
+"Generic","Generic","R4",52.6988323889452
+"Generic","Generic","R3",70.4947209153836
+"Generic","Generic","R2",58.5772558346594
+"Generic","Generic","Q11",26.9700424503797
+"Generic","Generic","Q10",28.016765934626
+"Generic","Generic","Q9",32.9351224886141
+"Generic","Generic","Q8",25.2175824200352
+"Generic","Generic","Q7",39.8718423921408
+"Generic","Generic","Q6",29.4458482319634
+"Generic","Generic","Q5",39.3794026804384
+"Generic","Generic","Q4",54.6691169010962
+"Generic","Generic","Q3",58.5041810971849
+"Generic","Generic","Q2",58.9957677591465
+"Generic","Generic","Q1",42.1534295983443
+"Generic","Generic","P11",24.340868665085
+"Generic","Generic","P10",25.773499934779
+"Generic","Generic","P9",26.2006478885712
+"Generic","Generic","P8",28.3001237642364
+"Generic","Generic","P7",38.8212208310783
+"Generic","Generic","P6",36.0606015589334
+"Generic","Generic","P5",42.8446037452839
+"Generic","Generic","P4",46.5919797264724
+"Generic","Generic","P3",72.246142706451
+"Generic","Generic","P2",91.9472859312031
+"Generic","Generic","O14",63.3269029250492
+"Generic","Generic","O13",27.1894853611624
+"Generic","Generic","O12",30.6572319603009
+"Generic","Generic","O11",23.8305668567717
+"Generic","Generic","O10",27.9097113446739
+"Generic","Generic","O9",30.5781259144921
+"Generic","Generic","O8",34.2404284295467
+"Generic","Generic","O7",49.4869079202073
+"Generic","Generic","O6",45.2522445999254
+"Generic","Generic","O5",64.9087991669782
+"Generic","Generic","O4",71.9782749322568
+"Generic","Generic","O3",94.1664759309275
+"Generic","Generic","O2",94.0989149586009
+"Generic","Generic","N14",33.2197850444239
+"Generic","Generic","N13",28.9381105619496
+"Generic","Generic","N12",25.9049217017799
+"Generic","Generic","N11",30.9811097585946
+"Generic","Generic","N10",36.1951190566032
+"Generic","Generic","N9",54.6208295350721
+"Generic","Generic","N8",65.252308031957
+"Generic","Generic","N7",76.883941290548
+"Generic","Generic","N6",79.6616046002813
+"Generic","Generic","N5",104.024404476004
+"Generic","Generic","N4",84.760979767344
+"Generic","Generic","N3",93.852092436407
+"Generic","Generic","N2",91.369925267019
+"Generic","Generic","M29",71.6534301122962
+"Generic","Generic","M28",72.3781889626404
+"Generic","Generic","M27",57.7228783408777
+"Generic","Generic","M25",28.611578899598
+"Generic","Generic","M16",29.6441707848642
+"Generic","Generic","M15",32.572127763063
+"Generic","Generic","M14",25.579753228039
+"Generic","Generic","M13",24.6797882617062
+"Generic","Generic","M12",22.9480527584446
+"Generic","Generic","M11",31.9044489378385
+"Generic","Generic","M10",74.3584521140985
+"Generic","Generic","M9",66.0818318885423
+"Generic","Generic","M8",58.1899102518592
+"Generic","Generic","M7",76.175674382666
+"Generic","Generic","M6",122.378982582858
+"Generic","Generic","M5",68.4681387804292
+"Generic","Generic","M4",70.7828380267037
+"Generic","Generic","M3",97.8374338913533
+"Generic","Generic","M2",122.676503599689
+"Generic","Generic","L32",56.9591978185517
+"Generic","Generic","L31",60.8648406264186
+"Generic","Generic","L30",60.3368729381643
+"Generic","Generic","L29",71.0730681148951
+"Generic","Generic","L28",54.8525785397346
+"Generic","Generic","L27",40.2772275915625
+"Generic","Generic","L26",38.811556008806
+"Generic","Generic","L25",37.5669697582562
+"Generic","Generic","L24",34.703249366101
+"Generic","Generic","L16",38.1216461537234
+"Generic","Generic","L15",39.3256357337814
+"Generic","Generic","L14",25.2107790631769
+"Generic","Generic","L13",23.4115505715665
+"Generic","Generic","L12",25.4971950082429
+"Generic","Generic","L11",41.3400341853897
+"Generic","Generic","L10",103.884247209646
+"Generic","Generic","L9",83.8800848822248
+"Generic","Generic","L8",103.35965012774
+"Generic","Generic","L7",109.807095730188
+"Generic","Generic","L6",108.416455314732
+"Generic","Generic","L5",67.0969995316034
+"Generic","Generic","L4",74.3348812351134
+"Generic","Generic","L3",116.990977018807
+"Generic","Generic","L2",164.24775644108
+"Generic","Generic","L1",152.825055206427
+"Generic","Generic","K33",46.8435084110642
+"Generic","Generic","K32",58.7712278430451
+"Generic","Generic","K31",56.1408043112351
+"Generic","Generic","K30",55.5887855115954
+"Generic","Generic","K29",40.4767373877563
+"Generic","Generic","K28",34.2146445907359
+"Generic","Generic","K27",36.5720294807778
+"Generic","Generic","K26",38.546272172544
+"Generic","Generic","K25",40.24197388292
+"Generic","Generic","K24",34.8041244275763
+"Generic","Generic","K23",35.2235416306569
+"Generic","Generic","K16",34.6860450057558
+"Generic","Generic","K15",33.5865605603839
+"Generic","Generic","K14",28.2786130236781
+"Generic","Generic","K13",30.4775040639959
+"Generic","Generic","K12",40.8964221980199
+"Generic","Generic","K11",36.380540920234
+"Generic","Generic","K10",102.68870845963
+"Generic","Generic","K9",112.422505379925
+"Generic","Generic","K8",122.622111726344
+"Generic","Generic","K7",95.2928414295206
+"Generic","Generic","K6",116.973070340901
+"Generic","Generic","K5",95.0045907018374
+"Generic","Generic","K4",92.8494984595997
+"Generic","Generic","K3",114.68988700767
+"Generic","Generic","K2",155.678949106232
+"Generic","Generic","K1",180.673139831629
+"Generic","Generic","J35",46.8072454525923
+"Generic","Generic","J34",42.9491641382088
+"Generic","Generic","J33",37.0337279174175
+"Generic","Generic","J32",52.9218046970698
+"Generic","Generic","J31",60.1374740203253
+"Generic","Generic","J30",54.5598925854835
+"Generic","Generic","J29",39.9546004548944
+"Generic","Generic","J28",36.736124240933
+"Generic","Generic","J27",30.5856003007715
+"Generic","Generic","J26",25.4021064134777
+"Generic","Generic","J25",29.5100389700019
+"Generic","Generic","J24",38.0776818850569
+"Generic","Generic","J23",40.6716742224342
+"Generic","Generic","J17",24.8445193463555
+"Generic","Generic","J16",26.8280675568014
+"Generic","Generic","J15",36.9226039902018
+"Generic","Generic","J14",34.393117803832
+"Generic","Generic","J13",32.3399609722251
+"Generic","Generic","J12",32.7902848240474
+"Generic","Generic","J11",31.1147134239151
+"Generic","Generic","J10",67.7527615314943
+"Generic","Generic","J9",85.6888790848011
+"Generic","Generic","J8",109.034877458015
+"Generic","Generic","J7",112.76800322428
+"Generic","Generic","J6",141.133372505574
+"Generic","Generic","J5",173.007746465722
+"Generic","Generic","J4",142.341271935512
+"Generic","Generic","J3",102.491326097353
+"Generic","Generic","J2",162.99958348888
+"Generic","Generic","J1",196.773486983741
+"Generic","Generic","I36",54.3452628220934
+"Generic","Generic","I35",57.3221730373999
+"Generic","Generic","I34",50.0833890698807
+"Generic","Generic","I33",44.5174287208602
+"Generic","Generic","I32",52.6909642565068
+"Generic","Generic","I31",61.682113880606
+"Generic","Generic","I30",52.9674736610925
+"Generic","Generic","I29",44.4088143275981
+"Generic","Generic","I28",39.1986536832607
+"Generic","Generic","I27",32.2839380076823
+"Generic","Generic","I26",28.1804098177726
+"Generic","Generic","I25",29.0782352824995
+"Generic","Generic","I24",36.8153586774509
+"Generic","Generic","I23",45.362675563575
+"Generic","Generic","I19",24.6403905338584
+"Generic","Generic","I18",24.6740797662493
+"Generic","Generic","I17",26.7870921820088
+"Generic","Generic","I16",34.7866110541461
+"Generic","Generic","I15",59.2293419326562
+"Generic","Generic","I14",59.0201364866559
+"Generic","Generic","I13",51.3205419598146
+"Generic","Generic","I12",46.5352449919348
+"Generic","Generic","I11",59.710351294608
+"Generic","Generic","I10",75.5921112828217
+"Generic","Generic","I9",95.3830574628964
+"Generic","Generic","I8",126.23844043612
+"Generic","Generic","I7",132.797540391209
+"Generic","Generic","I6",135.450456454518
+"Generic","Generic","I5",168.184544901016
+"Generic","Generic","I4",112.556683238651
+"Generic","Generic","I3",102.375279227448
+"Generic","Generic","I2",163.886988998195
+"Generic","Generic","I1",228.508409703938
+"Generic","Generic","H36",55.3973172809806
+"Generic","Generic","H35",55.3725535556206
+"Generic","Generic","H34",44.1425123198139
+"Generic","Generic","H33",53.5830231223166
+"Generic","Generic","H32",55.9994499420088
+"Generic","Generic","H31",63.7921697819746
+"Generic","Generic","H30",66.8084448648976
+"Generic","Generic","H29",56.6840693685382
+"Generic","Generic","H28",56.2193733094929
+"Generic","Generic","H27",41.496871131916
+"Generic","Generic","H26",35.5736200058218
+"Generic","Generic","H25",40.1763799812968
+"Generic","Generic","H24",44.6644964011098
+"Generic","Generic","H23",39.1661392949743
+"Generic","Generic","H22",26.7893286734809
+"Generic","Generic","H21",26.9430688668105
+"Generic","Generic","H20",25.9297579167041
+"Generic","Generic","H19",25.5282147614529
+"Generic","Generic","H18",28.7933081972222
+"Generic","Generic","H17",36.631265193141
+"Generic","Generic","H16",50.279889182798
+"Generic","Generic","H15",75.1629811773959
+"Generic","Generic","H14",79.0339648511698
+"Generic","Generic","H13",77.4007744730344
+"Generic","Generic","H12",78.477425717896
+"Generic","Generic","H11",81.9772306491858
+"Generic","Generic","H10",92.0808432945905
+"Generic","Generic","H9",101.755344407473
+"Generic","Generic","H8",110.012224501404
+"Generic","Generic","H7",151.67701285463
+"Generic","Generic","H6",125.255381607951
+"Generic","Generic","H5",158.358026709674
+"Generic","Generic","H4",122.470235310494
+"Generic","Generic","H3",166.950165962239
+"Generic","Generic","H2",189.307402647073
+"Generic","Generic","H1",227.045639777767
+"Generic","Generic","G34",49.4233337122666
+"Generic","Generic","G33",41.4162036743449
+"Generic","Generic","G32",83.242358154652
+"Generic","Generic","G31",86.5821834251369
+"Generic","Generic","G30",85.1207585405611
+"Generic","Generic","G29",72.4402741551525
+"Generic","Generic","G28",78.1974868405962
+"Generic","Generic","G27",65.1381624621677
+"Generic","Generic","G26",56.2602780734895
+"Generic","Generic","G25",50.252501528463
+"Generic","Generic","G24",42.2569309605061
+"Generic","Generic","G23",40.9240862748531
+"Generic","Generic","G22",31.1373666820343
+"Generic","Generic","G21",29.8183800464834
+"Generic","Generic","G20",29.7085735511622
+"Generic","Generic","G19",36.1075815976665
+"Generic","Generic","G18",50.3092853879965
+"Generic","Generic","G17",61.200673667445
+"Generic","Generic","G16",73.0628374175617
+"Generic","Generic","G15",73.0388583143188
+"Generic","Generic","G14",77.7646490339733
+"Generic","Generic","G13",84.246514888889
+"Generic","Generic","G12",87.2109495702466
+"Generic","Generic","G11",94.6896187475781
+"Generic","Generic","G10",89.3829053018363
+"Generic","Generic","G9",87.7071262718585
+"Generic","Generic","G8",116.077206212004
+"Generic","Generic","G7",144.693545119181
+"Generic","Generic","G6",159.307218797485
+"Generic","Generic","G5",163.984379484128
+"Generic","Generic","G4",160.754599173108
+"Generic","Generic","G3",232.576822329467
+"Generic","Generic","G2",238.033853157699
+"Generic","Generic","F34",59.7493698071358
+"Generic","Generic","F33",53.6301076401298
+"Generic","Generic","F32",79.2235373634331
+"Generic","Generic","F31",109.731654010608
+"Generic","Generic","F30",105.130803571046
+"Generic","Generic","F29",96.0911256038622
+"Generic","Generic","F28",81.47919339627
+"Generic","Generic","F27",74.7203451923271
+"Generic","Generic","F26",66.7917537894154
+"Generic","Generic","F25",58.7392085621134
+"Generic","Generic","F24",45.6312171828043
+"Generic","Generic","F23",33.684885368293
+"Generic","Generic","F22",31.1196628772542
+"Generic","Generic","F21",36.9869796337036
+"Generic","Generic","F20",45.0015037161479
+"Generic","Generic","F19",65.4714931658651
+"Generic","Generic","F18",73.8507876433443
+"Generic","Generic","F17",80.7897011929387
+"Generic","Generic","F16",74.8765553033198
+"Generic","Generic","F15",83.9432977400545
+"Generic","Generic","F14",86.1680075942263
+"Generic","Generic","F13",100.514506026386
+"Generic","Generic","F12",94.7374148236873
+"Generic","Generic","F11",70.4909554738455
+"Generic","Generic","F7",157.596081038155
+"Generic","Generic","F6",151.148960873624
+"Generic","Generic","F5",165.638489749201
+"Generic","Generic","F4",198.982352781194
+"Generic","Generic","F3",267.819930487722
+"Generic","Generic","F2",222.016418151559
+"Generic","Generic","E34",64.9155095526247
+"Generic","Generic","E33",94.6896663602219
+"Generic","Generic","E32",96.7856193230244
+"Generic","Generic","E31",102.849107709864
+"Generic","Generic","E30",124.265290926393
+"Generic","Generic","E29",120.137031589886
+"Generic","Generic","E28",105.645565828389
+"Generic","Generic","E27",95.7519551646129
+"Generic","Generic","E26",76.9737262326979
+"Generic","Generic","E25",72.1829083554883
+"Generic","Generic","E24",52.4791735791499
+"Generic","Generic","E23",46.2720016975595
+"Generic","Generic","E22",46.4400145724732
+"Generic","Generic","E21",50.2717594278789
+"Generic","Generic","E20",60.6500099610697
+"Generic","Generic","E19",73.104367268085
+"Generic","Generic","E18",90.3104831116618
+"Generic","Generic","E17",97.7194386615137
+"Generic","Generic","E16",83.74152798767
+"Generic","Generic","E15",88.3525904843
+"Generic","Generic","E14",105.82833890125
+"Generic","Generic","E13",106.702154838957
+"Generic","Generic","E7",170.557630139286
+"Generic","Generic","E6",181.489747639171
+"Generic","Generic","E5",203.087565539539
+"Generic","Generic","E4",147.905892243369
+"Generic","Generic","D33",92.252514071639
+"Generic","Generic","D32",117.296262689388
+"Generic","Generic","D31",116.452276838001
+"Generic","Generic","D30",129.265647050493
+"Generic","Generic","D29",115.53044565185
+"Generic","Generic","D28",124.070256925375
+"Generic","Generic","D27",119.87677126169
+"Generic","Generic","D26",102.381182623065
+"Generic","Generic","D25",91.1183807805082
+"Generic","Generic","D24",87.0913876219616
+"Generic","Generic","D23",76.9962004887958
+"Generic","Generic","D22",89.9309777898208
+"Generic","Generic","D21",86.709274803519
+"Generic","Generic","D20",84.283601141217
+"Generic","Generic","D19",90.0411869406188
+"Generic","Generic","D18",103.86381126323
+"Generic","Generic","D17",98.9893485962491
+"Generic","Generic","D16",99.2782531396725
+"Generic","Generic","D15",89.9508565989415
+"Generic","Generic","D14",103.24679391129
+"Generic","Generic","D7",117.523528859596
+"Generic","Generic","C32",98.5469374939667
+"Generic","Generic","C31",111.961934336653
+"Generic","Generic","C30",137.543828206361
+"Generic","Generic","C29",118.584311241365
+"Generic","Generic","C28",126.4115617991
+"Generic","Generic","C27",129.77928241664
+"Generic","Generic","C26",132.70413862405
+"Generic","Generic","C25",113.322639855727
+"Generic","Generic","C24",112.968745018715
+"Generic","Generic","C23",107.817763881136
+"Generic","Generic","C22",108.151774610107
+"Generic","Generic","C21",108.772292748546
+"Generic","Generic","C20",110.604625458864
+"Generic","Generic","C19",96.8048464996924
+"Generic","Generic","C18",100.451201353684
+"Generic","Generic","C17",96.2334535020698
+"Generic","Generic","C16",98.914123471183
+"Generic","Generic","C15",94.0871277023227
+"Generic","Generic","B29",125.388053902444
+"Generic","Generic","B28",136.496972719786
+"Generic","Generic","B27",133.205577789955
+"Generic","Generic","B26",129.896988020499
+"Generic","Generic","B25",125.885639311405
+"Generic","Generic","B24",116.107150000728
+"Generic","Generic","B23",114.301904343277
+"Generic","Generic","B22",131.214856558483
+"Generic","Generic","B21",132.960713662201
+"Generic","Generic","A26",116.98593530493
+"Generic","Generic","A25",116.629555318922
+"Generic","Generic","A24",113.55124819839
+"Broadleaf","Broadleaf","T6",62.9532873686287
+"Broadleaf","Broadleaf","S6",66.1449879394516
+"Broadleaf","Broadleaf","S3",96.4785442101476
+"Broadleaf","Broadleaf","R7",72.3381642062627
+"Broadleaf","Broadleaf","R4",84.4755666482672
+"Broadleaf","Broadleaf","R3",93.1442411717486
+"Broadleaf","Broadleaf","Q7",64.9844281717725
+"Broadleaf","Broadleaf","Q4",63.4387617711232
+"Broadleaf","Broadleaf","Q2",64.3513425906439
+"Broadleaf","Broadleaf","P7",57.1133869080006
+"Broadleaf","Broadleaf","P3",50.2512275658806
+"Broadleaf","Broadleaf","P2",90.1955317003307
+"Broadleaf","Broadleaf","O7",87.504059987263
+"Broadleaf","Broadleaf","O3",142.454324628596
+"Broadleaf","Broadleaf","N10",87.7646862695193
+"Broadleaf","Broadleaf","N9",101.317177183193
+"Broadleaf","Broadleaf","N8",116.094681502905
+"Broadleaf","Broadleaf","N7",120.663694876803
+"Broadleaf","Broadleaf","N6",118.97037887998
+"Broadleaf","Broadleaf","N5",118.046857232135
+"Broadleaf","Broadleaf","N4",90.9753922809688
+"Broadleaf","Broadleaf","N3",149.171830585847
+"Broadleaf","Broadleaf","M10",121.887020919353
+"Broadleaf","Broadleaf","M9",117.023989742844
+"Broadleaf","Broadleaf","M8",125.777850016993
+"Broadleaf","Broadleaf","M7",164.566368082907
+"Broadleaf","Broadleaf","M6",156.729365744978
+"Broadleaf","Broadleaf","M5",122.857961946459
+"Broadleaf","Broadleaf","M4",89.7783677744555
+"Broadleaf","Broadleaf","M3",112.591388084365
+"Broadleaf","Broadleaf","L11",71.8039932740387
+"Broadleaf","Broadleaf","L10",130.647508499963
+"Broadleaf","Broadleaf","L9",140.619101196718
+"Broadleaf","Broadleaf","L8",148.07009740415
+"Broadleaf","Broadleaf","L7",153.045635825206
+"Broadleaf","Broadleaf","L6",134.069388436807
+"Broadleaf","Broadleaf","L5",102.81231470934
+"Broadleaf","Broadleaf","L3",161.902806121973
+"Broadleaf","Broadleaf","K32",33.7020216788287
+"Broadleaf","Broadleaf","K11",91.9453887703399
+"Broadleaf","Broadleaf","K10",130.521397291798
+"Broadleaf","Broadleaf","K9",139.784405214098
+"Broadleaf","Broadleaf","K8",134.587492006955
+"Broadleaf","Broadleaf","K7",126.978340236784
+"Broadleaf","Broadleaf","K6",126.873420248734
+"Broadleaf","Broadleaf","K5",126.101865487964
+"Broadleaf","Broadleaf","K4",138.475925724
+"Broadleaf","Broadleaf","K3",167.363751655884
+"Broadleaf","Broadleaf","J11",78.117937457826
+"Broadleaf","Broadleaf","J10",103.384109421722
+"Broadleaf","Broadleaf","J9",119.985341845616
+"Broadleaf","Broadleaf","J8",129.602469838863
+"Broadleaf","Broadleaf","J7",111.985960147733
+"Broadleaf","Broadleaf","J6",126.448192412728
+"Broadleaf","Broadleaf","J5",136.659347854895
+"Broadleaf","Broadleaf","J4",131.731959711368
+"Broadleaf","Broadleaf","J3",116.532948838478
+"Broadleaf","Broadleaf","I14",110.520533975916
+"Broadleaf","Broadleaf","I13",98.9251731283532
+"Broadleaf","Broadleaf","I12",85.9603743044809
+"Broadleaf","Broadleaf","I11",89.1008490159636
+"Broadleaf","Broadleaf","I10",112.870492544457
+"Broadleaf","Broadleaf","I9",120.988037571747
+"Broadleaf","Broadleaf","I8",124.486122652974
+"Broadleaf","Broadleaf","I7",121.677898480601
+"Broadleaf","Broadleaf","I6",122.254097809995
+"Broadleaf","Broadleaf","I5",135.669537760067
+"Broadleaf","Broadleaf","I4",127.741567848291
+"Broadleaf","Broadleaf","H30",70.2528450884145
+"Broadleaf","Broadleaf","H16",97.8218064798165
+"Broadleaf","Broadleaf","H15",99.0900858240016
+"Broadleaf","Broadleaf","H14",97.556452399483
+"Broadleaf","Broadleaf","H13",89.5436167048809
+"Broadleaf","Broadleaf","H12",97.4003645257416
+"Broadleaf","Broadleaf","H11",107.739970433906
+"Broadleaf","Broadleaf","H10",106.693274475307
+"Broadleaf","Broadleaf","H9",100.028229191433
+"Broadleaf","Broadleaf","H8",105.623104201361
+"Broadleaf","Broadleaf","H7",115.776454188977
+"Broadleaf","Broadleaf","H6",114.850261136137
+"Broadleaf","Broadleaf","H5",163.732776223345
+"Broadleaf","Broadleaf","H4",112.612540870403
+"Broadleaf","Broadleaf","G30",106.946807587173
+"Broadleaf","Broadleaf","G28",74.8232359625756
+"Broadleaf","Broadleaf","G18",107.568248288324
+"Broadleaf","Broadleaf","G17",102.215045513218
+"Broadleaf","Broadleaf","G16",107.372800351978
+"Broadleaf","Broadleaf","G15",102.927669460983
+"Broadleaf","Broadleaf","G14",110.499322113597
+"Broadleaf","Broadleaf","G13",109.230399011529
+"Broadleaf","Broadleaf","G12",102.384180293376
+"Broadleaf","Broadleaf","G11",93.7681464383118
+"Broadleaf","Broadleaf","G10",84.1649872248921
+"Broadleaf","Broadleaf","G8",105.104014527439
+"Broadleaf","Broadleaf","G7",113.747160066102
+"Broadleaf","Broadleaf","F34",31.7258776000219
+"Broadleaf","Broadleaf","F33",52.8815232097191
+"Broadleaf","Broadleaf","F31",119.526743799361
+"Broadleaf","Broadleaf","F30",132.704768353747
+"Broadleaf","Broadleaf","F29",113.355955589426
+"Broadleaf","Broadleaf","F28",96.0138197091803
+"Broadleaf","Broadleaf","F27",78.7015960281918
+"Broadleaf","Broadleaf","F26",69.0977657309585
+"Broadleaf","Broadleaf","F25",58.2890962264186
+"Broadleaf","Broadleaf","F20",90.4442041411906
+"Broadleaf","Broadleaf","F19",83.7478138625436
+"Broadleaf","Broadleaf","F18",91.8504367977675
+"Broadleaf","Broadleaf","F17",90.1893606181912
+"Broadleaf","Broadleaf","F16",86.2669543588713
+"Broadleaf","Broadleaf","F15",93.7618437447281
+"Broadleaf","Broadleaf","F14",108.272152219276
+"Broadleaf","Broadleaf","F13",105.519000377749
+"Broadleaf","Broadleaf","F12",92.201007425045
+"Broadleaf","Broadleaf","F11",66.7951329407277
+"Broadleaf","Broadleaf","F7",128.108598760808
+"Broadleaf","Broadleaf","E33",101.767212238648
+"Broadleaf","Broadleaf","E32",104.982099151105
+"Broadleaf","Broadleaf","E31",110.527045128057
+"Broadleaf","Broadleaf","E30",135.947976500023
+"Broadleaf","Broadleaf","E29",127.744988725355
+"Broadleaf","Broadleaf","E28",110.19440409694
+"Broadleaf","Broadleaf","E27",99.1688619741693
+"Broadleaf","Broadleaf","E26",88.6688724304511
+"Broadleaf","Broadleaf","E25",78.5623535608092
+"Broadleaf","Broadleaf","E24",73.3125811823708
+"Broadleaf","Broadleaf","E22",69.6020274378599
+"Broadleaf","Broadleaf","E21",53.6510027295782
+"Broadleaf","Broadleaf","E20",93.2957402240487
+"Broadleaf","Broadleaf","E19",119.047077864616
+"Broadleaf","Broadleaf","E18",116.543069021752
+"Broadleaf","Broadleaf","E17",99.2119768909513
+"Broadleaf","Broadleaf","E16",111.031310739229
+"Broadleaf","Broadleaf","E15",88.0719861032437
+"Broadleaf","Broadleaf","E14",108.328780619123
+"Broadleaf","Broadleaf","E13",103.181391957821
+"Broadleaf","Broadleaf","E7",135.074250232128
+"Broadleaf","Broadleaf","D33",106.150637913181
+"Broadleaf","Broadleaf","D32",125.768924684716
+"Broadleaf","Broadleaf","D31",126.058731198615
+"Broadleaf","Broadleaf","D30",132.692947817845
+"Broadleaf","Broadleaf","D29",123.334715442566
+"Broadleaf","Broadleaf","D28",136.414340582824
+"Broadleaf","Broadleaf","D27",126.848406169157
+"Broadleaf","Broadleaf","D26",110.478743369209
+"Broadleaf","Broadleaf","D25",89.0670966417516
+"Broadleaf","Broadleaf","D24",85.1690583007749
+"Broadleaf","Broadleaf","D23",79.3242105265425
+"Broadleaf","Broadleaf","D22",68.97224947305
+"Broadleaf","Broadleaf","D21",69.6539748091056
+"Broadleaf","Broadleaf","D20",100.721425684996
+"Broadleaf","Broadleaf","D19",109.309718559308
+"Broadleaf","Broadleaf","D18",104.911445105578
+"Broadleaf","Broadleaf","D17",101.499892553922
+"Broadleaf","Broadleaf","D16",103.616894682628
+"Broadleaf","Broadleaf","D15",83.6252839889876
+"Broadleaf","Broadleaf","D14",100.050297476306
+"Broadleaf","Broadleaf","C32",116.383057377003
+"Broadleaf","Broadleaf","C31",117.332022194334
+"Broadleaf","Broadleaf","C29",124.844651979707
+"Broadleaf","Broadleaf","C28",124.673055131598
+"Broadleaf","Broadleaf","C27",126.794744542722
+"Broadleaf","Broadleaf","C26",130.758203451331
+"Broadleaf","Broadleaf","C25",128.572560972152
+"Broadleaf","Broadleaf","C24",123.08700116065
+"Broadleaf","Broadleaf","C23",115.334576458758
+"Broadleaf","Broadleaf","C22",113.1126088131
+"Broadleaf","Broadleaf","C21",105.480169017931
+"Broadleaf","Broadleaf","C20",105.389618497382
+"Broadleaf","Broadleaf","C19",88.3526584881583
+"Broadleaf","Broadleaf","C18",97.139289716357
+"Broadleaf","Broadleaf","C17",92.9097880989684
+"Broadleaf","Broadleaf","C16",100.377567204216
+"Broadleaf","Broadleaf","C15",89.706477289452
+"Broadleaf","Broadleaf","B28",125.669919716757
+"Broadleaf","Broadleaf","B27",128.011580617465
+"Broadleaf","Broadleaf","B26",129.360134160402
+"Broadleaf","Broadleaf","B25",128.806337836004
+"Broadleaf","Broadleaf","B24",116.430771381501
+"Broadleaf","Broadleaf","B23",122.667129931728
+"Broadleaf","Broadleaf","B22",133.163637377493
+"Broadleaf","Broadleaf","B21",142.55067419611
+"Broadleaf","Broadleaf","A26",117.280148819328
+"Broadleaf","Broadleaf","A25",114.193931089864
+"Broadleaf","Broadleaf","A24",121.701419138143
+"Coniferous","Coniferous","V5",34.4638872081178
+"Coniferous","Coniferous","U7",41.9092300039601
+"Coniferous","Coniferous","U6",45.7005952296208
+"Coniferous","Coniferous","U5",44.1320647327894
+"Coniferous","Coniferous","U4",51.2716911180949
+"Coniferous","Coniferous","T8",26.5067302759448
+"Coniferous","Coniferous","T7",38.4548103286363
+"Coniferous","Coniferous","T6",70.5303241784082
+"Coniferous","Coniferous","T5",51.6536067020724
+"Coniferous","Coniferous","T4",39.6080575061799
+"Coniferous","Coniferous","T3",48.7599690016529
+"Coniferous","Coniferous","S8",24.5570076130543
+"Coniferous","Coniferous","S7",38.3764496218513
+"Coniferous","Coniferous","S6",49.017022003761
+"Coniferous","Coniferous","S5",48.5712940485776
+"Coniferous","Coniferous","S4",34.79756021423
+"Coniferous","Coniferous","S3",65.5479782888431
+"Coniferous","Coniferous","R9",20.7133054700812
+"Coniferous","Coniferous","R8",19.0847753609621
+"Coniferous","Coniferous","R7",37.6040874503822
+"Coniferous","Coniferous","R6",37.5995822865813
+"Coniferous","Coniferous","R5",32.1392527122987
+"Coniferous","Coniferous","R4",51.3205410543761
+"Coniferous","Coniferous","R3",70.159985076846
+"Coniferous","Coniferous","R2",55.4208865461078
+"Coniferous","Coniferous","Q10",26.7648504242918
+"Coniferous","Coniferous","Q9",31.3115025850794
+"Coniferous","Coniferous","Q8",24.3720440421333
+"Coniferous","Coniferous","Q7",37.6009026077404
+"Coniferous","Coniferous","Q6",27.9665224460624
+"Coniferous","Coniferous","Q5",39.9972966338049
+"Coniferous","Coniferous","Q4",58.6765544553468
+"Coniferous","Coniferous","Q3",56.6619650693358
+"Coniferous","Coniferous","Q2",55.9599069242181
+"Coniferous","Coniferous","P11",23.6299998417601
+"Coniferous","Coniferous","P10",25.0292147367777
+"Coniferous","Coniferous","P9",24.5992022946951
+"Coniferous","Coniferous","P8",26.9317792100667
+"Coniferous","Coniferous","P7",45.7498332039276
+"Coniferous","Coniferous","P6",34.549982418966
+"Coniferous","Coniferous","P5",42.3847657584216
+"Coniferous","Coniferous","P4",51.8281200081785
+"Coniferous","Coniferous","P3",66.0936817546128
+"Coniferous","Coniferous","P2",77.2863886461518
+"Coniferous","Coniferous","O11",22.579917747983
+"Coniferous","Coniferous","O10",29.6748200248619
+"Coniferous","Coniferous","O9",28.662114300726
+"Coniferous","Coniferous","O8",52.7128747737705
+"Coniferous","Coniferous","O7",61.4718387806398
+"Coniferous","Coniferous","O6",50.6294609596319
+"Coniferous","Coniferous","O5",53.515740484789
+"Coniferous","Coniferous","O4",66.5003767728708
+"Coniferous","Coniferous","O3",89.9397097596424
+"Coniferous","Coniferous","N13",29.2782952729177
+"Coniferous","Coniferous","N12",25.4316525512871
+"Coniferous","Coniferous","N11",35.2192058733876
+"Coniferous","Coniferous","N10",39.1939513301309
+"Coniferous","Coniferous","N9",57.6956110793395
+"Coniferous","Coniferous","N8",72.8706668743576
+"Coniferous","Coniferous","N7",88.2583344214801
+"Coniferous","Coniferous","N6",73.7314946355016
+"Coniferous","Coniferous","N5",86.2124042162146
+"Coniferous","Coniferous","N4",82.8808623861722
+"Coniferous","Coniferous","N3",91.7210999939954
+"Coniferous","Coniferous","M29",67.9543200282516
+"Coniferous","Coniferous","M28",68.6701857043119
+"Coniferous","Coniferous","M27",56.2058572993604
+"Coniferous","Coniferous","M14",24.1381633121001
+"Coniferous","Coniferous","M13",23.411286275263
+"Coniferous","Coniferous","M12",24.747874146942
+"Coniferous","Coniferous","M11",30.7228344904342
+"Coniferous","Coniferous","M10",70.6718584806797
+"Coniferous","Coniferous","M9",68.1825336094208
+"Coniferous","Coniferous","M8",86.7780660140687
+"Coniferous","Coniferous","M7",94.0889295433043
+"Coniferous","Coniferous","M6",104.600761802953
+"Coniferous","Coniferous","M5",70.3335650551126
+"Coniferous","Coniferous","M4",77.7661039015053
+"Coniferous","Coniferous","M3",108.018647295883
+"Coniferous","Coniferous","M2",113.231125388128
+"Coniferous","Coniferous","L32",54.6249667473194
+"Coniferous","Coniferous","L31",57.9655895274173
+"Coniferous","Coniferous","L30",57.212939513055
+"Coniferous","Coniferous","L29",67.645227603675
+"Coniferous","Coniferous","L28",52.5592401656108
+"Coniferous","Coniferous","L27",38.1964554239199
+"Coniferous","Coniferous","L26",37.0456433352465
+"Coniferous","Coniferous","L25",36.9021962634039
+"Coniferous","Coniferous","L16",36.3649647299382
+"Coniferous","Coniferous","L15",36.5359967707096
+"Coniferous","Coniferous","L14",23.7970277830808
+"Coniferous","Coniferous","L13",24.467976978694
+"Coniferous","Coniferous","L12",25.1143197816974
+"Coniferous","Coniferous","L11",36.1390726898851
+"Coniferous","Coniferous","L10",86.8186670167534
+"Coniferous","Coniferous","L9",76.2271889973905
+"Coniferous","Coniferous","L8",105.276766771418
+"Coniferous","Coniferous","L7",115.841463321771
+"Coniferous","Coniferous","L6",98.3090612314054
+"Coniferous","Coniferous","L5",76.6534166114939
+"Coniferous","Coniferous","L4",94.0032641297817
+"Coniferous","Coniferous","L3",115.569898600116
+"Coniferous","Coniferous","L2",153.127129014212
+"Coniferous","Coniferous","L1",143.854386356151
+"Coniferous","Coniferous","K33",43.8093222450997
+"Coniferous","Coniferous","K32",61.0244763580876
+"Coniferous","Coniferous","K31",52.787310625211
+"Coniferous","Coniferous","K30",54.0462631415834
+"Coniferous","Coniferous","K29",38.6553415366532
+"Coniferous","Coniferous","K28",32.7867351153337
+"Coniferous","Coniferous","K27",34.5080541767041
+"Coniferous","Coniferous","K26",36.156141732651
+"Coniferous","Coniferous","K25",38.4018379544407
+"Coniferous","Coniferous","K24",33.6713244139744
+"Coniferous","Coniferous","K16",29.47991456035
+"Coniferous","Coniferous","K15",32.4279231225309
+"Coniferous","Coniferous","K14",27.8795412288832
+"Coniferous","Coniferous","K13",31.5338345041258
+"Coniferous","Coniferous","K12",40.7214288444484
+"Coniferous","Coniferous","K11",34.892058202127
+"Coniferous","Coniferous","K10",84.0280166104266
+"Coniferous","Coniferous","K9",117.116882486329
+"Coniferous","Coniferous","K8",100.941145590705
+"Coniferous","Coniferous","K7",100.772470557611
+"Coniferous","Coniferous","K6",132.389501118931
+"Coniferous","Coniferous","K5",98.7518525607974
+"Coniferous","Coniferous","K4",98.5167946413322
+"Coniferous","Coniferous","K3",123.256534993265
+"Coniferous","Coniferous","K2",146.539610423966
+"Coniferous","Coniferous","K1",179.873440534108
+"Coniferous","Coniferous","J35",46.7311447794158
+"Coniferous","Coniferous","J34",36.5531452891253
+"Coniferous","Coniferous","J33",43.5394338622416
+"Coniferous","Coniferous","J32",56.3255949205182
+"Coniferous","Coniferous","J31",56.5537001929224
+"Coniferous","Coniferous","J30",51.7609513742472
+"Coniferous","Coniferous","J29",38.605051197076
+"Coniferous","Coniferous","J28",35.3923033073639
+"Coniferous","Coniferous","J27",28.9300973539164
+"Coniferous","Coniferous","J26",24.2160395501671
+"Coniferous","Coniferous","J25",27.6991756146552
+"Coniferous","Coniferous","J24",35.9799012117422
+"Coniferous","Coniferous","J17",24.025983324214
+"Coniferous","Coniferous","J16",25.4807997742264
+"Coniferous","Coniferous","J15",34.1789252666074
+"Coniferous","Coniferous","J14",31.9326701043702
+"Coniferous","Coniferous","J13",31.9348648402719
+"Coniferous","Coniferous","J12",30.8845778713485
+"Coniferous","Coniferous","J11",28.7789013089065
+"Coniferous","Coniferous","J10",45.0046913319172
+"Coniferous","Coniferous","J9",69.277446598688
+"Coniferous","Coniferous","J8",89.7928766983348
+"Coniferous","Coniferous","J7",105.476954361124
+"Coniferous","Coniferous","J6",151.411121272601
+"Coniferous","Coniferous","J5",163.19064686945
+"Coniferous","Coniferous","J4",128.921833875102
+"Coniferous","Coniferous","J3",106.163779426614
+"Coniferous","Coniferous","J2",154.797587964367
+"Coniferous","Coniferous","J1",196.573023115447
+"Coniferous","Coniferous","I36",55.0709853061203
+"Coniferous","Coniferous","I35",54.5749014079928
+"Coniferous","Coniferous","I34",51.3328136121359
+"Coniferous","Coniferous","I33",46.2817388666376
+"Coniferous","Coniferous","I32",50.2438012353487
+"Coniferous","Coniferous","I31",69.5445224566932
+"Coniferous","Coniferous","I30",50.3787774978154
+"Coniferous","Coniferous","I29",42.2001624430061
+"Coniferous","Coniferous","I28",37.9693521704781
+"Coniferous","Coniferous","I27",30.8302812012051
+"Coniferous","Coniferous","I26",27.2030030372847
+"Coniferous","Coniferous","I25",27.7002745446639
+"Coniferous","Coniferous","I24",34.5537072915182
+"Coniferous","Coniferous","I23",42.7373498470918
+"Coniferous","Coniferous","I19",23.1941010807419
+"Coniferous","Coniferous","I18",23.8731800403625
+"Coniferous","Coniferous","I17",25.9916374227101
+"Coniferous","Coniferous","I16",32.2067874589405
+"Coniferous","Coniferous","I15",55.9805220190533
+"Coniferous","Coniferous","I14",52.6678370435235
+"Coniferous","Coniferous","I13",51.3239277049274
+"Coniferous","Coniferous","I12",40.5462963990242
+"Coniferous","Coniferous","I11",52.4755530822149
+"Coniferous","Coniferous","I10",58.9074620867162
+"Coniferous","Coniferous","I9",80.7889537111738
+"Coniferous","Coniferous","I8",127.815890133786
+"Coniferous","Coniferous","I7",136.421877344066
+"Coniferous","Coniferous","I6",134.363635189739
+"Coniferous","Coniferous","I5",173.427292526342
+"Coniferous","Coniferous","I4",135.711992199987
+"Coniferous","Coniferous","I3",119.669669599171
+"Coniferous","Coniferous","I2",155.378313982162
+"Coniferous","Coniferous","H36",53.6875348997703
+"Coniferous","Coniferous","H35",53.4113917131619
+"Coniferous","Coniferous","H34",42.7582339933757
+"Coniferous","Coniferous","H33",51.0356470190593
+"Coniferous","Coniferous","H32",52.9803198024349
+"Coniferous","Coniferous","H31",68.7157666114127
+"Coniferous","Coniferous","H30",68.4691697039888
+"Coniferous","Coniferous","H29",54.4667178040368
+"Coniferous","Coniferous","H28",54.2681736061657
+"Coniferous","Coniferous","H27",39.9462208849078
+"Coniferous","Coniferous","H26",33.9182343558484
+"Coniferous","Coniferous","H25",38.6515677940538
+"Coniferous","Coniferous","H24",45.6169263366413
+"Coniferous","Coniferous","H23",37.4333585322481
+"Coniferous","Coniferous","H21",25.6599226107926
+"Coniferous","Coniferous","H20",24.7278981955772
+"Coniferous","Coniferous","H19",24.4782781837394
+"Coniferous","Coniferous","H18",27.8528047238795
+"Coniferous","Coniferous","H17",35.1083379441666
+"Coniferous","Coniferous","H16",48.7476671990388
+"Coniferous","Coniferous","H15",71.0232280389893
+"Coniferous","Coniferous","H14",66.1687875657489
+"Coniferous","Coniferous","H13",64.5933394700311
+"Coniferous","Coniferous","H12",67.5908653793181
+"Coniferous","Coniferous","H11",75.7131911371064
+"Coniferous","Coniferous","H10",84.7360362887966
+"Coniferous","Coniferous","H9",87.0420637732233
+"Coniferous","Coniferous","H8",103.30597641795
+"Coniferous","Coniferous","H7",136.723363575824
+"Coniferous","Coniferous","H6",126.595622217855
+"Coniferous","Coniferous","H5",164.393399706927
+"Coniferous","Coniferous","H4",124.638670216279
+"Coniferous","Coniferous","H3",155.309697794004
+"Coniferous","Coniferous","H2",167.708422291252
+"Coniferous","Coniferous","H1",215.211476027695
+"Coniferous","Coniferous","G34",46.8668478267008
+"Coniferous","Coniferous","G33",38.4775183956879
+"Coniferous","Coniferous","G32",79.1224512213526
+"Coniferous","Coniferous","G31",86.9605413583418
+"Coniferous","Coniferous","G30",82.2157896904581
+"Coniferous","Coniferous","G29",71.8029199275547
+"Coniferous","Coniferous","G28",74.7212111615239
+"Coniferous","Coniferous","G27",61.5002117038015
+"Coniferous","Coniferous","G26",54.4830734370118
+"Coniferous","Coniferous","G25",48.147778351013
+"Coniferous","Coniferous","G24",40.9170695768016
+"Coniferous","Coniferous","G23",38.4332111091568
+"Coniferous","Coniferous","G22",30.1262911190564
+"Coniferous","Coniferous","G21",28.8859805812372
+"Coniferous","Coniferous","G20",27.6513758740283
+"Coniferous","Coniferous","G19",34.5723414698004
+"Coniferous","Coniferous","G18",47.4962272133892
+"Coniferous","Coniferous","G17",47.3245290279626
+"Coniferous","Coniferous","G16",62.3998216801909
+"Coniferous","Coniferous","G15",69.329450157084
+"Coniferous","Coniferous","G14",62.567290796167
+"Coniferous","Coniferous","G13",73.2007221972797
+"Coniferous","Coniferous","G12",76.1558582561045
+"Coniferous","Coniferous","G11",87.8779503730759
+"Coniferous","Coniferous","G10",108.601673854089
+"Coniferous","Coniferous","G8",179.078615419884
+"Coniferous","Coniferous","G7",149.271305297678
+"Coniferous","Coniferous","G6",166.816699128611
+"Coniferous","Coniferous","G5",164.124592815768
+"Coniferous","Coniferous","G4",176.138628904936
+"Coniferous","Coniferous","G3",201.189508998532
+"Coniferous","Coniferous","G2",200.459853292499
+"Coniferous","Coniferous","F34",58.409099419796
+"Coniferous","Coniferous","F33",58.7658675739169
+"Coniferous","Coniferous","F32",80.1621184177693
+"Coniferous","Coniferous","F31",105.60535968414
+"Coniferous","Coniferous","F30",98.0964350728496
+"Coniferous","Coniferous","F29",91.6124142546716
+"Coniferous","Coniferous","F28",76.08053977721
+"Coniferous","Coniferous","F27",68.876988988057
+"Coniferous","Coniferous","F26",58.7475455131958
+"Coniferous","Coniferous","F25",55.6319897150252
+"Coniferous","Coniferous","F24",41.7358186451741
+"Coniferous","Coniferous","F23",31.8653398580677
+"Coniferous","Coniferous","F22",30.3513801756036
+"Coniferous","Coniferous","F21",35.2077184884409
+"Coniferous","Coniferous","F20",43.8282808040901
+"Coniferous","Coniferous","F19",63.0651573512852
+"Coniferous","Coniferous","F18",71.3465993886246
+"Coniferous","Coniferous","F17",70.7038621027885
+"Coniferous","Coniferous","F16",66.9235629731271
+"Coniferous","Coniferous","F15",79.1692598041144
+"Coniferous","Coniferous","F14",70.0942833232777
+"Coniferous","Coniferous","F13",67.3047108880008
+"Coniferous","Coniferous","F12",87.3063264873054
+"Coniferous","Coniferous","F7",146.867667301266
+"Coniferous","Coniferous","F6",172.073078094422
+"Coniferous","Coniferous","F5",169.407905907947
+"Coniferous","Coniferous","F4",201.329720863967
+"Coniferous","Coniferous","F3",243.306348916371
+"Coniferous","Coniferous","F2",195.521058177693
+"Coniferous","Coniferous","E33",82.571877009036
+"Coniferous","Coniferous","E32",98.4154426754191
+"Coniferous","Coniferous","E31",101.289400598051
+"Coniferous","Coniferous","E30",106.669974216656
+"Coniferous","Coniferous","E29",105.635012974422
+"Coniferous","Coniferous","E28",100.788570218036
+"Coniferous","Coniferous","E27",93.7001985308444
+"Coniferous","Coniferous","E26",73.5998280782264
+"Coniferous","Coniferous","E25",72.3889605792701
+"Coniferous","Coniferous","E24",49.2552835995056
+"Coniferous","Coniferous","E23",44.2166535712438
+"Coniferous","Coniferous","E22",44.3281638226628
+"Coniferous","Coniferous","E21",47.7444551762108
+"Coniferous","Coniferous","E20",56.7981304603348
+"Coniferous","Coniferous","E19",69.4880686991762
+"Coniferous","Coniferous","E18",87.9397680667176
+"Coniferous","Coniferous","E17",82.3782750491601
+"Coniferous","Coniferous","E16",78.3072815616392
+"Coniferous","Coniferous","E15",84.0524725678888
+"Coniferous","Coniferous","E14",104.297259676687
+"Coniferous","Coniferous","E13",100.763298824872
+"Coniferous","Coniferous","E7",170.707035935738
+"Coniferous","Coniferous","E6",197.003006693373
+"Coniferous","Coniferous","E5",190.783411833053
+"Coniferous","Coniferous","D33",88.5360290379403
+"Coniferous","Coniferous","D32",105.904374888522
+"Coniferous","Coniferous","D31",112.895721705505
+"Coniferous","Coniferous","D30",108.082564133553
+"Coniferous","Coniferous","D29",95.4427385686842
+"Coniferous","Coniferous","D28",102.268224514836
+"Coniferous","Coniferous","D27",101.679632548544
+"Coniferous","Coniferous","D26",91.3519034910125
+"Coniferous","Coniferous","D25",88.3346621890242
+"Coniferous","Coniferous","D24",89.4539018499949
+"Coniferous","Coniferous","D23",75.3274219546365
+"Coniferous","Coniferous","D22",84.373292638765
+"Coniferous","Coniferous","D21",79.6390779369647
+"Coniferous","Coniferous","D20",81.1067620041798
+"Coniferous","Coniferous","D19",83.8729346814336
+"Coniferous","Coniferous","D18",98.3826939544495
+"Coniferous","Coniferous","D17",84.9114378348578
+"Coniferous","Coniferous","D16",83.8896725002212
+"Coniferous","Coniferous","C32",102.99361560285
+"Coniferous","Coniferous","C31",111.725068249216
+"Coniferous","Coniferous","C29",98.7338719360932
+"Coniferous","Coniferous","C28",98.0744543465453
+"Coniferous","Coniferous","C27",105.146652136723
+"Coniferous","Coniferous","C26",106.090845817194
+"Coniferous","Coniferous","C25",104.409284737471
+"Coniferous","Coniferous","C24",111.474924708043
+"Coniferous","Coniferous","C23",108.966091386692
+"Coniferous","Coniferous","C22",97.1557670275049
+"Coniferous","Coniferous","C21",96.5892355608504
+"Coniferous","Coniferous","C20",102.767791417499
+"Coniferous","Coniferous","C19",90.1345886459723
+"Coniferous","Coniferous","C18",99.7629851385503
+"Coniferous","Coniferous","C17",89.952745209645
+"Coniferous","Coniferous","C16",86.6685392476697
+"Coniferous","Coniferous","B28",105.097774408248
+"Coniferous","Coniferous","B26",104.27849538536
+"Coniferous","Coniferous","B25",107.225843648896
+"Coniferous","Coniferous","B24",102.292670021115
+"Coniferous","Coniferous","B23",110.164028978732
+"Coniferous","Coniferous","B22",107.64998690638
+"Coniferous","Coniferous","B21",108.979287403971
+"Coniferous","Coniferous","A26",102.177113032737
+"Coniferous","Coniferous","A25",89.841666383581
+"Coniferous","Coniferous","A24",97.8169418745949
+"Amabilis fir","ABIE.AMA","G3",211.090064538123
+"Amabilis fir","ABIE.AMA","G2",185.055585611079
+"Amabilis fir","ABIE.AMA","F4",205.773147310414
+"Amabilis fir","ABIE.AMA","F3",243.98231174614
+"Balsam fir","ABIE.BAL","K32",69.0764671733351
+"Balsam fir","ABIE.BAL","J35",49.5585559130351
+"Balsam fir","ABIE.BAL","J33",57.5192997126935
+"Balsam fir","ABIE.BAL","J32",67.0737898605668
+"Balsam fir","ABIE.BAL","I36",49.1727560816071
+"Balsam fir","ABIE.BAL","I35",52.4044589599465
+"Balsam fir","ABIE.BAL","I34",56.8361976993009
+"Balsam fir","ABIE.BAL","I33",56.1010564567373
+"Balsam fir","ABIE.BAL","I31",87.1024573137366
+"Balsam fir","ABIE.BAL","H36",48.4871826742454
+"Balsam fir","ABIE.BAL","H35",48.9668483837664
+"Balsam fir","ABIE.BAL","H34",43.4120679522312
+"Balsam fir","ABIE.BAL","H33",51.3918491356231
+"Balsam fir","ABIE.BAL","H31",79.7850308149238
+"Balsam fir","ABIE.BAL","H30",74.2623726278036
+"Balsam fir","ABIE.BAL","G34",46.093855379999
+"Balsam fir","ABIE.BAL","G33",38.7036567859784
+"Balsam fir","ABIE.BAL","G31",109.054670372035
+"Balsam fir","ABIE.BAL","G30",89.7312725541277
+"Balsam fir","ABIE.BAL","G29",73.7949268602656
+"Balsam fir","ABIE.BAL","G28",72.1233626251855
+"Balsam fir","ABIE.BAL","F34",53.3771337891707
+"Balsam fir","ABIE.BAL","F33",51.0706817949632
+"Balsam fir","ABIE.BAL","F31",110.360094995255
+"Balsam fir","ABIE.BAL","F30",98.0137212960491
+"Balsam fir","ABIE.BAL","F29",96.3350499622579
+"Balsam fir","ABIE.BAL","F28",74.2087082470221
+"Balsam fir","ABIE.BAL","F27",63.9053942412005
+"Balsam fir","ABIE.BAL","F26",50.8631482285294
+"Balsam fir","ABIE.BAL","E33",86.1180709190163
+"Balsam fir","ABIE.BAL","E32",109.469849201039
+"Balsam fir","ABIE.BAL","E31",106.358717611664
+"Balsam fir","ABIE.BAL","E30",109.578864525681
+"Balsam fir","ABIE.BAL","E29",108.59019908851
+"Balsam fir","ABIE.BAL","E28",96.1820366319628
+"Balsam fir","ABIE.BAL","E27",88.5450666798176
+"Balsam fir","ABIE.BAL","E26",73.6151932459127
+"Balsam fir","ABIE.BAL","E25",75.351473571139
+"Balsam fir","ABIE.BAL","D31",115.024033559499
+"Balsam fir","ABIE.BAL","D30",107.663596457664
+"Balsam fir","ABIE.BAL","D29",100.576534242295
+"Balsam fir","ABIE.BAL","D28",107.351235430724
+"Balsam fir","ABIE.BAL","D27",106.150191186796
+"Balsam fir","ABIE.BAL","D26",93.4043778844621
+"Balsam fir","ABIE.BAL","D25",92.4553615535166
+"Balsam fir","ABIE.BAL","C29",105.096515587698
+"Balsam fir","ABIE.BAL","C28",104.011254817745
+"Balsam fir","ABIE.BAL","C27",105.386395600238
+"Balsam fir","ABIE.BAL","C26",102.724294417311
+"Balsam fir","ABIE.BAL","C25",101.295128810942
+"Balsam fir","ABIE.BAL","C24",103.60100061196
+"Balsam fir","ABIE.BAL","B28",104.308977094041
+"Subalpine fir","ABIE.LAS","R6",39.0519041289275
+"Subalpine fir","ABIE.LAS","P5",40.0578698942095
+"Subalpine fir","ABIE.LAS","P4",40.1585235889101
+"Subalpine fir","ABIE.LAS","P3",52.5966131631193
+"Subalpine fir","ABIE.LAS","O5",41.1360553791746
+"Subalpine fir","ABIE.LAS","O4",62.3481949209591
+"Subalpine fir","ABIE.LAS","O3",77.1398305665229
+"Subalpine fir","ABIE.LAS","N4",60.1144086561365
+"Subalpine fir","ABIE.LAS","N3",73.6810576092889
+"Subalpine fir","ABIE.LAS","M5",51.8646085549942
+"Subalpine fir","ABIE.LAS","M4",59.4505747592512
+"Subalpine fir","ABIE.LAS","M3",85.0846717741944
+"Subalpine fir","ABIE.LAS","M2",94.5873440030266
+"Subalpine fir","ABIE.LAS","L6",62.410808166421
+"Subalpine fir","ABIE.LAS","L5",60.5747601673083
+"Subalpine fir","ABIE.LAS","L4",73.9051800779923
+"Subalpine fir","ABIE.LAS","L3",104.658406234908
+"Subalpine fir","ABIE.LAS","K6",143.003934930011
+"Subalpine fir","ABIE.LAS","K5",88.0900625508669
+"Subalpine fir","ABIE.LAS","K4",82.9766457406932
+"Subalpine fir","ABIE.LAS","K3",94.9469894087368
+"Subalpine fir","ABIE.LAS","J6",186.42468611718
+"Subalpine fir","ABIE.LAS","J5",173.178027963794
+"Subalpine fir","ABIE.LAS","J4",120.746453245853
+"Subalpine fir","ABIE.LAS","J3",86.3306718684451
+"Subalpine fir","ABIE.LAS","I6",119.564384839723
+"Subalpine fir","ABIE.LAS","I5",145.564267016203
+"Subalpine fir","ABIE.LAS","I4",87.2693106008012
+"Subalpine fir","ABIE.LAS","I3",97.4989148081972
+"Subalpine fir","ABIE.LAS","H7",142.93792846398
+"Subalpine fir","ABIE.LAS","H6",125.48070293852
+"Subalpine fir","ABIE.LAS","H5",116.838174842421
+"Subalpine fir","ABIE.LAS","H4",124.255804211472
+"Subalpine fir","ABIE.LAS","H3",172.772812144506
+"Subalpine fir","ABIE.LAS","G6",120.624919380951
+"Subalpine fir","ABIE.LAS","G5",143.960468863914
+"Subalpine fir","ABIE.LAS","G4",177.585715106567
+"Subalpine fir","ABIE.LAS","G3",166.142511988461
+"Subalpine fir","ABIE.LAS","F7",99.0712948077917
+"Subalpine fir","ABIE.LAS","F6",131.311337722598
+"Subalpine fir","ABIE.LAS","F5",140.764646377176
+"Subalpine fir","ABIE.LAS","F4",179.066469663802
+"Subalpine fir","ABIE.LAS","E7",144.170704401624
+"Subalpine fir","ABIE.LAS","E6",160.162118407427
+"Subalpine fir","ABIE.LAS","E5",198.915225440035
+"Red maple","ACER.RUB","F34",34.4734030393938
+"Red maple","ACER.RUB","F33",56.881679892897
+"Red maple","ACER.RUB","E33",109.068685590467
+"Red maple","ACER.RUB","E32",98.8786461434645
+"Red maple","ACER.RUB","E31",119.914837947248
+"Red maple","ACER.RUB","D33",114.539951146186
+"Red maple","ACER.RUB","D32",132.387279829864
+"Red maple","ACER.RUB","D31",114.213648046333
+"Red maple","ACER.RUB","C32",125.15197718958
+"Red maple","ACER.RUB","C31",126.41321007453
+"Red maple","ACER.RUB","C28",125.237408802668
+"Red maple","ACER.RUB","B28",121.644689886078
+"Sugar maple","ACER.SAH","F30",149.761600454077
+"Sugar maple","ACER.SAH","E31",138.828657769249
+"Sugar maple","ACER.SAH","E30",143.305791942074
+"Sugar maple","ACER.SAH","E29",133.468745493502
+"Sugar maple","ACER.SAH","D32",129.522400764795
+"Sugar maple","ACER.SAH","D31",136.687781180672
+"Sugar maple","ACER.SAH","D30",136.26739969232
+"Sugar maple","ACER.SAH","D29",128.892873745006
+"Sugar maple","ACER.SAH","D28",139.241533851601
+"Sugar maple","ACER.SAH","D27",141.393836457784
+"Sugar maple","ACER.SAH","C29",125.756377885894
+"Sugar maple","ACER.SAH","C28",132.670622053425
+"Sugar maple","ACER.SAH","C27",131.92982537832
+"Sugar maple","ACER.SAH","C26",135.789178007023
+"Sugar maple","ACER.SAH","C25",132.425021283003
+"Sugar maple","ACER.SAH","C24",142.941822964979
+"Sugar maple","ACER.SAH","C21",114.036730488887
+"Sugar maple","ACER.SAH","B28",135.168856140179
+"Sugar maple","ACER.SAH","B27",128.909543026612
+"Sugar maple","ACER.SAH","B26",130.251218339802
+"Sugar maple","ACER.SAH","B25",127.969550342893
+"Sugar maple","ACER.SAH","B24",121.184406037692
+"Sugar maple","ACER.SAH","B23",131.176313713588
+"Sugar maple","ACER.SAH","B22",133.160848676205
+"Sugar maple","ACER.SAH","B21",143.402390603533
+"Sugar maple","ACER.SAH","A26",117.242705577312
+"Sugar maple","ACER.SAH","A25",115.090195511565
+"Sugar maple","ACER.SAH","A24",122.63757842464
+"Yellow birch","BETU.ALL","F30",166.064038408808
+"Yellow birch","BETU.ALL","D28",158.349795849151
+"Yellow birch","BETU.ALL","D27",165.940441165573
+"Yellow birch","BETU.ALL","C26",155.780063289994
+"Yellow birch","BETU.ALL","C25",154.723204646288
+"White birch","BETU.PAP","T6",63.8158724056803
+"White birch","BETU.PAP","S6",66.8583854875358
+"White birch","BETU.PAP","R7",68.6901697314106
+"White birch","BETU.PAP","R3",98.2930201125421
+"White birch","BETU.PAP","Q7",67.5399639841986
+"White birch","BETU.PAP","K32",34.0444527520115
+"White birch","BETU.PAP","H30",71.0662674463828
+"White birch","BETU.PAP","G30",108.527223802462
+"White birch","BETU.PAP","G28",75.9343691514195
+"White birch","BETU.PAP","F31",125.613803385479
+"White birch","BETU.PAP","F30",124.774787176037
+"White birch","BETU.PAP","F29",112.198399524123
+"White birch","BETU.PAP","F28",88.4641072630145
+"White birch","BETU.PAP","F27",79.9079970437463
+"White birch","BETU.PAP","F26",70.0564195518481
+"White birch","BETU.PAP","F25",59.0388685237908
+"White birch","BETU.PAP","E29",128.653505380839
+"White birch","BETU.PAP","E28",111.889846921004
+"White birch","BETU.PAP","E27",99.5145759321838
+"White birch","BETU.PAP","E26",90.0912040219725
+"White birch","BETU.PAP","E25",76.9509507429303
+"White birch","BETU.PAP","E21",54.4895686297428
+"White birch","BETU.PAP","D31",139.225908331963
+"White birch","BETU.PAP","D29",120.529971837891
+"White birch","BETU.PAP","D28",137.916443615266
+"White birch","BETU.PAP","D27",124.058103080022
+"White birch","BETU.PAP","D26",112.346115018018
+"White birch","BETU.PAP","D25",97.9424815109849
+"White birch","BETU.PAP","D22",47.2979781699274
+"White birch","BETU.PAP","D21",47.0290921180833
+"White birch","BETU.PAP","D19",123.369963073786
+"White birch","BETU.PAP","C27",125.182163707058
+"White birch","BETU.PAP","C26",126.278276883771
+"White birch","BETU.PAP","C25",124.943177888895
+"White birch","BETU.PAP","C24",127.985119534949
+"White birch","BETU.PAP","C22",105.311634674536
+"White birch","BETU.PAP","C21",89.9541687604834
+"White birch","BETU.PAP","C20",102.48163021152
+"White birch","BETU.PAP","C19",83.8383995056872
+"White birch","BETU.PAP","B25",125.396921973803
+"White birch","BETU.PAP","B24",114.599843232319
+"White birch","BETU.PAP","B23",110.0257791611
+"Yellow-cedar","CHAM.NOO","J2",144.355848232815
+"Yellow-cedar","CHAM.NOO","I2",147.783891362311
+"Yellow-cedar","CHAM.NOO","H2",131.538257392307
+"Yellow-cedar","CHAM.NOO","G2",185.703880652862
+"Black ash","FRAX.NIG","A26",120.65207047703
+"Tamarack","LARI.LAR","U7",104.791218578523
+"Tamarack","LARI.LAR","O10",66.366653808298
+"Tamarack","LARI.LAR","N13",68.883682953942
+"Tamarack","LARI.LAR","M10",210.177533265246
+"Tamarack","LARI.LAR","K10",125.297673499665
+"Tamarack","LARI.LAR","G17",84.488904480419
+"Tamarack","LARI.LAR","F24",93.8270066908441
+"Tamarack","LARI.LAR","F23",80.4571703311197
+"Tamarack","LARI.LAR","F13",119.848240833337
+"Tamarack","LARI.LAR","E23",107.030452045772
+"Western larch","LARI.OCC","F6",211.51295125605
+"Engelmann spruce","PICE.ENG","L5",90.1563970040152
+"Engelmann spruce","PICE.ENG","L4",126.656349605949
+"Engelmann spruce","PICE.ENG","K6",161.092321672422
+"Engelmann spruce","PICE.ENG","K5",126.813710357804
+"Engelmann spruce","PICE.ENG","K4",118.218624213583
+"Engelmann spruce","PICE.ENG","K3",139.757516480401
+"Engelmann spruce","PICE.ENG","J5",169.238370691591
+"Engelmann spruce","PICE.ENG","J4",174.475412797076
+"Engelmann spruce","PICE.ENG","J3",126.426303875579
+"Engelmann spruce","PICE.ENG","I6",152.057829183485
+"Engelmann spruce","PICE.ENG","I5",184.043693579696
+"Engelmann spruce","PICE.ENG","I4",162.917179285803
+"Engelmann spruce","PICE.ENG","I3",107.531471411305
+"Engelmann spruce","PICE.ENG","H7",100.817469335486
+"Engelmann spruce","PICE.ENG","H6",134.498832167381
+"Engelmann spruce","PICE.ENG","H5",182.082503971957
+"Engelmann spruce","PICE.ENG","G7",121.205582033343
+"Engelmann spruce","PICE.ENG","G6",172.233108956653
+"Engelmann spruce","PICE.ENG","G5",162.533914008
+"Engelmann spruce","PICE.ENG","F7",146.647552372382
+"Engelmann spruce","PICE.ENG","F6",159.614203117171
+"Engelmann spruce","PICE.ENG","F5",173.718469531072
+"Engelmann spruce","PICE.ENG","F4",224.626903479103
+"Engelmann spruce","PICE.ENG","E7",178.229073041526
+"Engelmann spruce","PICE.ENG","E6",193.84108929672
+"White spruce","PICE.GLA","T6",102.165475852
+"White spruce","PICE.GLA","T4",34.207943621509
+"White spruce","PICE.GLA","S5",65.4013213218111
+"White spruce","PICE.GLA","S3",81.250450899559
+"White spruce","PICE.GLA","R3",81.4327959160273
+"White spruce","PICE.GLA","Q5",48.0010097771457
+"White spruce","PICE.GLA","Q4",82.001713851408
+"White spruce","PICE.GLA","Q3",73.4389186943624
+"White spruce","PICE.GLA","Q2",59.9499744351742
+"White spruce","PICE.GLA","P7",63.7739467578237
+"White spruce","PICE.GLA","P6",39.1106890750856
+"White spruce","PICE.GLA","P5",45.9167857692271
+"White spruce","PICE.GLA","P4",72.2912017349654
+"White spruce","PICE.GLA","P3",83.0646817339072
+"White spruce","PICE.GLA","P2",94.7583862505479
+"White spruce","PICE.GLA","O7",76.3045653037348
+"White spruce","PICE.GLA","O6",60.9015623427899
+"White spruce","PICE.GLA","O5",45.9338332165291
+"White spruce","PICE.GLA","O4",49.1610064295387
+"White spruce","PICE.GLA","O3",102.900030980911
+"White spruce","PICE.GLA","N8",96.3792456763149
+"White spruce","PICE.GLA","N7",100.211840588674
+"White spruce","PICE.GLA","N6",91.4502471085983
+"White spruce","PICE.GLA","M10",114.481296800835
+"White spruce","PICE.GLA","M8",124.116783445757
+"White spruce","PICE.GLA","L8",163.830725032333
+"White spruce","PICE.GLA","L7",154.027247265764
+"White spruce","PICE.GLA","L6",143.76747594305
+"White spruce","PICE.GLA","K10",154.601347303135
+"White spruce","PICE.GLA","K9",166.114077178769
+"White spruce","PICE.GLA","K8",148.582198781866
+"White spruce","PICE.GLA","K7",147.655527010182
+"White spruce","PICE.GLA","K6",173.164671397643
+"White spruce","PICE.GLA","K5",121.907385869224
+"White spruce","PICE.GLA","K4",142.349300365548
+"White spruce","PICE.GLA","J9",133.964388467621
+"White spruce","PICE.GLA","J8",142.729659908467
+"White spruce","PICE.GLA","J7",148.566976711224
+"White spruce","PICE.GLA","J6",185.177704644198
+"White spruce","PICE.GLA","J5",227.809788608284
+"White spruce","PICE.GLA","I9",126.48592893529
+"White spruce","PICE.GLA","I8",169.951455087145
+"White spruce","PICE.GLA","I7",156.855497058664
+"White spruce","PICE.GLA","I6",176.360705235715
+"White spruce","PICE.GLA","H10",122.143607073433
+"White spruce","PICE.GLA","H8",123.532802916573
+"White spruce","PICE.GLA","H7",149.980325338019
+"White spruce","PICE.GLA","H6",156.569009860022
+"White spruce","PICE.GLA","G31",83.6401871309314
+"White spruce","PICE.GLA","G11",95.2722248725123
+"White spruce","PICE.GLA","G7",185.387712111426
+"White spruce","PICE.GLA","F33",87.0189061808805
+"White spruce","PICE.GLA","F7",183.858514483156
+"White spruce","PICE.GLA","E33",104.341433565047
+"White spruce","PICE.GLA","E14",119.899960753683
+"Black spruce","PICE.MAR","V5",42.2677928073672
+"Black spruce","PICE.MAR","U6",55.8018779489063
+"Black spruce","PICE.MAR","U5",53.9102928557339
+"Black spruce","PICE.MAR","U4",62.7738467553485
+"Black spruce","PICE.MAR","T8",32.3601542459061
+"Black spruce","PICE.MAR","T7",47.1616453062161
+"Black spruce","PICE.MAR","T6",59.7041259536871
+"Black spruce","PICE.MAR","T5",62.9035036337674
+"Black spruce","PICE.MAR","T4",56.1372154172404
+"Black spruce","PICE.MAR","T3",60.3265631063972
+"Black spruce","PICE.MAR","S8",30.18299704081
+"Black spruce","PICE.MAR","S7",47.113117029323
+"Black spruce","PICE.MAR","S6",59.4921965489876
+"Black spruce","PICE.MAR","S5",50.7986021138871
+"Black spruce","PICE.MAR","S4",42.5712947688607
+"Black spruce","PICE.MAR","S3",70.062642477806
+"Black spruce","PICE.MAR","R9",25.6135027658784
+"Black spruce","PICE.MAR","R8",23.4091911411819
+"Black spruce","PICE.MAR","R7",46.144164081618
+"Black spruce","PICE.MAR","R6",45.9047014649363
+"Black spruce","PICE.MAR","R5",39.1849916001766
+"Black spruce","PICE.MAR","R4",62.6036740824281
+"Black spruce","PICE.MAR","R3",81.5183832122999
+"Black spruce","PICE.MAR","R2",68.0155069371967
+"Black spruce","PICE.MAR","Q10",32.9177814874968
+"Black spruce","PICE.MAR","Q9",38.5241412681362
+"Black spruce","PICE.MAR","Q8",29.9777502256271
+"Black spruce","PICE.MAR","Q7",45.8214424237243
+"Black spruce","PICE.MAR","Q6",34.1906975069399
+"Black spruce","PICE.MAR","Q5",44.7713230121138
+"Black spruce","PICE.MAR","Q4",63.4046533881478
+"Black spruce","PICE.MAR","Q3",56.7235117192741
+"Black spruce","PICE.MAR","Q2",70.3205506653497
+"Black spruce","PICE.MAR","P11",29.0697082564242
+"Black spruce","PICE.MAR","P10",30.7296011331846
+"Black spruce","PICE.MAR","P9",30.2875897626318
+"Black spruce","PICE.MAR","P8",33.0341226366321
+"Black spruce","PICE.MAR","P7",41.9401129891488
+"Black spruce","PICE.MAR","P6",41.0146993839418
+"Black spruce","PICE.MAR","P5",48.9911764433677
+"Black spruce","PICE.MAR","P4",53.240386893806
+"Black spruce","PICE.MAR","P3",66.0191951720522
+"Black spruce","PICE.MAR","P2",84.4094231455293
+"Black spruce","PICE.MAR","O11",27.8019194207619
+"Black spruce","PICE.MAR","O10",31.266505723829
+"Black spruce","PICE.MAR","O9",35.1291592830722
+"Black spruce","PICE.MAR","O8",37.7656389113482
+"Black spruce","PICE.MAR","O7",51.2897193876619
+"Black spruce","PICE.MAR","O6",48.4735380349371
+"Black spruce","PICE.MAR","O5",68.0321806869729
+"Black spruce","PICE.MAR","O4",76.7984980013641
+"Black spruce","PICE.MAR","O3",98.3113278875536
+"Black spruce","PICE.MAR","N12",31.294852138502
+"Black spruce","PICE.MAR","N11",35.6920141793848
+"Black spruce","PICE.MAR","N10",42.2962983181157
+"Black spruce","PICE.MAR","N9",57.1860544827983
+"Black spruce","PICE.MAR","N8",52.9601532244778
+"Black spruce","PICE.MAR","N7",76.9215822447011
+"Black spruce","PICE.MAR","N6",75.0587714018404
+"Black spruce","PICE.MAR","N5",90.7884811435812
+"Black spruce","PICE.MAR","N4",106.353354958931
+"Black spruce","PICE.MAR","N3",115.967376970018
+"Black spruce","PICE.MAR","M29",83.6339439996306
+"Black spruce","PICE.MAR","M28",84.7195018612802
+"Black spruce","PICE.MAR","M27",69.2109170159866
+"Black spruce","PICE.MAR","M14",29.637269359155
+"Black spruce","PICE.MAR","M13",28.7959766390147
+"Black spruce","PICE.MAR","M12",26.2393941304222
+"Black spruce","PICE.MAR","M11",39.0001595243234
+"Black spruce","PICE.MAR","M10",74.858583956104
+"Black spruce","PICE.MAR","M9",72.4454734716773
+"Black spruce","PICE.MAR","M8",61.2599092753702
+"Black spruce","PICE.MAR","M7",64.9108516422971
+"Black spruce","PICE.MAR","M6",103.39666263383
+"Black spruce","PICE.MAR","M5",97.6659046540427
+"Black spruce","PICE.MAR","M4",98.4933484817868
+"Black spruce","PICE.MAR","M3",117.565290094723
+"Black spruce","PICE.MAR","L32",68.3632871978491
+"Black spruce","PICE.MAR","L31",71.2122217286363
+"Black spruce","PICE.MAR","L30",70.2138785383715
+"Black spruce","PICE.MAR","L29",82.5229565685981
+"Black spruce","PICE.MAR","L28",64.4777906577245
+"Black spruce","PICE.MAR","L27",46.9646737547689
+"Black spruce","PICE.MAR","L26",45.4315480649592
+"Black spruce","PICE.MAR","L25",46.46142088233
+"Black spruce","PICE.MAR","L16",45.1953054179024
+"Black spruce","PICE.MAR","L15",45.1114483658648
+"Black spruce","PICE.MAR","L14",29.2626840399206
+"Black spruce","PICE.MAR","L13",27.0579896516438
+"Black spruce","PICE.MAR","L12",25.3042368019915
+"Black spruce","PICE.MAR","L11",36.3046666076657
+"Black spruce","PICE.MAR","L10",118.741331976892
+"Black spruce","PICE.MAR","L9",86.6857749622645
+"Black spruce","PICE.MAR","L8",78.6901452983515
+"Black spruce","PICE.MAR","L7",76.6151927525739
+"Black spruce","PICE.MAR","L6",115.945528357301
+"Black spruce","PICE.MAR","L5",102.204244416428
+"Black spruce","PICE.MAR","K33",53.578857282363
+"Black spruce","PICE.MAR","K32",67.5606981367292
+"Black spruce","PICE.MAR","K31",64.5435035815203
+"Black spruce","PICE.MAR","K30",66.0505414006413
+"Black spruce","PICE.MAR","K29",47.3065341127098
+"Black spruce","PICE.MAR","K28",40.2387086018588
+"Black spruce","PICE.MAR","K27",42.3065023837436
+"Black spruce","PICE.MAR","K26",44.1961736121021
+"Black spruce","PICE.MAR","K25",47.2658754502245
+"Black spruce","PICE.MAR","K24",41.4520934870963
+"Black spruce","PICE.MAR","K16",39.8130333533013
+"Black spruce","PICE.MAR","K15",40.3310925114521
+"Black spruce","PICE.MAR","K14",31.1041746036112
+"Black spruce","PICE.MAR","K13",31.7867653342019
+"Black spruce","PICE.MAR","K12",43.1199198482419
+"Black spruce","PICE.MAR","K11",38.2626511530765
+"Black spruce","PICE.MAR","K10",121.326193433943
+"Black spruce","PICE.MAR","K9",104.357814306343
+"Black spruce","PICE.MAR","K8",82.5002149156971
+"Black spruce","PICE.MAR","K7",79.9958366039661
+"Black spruce","PICE.MAR","K6",126.258554725138
+"Black spruce","PICE.MAR","J35",53.7750380607597
+"Black spruce","PICE.MAR","J34",45.7567337196594
+"Black spruce","PICE.MAR","J33",39.9599822126871
+"Black spruce","PICE.MAR","J32",61.2520915926113
+"Black spruce","PICE.MAR","J31",69.1438258342852
+"Black spruce","PICE.MAR","J30",63.1296399991265
+"Black spruce","PICE.MAR","J29",47.3308757005427
+"Black spruce","PICE.MAR","J28",43.4641878419909
+"Black spruce","PICE.MAR","J27",35.5555253828951
+"Black spruce","PICE.MAR","J26",29.7098861612883
+"Black spruce","PICE.MAR","J25",34.0245412789319
+"Black spruce","PICE.MAR","J24",44.2006664407375
+"Black spruce","PICE.MAR","J17",29.492879433033
+"Black spruce","PICE.MAR","J16",31.1311494074299
+"Black spruce","PICE.MAR","J15",43.4270174445652
+"Black spruce","PICE.MAR","J14",39.1182288095634
+"Black spruce","PICE.MAR","J13",36.7625002467455
+"Black spruce","PICE.MAR","J12",36.329200369207
+"Black spruce","PICE.MAR","J11",33.9777677853032
+"Black spruce","PICE.MAR","J10",65.0097504853821
+"Black spruce","PICE.MAR","J9",74.9576345616891
+"Black spruce","PICE.MAR","J8",62.3610586287185
+"Black spruce","PICE.MAR","J7",94.8547540697193
+"Black spruce","PICE.MAR","J6",131.964337490659
+"Black spruce","PICE.MAR","I36",73.7024467090523
+"Black spruce","PICE.MAR","I35",68.2721213938745
+"Black spruce","PICE.MAR","I34",55.6791568519501
+"Black spruce","PICE.MAR","I33",44.6595236031094
+"Black spruce","PICE.MAR","I32",61.8065406760126
+"Black spruce","PICE.MAR","I31",71.2676577489063
+"Black spruce","PICE.MAR","I30",61.5640848721245
+"Black spruce","PICE.MAR","I29",51.724413337686
+"Black spruce","PICE.MAR","I28",46.631078016586
+"Black spruce","PICE.MAR","I27",37.8952157675301
+"Black spruce","PICE.MAR","I26",33.4384583498057
+"Black spruce","PICE.MAR","I25",34.002967896298
+"Black spruce","PICE.MAR","I24",42.3987567866405
+"Black spruce","PICE.MAR","I23",52.4717042742478
+"Black spruce","PICE.MAR","I19",28.4236612076368
+"Black spruce","PICE.MAR","I18",29.2236615065096
+"Black spruce","PICE.MAR","I17",31.7674203989181
+"Black spruce","PICE.MAR","I16",39.3899142256345
+"Black spruce","PICE.MAR","I15",68.4177748266043
+"Black spruce","PICE.MAR","I14",67.5257503839645
+"Black spruce","PICE.MAR","I13",61.1726526516834
+"Black spruce","PICE.MAR","I12",54.5275934243384
+"Black spruce","PICE.MAR","I11",63.4123650068559
+"Black spruce","PICE.MAR","I10",76.7290849089734
+"Black spruce","PICE.MAR","I9",89.8642746116534
+"Black spruce","PICE.MAR","I8",117.56204495854
+"Black spruce","PICE.MAR","I7",126.458707044274
+"Black spruce","PICE.MAR","I6",134.915743956065
+"Black spruce","PICE.MAR","H36",70.9709901943546
+"Black spruce","PICE.MAR","H35",69.8399658865188
+"Black spruce","PICE.MAR","H34",50.6924927170079
+"Black spruce","PICE.MAR","H33",61.3650597338291
+"Black spruce","PICE.MAR","H32",65.2824204321337
+"Black spruce","PICE.MAR","H31",73.7464285391534
+"Black spruce","PICE.MAR","H30",76.6341436063144
+"Black spruce","PICE.MAR","H29",66.6466216973756
+"Black spruce","PICE.MAR","H28",66.2197221584314
+"Black spruce","PICE.MAR","H27",49.0732259276866
+"Black spruce","PICE.MAR","H26",41.5903172703408
+"Black spruce","PICE.MAR","H25",47.260422371126
+"Black spruce","PICE.MAR","H24",50.7202250715302
+"Black spruce","PICE.MAR","H23",45.7261876971015
+"Black spruce","PICE.MAR","H21",31.4485801092237
+"Black spruce","PICE.MAR","H20",30.2865883878322
+"Black spruce","PICE.MAR","H19",30.0405305284841
+"Black spruce","PICE.MAR","H18",34.1637726720823
+"Black spruce","PICE.MAR","H17",42.9226456640813
+"Black spruce","PICE.MAR","H16",59.4491814017045
+"Black spruce","PICE.MAR","H15",86.8736236840816
+"Black spruce","PICE.MAR","H14",93.4746908995436
+"Black spruce","PICE.MAR","H13",90.9185448280383
+"Black spruce","PICE.MAR","H12",87.8136533731549
+"Black spruce","PICE.MAR","H11",82.6060823858077
+"Black spruce","PICE.MAR","H10",93.3082419635909
+"Black spruce","PICE.MAR","H9",106.84514405297
+"Black spruce","PICE.MAR","H8",119.943869789283
+"Black spruce","PICE.MAR","H7",170.757140356164
+"Black spruce","PICE.MAR","G33",47.0954355760792
+"Black spruce","PICE.MAR","G32",97.2071367713652
+"Black spruce","PICE.MAR","G31",93.2868442352597
+"Black spruce","PICE.MAR","G30",90.6232347737602
+"Black spruce","PICE.MAR","G29",84.2440263778052
+"Black spruce","PICE.MAR","G28",91.6718574088536
+"Black spruce","PICE.MAR","G27",75.0514664627878
+"Black spruce","PICE.MAR","G26",66.3272259230443
+"Black spruce","PICE.MAR","G25",58.6171394792911
+"Black spruce","PICE.MAR","G24",49.909658385641
+"Black spruce","PICE.MAR","G23",46.9837547128795
+"Black spruce","PICE.MAR","G22",36.729810406303
+"Black spruce","PICE.MAR","G21",35.3631748229261
+"Black spruce","PICE.MAR","G20",33.9137851429827
+"Black spruce","PICE.MAR","G19",42.2614159644365
+"Black spruce","PICE.MAR","G18",58.1105594511429
+"Black spruce","PICE.MAR","G17",71.8089317325244
+"Black spruce","PICE.MAR","G16",83.6473405998995
+"Black spruce","PICE.MAR","G15",84.8995539984536
+"Black spruce","PICE.MAR","G14",88.5780446637571
+"Black spruce","PICE.MAR","G13",89.5768710034603
+"Black spruce","PICE.MAR","G12",93.2028598652411
+"Black spruce","PICE.MAR","G11",109.536777802614
+"Black spruce","PICE.MAR","G10",133.858453866426
+"Black spruce","PICE.MAR","G7",186.734614536491
+"Black spruce","PICE.MAR","F34",79.6622002625128
+"Black spruce","PICE.MAR","F33",63.133994257451
+"Black spruce","PICE.MAR","F32",99.7925035477588
+"Black spruce","PICE.MAR","F31",121.772735815959
+"Black spruce","PICE.MAR","F30",118.674266126173
+"Black spruce","PICE.MAR","F29",105.031641986733
+"Black spruce","PICE.MAR","F28",93.8744062314876
+"Black spruce","PICE.MAR","F27",88.7451697366159
+"Black spruce","PICE.MAR","F26",77.5169889949635
+"Black spruce","PICE.MAR","F25",67.6621308340447
+"Black spruce","PICE.MAR","F24",53.6310728316657
+"Black spruce","PICE.MAR","F23",36.9297083563846
+"Black spruce","PICE.MAR","F22",37.1129143690262
+"Black spruce","PICE.MAR","F21",43.0529823832489
+"Black spruce","PICE.MAR","F20",53.5757403754926
+"Black spruce","PICE.MAR","F19",77.0224641839892
+"Black spruce","PICE.MAR","F18",86.8642613031271
+"Black spruce","PICE.MAR","F17",95.9978670501641
+"Black spruce","PICE.MAR","F16",89.7528135723904
+"Black spruce","PICE.MAR","F15",97.0852005604385
+"Black spruce","PICE.MAR","F14",94.0918869268056
+"Black spruce","PICE.MAR","F13",101.288657999116
+"Black spruce","PICE.MAR","F12",109.124069560697
+"Black spruce","PICE.MAR","E33",83.5007165127997
+"Black spruce","PICE.MAR","E32",104.558011777635
+"Black spruce","PICE.MAR","E31",116.144392155411
+"Black spruce","PICE.MAR","E30",125.357435411259
+"Black spruce","PICE.MAR","E29",123.971345463423
+"Black spruce","PICE.MAR","E28",117.862711363238
+"Black spruce","PICE.MAR","E27",108.107457570889
+"Black spruce","PICE.MAR","E26",88.5201217695436
+"Black spruce","PICE.MAR","E25",83.7534441096688
+"Black spruce","PICE.MAR","E24",59.9657383367134
+"Black spruce","PICE.MAR","E23",53.6784130787616
+"Black spruce","PICE.MAR","E22",54.0611254358606
+"Black spruce","PICE.MAR","E21",58.2770455924631
+"Black spruce","PICE.MAR","E20",69.3390530879573
+"Black spruce","PICE.MAR","E19",84.7209467434377
+"Black spruce","PICE.MAR","E18",107.17001860169
+"Black spruce","PICE.MAR","E17",112.798991158848
+"Black spruce","PICE.MAR","E16",102.6434582693
+"Black spruce","PICE.MAR","E15",103.651406672367
+"Black spruce","PICE.MAR","E14",122.625344348128
+"Black spruce","PICE.MAR","E13",125.007400792837
+"Black spruce","PICE.MAR","D32",124.624836291157
+"Black spruce","PICE.MAR","D31",128.284287426562
+"Black spruce","PICE.MAR","D30",130.62092075514
+"Black spruce","PICE.MAR","D29",109.195169892084
+"Black spruce","PICE.MAR","D28",117.189744310725
+"Black spruce","PICE.MAR","D27",112.467094123228
+"Black spruce","PICE.MAR","D26",106.308662660323
+"Black spruce","PICE.MAR","D25",101.804592263841
+"Black spruce","PICE.MAR","D24",101.026115536717
+"Black spruce","PICE.MAR","D23",91.9203236779178
+"Black spruce","PICE.MAR","D22",103.08564917648
+"Black spruce","PICE.MAR","D21",97.2148182478539
+"Black spruce","PICE.MAR","D20",99.1171428210106
+"Black spruce","PICE.MAR","D19",102.573649167041
+"Black spruce","PICE.MAR","D18",120.288720639943
+"Black spruce","PICE.MAR","D17",115.462984860475
+"Black spruce","PICE.MAR","D16",108.676225974263
+"Black spruce","PICE.MAR","C32",106.659385876
+"Black spruce","PICE.MAR","C31",127.671420762418
+"Black spruce","PICE.MAR","C29",110.419536080439
+"Black spruce","PICE.MAR","C28",109.52960731628
+"Black spruce","PICE.MAR","C27",114.710440974496
+"Black spruce","PICE.MAR","C26",117.081286163405
+"Black spruce","PICE.MAR","C25",112.752752541482
+"Black spruce","PICE.MAR","C24",122.707629902132
+"Black spruce","PICE.MAR","C23",116.239358462961
+"Black spruce","PICE.MAR","C22",109.87994110547
+"Black spruce","PICE.MAR","C21",118.700148653495
+"Black spruce","PICE.MAR","C20",126.10439872158
+"Black spruce","PICE.MAR","C19",110.557795623066
+"Black spruce","PICE.MAR","C18",113.062073187118
+"Black spruce","PICE.MAR","C17",103.371109892251
+"Black spruce","PICE.MAR","C16",110.565828927189
+"Black spruce","PICE.MAR","B26",112.655171820238
+"Black spruce","PICE.MAR","B25",117.349224669304
+"Black spruce","PICE.MAR","B24",118.146565361766
+"Black spruce","PICE.MAR","B23",122.931899853109
+"Black spruce","PICE.MAR","B22",122.876938750228
+"Black spruce","PICE.MAR","B21",133.334883650211
+"Black spruce","PICE.MAR","A25",103.092781963563
+"Red spruce","PICE.RUB","E33",82.8610898627907
+"Red spruce","PICE.RUB","E32",98.619302337714
+"Red spruce","PICE.RUB","D33",87.9848880709771
+"Red spruce","PICE.RUB","D32",109.753559773241
+"Red spruce","PICE.RUB","D31",117.367624479927
+"Red spruce","PICE.RUB","C32",118.950782317524
+"Red spruce","PICE.RUB","C31",119.822504724179
+"Jack pine","PINU.BAN","O10",41.4825540777372
+"Jack pine","PINU.BAN","O8",93.7127562344781
+"Jack pine","PINU.BAN","O7",84.8076316283757
+"Jack pine","PINU.BAN","N11",49.583954597652
+"Jack pine","PINU.BAN","N10",50.3991484419697
+"Jack pine","PINU.BAN","N9",80.3479527498626
+"Jack pine","PINU.BAN","N8",100.971820996219
+"Jack pine","PINU.BAN","N7",124.576910060218
+"Jack pine","PINU.BAN","M12",32.2661791655699
+"Jack pine","PINU.BAN","M11",33.9491951218947
+"Jack pine","PINU.BAN","M10",56.4688000706248
+"Jack pine","PINU.BAN","M9",88.6836330970704
+"Jack pine","PINU.BAN","M8",126.019445161552
+"Jack pine","PINU.BAN","L13",30.7915238713987
+"Jack pine","PINU.BAN","L12",33.9045985253578
+"Jack pine","PINU.BAN","L11",48.3349441548941
+"Jack pine","PINU.BAN","L10",87.5121682386841
+"Jack pine","PINU.BAN","L9",93.067216173849
+"Jack pine","PINU.BAN","K16",30.047964373185
+"Jack pine","PINU.BAN","K15",36.5261791121446
+"Jack pine","PINU.BAN","K14",34.7483266394038
+"Jack pine","PINU.BAN","K13",42.4169157484356
+"Jack pine","PINU.BAN","K12",52.6841259083172
+"Jack pine","PINU.BAN","K11",43.812149417855
+"Jack pine","PINU.BAN","K10",49.8108377573111
+"Jack pine","PINU.BAN","J15",36.8478644713008
+"Jack pine","PINU.BAN","J14",36.2324678235721
+"Jack pine","PINU.BAN","J13",38.5171223823529
+"Jack pine","PINU.BAN","J12",36.5238991277406
+"Jack pine","PINU.BAN","J11",33.9800996078066
+"Jack pine","PINU.BAN","J10",41.5408319718096
+"Jack pine","PINU.BAN","J9",42.326186326312
+"Jack pine","PINU.BAN","I14",56.3657341850053
+"Jack pine","PINU.BAN","I13",61.808151870523
+"Jack pine","PINU.BAN","I12",41.3695970744434
+"Jack pine","PINU.BAN","I11",60.4204746479992
+"Jack pine","PINU.BAN","I10",62.0657798922992
+"Jack pine","PINU.BAN","I9",60.0312895533579
+"Jack pine","PINU.BAN","H24",57.0275526499534
+"Jack pine","PINU.BAN","H14",63.0888965128942
+"Jack pine","PINU.BAN","H13",61.3825406823381
+"Jack pine","PINU.BAN","H12",71.8389803708606
+"Jack pine","PINU.BAN","H11",95.7279764159875
+"Jack pine","PINU.BAN","H10",85.8103925816046
+"Jack pine","PINU.BAN","G16",63.4146124662995
+"Jack pine","PINU.BAN","G14",55.3455890407039
+"Jack pine","PINU.BAN","F17",70.1955552222328
+"Jack pine","PINU.BAN","F16",68.6540277367661
+"Jack pine","PINU.BAN","F14",71.163930693247
+"Jack pine","PINU.BAN","E28",124.096006136726
+"Jack pine","PINU.BAN","E27",117.487594384928
+"Jack pine","PINU.BAN","E17",80.7355371806163
+"Jack pine","PINU.BAN","E16",82.584146583608
+"Jack pine","PINU.BAN","E15",95.890416319021
+"Jack pine","PINU.BAN","D27",120.296482197863
+"Jack pine","PINU.BAN","D26",105.552969401851
+"Jack pine","PINU.BAN","D25",100.235841473261
+"Jack pine","PINU.BAN","D24",114.505979385022
+"Jack pine","PINU.BAN","D17",84.9310184043645
+"Jack pine","PINU.BAN","D16",90.1334124038616
+"Jack pine","PINU.BAN","C24",136.743528844286
+"Jack pine","PINU.BAN","C23",142.040078681792
+"Jack pine","PINU.BAN","C22",119.500508488466
+"Jack pine","PINU.BAN","C18",123.000235712366
+"Jack pine","PINU.BAN","C17",108.832833633763
+"Jack pine","PINU.BAN","C16",94.8114803057695
+"Jack pine","PINU.BAN","B23",123.795632744141
+"Jack pine","PINU.BAN","B22",126.376619337312
+"Lodgepole pine","PINU.CON","Q4",50.3932897650814
+"Lodgepole pine","PINU.CON","P5",48.6447087995
+"Lodgepole pine","PINU.CON","P4",59.2014944195063
+"Lodgepole pine","PINU.CON","P3",81.8262987414386
+"Lodgepole pine","PINU.CON","O6",56.460419825763
+"Lodgepole pine","PINU.CON","O5",71.3845380995339
+"Lodgepole pine","PINU.CON","O4",94.5415954710348
+"Lodgepole pine","PINU.CON","O3",109.307628693525
+"Lodgepole pine","PINU.CON","N7",98.9458091781058
+"Lodgepole pine","PINU.CON","N6",75.7876052756362
+"Lodgepole pine","PINU.CON","N5",96.5177812506704
+"Lodgepole pine","PINU.CON","N4",102.565090609947
+"Lodgepole pine","PINU.CON","N3",107.377479571698
+"Lodgepole pine","PINU.CON","M7",138.973261444647
+"Lodgepole pine","PINU.CON","M6",122.337428728205
+"Lodgepole pine","PINU.CON","M5",80.4801718414868
+"Lodgepole pine","PINU.CON","M4",94.4215603572388
+"Lodgepole pine","PINU.CON","M3",121.490562083234
+"Lodgepole pine","PINU.CON","L7",148.140700463277
+"Lodgepole pine","PINU.CON","L6",103.480311707254
+"Lodgepole pine","PINU.CON","L5",75.2382983160033
+"Lodgepole pine","PINU.CON","L4",86.6101707065758
+"Lodgepole pine","PINU.CON","K7",103.404072359745
+"Lodgepole pine","PINU.CON","K6",104.932902284917
+"Lodgepole pine","PINU.CON","K5",72.2020879614721
+"Lodgepole pine","PINU.CON","K4",73.4964319332021
+"Lodgepole pine","PINU.CON","K3",132.269348468826
+"Lodgepole pine","PINU.CON","J6",143.135565307629
+"Lodgepole pine","PINU.CON","J5",117.353760078227
+"Lodgepole pine","PINU.CON","J4",95.3287081965378
+"Lodgepole pine","PINU.CON","J3",94.1555136186998
+"Lodgepole pine","PINU.CON","I8",132.380073818363
+"Lodgepole pine","PINU.CON","I7",160.365546271158
+"Lodgepole pine","PINU.CON","I6",131.165728017379
+"Lodgepole pine","PINU.CON","I5",158.667669903668
+"Lodgepole pine","PINU.CON","I4",87.9722855167225
+"Lodgepole pine","PINU.CON","I3",81.4497500771686
+"Lodgepole pine","PINU.CON","H7",162.352568227035
+"Lodgepole pine","PINU.CON","H6",109.413865381387
+"Lodgepole pine","PINU.CON","H5",126.277150838645
+"Lodgepole pine","PINU.CON","H4",96.7683064445217
+"Lodgepole pine","PINU.CON","H3",108.197888325159
+"Lodgepole pine","PINU.CON","G8",176.127154987827
+"Lodgepole pine","PINU.CON","G7",150.162484772177
+"Lodgepole pine","PINU.CON","G6",141.752554489697
+"Lodgepole pine","PINU.CON","G5",137.849623789398
+"Lodgepole pine","PINU.CON","G4",103.020594074134
+"Lodgepole pine","PINU.CON","F7",153.666148812321
+"Lodgepole pine","PINU.CON","F6",155.64273448026
+"Lodgepole pine","PINU.CON","F5",152.60192671516
+"Lodgepole pine","PINU.CON","F4",151.73965888348
+"Lodgepole pine","PINU.CON","E7",187.117327484237
+"Lodgepole pine","PINU.CON","E6",196.076424240247
+"Lodgepole pine","PINU.CON","E5",166.796830576223
+"Red pine","PINU.RES","B25",136.797360433032
+"Red pine","PINU.RES","B22",133.193733298665
+"Eastern white pine","PINU.STR","C27",119.655711824401
+"Eastern white pine","PINU.STR","C26",121.759641681579
+"Eastern white pine","PINU.STR","C25",122.217513519393
+"Eastern white pine","PINU.STR","C24",123.57018093384
+"Eastern white pine","PINU.STR","B26",117.121044099084
+"Eastern white pine","PINU.STR","B25",120.312023538001
+"Eastern white pine","PINU.STR","B24",110.572804046447
+"Eastern white pine","PINU.STR","B23",125.845596572956
+"Eastern white pine","PINU.STR","B22",117.727646594108
+"Eastern white pine","PINU.STR","A26",104.673844534044
+"Eastern white pine","PINU.STR","A25",101.667769101958
+"Eastern white pine","PINU.STR","A24",100.610187451197
+"Balsam poplar","POPU.BAL","K10",119.42412551604
+"Largetooth aspen","POPU.GRA","E16",118.143233991505
+"Largetooth aspen","POPU.GRA","E14",111.879045503223
+"Largetooth aspen","POPU.GRA","D15",85.40771932458
+"Largetooth aspen","POPU.GRA","D14",100.441825775535
+"Largetooth aspen","POPU.GRA","C16",99.0484695192139
+"Largetooth aspen","POPU.GRA","C15",90.3280413536324
+"Trembling aspen","POPU.TRE","S3",93.7155062126637
+"Trembling aspen","POPU.TRE","R7",74.6032153114341
+"Trembling aspen","POPU.TRE","R4",82.0447894188499
+"Trembling aspen","POPU.TRE","R3",86.0694251754795
+"Trembling aspen","POPU.TRE","Q7",61.7885250066873
+"Trembling aspen","POPU.TRE","Q4",61.7305392272057
+"Trembling aspen","POPU.TRE","Q2",62.6191734173843
+"Trembling aspen","POPU.TRE","P7",55.5998959191786
+"Trembling aspen","POPU.TRE","P3",48.8251489667513
+"Trembling aspen","POPU.TRE","P2",87.9330403065312
+"Trembling aspen","POPU.TRE","O7",85.2659966264067
+"Trembling aspen","POPU.TRE","O3",138.455456240325
+"Trembling aspen","POPU.TRE","N10",85.2896021713092
+"Trembling aspen","POPU.TRE","N9",98.5811068905341
+"Trembling aspen","POPU.TRE","N8",113.117154264802
+"Trembling aspen","POPU.TRE","N7",117.59727453754
+"Trembling aspen","POPU.TRE","N6",115.990457258205
+"Trembling aspen","POPU.TRE","N5",115.096667920205
+"Trembling aspen","POPU.TRE","N4",88.3977418644907
+"Trembling aspen","POPU.TRE","N3",145.345112295129
+"Trembling aspen","POPU.TRE","M10",118.647345368146
+"Trembling aspen","POPU.TRE","M9",113.98027397272
+"Trembling aspen","POPU.TRE","M8",122.610948405026
+"Trembling aspen","POPU.TRE","M7",160.499463701629
+"Trembling aspen","POPU.TRE","M6",152.876232747328
+"Trembling aspen","POPU.TRE","M5",119.711959396312
+"Trembling aspen","POPU.TRE","M4",87.2729390439321
+"Trembling aspen","POPU.TRE","M3",109.737049562178
+"Trembling aspen","POPU.TRE","L11",69.8344260688427
+"Trembling aspen","POPU.TRE","L10",127.352293720904
+"Trembling aspen","POPU.TRE","L9",137.081304118846
+"Trembling aspen","POPU.TRE","L8",144.427177654817
+"Trembling aspen","POPU.TRE","L7",149.272898386627
+"Trembling aspen","POPU.TRE","L6",130.798510322184
+"Trembling aspen","POPU.TRE","L5",100.278484262605
+"Trembling aspen","POPU.TRE","L3",157.239575016176
+"Trembling aspen","POPU.TRE","K11",89.4984314405942
+"Trembling aspen","POPU.TRE","K10",135.288071996398
+"Trembling aspen","POPU.TRE","K9",136.251812651455
+"Trembling aspen","POPU.TRE","K8",131.17315748423
+"Trembling aspen","POPU.TRE","K7",123.772248657628
+"Trembling aspen","POPU.TRE","K6",123.775005960391
+"Trembling aspen","POPU.TRE","K5",122.902210642891
+"Trembling aspen","POPU.TRE","K4",134.925074268236
+"Trembling aspen","POPU.TRE","K3",163.072390581934
+"Trembling aspen","POPU.TRE","J11",75.9854778175974
+"Trembling aspen","POPU.TRE","J10",100.743124827502
+"Trembling aspen","POPU.TRE","J9",116.947396298915
+"Trembling aspen","POPU.TRE","J8",126.384391878691
+"Trembling aspen","POPU.TRE","J7",109.168024958346
+"Trembling aspen","POPU.TRE","J6",123.308317619095
+"Trembling aspen","POPU.TRE","J5",133.219075058549
+"Trembling aspen","POPU.TRE","J4",128.445289211846
+"Trembling aspen","POPU.TRE","J3",113.33743634889
+"Trembling aspen","POPU.TRE","I14",107.417398957407
+"Trembling aspen","POPU.TRE","I13",96.2302058049553
+"Trembling aspen","POPU.TRE","I12",83.6401959161224
+"Trembling aspen","POPU.TRE","I11",86.8323277018795
+"Trembling aspen","POPU.TRE","I10",109.950048213068
+"Trembling aspen","POPU.TRE","I9",117.977312537746
+"Trembling aspen","POPU.TRE","I8",121.376433272151
+"Trembling aspen","POPU.TRE","I7",118.58824129345
+"Trembling aspen","POPU.TRE","I6",119.179282165278
+"Trembling aspen","POPU.TRE","I5",132.241803229417
+"Trembling aspen","POPU.TRE","I4",124.524674111577
+"Trembling aspen","POPU.TRE","H16",95.0314862161221
+"Trembling aspen","POPU.TRE","H15",96.4595430963438
+"Trembling aspen","POPU.TRE","H14",95.0335731779737
+"Trembling aspen","POPU.TRE","H13",87.2336696715731
+"Trembling aspen","POPU.TRE","H12",94.8894545207458
+"Trembling aspen","POPU.TRE","H11",104.98474807779
+"Trembling aspen","POPU.TRE","H10",103.955882378668
+"Trembling aspen","POPU.TRE","H9",97.4949675915746
+"Trembling aspen","POPU.TRE","H8",102.94866992021
+"Trembling aspen","POPU.TRE","H7",112.84595238907
+"Trembling aspen","POPU.TRE","H6",111.847263822939
+"Trembling aspen","POPU.TRE","H5",159.562726636795
+"Trembling aspen","POPU.TRE","H4",109.490843231116
+"Trembling aspen","POPU.TRE","G18",104.649941928198
+"Trembling aspen","POPU.TRE","G17",99.5839285003413
+"Trembling aspen","POPU.TRE","G16",104.599807854206
+"Trembling aspen","POPU.TRE","G15",100.113391132667
+"Trembling aspen","POPU.TRE","G14",107.46009000955
+"Trembling aspen","POPU.TRE","G13",106.42176941092
+"Trembling aspen","POPU.TRE","G12",99.7477401995547
+"Trembling aspen","POPU.TRE","G11",91.351899562843
+"Trembling aspen","POPU.TRE","G10",82.0233492907134
+"Trembling aspen","POPU.TRE","G8",102.419444681675
+"Trembling aspen","POPU.TRE","G7",110.848375555845
+"Trembling aspen","POPU.TRE","F31",113.406729898744
+"Trembling aspen","POPU.TRE","F30",118.856238595866
+"Trembling aspen","POPU.TRE","F29",113.596093302521
+"Trembling aspen","POPU.TRE","F28",105.47537570742
+"Trembling aspen","POPU.TRE","F20",87.9549444300285
+"Trembling aspen","POPU.TRE","F19",81.6339364150238
+"Trembling aspen","POPU.TRE","F18",89.4069891207783
+"Trembling aspen","POPU.TRE","F17",87.9222763065859
+"Trembling aspen","POPU.TRE","F16",84.0887161341139
+"Trembling aspen","POPU.TRE","F15",91.0931606102895
+"Trembling aspen","POPU.TRE","F14",105.459669094911
+"Trembling aspen","POPU.TRE","F13",102.815911291943
+"Trembling aspen","POPU.TRE","F12",89.786497710444
+"Trembling aspen","POPU.TRE","F11",65.0848600131943
+"Trembling aspen","POPU.TRE","F7",124.83543294887
+"Trembling aspen","POPU.TRE","E32",115.310750282475
+"Trembling aspen","POPU.TRE","E31",121.062244720715
+"Trembling aspen","POPU.TRE","E30",123.649088925514
+"Trembling aspen","POPU.TRE","E29",121.21956302395
+"Trembling aspen","POPU.TRE","E28",107.534852979407
+"Trembling aspen","POPU.TRE","E27",97.8402105949524
+"Trembling aspen","POPU.TRE","E25",79.219178771274
+"Trembling aspen","POPU.TRE","E24",71.5027481647577
+"Trembling aspen","POPU.TRE","E22",67.7278286439033
+"Trembling aspen","POPU.TRE","E20",90.9422221719894
+"Trembling aspen","POPU.TRE","E19",116.009777388968
+"Trembling aspen","POPU.TRE","E18",113.593012206837
+"Trembling aspen","POPU.TRE","E17",96.7144645593168
+"Trembling aspen","POPU.TRE","E16",98.1402009938648
+"Trembling aspen","POPU.TRE","E15",85.797290578661
+"Trembling aspen","POPU.TRE","E14",97.969396297967
+"Trembling aspen","POPU.TRE","E13",100.565811409626
+"Trembling aspen","POPU.TRE","E7",131.319318795873
+"Trembling aspen","POPU.TRE","D31",119.844066094568
+"Trembling aspen","POPU.TRE","D30",126.757767682091
+"Trembling aspen","POPU.TRE","D27",102.777295989644
+"Trembling aspen","POPU.TRE","D25",79.6092104538199
+"Trembling aspen","POPU.TRE","D24",83.0869798155449
+"Trembling aspen","POPU.TRE","D23",77.3809110804437
+"Trembling aspen","POPU.TRE","D22",88.7888245288079
+"Trembling aspen","POPU.TRE","D21",88.7870713562505
+"Trembling aspen","POPU.TRE","D20",98.1716423324895
+"Trembling aspen","POPU.TRE","D19",96.6868443789895
+"Trembling aspen","POPU.TRE","D18",102.265287337581
+"Trembling aspen","POPU.TRE","D17",98.9359387950199
+"Trembling aspen","POPU.TRE","D16",100.984169467968
+"Trembling aspen","POPU.TRE","D15",75.5093674134684
+"Trembling aspen","POPU.TRE","D14",92.6423672415572
+"Trembling aspen","POPU.TRE","C27",122.267980232934
+"Trembling aspen","POPU.TRE","C24",105.374152136866
+"Trembling aspen","POPU.TRE","C23",112.444481641012
+"Trembling aspen","POPU.TRE","C22",119.013527718501
+"Trembling aspen","POPU.TRE","C21",111.857673271404
+"Trembling aspen","POPU.TRE","C20",107.060443535937
+"Trembling aspen","POPU.TRE","C19",90.971148236429
+"Trembling aspen","POPU.TRE","C18",94.6768144281955
+"Trembling aspen","POPU.TRE","C17",90.5860509461911
+"Trembling aspen","POPU.TRE","C16",94.6228733273866
+"Trembling aspen","POPU.TRE","C15",81.3477168982706
+"Trembling aspen","POPU.TRE","B25",132.006271952433
+"Trembling aspen","POPU.TRE","B23",126.624764384969
+"Trembling aspen","POPU.TRE","B22",130.570185207099
+"Douglas-fir","PSEU.MEN","I5",211.75983413161
+"Douglas-fir","PSEU.MEN","I4",206.161832673071
+"Douglas-fir","PSEU.MEN","H5",207.285144759905
+"Douglas-fir","PSEU.MEN","H4",154.542453197697
+"Douglas-fir","PSEU.MEN","G6",196.462400884726
+"Douglas-fir","PSEU.MEN","G5",176.258334949164
+"Douglas-fir","PSEU.MEN","G4",169.3435003923
+"Douglas-fir","PSEU.MEN","G3",219.125341936749
+"Douglas-fir","PSEU.MEN","F7",165.366776233651
+"Douglas-fir","PSEU.MEN","F6",179.796029952959
+"Douglas-fir","PSEU.MEN","F5",181.967512575264
+"Douglas-fir","PSEU.MEN","F4",210.617587206443
+"Douglas-fir","PSEU.MEN","F3",239.629357426359
+"Douglas-fir","PSEU.MEN","E7",177.041629868323
+"Douglas-fir","PSEU.MEN","E6",210.802614693465
+"Douglas-fir","PSEU.MEN","E5",207.713384154553
+"Eastern white-cedar","THUJ.OCC","D30",102.747147540459
+"Eastern white-cedar","THUJ.OCC","B26",100.650476233589
+"Eastern white-cedar","THUJ.OCC","A25",83.3596889676959
+"Western redcedar","THUJ.PLI","L2",171.484818470622
+"Western redcedar","THUJ.PLI","K2",168.964504827724
+"Western redcedar","THUJ.PLI","K1",173.999061545291
+"Western redcedar","THUJ.PLI","J2",179.068797025779
+"Western redcedar","THUJ.PLI","J1",189.576753220488
+"Western redcedar","THUJ.PLI","I3",209.923652426343
+"Western redcedar","THUJ.PLI","I2",172.407666139354
+"Western redcedar","THUJ.PLI","H2",194.968102380171
+"Western redcedar","THUJ.PLI","H1",204.170567581483
+"Western redcedar","THUJ.PLI","G4",195.598652861944
+"Western redcedar","THUJ.PLI","G2",197.041810350062
+"Western redcedar","THUJ.PLI","F4",189.750875262912
+"Western redcedar","THUJ.PLI","F2",180.74024416047
+"Western hemlock","TSUG.HET","M3",122.406914814303
+"Western hemlock","TSUG.HET","M2",138.648496270588
+"Western hemlock","TSUG.HET","L3",141.696422516508
+"Western hemlock","TSUG.HET","L1",144.228223487558
+"Western hemlock","TSUG.HET","K3",160.439706382138
+"Western hemlock","TSUG.HET","K2",157.351941681397
+"Western hemlock","TSUG.HET","K1",186.871692998849
+"Western hemlock","TSUG.HET","J3",141.574738447949
+"Western hemlock","TSUG.HET","J2",168.741437881011
+"Western hemlock","TSUG.HET","J1",206.668246942632
+"Western hemlock","TSUG.HET","I3",157.850458493227
+"Western hemlock","TSUG.HET","I2",185.839559178508
+"Western hemlock","TSUG.HET","H5",193.488989384489
+"Western hemlock","TSUG.HET","H3",219.221151930584
+"Western hemlock","TSUG.HET","H2",205.885832684864
+"Western hemlock","TSUG.HET","H1",226.521985158369
+"Western hemlock","TSUG.HET","G6",206.514568605735
+"Western hemlock","TSUG.HET","G5",204.631354501976
+"Western hemlock","TSUG.HET","G4",250.005723185283
+"Western hemlock","TSUG.HET","G3",254.684947241007
+"Western hemlock","TSUG.HET","G2",239.659622999126
+"Western hemlock","TSUG.HET","F6",208.396428848016
+"Western hemlock","TSUG.HET","F5",204.162686368337
+"Western hemlock","TSUG.HET","F4",254.956607365847
+"Western hemlock","TSUG.HET","F3",263.078573812352
+"Western hemlock","TSUG.HET","F2",214.013194685406
+"Western hemlock","TSUG.HET","E6",231.60685453906
+"Mountain hemlock","TSUG.MER","M3",114.927859273444
+"Mountain hemlock","TSUG.MER","M2",106.38720149528
+"Mountain hemlock","TSUG.MER","L3",101.731374772145
+"Mountain hemlock","TSUG.MER","L2",131.541800100907
+"Mountain hemlock","TSUG.MER","K3",95.5367498337851
+"Mountain hemlock","TSUG.MER","K2",112.924858763145
+"Mountain hemlock","TSUG.MER","J3",86.3080844259255
+"Mountain hemlock","TSUG.MER","J2",118.171971092021
+"Mountain hemlock","TSUG.MER","I3",83.6602401589089
+"Mountain hemlock","TSUG.MER","I2",109.616524233097
+"Mountain hemlock","TSUG.MER","H3",120.35711758862
+"Mountain hemlock","TSUG.MER","H2",119.916488096169
+"Mountain hemlock","TSUG.MER","G3",157.427463243578
+"Mountain hemlock","TSUG.MER","G2",180.111382476246
+"Mountain hemlock","TSUG.MER","F3",216.173289662966
+"Mountain hemlock","TSUG.MER","F2",176.829900861789
