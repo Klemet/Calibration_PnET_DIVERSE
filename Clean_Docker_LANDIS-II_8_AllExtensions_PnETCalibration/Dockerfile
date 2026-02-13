@@ -148,11 +148,11 @@ RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX \
 && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/ && rm -r Extension-NECN-Succession
 
 # PnET Succession
-# As of time of writing, seems to work, but is not released officially.
+# Latest official release
 RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX \
 # Commit 8cd34cd223e5cfbf9b63e2582ff863e2c2d37d07 is the most recent at date of writing.
 # Testing an update from Austen !
-&& ./downloadSpecificGitCommitAndFolder.sh https://github.com/aruzicka555/Extension-PnET-Succession.git 8cd34cd223e5cfbf9b63e2582ff863e2c2d37d07 /src \ 
+&& ./downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession.git 5e7e5f95d6a1f47b5a8b62cd92c4598aa0b85d78 /src \ 
 && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Extension-PnET-Succession/src \
 && python /bin/LANDIS_Linux/Core-Model-v8-LINUX/editing_csproj_LANDIS-II_files.py ./PnET-Succession.csproj \
 # We need to remove the .sln file; it's not useful to build, and is full of bad/missing references to other projects.
@@ -163,10 +163,10 @@ RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX \
 # We remove the files
 && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/ && rm -r Extension-PnET-Succession \
 # To finish, we have to transfer some "Default files" of PnET in the extension folder
-&& ./downloadSpecificGitCommitAndFolder.sh https://github.com/aruzicka555/Extension-PnET-Succession.git 8cd34cd223e5cfbf9b63e2582ff863e2c2d37d07 /deploy \ 
+&& ./downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession.git 5e7e5f95d6a1f47b5a8b62cd92c4598aa0b85d78 /deploy \ 
 && cp -r /bin/LANDIS_Linux/Core-Model-v8-LINUX/Extension-PnET-Succession/deploy/Defaults /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/extensions \
 # We also have to register the extension properly
-&& cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Extension-PnET-Succession && wget https://raw.githubusercontent.com/aruzicka555/Extension-PnET-Succession/8cd34cd223e5cfbf9b63e2582ff863e2c2d37d07/deploy/installer/PnET-Succession.txt \
+&& cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Extension-PnET-Succession && wget https://raw.githubusercontent.com/LANDIS-II-Foundation/Extension-PnET-Succession/refs/heads/master/deploy/installer/PnET-Succession.txt \
 && dotnet $LANDIS_EXTENSIONS_TOOL add "PnET-Succession.txt" \
 && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/ && rm -r Extension-PnET-Succession
 
@@ -580,12 +580,12 @@ RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Tool-Console/src && dotnet build -c
 # # Re-configure git for latest version of HTTP protocol
 RUN git config --global --unset http.version
 
-# Adding the Python packages I need to make Magic Harvest run
+# Adding the Python packages I need to make everything run
 COPY ./files_to_help_compilation/pip_requirements.txt /tmp
 RUN pip install --upgrade pip && pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r /tmp/pip_requirements.txt
 
 # Adding jupyter lab and book
-RUN pip install jupyterlab
+RUN pip install jupyterlab==4.5.3
 RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
@@ -624,3 +624,28 @@ CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"]
 # Is used so that if the user uses Wget again with the image, then the certificate verification
 # will be in place, avoiding potential security issues.
 # RUN sed -i '/^check_certificate = off$/d' ~/.wgetrc
+
+
+# ## SPECIAL DEBUG :
+# # I leave this here in case I need it again; but for now, can be removed.
+# # # PnET-Cohort debug insertion. Because issue with climate we have to test
+# RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX \
+# # Let's remove the previous .dll to be certain
+# && rm /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/extensions/Landis.Library.PnETCohorts-v2.dll \
+# && rm /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/Release/Landis.Library.PnETCohorts-v2.dll \
+# && ./downloadSpecificGitCommitAndFolder.sh https://github.com/LANDIS-II-Foundation/Library-PnET-Cohort.git f32204629073964a2e99e098b6b0a669415c94dd /src \ 
+# && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Library-PnET-Cohort/src \
+# && python /bin/LANDIS_Linux/Core-Model-v8-LINUX/editing_csproj_LANDIS-II_files.py ./Library-PnET-Cohort.csproj \
+# # We need to remove the .sln file; it's not useful to build, and is full of bad/missing references to other projects.
+# && rm /bin/LANDIS_Linux/Core-Model-v8-LINUX/Library-PnET-Cohort/src/Library-PnET-Cohort.sln
+# # Before we build, we add the edited file with debug instructions
+# COPY files_to_help_compilation/EcoregionData.cs /bin/LANDIS_Linux/Core-Model-v8-LINUX/Library-PnET-Cohort/src
+# COPY files_to_help_compilation/Globals.cs /bin/LANDIS_Linux/Core-Model-v8-LINUX/Library-PnET-Cohort/src/utility
+
+# # We make the build
+# RUN cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/Library-PnET-Cohort/src \
+# && dotnet build -c Release \
+# # We have to copy it to the right place ? It doesn't go in the right folder
+# && cp /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/extensions/Landis.Library.PnETCohorts-v2.dll /bin/LANDIS_Linux/Core-Model-v8-LINUX/build/Release/ \
+# # We remove the files
+# && cd /bin/LANDIS_Linux/Core-Model-v8-LINUX/ && rm -r Library-PnET-Cohort
