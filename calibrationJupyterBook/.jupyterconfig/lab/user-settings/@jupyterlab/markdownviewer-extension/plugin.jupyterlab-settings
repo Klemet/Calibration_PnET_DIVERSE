@@ -1,0 +1,13 @@
+{
+    // Markdown Viewer
+    // @jupyterlab/markdownviewer-extension:plugin
+    // Markdown viewer settings.
+    // *******************************************
+
+    // Hide Front Matter
+    // Whether to hide YAML front matter.
+    // The YAML front matter must be placed at the top of the document,
+    // started by a line of three dashes (---) and ended by a line of
+    // three dashes (---) or three points (...).
+    "hideFrontMatter": false
+}

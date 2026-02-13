@@ -11,6 +11,9 @@
     <loc>http://localhost:3000/startingcalibrationtest/some-important-notions</loc>
   </url>
   <url>
+    <loc>http://localhost:3000/startingcalibrationtest/goals-and-assumptions</loc>
+  </url>
+  <url>
     <loc>http://localhost:3000/startingcalibrationtest/loading-functions</loc>
   </url>
   <url>

@@ -4,14 +4,16 @@
         "lineNumbers": false,
         "lineWrap": false
     },
-    "defaultCell": "markdown",
+    "defaultCell": "code",
     "autoStartDefaultKernel": false,
+    "showInputPlaceholder": true,
     "inputHistoryScope": "global",
     "kernelShutdown": false,
     "markdownCellConfig": {
         "lineNumbers": false,
         "matchBrackets": false
     },
+    "autoRenderMarkdownCells": false,
     "rawCellConfig": {
         "lineNumbers": false,
         "matchBrackets": false
@@ -24,7 +26,8 @@
     "showEditorForReadOnlyMarkdown": true,
     "kernelStatus": {
         "showOnStatusBar": false,
-        "showProgress": true
+        "showProgress": true,
+        "showJumpToRecentExecutionButton": false
     },
     "documentWideUndoRedo": false,
     "showHiddenCellsButton": true,
@@ -32,6 +35,9 @@
     "sideBySideLeftMarginOverride": "10px",
     "sideBySideRightMarginOverride": "10px",
     "sideBySideOutputRatio": 1,
-    "windowingMode": "full",
-    "accessKernelHistory": false
+    "windowingMode": "contentVisibility",
+    "accessKernelHistory": false,
+    "addExtraLineOnCellMerge": true,
+    "showMinimap": false,
+    "useSystemClipboardForCells": false
 }
