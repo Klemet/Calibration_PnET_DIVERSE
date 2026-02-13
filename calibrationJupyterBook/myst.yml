@@ -14,7 +14,8 @@ project:
     - file: intro.md
     - file: StartingCalibrationTest/Intro_CalibrationTest.ipynb
       children:
-        - file: StartingCalibrationTest/0.Some_important_notions.ipynb
+        - file: StartingCalibrationTest/0.1.Some_important_notions.ipynb
+        - file: StartingCalibrationTest/0.2.Goals_and_assumptions.ipynb
         - file: StartingCalibrationTest/1.Loading_functions.ipynb
         - file: StartingCalibrationTest/2.Test_sim_functions.ipynb
         - file: StartingCalibrationTest/3.Initial_Species_Parameters.ipynb
