@@ -3,7 +3,8 @@ LandisData  "Output-PnET"
 Timestep  10
 
 Species ALL
-	  
+
+Wood-FoliageBiomass output/WoodFoliageBiomass/{species}/WoodFoliageBiomass-{timestep}.img
 WoodBiomass	output/WoodBiomass/{species}/WoodBiomass-{timestep}.img
 FoliageBiomass output/FoliageBiomass/{species}/FoliageBiomass-{timestep}.img
 RootBiomass output/RootBiomass/{species}/RootBiomass-{timestep}.img

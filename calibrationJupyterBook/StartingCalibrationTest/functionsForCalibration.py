@@ -77,6 +77,10 @@ from dateutil.relativedelta import relativedelta
 import pytz
 import suncalc
 from suncalc import get_times
+import json
+from rasterio.transform import Affine
+import csv
+import random
 
 #%% FUNCTIONS TO PARSE PARAMETERS
 
@@ -6006,7 +6010,7 @@ from pathlib import Path
 import numpy as np
 from collections import defaultdict
 
-def plot_all_cohort_results(output_folder):
+def plot_all_cohort_results(output_folder, species_colors):
     """
     Plot vegetation model results for multiple cohorts.
 
@@ -6054,8 +6058,8 @@ def plot_all_cohort_results(output_folder):
 
     # Step 5: Assign colors to species and cohorts
     species_list = sorted(species_cohorts.keys())
-    base_colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
-    species_colors = {species: base_colors[idx % 3] for idx, species in enumerate(species_list)}
+    # base_colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
+    # species_colors = {species: base_colors[idx % 3] for idx, species in enumerate(species_list)}
 
     cohort_colors = {}
     for idx, species in enumerate(species_list):
@@ -6063,7 +6067,8 @@ def plot_all_cohort_results(output_folder):
         n_cohorts = len(cohorts)
 
         # Create gradient for this species
-        base_color = base_colors[idx % 3]
+        # base_color = base_colors[idx % 3]
+        base_color = species_colors[species]
         base_rgb = plt.matplotlib.colors.to_rgb(base_color)
 
         for i, (implant_year, label) in enumerate(cohorts):
@@ -6187,3 +6192,555 @@ def plot_single_cohort_results(csv_path, monthsToKeep=None):
 
     plt.tight_layout()
     plt.show()
+
+
+def create_species_csv(species_tuple, numberOfCells, ageRange, filename='output.csv'):
+    """Function used to create the .csv files to initialize
+    the landscapes for the little simulations used for the calibration."""
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+
+        # Write header
+        writer.writerow(['MapCode', 'SpeciesName', 'CohortAge', 'CohortBiomass'])
+
+        # Loop through MapCode 1 to 1001
+        for map_code in range(1, numberOfCells+2):
+            # Write one row for each species
+            for species in species_tuple:
+                random_age = random.randint(ageRange[0], ageRange[1])
+                writer.writerow([map_code, species, random_age, 0])
+
+def min_max_top30_contiguous(series) -> tuple:
+    """
+    Returns (min, max) of a contiguous window of the top 30% values,
+    anchored at the global maximum and expanded greedily left/right.
+    Used to get the variation of the LAI around its maximum
+    """
+    values = series.reset_index(drop=True)
+    n = len(values)
+    n_top = max(1, int(n * 0.30))
+
+    peak_idx = values.idxmax()
+
+    left = peak_idx - 1
+    right = peak_idx + 1
+    window_indices = [peak_idx]
+
+    while len(window_indices) < n_top:
+        has_left = left >= 0
+        has_right = right < n
+
+        if has_left and has_right:
+            # Expand toward the side with the larger neighbor
+            if values[left] >= values[right]:
+                window_indices.append(left)
+                left -= 1
+            else:
+                window_indices.append(right)
+                right += 1
+        elif has_left:
+            window_indices.append(left)
+            left -= 1
+        elif has_right:
+            window_indices.append(right)
+            right += 1
+        else:
+            break  # Series exhausted
+
+    selected_values = values[window_indices]
+    return selected_values.min(), selected_values.max()
+
+def calibrationSimulationMonoculturemanawan(duration = 100,
+                                            climate = "mild",
+                                            soil = "SILO",
+                                            speciesToSimulate = "ABIE.BAL",
+                                            dictOfInitialCoreSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json')),
+                                            dictOfInitialPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
+                                            dictOfInitialPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json'))):
+    # We prepare the simulation files
+    PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
+    
+    # - Species.txt : replace with the right initial core species parameters from the JSON file
+    PnETGitHub_OneCellSim["species.txt"] = dictOfInitialCoreSpeciesParameters
+    
+    # - SpeciesParameters.txt : replace with the initial PnET species parameters from the JSOn file
+    PnETGitHub_OneCellSim["SpeciesParameters.txt"] = dictOfInitialPnETSpeciesParameters
+    
+    # - PnETGenericParameters.txt : replace with initial generic parameters from the JSON file
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"] = dictOfInitialPnETGenericParameters
+    
+    # Setting duration and timestep (minimal timestep for maximum spatial resolution, although it shouldn't change anything)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = "1"
+    PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
+    # Changing the soil if needed
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
+    # - pnetsuccession.txt : change startyear to 1910 and latitude to village of Manawan (47.2223)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = "1910"
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
+    # No dispersal, since we only simulate one pixel and the life of one cohort (monoculture and even-aged)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "NoDispersal"
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["PreventEstablishment"] = "True"
+    # Setting other parameters
+    PnETGitHub_OneCellSim["scenario.txt"]["CellLength"] = "100"
+
+    # Preparing the landscape
+    # Removing Other species from the simulation
+    speciesToRemove = []
+    for species in PnETGitHub_OneCellSim["species.txt"].keys():
+        if species != speciesToSimulate and species != "LandisData":
+            speciesToRemove.append(species)
+    for species in speciesToRemove:
+        del PnETGitHub_OneCellSim["species.txt"][species]
+        del PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"][species]
+    # Inserting reading of the right climate file
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
+    
+    # -  PnEToutputsites_onecell.txt : replace site location
+    PnETGitHub_OneCellSim["PnEToutputsites_onecell.txt"]["Site1"] = '1 1'
+
+    # Writing the files in a temporary folder
+    simulationPath = "/tmp/monocultureCalibrationPnET/"
+
+    # We create the folder
+    if not os.path.exists(simulationPath):
+        os.mkdir(simulationPath)
+    else:
+        shutil.rmtree(simulationPath)
+        os.mkdir(simulationPath)
+    
+    write_all_LANDIS_files(simulationPath,
+                           PnETGitHub_OneCellSim,
+                           True)
+
+    # Copy the climate files
+    shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
+    shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+    shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+
+    # Preparing rasters
+    numberOfCells = 1
+    ageRange = [1, 1]
+    # Preparing the data we will put in the rasters
+    data = np.ones((1, numberOfCells), dtype=np.uint8)
+    # Transform used to settle the size of cells - not sure is very useful
+    transform = Affine.translation(0, 0) * Affine.scale(1, 1)
+    # Creating the ecoregion raster
+    with rasterio.open(
+    simulationPath + '/ecoregion.img',
+    'w',
+    driver='GTiff',
+    height=1,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    # Preparing the initial communities raster
+    with rasterio.open(
+    simulationPath + '/initial-communities.img',
+    'w',
+    driver='GTiff',
+    height=1,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    data = np.arange(1, numberOfCells+1, dtype="int32").reshape(1, numberOfCells)
+    # Creating initial community .csv
+    create_species_csv([speciesToSimulate], numberOfCells, ageRange, filename = simulationPath + "/initial-communities.csv")
+
+    # We launch the simulation
+    runLANDIS_Simulation(simulationPath,
+                         "scenario.txt",
+                        False)
+
+    # We get the result file : only .csv file that should represent the cohort
+    csv_file_cohort = pd.read_csv(glob.glob(f'{simulationPath}/Output/Site1/Cohort_*.csv')[0])
+    # print(csv_file_cohort)
+    # Add a measure of total biomass
+    csv_file_cohort["SumFoliageWood_Site"] = csv_file_cohort["SiteFol(gDW)"] + csv_file_cohort["SiteWood(gDW)"]
+    # We also get the foliage biomass from another output; this is because the foliage+wood biomass in the cohort file
+    # is in gDW, or gram of dry weight. But we want g/m2 to compare to NFI data.
+    csv_file_WoodFoliageBiomass = pd.read_csv(f'{simulationPath}output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
+    
+    # We get the results we need
+    variablesOutput = ["Biomass peak height", "Biomass peak time",
+                       "Initation of decline", "Time of death",
+                       "Maximum LAI", "LAI stability"]
+    dictOfOutput = {}
+    for variable in variablesOutput:
+        if variable == "Biomass peak height":
+            dictOfOutput[variable] = (csv_file_WoodFoliageBiomass[str(speciesToSimulate) + "_g/m2"].max())
+        elif variable == "Biomass peak time":
+            max_index = csv_file_cohort['SumFoliageWood_Site'].idxmax()
+            # Here, we want the age of the cohort when it reaches the maximum
+            # Since there is one row per month, and since the first row is the first month of life
+            # of the cohort (even if there is a spinup), then the age of the cohorts (in years) is
+            # simply row/12 (since 12 rows make a year of life.
+            dictOfOutput[variable] = ((max_index+1)/12)
+        elif variable == "Initation of decline":
+            # When fAge goes under 0.90 for the first time
+            # Create a boolean mask for rows where 'my_column' is less than the threshold
+            condition_met = csv_file_cohort['fage(-)'] < 0.9
+            first_occurrence_index = csv_file_cohort.index[condition_met].min()
+            # We want to get the age of the cohort where fAge goes under 0.90
+            # Since one row per month, it's simply the number of row/index divided by 12.
+            dictOfOutput[variable] = ((first_occurrence_index+1)/12)
+        elif variable == "Time of death":
+            # Cohort dies when NSCfrac is inferior to 0.01 at the end of a year (december)
+            # We get the index of the row when this happens and divided it by 12 (since there
+            # is one row per month), this gives us the age (in years) of death.
+            mask = (csv_file_cohort['Month'] == 12) & (csv_file_cohort['NSCfrac(-)'] < 0.01)
+            try:
+                idx = csv_file_cohort[mask].index[0]
+            except:
+                  # Code to handle any other error
+                  print("Havent found the index where the cohort died. Might be an issue with the cohort.csv")
+            dictOfOutput[variable] = ((idx+1)/12)
+        elif variable == "Maximum LAI":
+            dictOfOutput[variable] = csv_file_cohort["SiteLAI(m2)"].max()
+        elif variable == "LAI stability":
+            dictOfOutput[variable] = min_max_top30_contiguous(csv_file_cohort["SiteLAI(m2)"])
+        else:
+            raise ValueError("Value not recognized for output variable : " + str(variable))
+
+    plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
+    
+    return(dictOfOutput)
+    # Delete the folder
+    # shutil.rmtree(simulationPath)
+
+
+#########################################################
+# FUNCTION TO GET THE BOUNDS FOR EACH PARAMETERS WE WILL CALIBRATE
+#########################################################
+
+# Function to read the values taken from the litterature from the markdown table where they are
+
+import re
+import nbformat
+
+def parse_parameters_bounds_table(notebook_path: str, markdown_cell_number: int) -> dict:
+    """
+    Reads a markdown cell by its markdown-cell index (1-based, skipping
+    code/raw cells) from the given notebook, extracts the first markdown
+    table found, and returns a nested dict:
+        result[parameter_name][column_level] = [value1, value2, ...]
+
+    Parameters
+    ----------
+    notebook_path : str
+        Path to the .ipynb notebook file.
+    markdown_cell_number : int
+        1-based index counting only markdown cells.
+
+    Returns
+    -------
+    dict
+        Nested dictionary of parsed values, or {} on error.
+    """
+
+    # --- 1. Read the markdown cell ---
+    source = read_markdown_cell(notebook_path, markdown_cell_number)
+
+    if source is None:
+        print(f"[ERROR] Could not find markdown cell number {markdown_cell_number} "
+              f"in '{notebook_path}'.")
+        return {}
+
+    # --- 2. Extract the markdown table lines ---
+    lines = source.splitlines()
+    table_lines = []
+    in_table = False
+
+    for line in lines:
+        stripped = line.strip()
+        if re.match(r"^\|.*\|$", stripped):
+            in_table = True
+            table_lines.append(stripped)
+        else:
+            if in_table:
+                # Stop at the first non-table line after the table started
+                break
+
+    if len(table_lines) < 3:
+        print("[ERROR] No valid markdown table found in the cell "
+              "(need at least a header row, a separator row, and one data row).")
+        return {}
+
+    # --- 3. Validate separator row ---
+    separator = table_lines[1]
+    if not re.match(r"^\|[\s\-:|]+\|$", separator):
+        print(f"[ERROR] Row 1 does not look like a markdown table separator: "
+              f"'{separator}'")
+        return {}
+
+    # --- 4. Helper: split a markdown row into cells ---
+    def split_row(row: str) -> list:
+        return [cell.strip() for cell in row.strip("|").split("|")]
+
+    # --- 5. Parse header row ---
+    header_cells = split_row(table_lines[0])
+
+    if len(header_cells) < 3:
+        print(f"[ERROR] Table header has fewer than 3 columns: {header_cells}")
+        return {}
+
+    # Column 0 = parameter name, column 1 = description (ignored), rest = levels
+    levels = header_cells[2:]
+
+    # --- 6. Helper: extract numeric values from a cell string ---
+    def extract_values(cell_text: str) -> list:
+        """
+        Strips citation markers ([^N] or [N]) and splits on commas,
+        returning a list of floats (or strings if not numeric).
+        Empty cells return [].
+        """
+        cleaned = re.sub(r"\[\^?\d+\]", "", cell_text)
+        parts = [p.strip() for p in cleaned.split(",")]
+        values = [p for p in parts if p]
+        result = []
+        for v in values:
+            try:
+                result.append(float(v))
+            except ValueError:
+                result.append(v)
+        return result
+
+    # --- 7. Parse data rows ---
+    result = {}
+
+    for row_line in table_lines[2:]:  # skip header and separator
+        row_cells = split_row(row_line)
+
+        if len(row_cells) < 2:
+            print(f"[WARNING] Skipping malformed row: '{row_line}'")
+            continue
+
+        param_name = row_cells[0]
+
+        if not param_name:
+            print(f"[WARNING] Skipping row with empty parameter name: '{row_line}'")
+            continue
+
+        # Pad row if it has fewer columns than the header
+        while len(row_cells) < len(header_cells):
+            row_cells.append("")
+
+        result[param_name] = {}
+        for i, level in enumerate(levels):
+            col_index = i + 2  # offset: skip param name + description
+            cell_text = row_cells[col_index] if col_index < len(row_cells) else ""
+            result[param_name][level] = extract_values(cell_text)
+
+    return result
+
+
+# Functions to compute the bounds for each parameters depending on the list of values 
+# If we don't have a lot of values, or for missing values, we compute bounds
+# based on informations from other cells
+
+import numpy as np
+from typing import Union
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def detect_characteristic_type(level_keys: list) -> str:
+    """Detect 'ordinal' (>2 levels) or 'binary' (exactly 2 levels)."""
+    return "binary" if len(level_keys) == 2 else "ordinal"
+
+
+def build_level_scores(level_keys: list) -> dict:
+    """Map each level key to a numeric score from 1.0 to N."""
+    return {key: float(i + 1) for i, key in enumerate(level_keys)}
+
+
+def compute_pooled_std(level_data: dict) -> float:
+    """Pooled sample std across all levels."""
+    all_values = [v for vals in level_data.values() for v in vals]
+    return float(np.std(all_values, ddof=1)) if len(all_values) >= 2 else 0.0
+
+
+def fit_trend(level_data: dict, level_scores: dict, min_n: int = 3) -> Union[tuple, None]:
+    """
+    Fit a linear regression (level_score -> mean_value) using only
+    levels with at least `min_n` observations.
+
+    Returns (slope, intercept) or None if fewer than 2 qualifying levels.
+    """
+    xs, ys = [], []
+    for level, values in level_data.items():
+        if len(values) >= min_n:
+            xs.append(level_scores[level])
+            ys.append(float(np.mean(values)))
+
+    if len(xs) < 2:
+        return None
+
+    slope, intercept = np.polyfit(np.array(xs), np.array(ys), 1)
+    return float(slope), float(intercept)
+
+
+# ---------------------------------------------------------------------------
+# Core bound computation
+# ---------------------------------------------------------------------------
+
+def compute_bounds_for_level(
+    values: list,
+    level,
+    char_type: str,
+    level_data: dict,
+    level_scores: dict,
+    pooled_std: float,
+    trend: Union[tuple, None],
+    expansion_factor: float = 0.5,
+) -> dict:
+    """
+    Compute (lower, upper) bounds for a single parameter-level combination.
+
+    Rules:
+        n >= 10  : empirical 5th–95th percentile
+        3–9      : empirical range ± expansion_factor * pooled_std
+        1–2      : extrapolated/borrowed mean ± pooled_std
+        0        : extrapolated/borrowed mean ± pooled_std
+    """
+    n = len(values)
+    result = {"n": n, "method": None, "lower": None, "upper": None}
+
+    def _fallback_center() -> tuple[float, str]:
+        if char_type == "ordinal" and trend is not None:
+            slope, intercept = trend
+            score = level_scores[level]
+            center = slope * score + intercept
+            return center, "extrapolated_trend"
+        else:
+            other_values = [
+                v for k, v_list in level_data.items()
+                if k != level for v in v_list
+            ]
+            if other_values:
+                return float(np.mean(other_values)), "borrowed_mean"
+            all_values = [v for vals in level_data.values() for v in vals]
+            return (float(np.mean(all_values)) if all_values else float("nan")), "global_mean"
+
+    if n >= 10:
+        result["method"] = "empirical_percentile"
+        result["lower"] = float(np.percentile(values, 5))
+        result["upper"] = float(np.percentile(values, 95))
+
+    elif 3 <= n <= 9:
+        result["method"] = "empirical_expanded"
+        result["lower"] = float(np.min(values)) - expansion_factor * pooled_std
+        result["upper"] = float(np.max(values)) + expansion_factor * pooled_std
+
+    elif 1 <= n <= 2:
+        center, label = _fallback_center()
+        result["method"] = f"{label}_pooled_std (n=1-2)"
+        result["lower"] = center - pooled_std
+        result["upper"] = center + pooled_std
+
+    else:  # n == 0
+        center, label = _fallback_center()
+        result["method"] = f"{label}_pooled_std (n=0)"
+        if np.isnan(center):
+            result["lower"] = None
+            result["upper"] = None
+        else:
+            result["lower"] = center - pooled_std
+            result["upper"] = center + pooled_std
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Main entry point
+# ---------------------------------------------------------------------------
+
+def compute_all_bounds(
+    data: dict,
+    expansion_factor: float = 0.5,
+    trend_min_n: int = 3,
+    verbose: bool = False,
+) -> dict:
+    """
+    Compute bounds for all parameters and their characteristic levels.
+
+    Parameters
+    ----------
+    data : dict
+        Nested dict: {param_name: {level_key: [values]}}
+        Level keys can be any type (strings, ints, etc.); their order
+        in the dict defines their ordinal score (first = 1, last = N).
+    expansion_factor : float
+        Multiplier for pooled std when expanding sparse empirical ranges.
+    trend_min_n : int
+        Minimum observations per level to include that level in the
+        trend regression.
+    verbose : bool
+        If True, print a summary table of results after computation.
+
+    Returns
+    -------
+    dict
+        Nested dict: {param_name: {level_key: {n, method, lower, upper,
+                                               characteristic_type,
+                                               level_score, trend}}}
+    """
+    results = {}
+
+    for param, level_data in data.items():
+        level_keys = list(level_data.keys())
+        char_type = detect_characteristic_type(level_keys)
+        level_scores = build_level_scores(level_keys)
+        pooled_std = compute_pooled_std(level_data)
+        trend = (
+            fit_trend(level_data, level_scores, min_n=trend_min_n)
+            if char_type == "ordinal"
+            else None
+        )
+
+        results[param] = {}
+        for level, values in level_data.items():
+            bounds = compute_bounds_for_level(
+                values=values,
+                level=level,
+                char_type=char_type,
+                level_data=level_data,
+                level_scores=level_scores,
+                pooled_std=pooled_std,
+                trend=trend,
+                expansion_factor=expansion_factor,
+            )
+            bounds["characteristic_type"] = char_type
+            bounds["level_score"] = level_scores[level]
+            if trend is not None:
+                bounds["trend"] = {"slope": trend[0], "intercept": trend[1]}
+            results[param][level] = bounds
+
+    if verbose:
+        for param, levels in results.items():
+            print(f"\n=== {param} ===")
+            for level, info in levels.items():
+                trend_str = ""
+                if "trend" in info:
+                    t = info["trend"]
+                    trend_str = f" | slope={t['slope']:.3f}, intercept={t['intercept']:.3f}"
+                lo = f"{info['lower']:.3f}" if info["lower"] is not None else "None"
+                hi = f"{info['upper']:.3f}" if info["upper"] is not None else "None"
+                print(
+                    f"  Level {str(level):>20} (score={info['level_score']:.0f}) | "
+                    f"n={info['n']:>2} | "
+                    f"method={info['method']:<40} | "
+                    f"bounds=[{lo}, {hi}]"
+                    f"{trend_str}"
+                )
+
+    return results
