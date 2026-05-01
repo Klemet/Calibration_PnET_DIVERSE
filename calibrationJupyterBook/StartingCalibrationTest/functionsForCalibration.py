@@ -481,7 +481,7 @@ def parse_LANDIS_ClimateDataFile(file_path):
 
 
 
-def parse_All_LANDIS_PnET_Files(folder_path):
+def parse_All_LANDIS_PnET_Files(folder_path, printFiles = False):
     """
     The function uses the different functions defined in this file
     (parse_LANDIS_SimpleParameterFile, parse_LANDIS_SpeciesCoreFile,
@@ -522,81 +522,81 @@ def parse_All_LANDIS_PnET_Files(folder_path):
                 # so as to make the recognition of the file through the "LandisData"
                 # keyword more robust (can be recognized despite trailing spaces, etc.)
                 content_separated = [line.split() for line in content.splitlines()]
-                # print(content_separated)
+                # if printFiles: print(content_separated)
 
                 # Now, we do things differently in the case of each parameter file found
 
                 # Main scenario file
                 if ["LandisData", "Scenario"] in content_separated:
-                    print("Found : Main scenario file : " + str(filename))
+                    if printFiles: print("Found : Main scenario file : " + str(filename))
                     results[filename] = parse_LANDIS_SimpleParameterFile(file_path)
 
                 # Main species parameter core file
                 elif ["LandisData", "Species"] in content_separated:
-                    print("Found : Main species parameter file : " + str(filename))
+                    if printFiles: print("Found : Main species parameter file : " + str(filename))
                     results[filename] = parse_LANDIS_SpeciesCoreFile(file_path)
 
                 # Ecoregions file
                 elif ["LandisData", "Ecoregions"] in content_separated:
-                    print("Found : Main ecoregions file : " + str(filename))
+                    if printFiles: print("Found : Main ecoregions file : " + str(filename))
                     results[filename] = parse_ecoregions_file(file_path)
 
                 # Initial Communities file
                 # We add the detection of the .csv file header/columns
                 elif ["LandisData", "Initial Communities"] in content_separated or ["LandisData", '"Initial Communities"'] in content_separated or ["LandisData", "Initial", "Communities"] in content_separated or ['LandisData', '"Initial', 'Communities"'] in content_separated or ["MapCode,SpeciesName,CohortAge,CohortBiomass"] in content_separated:
-                    print("Found : Initial Communities file : " + str(filename))
+                    if printFiles: print("Found : Initial Communities file : " + str(filename))
                     # Now that initial communities are a .csv file, we can load this file in a panda dataframe for easy editing
                     results[filename] = pd.read_csv(file_path)
 
                 # Climate data file
                 elif ["Year", "Month", "TMax", "TMin", "PAR", "Prec", "CO2"] in content_separated:
-                    print("Found : Climate file : " + str(filename))
+                    if printFiles: print("Found : Climate file : " + str(filename))
                     results[filename] = parse_LANDIS_ClimateDataFile(file_path)
 
                 # PnET Ecoregion parameter files
                 elif ["LandisData", "EcoregionParameters"] in content_separated:
-                    print("Found : PnET Ecoregion parameter file : " + str(filename))
+                    if printFiles: print("Found : PnET Ecoregion parameter file : " + str(filename))
                     results[filename] = parse_PnET_ComplexTableParameterfile(file_path)
 
                 # PnET Succession Main file
                 elif ["LandisData", "PnET-Succession"] in content_separated or ["LandisData", '"PnET-Succession"'] in content_separated:
-                    print("Found : Main PnET parameter file : " + str(filename))
+                    if printFiles: print("Found : Main PnET parameter file : " + str(filename))
                     results[filename] = parse_LANDIS_SimpleParameterFile(file_path)  
 
                 # PnET Generic parameters file
                 elif ["LandisData", "PnETGenericParameters"] in content_separated:
-                    print("Found : PnET generic parameter file : " + str(filename))
+                    if printFiles: print("Found : PnET generic parameter file : " + str(filename))
                     results[filename] = parse_LANDIS_SimpleParameterFile(file_path)
                     
                 # PnET Species Parameter file
                 elif ["LandisData", "PnETSpeciesParameters"] in content_separated:
-                    print("Found : PnET species parameters file : " + str(filename))
+                    if printFiles: print("Found : PnET species parameters file : " + str(filename))
                     results[filename] = parse_PnET_ComplexTableParameterfile(file_path)
 
                 # PnET Output Biomass file
                 elif ["LandisData", "Output-PnET"] in content_separated or ["LandisData", '"Output-PnET"'] in content_separated: 
-                    print("Found : PnET OutputBiomass parameter file : " + str(filename))
+                    if printFiles: print("Found : PnET OutputBiomass parameter file : " + str(filename))
                     results[filename] = parse_LANDIS_SimpleParameterFile(file_path)
 
                 # PnET Output Sites File
                 elif ["LandisData", "PNEToutputsites"] in content_separated:
-                    print("Found : PnET OutputSites parameter file : " + str(filename))
+                    if printFiles: print("Found : PnET OutputSites parameter file : " + str(filename))
                     results[filename] = parse_LANDIS_SimpleParameterFile(file_path)
 
                 # PnET Disturbance Reduction File
                 elif ["LandisData", "DisturbanceReductions"] in content_separated:
-                    print("Found : Disturbance Reduction File : " + str(filename))
+                    if printFiles: print("Found : Disturbance Reduction File : " + str(filename))
                     results[filename] = parse_PnET_ComplexTableParameterfile(file_path)
                 
                 # If it's not a parameter file, we record its path
                 # Can be used to copy/paste any other file
                 else:
-                    print("Found : Additional file : " + str(filename))
+                    if printFiles: print("Found : Additional file : " + str(filename))
                     results[filename] = file_path
                     # If it's not a parameter file, we keep its path to copy it
                     
         else:
-            print("Found : Additional file : " + str(filename))
+            if printFiles: print("Found : Additional file : " + str(filename))
             results[filename] = file_path
                     
     return results
@@ -880,7 +880,7 @@ def write_climate_data(file_path, data):
 # output_file = 'D:\Klemet\Desktop\TEMP\climate_data_output.txt'
 # write_climate_data(climate_data, output_file)
 
-def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True):
+def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True, printFiles = False):
     """
     Does the opposite of parse_All_LANDIS_PnET_Files : uses the dictionnary of
     LANDIS-II parameters produced by parse_All_LANDIS_PnET_Files to write down
@@ -922,78 +922,78 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True):
 
                 # Main scenario file
                 if dataDict[filename]["LandisData"] == "Scenario":
-                    print("Found : Main scenario file : " + str(filename))
+                    if printFiles: print("Found : Main scenario file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
         
                 # Main species parameter core file
                 elif dataDict[filename]["LandisData"] == "Species":
-                    print("Found : Main species parameter file : " + str(filename))
+                    if printFiles:print("Found : Main species parameter file : " + str(filename))
                     write_LANDIS_SpeciesCoreFile(outputFolder + str(filename), dataDict[filename])
         
                 # Ecoregions file
                 elif dataDict[filename]["LandisData"] == "Ecoregions":
-                    print("Found : Main ecoregions file : " + str(filename))
+                    if printFiles:print("Found : Main ecoregions file : " + str(filename))
                     write_LANDIS_MainEcoregionsFile(outputFolder + "ecoregion.txt", dataDict[filename])
         
                 # Initial Communities file
                 # Dealing with the .csv file is out of it if statement, see below
                 elif dataDict[filename]["LandisData"] == "Initial Communities" or dataDict[filename]["LandisData"] == '"Initial Communities"':
-                    print("Found : Initial Communities file : " + str(filename))
+                    if printFiles:print("Found : Initial Communities file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Ecoregion parameter files
                 elif dataDict[filename]["LandisData"] == "EcoregionParameters":
-                    print("Found : PnET Ecoregion parameter file : " + str(filename))
+                    if printFiles:print("Found : PnET Ecoregion parameter file : " + str(filename))
                     write_PnET_ComplexTableParameterfile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Succession Main file
                 elif dataDict[filename]["LandisData"] == "PnET-Succession" or dataDict[filename]["LandisData"] == '"PnET-Succession"': 
-                    print("Found : Main PnET parameter file : " + str(filename))
+                    if printFiles:print("Found : Main PnET parameter file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Generic parameters file
                 elif dataDict[filename]["LandisData"] == "PnETGenericParameters": 
-                    print("Found : PnET generic parameter file : " + str(filename))
+                    if printFiles:print("Found : PnET generic parameter file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
                     
                 # PnET Species Parameter file
                 elif dataDict[filename]["LandisData"] == "PnETSpeciesParameters":
-                    print("Found : PnET species parameters file : " + str(filename))
+                    if printFiles:print("Found : PnET species parameters file : " + str(filename))
                     write_PnET_ComplexTableParameterfile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Output Biomass file
                 elif dataDict[filename]["LandisData"] == "Output-PnET" or dataDict[filename]["LandisData"] == '"Output-PnET"':
-                    print("Found : PnET OutputBiomass parameter file : " + str(filename))
+                    if printFiles:print("Found : PnET OutputBiomass parameter file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Output Sites File
                 elif dataDict[filename]["LandisData"] == "PNEToutputsites": 
-                    print("Found : PnET OutputSites parameter file : " + str(filename))
+                    if printFiles:print("Found : PnET OutputSites parameter file : " + str(filename))
                     write_LANDIS_SimpleParameterFile(outputFolder + str(filename), dataDict[filename])
         
                 # PnET Disturbance Reduction File
                 elif dataDict[filename]["LandisData"] == "DisturbanceReductions":
-                    print("Found : Disturbance Reduction File : " + str(filename))
+                    if printFiles:print("Found : Disturbance Reduction File : " + str(filename))
                     write_PnET_ComplexTableParameterfile(outputFolder + str(filename), dataDict[filename])
             
             else: # If it's a dict but there is no LandisData parameter, it must be the climate file
                 
                 # Climate data file - identified by looking at the keys of the first month of the first year in the dict
                 if  any(item in list(list(dataDict[filename].values())[0].values())[0].keys() for item in ["Year", "Month", "TMax", "TMin", "PAR", "Prec", "CO2"]):
-                    print("Found : Climate file : " + str(filename))
+                    if printFiles:print("Found : Climate file : " + str(filename))
                     write_climate_data(outputFolder + str(filename), dataDict[filename])
                     
                 else:
                     print("WARNING : file type not recognized for the following dictionnary :" + str(dataDict[filename]))
 
         elif "DataFrame" in str(type(dataDict[filename])): # Dealing with dataframe (often loaded from .csv files) to output them back as .csv
-                print("Found : dataframe : " + str(filename) + ", exporting to .csv")
+                if printFiles: print("Found : dataframe : " + str(filename) + ", exporting to .csv")
                 dataDict[filename].to_csv(outputFolder + str(filename), index=False)
             
         # If it's not a parameter file, we record its path
         # Can be used to copy/paste any other file
         else:
-            print("Found : Additional file : " + str(filename))
+            if printFiles: print("Found : Additional file : " + str(filename))
             if os.path.isfile(dataDict[filename]):
                 shutil.copy(dataDict[filename], outputFolder)
             elif os.path.isdir(dataDict[filename]):
@@ -6256,7 +6256,8 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
                                             speciesToSimulate = "ABIE.BAL",
                                             dictOfInitialCoreSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json')),
                                             dictOfInitialPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
-                                            dictOfInitialPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json'))):
+                                            dictOfInitialPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
+                                            plotResults = False):
     # We prepare the simulation files
     PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
     
@@ -6293,7 +6294,12 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
         del PnETGitHub_OneCellSim["species.txt"][species]
         del PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"][species]
     # Inserting reading of the right climate file
-    PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
+    if climate == "mild":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
+    elif climate == "realHistorical":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims.txt"
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
     
     # -  PnEToutputsites_onecell.txt : replace site location
     PnETGitHub_OneCellSim["PnEToutputsites_onecell.txt"]["Site1"] = '1 1'
@@ -6313,9 +6319,18 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
                            True)
 
     # Copy the climate files
-    shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
-    shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
-    shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+    if climate == "mild":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+    elif climate == "realHistorical":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos.csv", simulationPath)
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
+    # Removing climate.txt (old climate file from the test files)
+    os.remove(simulationPath + "/climate.txt")
 
     # Preparing rasters
     numberOfCells = 1
@@ -6367,11 +6382,14 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     # We also get the foliage biomass from another output; this is because the foliage+wood biomass in the cohort file
     # is in gDW, or gram of dry weight. But we want g/m2 to compare to NFI data.
     csv_file_WoodFoliageBiomass = pd.read_csv(f'{simulationPath}output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
+    # We also get the site csv that has the temperatures (for diagnostics)
+    csv_file_site = pd.read_csv(f'{simulationPath}/Output/Site1/Site.csv')
     
     # We get the results we need
-    variablesOutput = ["Biomass peak height", "Biomass peak time",
+    variablesOutput = ["Biomass peak height", "Biomass peak time", "Biomass peak 95% time",
                        "Initation of decline", "Time of death",
-                       "Maximum LAI", "LAI stability"]
+                       "Maximum LAI", "LAI stability", "Average Fwater",
+                      "Average July Temperature"]
     dictOfOutput = {}
     for variable in variablesOutput:
         if variable == "Biomass peak height":
@@ -6383,6 +6401,26 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
             # of the cohort (even if there is a spinup), then the age of the cohorts (in years) is
             # simply row/12 (since 12 rows make a year of life.
             dictOfOutput[variable] = ((max_index+1)/12)
+        elif variable == "Biomass peak 95% time":
+            # Calculate 95% of the maximum value in the column
+            threshold_value = csv_file_cohort['SumFoliageWood_Site'].max() * 0.95
+            
+            # Find the index of the first row where the column value is greater than or equal to the threshold
+            # The .idxmax() method returns the index of the first occurrence of the maximum value.
+            # To find the first occurrence of a value that meets a condition, we can create a boolean series.
+            # However, idxmax() is for maximum values. A more direct approach for a threshold is to filter.
+            
+            # Filter the DataFrame to get rows that meet the condition
+            rows_meeting_condition = csv_file_cohort[csv_file_cohort['SumFoliageWood_Site'] >= threshold_value]
+            
+            # Get the index of the first row from the filtered DataFrame
+            if not rows_meeting_condition.empty:
+                first_index = rows_meeting_condition.index[0]
+                dictOfOutput[variable] = ((first_index+1)/12)
+                # print(f"The first index where the column value is at least 95% of the maximum is: {first_index}")
+            else:
+                # print("No rows found that meet the condition.")
+                dictOfOutput[variable] = "None"
         elif variable == "Initation of decline":
             # When fAge goes under 0.90 for the first time
             # Create a boolean mask for rows where 'my_column' is less than the threshold
@@ -6398,18 +6436,37 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
             mask = (csv_file_cohort['Month'] == 12) & (csv_file_cohort['NSCfrac(-)'] < 0.01)
             try:
                 idx = csv_file_cohort[mask].index[0]
+                dictOfOutput[variable] = ((idx+1)/12)
             except:
-                  # Code to handle any other error
-                  print("Havent found the index where the cohort died. Might be an issue with the cohort.csv")
-            dictOfOutput[variable] = ((idx+1)/12)
+                # Code to handle any other error
+                # print("Havent found the index where the cohort died. Might be an issue with the cohort.csv")
+                dictOfOutput[variable] = "None"
         elif variable == "Maximum LAI":
-            dictOfOutput[variable] = csv_file_cohort["SiteLAI(m2)"].max()
+            dictOfOutput[variable] = csv_file_cohort["LAI(m2)"].max()
         elif variable == "LAI stability":
-            dictOfOutput[variable] = min_max_top30_contiguous(csv_file_cohort["SiteLAI(m2)"])
+            # dictOfOutput[variable] = min_max_top30_contiguous(csv_file_cohort["LAI(m2)"])
+
+            # Step 1: Get max yearly LAI per year
+            yearly_max_lai = csv_file_cohort.groupby("Year")["LAI(m2)"].max()
+            
+            # Step 2: Find the year where LAI reaches its overall maximum
+            year_of_max_lai = yearly_max_lai.idxmax()
+            
+            # Step 3: Find the last year before fAge(-) drops below 0.6
+            year_before_fage = csv_file_cohort[csv_file_cohort["fage(-)"] >= 0.7]["Year"].max()
+            
+            # Step 4: Filter and get the range (min, max) of yearly max LAI values in that window
+            result = yearly_max_lai.loc[year_of_max_lai:year_before_fage]
+            dictOfOutput[variable] = (result.min(), result.max())
+            
+        elif variable == "Average Fwater":
+            dictOfOutput[variable] = csv_file_cohort["fWater(-)"].mean()
+        elif variable == "Average July Temperature":
+            dictOfOutput[variable] = csv_file_site[csv_file_site['Month'] == 7]['Tday(C)'].mean()
         else:
             raise ValueError("Value not recognized for output variable : " + str(variable))
 
-    plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
+    if plotResults: plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
     
     return(dictOfOutput)
     # Delete the folder
@@ -6744,3 +6801,495 @@ def compute_all_bounds(
                 )
 
     return results
+
+#################################################################
+# TRYING TO RE-CREATE THE FUNCTIONS TO CREATE AND SELECT THE GAMS
+#################################################################
+
+# I've lost these functions because of a bug : createPercentilesBiomassDatasetsFromNFIData
+# and getGamDiagnostics.
+
+# I'm going to try to make them again, because they're needed.
+
+import numpy as np
+import pandas as pd
+import geopandas as gpd
+import rasterio
+from rasterio.mask import mask as rasterio_mask
+from rasterio.features import geometry_mask
+from shapely.ops import unary_union
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+
+
+def createPercentilesBiomassDatasetsFromNFIData(
+    abundance_raster_path,
+    age_raster_path,
+    biomass_raster_path,
+    speciesName,
+    study_landscape_shp_path,
+    canadian_ecozones_shp_path,
+    age_window=5,
+    abundance_window=5,
+    percentile=100,
+    mask_path=None,
+    printPlot=False
+):
+    # ------------------------------------------------------------------
+    # 1. Load shapefiles and reproject to raster CRS
+    # ------------------------------------------------------------------
+    with rasterio.open(abundance_raster_path) as src:
+        raster_crs = src.crs
+        raster_transform = src.transform
+        raster_shape = (src.height, src.width)
+        raster_nodata = src.nodata
+
+    study_landscape = gpd.read_file(study_landscape_shp_path).to_crs(raster_crs)
+    ecozones = gpd.read_file(canadian_ecozones_shp_path).to_crs(raster_crs)
+
+    study_geom = unary_union(study_landscape.geometry)
+    intersects_mask = ecozones.geometry.intersects(study_geom)
+    study_ecozones = ecozones[intersects_mask]
+    study_ecozones_union = unary_union(study_ecozones.geometry)
+
+    surrounding_mask = ecozones.geometry.intersects(study_ecozones_union) & ~intersects_mask
+    surrounding_ecozones = ecozones[surrounding_mask]
+    surrounding_union = unary_union(
+        pd.concat([study_ecozones, surrounding_ecozones]).geometry
+    )
+    canada_union = unary_union(ecozones.geometry)
+
+    masks = {
+        'study_landscape': study_geom,
+        'ecozone': study_ecozones_union,
+        'surrounding_ecozones': surrounding_union,
+        'canada': canada_union,
+    }
+
+    # ------------------------------------------------------------------
+    # 2. Helper: extract valid pixel triplets within a geometry
+    #    Opens all 3 rasters once, clips to bounding box, applies
+    #    geometry mask — avoids loading full rasters into RAM.
+    # ------------------------------------------------------------------
+    def extract_valid_pixels(geom):
+        geom_geojson = [geom.__geo_interface__]
+
+        with rasterio.open(abundance_raster_path) as src_a, \
+             rasterio.open(age_raster_path) as src_ag, \
+             rasterio.open(biomass_raster_path) as src_b:
+
+            # Crop each raster to geometry bounding box
+            abund_arr, abund_tf = rasterio_mask(src_a,  geom_geojson, crop=True, nodata=src_a.nodata)
+            age_arr,   _        = rasterio_mask(src_ag, geom_geojson, crop=True, nodata=src_ag.nodata)
+            bio_arr,   _        = rasterio_mask(src_b,  geom_geojson, crop=True, nodata=src_b.nodata)
+
+            abund_nd = src_a.nodata
+            age_nd   = src_ag.nodata
+            bio_nd   = src_b.nodata
+
+            # Build pixel-level geometry mask (True = inside geometry)
+            geom_msk = geometry_mask(
+                geom_geojson,
+                transform=abund_tf,
+                invert=True,
+                out_shape=abund_arr.shape[1:]
+            )
+
+        abund = abund_arr[0].astype(np.float32)
+        age   = age_arr[0].astype(np.float32)
+        bio   = bio_arr[0].astype(np.float32)
+
+        # Mask nodata
+        valid = geom_msk.copy()
+        if abund_nd is not None:
+            valid &= (abund != abund_nd)
+        if age_nd is not None:
+            valid &= (age != age_nd)
+        if bio_nd is not None:
+            valid &= (bio != bio_nd)
+
+        # Keep only positive/meaningful values
+        valid &= (abund > 0) & (age > 0) & (bio >= 0)
+
+        # Return only valid pixels — discard the rest immediately
+        return age[valid], abund[valid], bio[valid]
+
+    # ------------------------------------------------------------------
+    # 3. Helper: build windowed percentile dataframe
+    # ------------------------------------------------------------------
+    def build_windowed_df(age_vals, abundance_vals, biomass_vals):
+        print("Creating windowed dataframe...")
+
+        # EDIT HERE : we change it so that it is in g/m2 instead of tons/hectares,
+        # because LANDIS-II gives us g/m2.
+        # To switch, we multiply by 100.
+        species_biomass = (abundance_vals * biomass_vals / 100.0) * 100
+
+        age_max   = age_vals.max()
+        abund_max = abundance_vals.max()
+
+        age_bins   = np.arange(0, age_max   + age_window,   age_window)
+        abund_bins = np.arange(0, abund_max + abundance_window, abundance_window)
+
+        # Digitize is faster than pd.cut for large arrays
+        age_idx   = np.digitize(age_vals,   age_bins)   - 1
+        abund_idx = np.digitize(abundance_vals, abund_bins) - 1
+
+        # Clip indices to valid range
+        age_idx   = np.clip(age_idx,   0, len(age_bins)   - 2)
+        abund_idx = np.clip(abund_idx, 0, len(abund_bins) - 2)
+
+        # Combine into a single integer key for groupby
+        n_abund_bins = len(abund_bins) - 1
+        combined_key = age_idx * n_abund_bins + abund_idx
+
+        # Sort once for efficient grouping
+        sort_order  = np.argsort(combined_key)
+        sorted_keys = combined_key[sort_order]
+        sorted_bio  = species_biomass[sort_order]
+
+        unique_keys, first_idx, counts = np.unique(
+            sorted_keys, return_index=True, return_counts=True
+        )
+
+        records = []
+        for k, fi, cnt in zip(unique_keys, first_idx, counts):
+            group_bio = sorted_bio[fi:fi + cnt]
+            p_val     = np.percentile(group_bio, percentile)
+            a_idx     = k // n_abund_bins
+            ab_idx    = k  % n_abund_bins
+            records.append({
+                'age':               age_bins[a_idx]   + age_window   / 2,
+                'abundance':         abund_bins[ab_idx] + abundance_window / 2,
+                'biomass_percentile': p_val
+            })
+
+        if not records:
+            return pd.DataFrame(columns=['age', 'abundance', 'biomass_percentile'])
+
+        result_df = pd.DataFrame(records)
+
+        # Monotonic abundance constraint
+        kept_rows = []
+        for age_b in sorted(result_df['age'].unique()):
+            age_subset = result_df[result_df['age'] == age_b].sort_values('abundance')
+            max_so_far = -np.inf
+            for _, row in age_subset.iterrows():
+                if row['biomass_percentile'] >= max_so_far:
+                    max_so_far = row['biomass_percentile']
+                    kept_rows.append(row)
+
+        result_df = pd.DataFrame(kept_rows).reset_index(drop=True)
+        print(f"Applied monotonic abundance constraint - kept {len(result_df)} entries")
+        return result_df
+
+    # ------------------------------------------------------------------
+    # 4. Main loop
+    # ------------------------------------------------------------------
+    print("Creating initial dataframes for each mask...")
+    result_dict = {}
+
+    for mask_name, geom in masks.items():
+        print(f"Dealing with mask : {mask_name}\n")
+        age_vals, abundance_vals, biomass_vals = extract_valid_pixels(geom)
+        result_dict[mask_name] = build_windowed_df(age_vals, abundance_vals, biomass_vals)
+
+    print("\n===============")
+
+    # ------------------------------------------------------------------
+    # 5. Optional plot
+    # ------------------------------------------------------------------
+    if printPlot:
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        axes = axes.flatten()
+        for idx, (mask_name, df) in enumerate(result_dict.items()):
+            ax = axes[idx]
+            if df.empty:
+                ax.set_title(f"{mask_name} (no data)")
+                continue
+            sc = ax.scatter(
+                df['age'], df['biomass_percentile'],
+                c=df['abundance'], cmap='RdYlGn',
+                vmin=0, vmax=100, alpha=0.7,
+                edgecolors='k', linewidths=0.3
+            )
+            plt.colorbar(sc, ax=ax, label='% Abundance')
+            ax.set_xlabel('Forest Age (years)')
+            ax.set_ylabel(f'Biomass (Percentile {percentile}) in g/m2')
+            ax.set_title(f'{speciesName} — {mask_name}')
+        plt.tight_layout()
+        plt.show()
+
+    return result_dict
+
+import numpy as np
+import pandas as pd
+import json
+import os
+from pygam import LinearGAM, s, te
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import warnings
+warnings.filterwarnings('ignore')
+
+
+def getGamDiagnostics(
+    dictOfPointsSubsets,
+    speciesName,
+    exportCsvOfSelectedCurve_Path,
+    printPlot=False,
+    dictionnaryOfSelectedCurves=None
+):
+    """
+    Fits a GAM on each mask's dataframe from createPercentilesBiomassDatasetsFromNFIData,
+    computes diagnostics for the 100% abundance prediction curve, selects the best
+    mask, exports the predictions CSV and updates the JSON dictionary.
+
+    Parameters
+    ----------
+    dictOfPointsSubsets             : output dict from createPercentilesBiomassDatasetsFromNFIData
+    speciesName                     : species name string
+    exportCsvOfSelectedCurve_Path   : path to export the predictions CSV
+    printPlot                       : if True, plots GAM curves for all masks
+    dictionnaryOfSelectedCurves     : path to the JSON file tracking selected masks per species
+    """
+
+    mask_order = ['study_landscape', 'ecozone', 'surrounding_ecozones', 'canada']
+    abundance_levels = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+
+    # ------------------------------------------------------------------
+    # 1. Fit GAM and compute diagnostics for each mask
+    # ------------------------------------------------------------------
+    fitted_gams   = {}
+    age_arrays    = {}
+    diagnostics   = {}
+
+    print("=" * 80)
+    print("GAM 100% Abundance Curve Diagnostics")
+    print("=" * 80)
+
+    for mask_name in mask_order:
+        df = dictOfPointsSubsets.get(mask_name)
+        if df is None or df.empty:
+            continue
+
+        X = df[['age', 'abundance']].values
+        y = df['biomass_percentile'].values
+
+        # GAM: s(age, by=abundance) + s(abundance, by=age) + s(age) + s(abundance)
+        # All splines constrained to be concave (constraint='concave')
+        gam = LinearGAM(
+            s(0, by=1, constraints='concave') +
+            s(1, by=0, constraints='concave') +
+            s(0, constraints='concave') +
+            s(1, constraints='concave')
+        ).fit(X, y)
+
+        fitted_gams[mask_name] = gam
+
+        # Age range for prediction (same resolution as example CSV)
+        age_min  = df['age'].min()
+        age_max  = df['age'].max()
+        age_pred = np.linspace(age_min, age_max, 180)
+        age_arrays[mask_name] = age_pred
+
+        # 100% abundance prediction curve
+        X_pred_100 = np.column_stack([age_pred, np.full_like(age_pred, 100.0)])
+        pred_100   = gam.predict(X_pred_100)
+
+        # --- Pseudo R² ---
+        pseudo_r2 = gam.statistics_['pseudo_r2']['explained_deviance']
+
+        # --- Peak age and biomass ---
+        peak_idx     = np.argmax(pred_100)
+        peak_age     = age_pred[peak_idx]
+        peak_biomass = pred_100[peak_idx]
+
+        # --- % negative biomass ---
+        pct_negative = 100.0 * np.sum(pred_100 < 0) / len(pred_100)
+
+        # --- Concavity: % decrease after peak ---
+        post_peak    = pred_100[peak_idx:]
+        if len(post_peak) > 1:
+            pct_decrease = 100.0 * (post_peak[0] - post_peak[-1]) / post_peak[0] if post_peak[0] != 0 else 0.0
+        else:
+            pct_decrease = 0.0
+
+        # --- Is truly concave: second derivative < 0 everywhere after age 0 ---
+        is_concave = bool(np.all(np.diff(pred_100[:peak_idx + 1]) >= 0) and np.all(np.diff(pred_100[peak_idx:]) <= 0))
+
+        # --- Max observed biomass in mask ---
+        max_obs_biomass = df['biomass_percentile'].max()
+
+        # --- % points above 40% abundance ---
+        pct_above_40 = 100.0 * np.sum(df['abundance'] > 40) / len(df)
+
+        # --- Validity ---
+        is_valid = (pseudo_r2 > 0.85) and is_concave and (pct_negative < 20.0)
+
+        diagnostics[mask_name] = {
+            'Pseudo_R2':               round(pseudo_r2,       6),
+            'Peak_Age':                round(peak_age,        6),
+            'Peak_Biomass':            round(peak_biomass,    6),
+            'Pct_Negative_Biomass':    round(pct_negative,    1),
+            'Concavity_Pct_Decrease':  round(pct_decrease,    6),
+            'Is_Truly_Concave':        is_concave,
+            'Max_Observed_Biomass':    round(max_obs_biomass, 6),
+            'Pct_Above_40_Abundance':  round(pct_above_40,    6),
+            'Is_Valid':                is_valid,
+        }
+
+    diag_df = pd.DataFrame(diagnostics).T
+    diag_df.index.name = 'Mask'
+
+    # Reorder rows to match mask_order
+    diag_df = diag_df.reindex([m for m in mask_order if m in diag_df.index])
+
+    # Split display into column groups of 4 as in the example output
+    all_cols   = list(diag_df.columns)
+    col_groups = [all_cols[i:i+4] for i in range(0, len(all_cols), 4)]
+
+    for gi, group in enumerate(col_groups):
+        print(f"\nColumns {gi*4+1}-{min((gi+1)*4, len(all_cols))}:")
+        print(diag_df[group].to_string())
+        print("-" * 80)
+
+    print("=" * 80)
+
+    # ------------------------------------------------------------------
+    # 6. Optional plot
+    # ------------------------------------------------------------------
+    if printPlot:
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+        axes = axes.flatten()
+        cmap = cm.get_cmap('RdYlGn')
+
+        for idx, mask_name in enumerate(mask_order):
+            if mask_name not in fitted_gams:
+                continue
+            ax       = axes[idx]
+            gam_m    = fitted_gams[mask_name]
+            age_p    = age_arrays[mask_name]
+            df       = dictOfPointsSubsets[mask_name]
+
+            # Scatter of data points coloured by abundance
+            sc = ax.scatter(
+                df['age'], df['biomass_percentile'],
+                c=df['abundance'], cmap='RdYlGn',
+                vmin=0, vmax=100, alpha=0.5,
+                edgecolors='k', linewidths=0.2, s=20, label='Data'
+            )
+            plt.colorbar(sc, ax=ax, label='% Abundance')
+
+            # GAM curves for each abundance level
+            for abund in abundance_levels:
+                X_p   = np.column_stack([age_p, np.full_like(age_p, float(abund))])
+                p     = gam_m.predict(X_p)
+                color = cmap(abund / 100.0)
+                lw    = 2.5 if abund == 100 else 1.0
+                ax.plot(age_p, p, color=color, linewidth=lw,
+                        label=f'{abund}%' if abund == 100 else None)
+
+            ax.axhline(0, color='grey', linestyle='--', linewidth=0.8)
+            ax.set_xlabel('Forest Age (years)')
+            ax.set_ylabel(f'Species Biomass (Percentile) in g/m2')
+            valid_str = '✓ Valid' if diagnostics[mask_name]['Is_Valid'] else '✗ Invalid'
+            ax.set_title(f'{speciesName} — {mask_name}\n'
+                         f'R²={diagnostics[mask_name]["Pseudo_R2"]:.3f}  {valid_str}')
+
+        plt.suptitle(f'GAM Diagnostics — {speciesName}', fontsize=14, fontweight='bold')
+        plt.tight_layout()
+        plt.show()
+    
+    # ------------------------------------------------------------------
+    # 2. Select best mask
+    # ------------------------------------------------------------------
+    valid_masks = [m for m in mask_order if m in diagnostics and diagnostics[m]['Is_Valid']]
+
+    selected_mask = None
+    selection_reason = None
+
+    if valid_masks:
+        # Among valid masks, prefer those whose peak age and peak biomass
+        # are within 20% of the average across valid masks
+        valid_peak_ages    = [diagnostics[m]['Peak_Age']    for m in valid_masks]
+        valid_peak_biomass = [diagnostics[m]['Peak_Biomass'] for m in valid_masks]
+        avg_peak_age       = np.mean(valid_peak_ages)
+        avg_peak_biomass   = np.mean(valid_peak_biomass)
+
+        for mask_name in mask_order:  # smallest first
+            if mask_name not in valid_masks:
+                continue
+            d = diagnostics[mask_name]
+            age_ok     = abs(d['Peak_Age']    - avg_peak_age)    <= 0.20 * avg_peak_age
+            biomass_ok = abs(d['Peak_Biomass'] - avg_peak_biomass) <= 0.20 * avg_peak_biomass
+            if age_ok and biomass_ok:
+                selected_mask    = mask_name
+                selection_reason = (
+                    f"  - Curve is valid (R² > 0.85, truly concave, <20% negative values)\n"
+                    f"  - Peak age within 20% of average ({avg_peak_age:.2f} years)\n"
+                    f"  - Peak biomass within 20% of average ({avg_peak_biomass:.2f})"
+                )
+                break
+
+        # Fallback: just pick the smallest valid mask
+        if selected_mask is None:
+            selected_mask    = valid_masks[0]
+            selection_reason = "  - Smallest valid mask (peak age/biomass outside 20% window)"
+
+    else:
+        # No valid curve — let user choose
+        print("\nNo valid curve found. Diagnostics summary:")
+        print(diag_df.to_string())
+        print("\nAvailable masks:", mask_order)
+        user_choice = input("Please select a mask manually: ").strip()
+        selected_mask    = user_choice if user_choice in diagnostics else mask_order[0]
+        selection_reason = "  - Manually selected by user (no valid curve found)"
+
+    # ------------------------------------------------------------------
+    # 3. Print selection summary
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 80)
+    print("BEST CURVE SELECTION")
+    print("=" * 80)
+    print(f"\nSelected Mask: {selected_mask}")
+    print(f"\nReason for Selection:\n{selection_reason}")
+    print(f"\nDiagnostics for Selected Curve:")
+    print("-" * 80)
+    for group in col_groups:
+        print(diag_df.loc[[selected_mask], group].to_string())
+        print()
+    print("=" * 80)
+
+    # ------------------------------------------------------------------
+    # 4. Export predictions CSV for selected mask
+    # ------------------------------------------------------------------
+    gam_selected  = fitted_gams[selected_mask]
+    age_pred_sel  = age_arrays[selected_mask]
+
+    csv_data = {'Age': age_pred_sel}
+    for abund in abundance_levels:
+        X_pred = np.column_stack([age_pred_sel, np.full_like(age_pred_sel, float(abund))])
+        preds  = gam_selected.predict(X_pred)
+        csv_data[f'GAM_Prediction_{abund}%Abundance'] = preds
+
+    pred_df = pd.DataFrame(csv_data)
+    os.makedirs(os.path.dirname(exportCsvOfSelectedCurve_Path), exist_ok=True)
+    pred_df.to_csv(exportCsvOfSelectedCurve_Path, index=False)
+
+    # ------------------------------------------------------------------
+    # 5. Update JSON dictionary of selected curves
+    # ------------------------------------------------------------------
+    if dictionnaryOfSelectedCurves is not None:
+        if os.path.exists(dictionnaryOfSelectedCurves):
+            with open(dictionnaryOfSelectedCurves, 'r') as f:
+                existing = json.load(f)
+        else:
+            existing = {}
+        existing[speciesName] = selected_mask
+        with open(dictionnaryOfSelectedCurves, 'w') as f:
+            json.dump(existing, f, indent=None)
+
+
+    return diag_df
