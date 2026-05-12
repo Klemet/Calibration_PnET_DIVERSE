@@ -6091,7 +6091,7 @@ def plot_all_cohort_results(output_folder, species_colors):
     proportion_arrays = [(biomass / total_biomass * 100) for biomass in biomass_arrays]
 
     # Step 7: Create plots
-    variables = ['SiteWood(gDW)', 'LAI(m2)', 'SiteLAI(m2)', 'NSC(gC)']
+    variables = ['SiteWood(gDW)', 'Fol(gDW)', 'LAI(m2)', 'SiteLAI(m2)', 'NSC(gC)']
     fig, axes = plt.subplots(5, 1, figsize=(12, 16))
 
     # Individual cohort plots
@@ -6275,8 +6275,8 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
     # Changing the soil if needed
     PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
-    # - pnetsuccession.txt : change startyear to 1910 and latitude to village of Manawan (47.2223)
-    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = "1910"
+    # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = "1900"
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
     # No dispersal, since we only simulate one pixel and the life of one cohort (monoculture and even-aged)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "NoDispersal"
@@ -6298,6 +6298,8 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
         PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
     elif climate == "realHistorical":
         PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims.txt"
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
     else:
         raise ValueError("Climate value : " + str(climate) + " not recognized.")
     
@@ -6323,14 +6325,18 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
         shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
     elif climate == "realHistorical":
         shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
     else:
         raise ValueError("Climate value : " + str(climate) + " not recognized.")
     # Removing climate.txt (old climate file from the test files)
-    os.remove(simulationPath + "/climate.txt")
+    
 
     # Preparing rasters
     numberOfCells = 1
@@ -6389,7 +6395,7 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     variablesOutput = ["Biomass peak height", "Biomass peak time", "Biomass peak 95% time",
                        "Initation of decline", "Time of death",
                        "Maximum LAI", "LAI stability", "Average Fwater",
-                      "Average July Temperature"]
+                      "Average July Temperature", "Biomass at 50% of biomass peak 95% time"]
     dictOfOutput = {}
     for variable in variablesOutput:
         if variable == "Biomass peak height":
@@ -6463,6 +6469,39 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
             dictOfOutput[variable] = csv_file_cohort["fWater(-)"].mean()
         elif variable == "Average July Temperature":
             dictOfOutput[variable] = csv_file_site[csv_file_site['Month'] == 7]['Tday(C)'].mean()
+        elif variable == "Biomass at 50% of biomass peak 95% time":
+            # Used to check if a cohort grows fast enough in its young years (see subphase 1.3)
+            # We need to interpolate because the peak time is from the cohort file with a monthly timestep,
+            # while the biomass peak heigh is from the csv file with the same timestep as PnET-Succession (e.g. 5 years)
+            df = csv_file_WoodFoliageBiomass[["Time", str(speciesToSimulate) + "_g/m2"]].copy()
+            df = df.sort_values("Time").reset_index(drop=True)
+        
+            # Rows below and above the target time
+            below = df[df["Time"] <= 0.5*dictOfOutput["Biomass peak 95% time"]]
+            above = df[df["Time"] >= 0.5*dictOfOutput["Biomass peak 95% time"]]
+        
+            # Exact match — no interpolation needed
+            if not below.empty and below.iloc[-1]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
+                return below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
+            if not above.empty and above.iloc[0]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
+                return above.iloc[0][str(speciesToSimulate) + "_g/m2"]
+        
+            # Check that bracketing rows exist on both sides
+            if below.empty or above.empty:
+                # raise ValueError(
+                #     f"dictOfOutput["Biomass peak 95% time"]={dictOfOutput["Biomass peak 95% time"]} is outside the range "
+                #     f"of {"Time"} in csv_file_WoodFoliageBiomass "
+                #     f"({df["Time"].min()} – {df["Time"].max()})."
+                # )
+                dictOfOutput[variable] = "Biomass peak 95% time is outside the range in csv_file_WoodFoliageBiomass"
+        
+            t0, b0 = below.iloc[-1]["Time"], below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
+            t1, b1 = above.iloc[0]["Time"],  above.iloc[0][str(speciesToSimulate) + "_g/m2"]
+        
+            # Linear interpolation
+            interpolated_biomass = b0 + (b1 - b0) * (0.5*dictOfOutput["Biomass peak 95% time"] - t0) / (t1 - t0)
+        
+            dictOfOutput[variable] = interpolated_biomass
         else:
             raise ValueError("Value not recognized for output variable : " + str(variable))
 
