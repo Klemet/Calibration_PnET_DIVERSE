@@ -6257,7 +6257,8 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
                                             dictOfInitialCoreSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json')),
                                             dictOfInitialPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
                                             dictOfInitialPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
-                                            plotResults = False):
+                                            plotResults = False,
+                                            saveGrowthCurvePath = False):
     # We prepare the simulation files
     PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
     
@@ -6506,6 +6507,14 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
             raise ValueError("Value not recognized for output variable : " + str(variable))
 
     if plotResults: plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
+
+    if saveGrowthCurvePath:
+        output_path = Path(saveGrowthCurvePath)
+
+        # Create all parent directories if they don't exist
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+        csv_file_WoodFoliageBiomass.to_csv(output_path)
     
     return(dictOfOutput)
     # Delete the folder
