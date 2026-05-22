@@ -7343,7 +7343,7 @@ def getGamDiagnostics(
     return diag_df
 
 
-### FUNCTIONS FOR FIRST CALIBRATION STEP (MONOCULTURE IN IDEAL CONDITIONS
+### FUNCTIONS FOR FIRST CALIBRATION STEP (MONOCULTURE IN IDEAL CONDITIONS)
 
 import json
 import copy
@@ -9577,3 +9577,147 @@ def plot_multispecies_growth_curves(
     fig.suptitle("Multi-Species Growth Curves: Observations vs. Model", fontsize=15, fontweight="bold")
     plt.tight_layout()
     plt.show()
+
+
+
+## FUNCTIONS FOR SECOND CALIBRATION STEP
+# Drought and waterlogging
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pygam import LinearGAM, s
+
+def predict_H_parameters(
+    drought_tolerance: float,
+    waterlogging_tolerance: float,
+    plot: bool = False,
+    gam_summary: bool = False,
+    csv_path: str = "./SpeciesParametersSets/PreviousStudies/GustafsonParameters_UserGuidev5.1_WithDroughtAndWtTolerance.csv"
+) -> tuple[float, float, float, float]:
+    """
+    Predicts H1, H2, H3 and H4 parameter values using GAMs.
+    - H1, H2 are predicted from Waterlogging Tolerance
+    - H3, H4 are predicted from Drought Tolerance
+
+    Parameters
+    ----------
+    drought_tolerance : float
+        Drought tolerance score to predict H3 and H4 for (typically 1–5).
+    waterlogging_tolerance : float
+        Waterlogging tolerance score to predict H1 and H2 for (typically 1–5).
+    plot : bool, optional
+        If True, plots all 4 GAM fits and marks the predicted values. Default False.
+    gam_summary : bool, optional
+        If True, prints GAM summary and performance metrics for all 4 models. Default False.
+    csv_path : str, optional
+        Path to the input CSV file.
+
+    Returns
+    -------
+    tuple[float, float, float, float]
+        Predicted (H1, H2, H3, H4) values.
+    """
+
+    def _clean_data(df: pd.DataFrame, predictor_col: str, response_cols: list[str]) -> tuple[np.ndarray, list[np.ndarray]]:
+        """Filter, clean and return X and y arrays for a given predictor and response columns."""
+        subset = df.copy()
+        subset = subset[subset[predictor_col].astype(str).str.strip().str.lower() != "not found"]
+        subset = subset.dropna(subset=[predictor_col] + response_cols)
+        subset[predictor_col] = pd.to_numeric(subset[predictor_col], errors="coerce")
+        for col in response_cols:
+            subset[col] = pd.to_numeric(subset[col], errors="coerce")
+        subset = subset.dropna(subset=[predictor_col] + response_cols)
+        X = subset[predictor_col].values.reshape(-1, 1)
+        ys = [subset[col].values for col in response_cols]
+        return X, ys
+
+    def _print_summary(label: str, predictor_label: str, gam: LinearGAM, X: np.ndarray, y: np.ndarray):
+        """Print pygam native summary + performance metrics."""
+        y_pred = gam.predict(X)
+        residuals = y - y_pred
+        ss_res = np.sum(residuals ** 2)
+        ss_tot = np.sum((y - np.mean(y)) ** 2)
+        r2 = 1 - ss_res / ss_tot
+        rmse = np.sqrt(np.mean(residuals ** 2))
+        mae = np.mean(np.abs(residuals))
+        n = len(y)
+
+        print("=" * 55)
+        print(f"  GAM Summary — {label} = s({predictor_label})")
+        print("=" * 55)
+        gam.summary()
+        print(f"\n  📊 Performance Metrics ({n} observations)")
+        print(f"  {'R²':<30} {r2:.4f}")
+        print(f"  {'RMSE':<30} {rmse:.4f}")
+        print(f"  {'MAE':<30} {mae:.4f}")
+        print(f"  {'Residual Std Dev':<30} {np.std(residuals):.4f}")
+        print(f"  {'Residual Min':<30} {residuals.min():.4f}")
+        print(f"  {'Residual Max':<30} {residuals.max():.4f}")
+        print("=" * 55)
+        print()
+
+    def _plot_gam(ax, X: np.ndarray, y: np.ndarray, gam: LinearGAM,
+                  param_label: str, predictor_label: str,
+                  pred_x: float, pred_y: float):
+        """Plot a single GAM fit with data points, CI, and predicted value."""
+        X_range = np.linspace(1, 5, 200).reshape(-1, 1)
+        curve = gam.predict(X_range)
+        ci = gam.prediction_intervals(X_range, width=0.95)
+
+        ax.scatter(X.flatten(), y, alpha=0.6, edgecolors="steelblue",
+                   facecolors="lightblue", zorder=3, label="Observed data")
+        ax.plot(X_range.flatten(), curve, color="steelblue",
+                linewidth=2, label="GAM fit")
+        ax.fill_between(X_range.flatten(), ci[:, 0], ci[:, 1],
+                        alpha=0.2, color="steelblue", label="95% CI")
+        ax.axvline(pred_x, color="tomato", linestyle="--", linewidth=1.2, alpha=0.7)
+        ax.scatter([pred_x], [pred_y], color="tomato", zorder=5, s=80,
+                   label=f"Predicted {param_label} = {pred_y:.4f}")
+        ax.set_xlabel(predictor_label, fontsize=11)
+        ax.set_ylabel(param_label, fontsize=11)
+        ax.set_title(f"{param_label} = s({predictor_label})", fontsize=12)
+        ax.set_xlim(1, 5)
+        ax.legend(fontsize=9)
+        ax.grid(True, linestyle="--", alpha=0.4)
+
+    # --- Load data ---
+    df = pd.read_csv(csv_path)
+
+    # --- Clean data for each predictor ---
+    X_drought, (y_H3, y_H4) = _clean_data(df, "Drought Tolerance", ["H3", "H4"])
+    X_wlog,    (y_H1, y_H2) = _clean_data(df, "Waterlogging Tolerance", ["H1", "H2"])
+
+    # --- Fit GAMs ---
+    gam_H1 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H1)
+    gam_H2 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H2)
+    gam_H3 = LinearGAM(s(0)).gridsearch(X_drought, y_H3)
+    gam_H4 = LinearGAM(s(0)).gridsearch(X_drought, y_H4)
+
+    # --- GAM Summaries ---
+    if gam_summary:
+        _print_summary("H1", "Waterlogging Tolerance", gam_H1, X_wlog,    y_H1)
+        _print_summary("H2", "Waterlogging Tolerance", gam_H2, X_wlog,    y_H2)
+        _print_summary("H3", "Drought Tolerance",      gam_H3, X_drought, y_H3)
+        _print_summary("H4", "Drought Tolerance",      gam_H4, X_drought, y_H4)
+
+    # --- Predict ---
+    pred_H1 = float(gam_H1.predict([[waterlogging_tolerance]])[0])
+    pred_H2 = float(gam_H2.predict([[waterlogging_tolerance]])[0])
+    pred_H3 = float(gam_H3.predict([[drought_tolerance]])[0])
+    pred_H4 = float(gam_H4.predict([[drought_tolerance]])[0])
+
+    # --- Plot ---
+    if plot:
+        fig, axes = plt.subplots(1, 4, figsize=(22, 5))
+        fig.suptitle("GAM Regression: H1–H4 vs Tolerance Scores", fontsize=14)
+
+        _plot_gam(axes[0], X_wlog,    y_H1, gam_H1, "H1", "Waterlogging Tolerance", waterlogging_tolerance, pred_H1)
+        _plot_gam(axes[1], X_wlog,    y_H2, gam_H2, "H2", "Waterlogging Tolerance", waterlogging_tolerance, pred_H2)
+        _plot_gam(axes[2], X_drought, y_H3, gam_H3, "H3", "Drought Tolerance",      drought_tolerance,      pred_H3)
+        _plot_gam(axes[3], X_drought, y_H4, gam_H4, "H4", "Drought Tolerance",      drought_tolerance,      pred_H4)
+
+        plt.tight_layout()
+        plt.show()
+
+    return {"H1":round(pred_H1, 2), "H2":round(pred_H2, 2), "H3":round(pred_H3, 2), "H4":round(pred_H4, 2)}
