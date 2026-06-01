@@ -9580,7 +9580,7 @@ def plot_multispecies_growth_curves(
 
 
 
-## FUNCTIONS FOR SECOND CALIBRATION STEP
+## FUNCTIONS FOR DERIVING PARAMETERS THROUGH REGRESSION WITH PUBLISHED STUDIES
 # Drought and waterlogging
 
 import pandas as pd
@@ -9689,10 +9689,10 @@ def predict_H_parameters(
     X_wlog,    (y_H1, y_H2) = _clean_data(df, "Waterlogging Tolerance", ["H1", "H2"])
 
     # --- Fit GAMs ---
-    gam_H1 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H1)
-    gam_H2 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H2)
-    gam_H3 = LinearGAM(s(0)).gridsearch(X_drought, y_H3)
-    gam_H4 = LinearGAM(s(0)).gridsearch(X_drought, y_H4)
+    gam_H1 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H1, progress=False)
+    gam_H2 = LinearGAM(s(0)).gridsearch(X_wlog,   y_H2, progress=False)
+    gam_H3 = LinearGAM(s(0)).gridsearch(X_drought, y_H3, progress=False)
+    gam_H4 = LinearGAM(s(0)).gridsearch(X_drought, y_H4, progress=False)
 
     # --- GAM Summaries ---
     if gam_summary:
@@ -9721,3 +9721,497 @@ def predict_H_parameters(
         plt.show()
 
     return {"H1":round(pred_H1, 2), "H2":round(pred_H2, 2), "H3":round(pred_H3, 2), "H4":round(pred_H4, 2)}
+
+
+
+
+# TEMPERATURE PARAMETERS
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pygam import LinearGAM, s
+
+def predict_temperature_parameters(species_map, return_df=True, plotAndSummaries = True):
+    # ─────────────────────────────────────────────
+    # Hardcoded CSV paths
+    # ─────────────────────────────────────────────
+    CSV1_PATH = "./SpeciesParametersSets/PreviousStudies/GustafsonParameters_UserGuidev5.1_WithDroughtAndWtTolerance.csv"   # ← your first CSV
+    CSV2_PATH = "./ReferencesAndData/Others/DendonckerEtAl2026_Average_niche_all_spp.csv"       # ← your second CSV
+    
+    # ─────────────────────────────────────────────
+    # 1. Load & merge data
+    # ─────────────────────────────────────────────
+    def load_and_merge() -> pd.DataFrame:
+        df1 = pd.read_csv(CSV1_PATH)
+        df2 = pd.read_csv(CSV2_PATH)
+        df1 = df1.rename(columns={'Species': 'species'})
+        df = df1.merge(df2, on="species", how="left", suffixes=("", "_df2"))
+        return df
+    
+    
+    # ─────────────────────────────────────────────
+    # 2. Helpers: fit GAM, plot, summarise
+    # ─────────────────────────────────────────────
+    def fit_plot_gam(df: pd.DataFrame, formula_str: str, y_col: str,
+                     x_cols: list[str]) -> LinearGAM:
+        sub = df[[y_col] + x_cols].dropna()
+        y = sub[y_col].values
+        X = sub[x_cols].values
+    
+        n = len(x_cols)
+        if n == 1:
+            gam = LinearGAM(s(0))
+        elif n == 2:
+            gam = LinearGAM(s(0) + s(1))
+        else:
+            gam = LinearGAM(s(0) + s(1) + s(2))
+    
+        gam.fit(X, y)
+    
+        print(f"\n{'='*60}")
+        print(f"Model: {formula_str}")
+        print(f"{'='*60}")
+        if plotAndSummaries:
+            gam.summary()
+        
+            if n == 1:
+                _plot_1d(gam, sub, y_col, x_cols[0], formula_str)
+            else:
+                _plot_partial(gam, sub, y_col, x_cols, formula_str)
+    
+        return gam
+    
+    
+    def _plot_1d(gam: LinearGAM, sub: pd.DataFrame, y_col: str,
+                 x_col: str, title: str) -> None:
+        fig, ax = plt.subplots(figsize=(7, 4))
+        XX = gam.generate_X_grid(term=0, n=200)
+        preds = gam.predict(XX)
+        ci = gam.prediction_intervals(XX, width=0.95)
+    
+        ax.scatter(sub[x_col], sub[y_col], color="steelblue", alpha=0.7,
+                   edgecolors="white", s=60, label="Observed", zorder=3)
+        ax.plot(XX[:, 0], preds, color="tomato", lw=2, label="GAM prediction")
+        ax.fill_between(XX[:, 0], ci[:, 0], ci[:, 1],
+                        color="tomato", alpha=0.15, label="95% CI")
+        ax.set_xlabel(x_col)
+        ax.set_ylabel(y_col)
+        ax.set_title(title)
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+    
+    
+    def _plot_partial(gam: LinearGAM, sub: pd.DataFrame, y_col: str,
+                      x_cols: list[str], title: str) -> None:
+        n = len(x_cols)
+        fig, axes = plt.subplots(1, n, figsize=(5 * n, 4))
+        if n == 1:
+            axes = [axes]
+    
+        y_centered = sub[y_col] - sub[y_col].mean()
+    
+        for i, (ax, x_col) in enumerate(zip(axes, x_cols)):
+            XX = gam.generate_X_grid(term=i, n=200)
+            pdep, confi = gam.partial_dependence(term=i, X=XX, width=0.95)
+    
+            ax.scatter(sub[x_col], y_centered, color="steelblue", alpha=0.6,
+                       s=50, edgecolors="white", label="Observed (centred)", zorder=3)
+            ax.plot(XX[:, i], pdep, color="tomato", lw=2, label="Partial effect")
+            ax.fill_between(XX[:, i], confi[:, 0], confi[:, 1],
+                            color="tomato", alpha=0.15, label="95% CI")
+            ax.set_xlabel(x_col)
+            ax.set_ylabel(f"Partial effect on {y_col}" if i == 0 else "")
+            ax.legend(fontsize=8)
+    
+        fig.suptitle(title)
+        plt.tight_layout()
+        plt.show()
+    
+    
+    # ─────────────────────────────────────────────
+    # 3. Train all GAMs, return fitted model registry
+    # ─────────────────────────────────────────────
+    def train_gams(df: pd.DataFrame) -> dict:
+        """
+        Fits all GAMs and returns a registry:
+            { formula_str: (fitted_gam, x_cols) }
+        """
+        models = [
+            # PsnTMin
+            ("PsnTMin = s(MAT.q05)",
+             "PsnTMin", ["MAT.q05"]),
+    
+            # PsnTOpt
+            ("PsnTOpt = s(MAT.q95) + s(MTWM.q95)",
+             "PsnTOpt", ["MAT.q95", "MTWM.q95"]),
+    
+            # PsnTMax
+            ("PsnTMax = s(MTWM.q95)",
+             "PsnTMax", ["MTWM.q95"]),
+    
+            # LeafOnMinT — four candidate models
+            ("LeafOnMinT = s(MAT.q05)",
+             "LeafOnMinT", ["MAT.q05"])
+        ]
+    
+        registry = {}
+        for formula_str, y_col, x_cols in models:
+            gam = fit_plot_gam(df, formula_str, y_col, x_cols)
+            registry[formula_str] = (gam, x_cols)
+    
+        return registry
+    
+    
+    # ─────────────────────────────────────────────
+    # 4. Main pipeline
+    # ─────────────────────────────────────────────
+    def run_pipeline(
+        species_code_map: dict[str, str],
+        return_df: bool = False,
+        plotAndSummaries: bool = False
+    ) -> tuple[dict, pd.DataFrame | None]:
+        """
+        Parameters
+        ----------
+        species_code_map : dict
+            Keys   = species codes (e.g. "ABAL")
+            Values = full latin names (e.g. "Abies alba")
+    
+        return_df : bool
+            If True, also return the merged dataframe with prediction columns.
+    
+        Returns
+        -------
+        predictions : dict
+            { species_code: { "PsnTMin": float, "PsnTOpt": float,
+                              "PsnTMax": float, "LeafOnMinT": float } }
+        df : pd.DataFrame or None
+            Merged dataframe with prediction columns (only if return_df=True).
+        """
+        # ── Load, merge, train ────────────────────
+        df = load_and_merge()
+        registry = train_gams(df)
+    
+        # ── Load df2 separately for species lookup ─
+        # (predictions for new species use their climate variables from df2)
+        df2 = pd.read_csv(CSV2_PATH).set_index("species")
+    
+        # ── Selected models for final predictions ──
+        # Change these keys to swap the chosen model for each variable
+        selected = {
+            "PsnTMin":    ("PsnTMin = s(MAT.q05)",                ["MAT.q05"]),
+            "PsnTOpt":    ("PsnTOpt = s(MAT.q95) + s(MTWM.q95)", ["MAT.q95", "MTWM.q95"]),
+            "PsnTMax":    ("PsnTMax = s(MTWM.q95)",               ["MTWM.q95"]),
+            "LeafOnMinT": ("LeafOnMinT = s(MAT.q05)",             ["MAT.q05"])
+        }
+    
+        # ── Predict for each species code ──────────
+        predictions = {}
+    
+        for code, latin_name in species_code_map.items():
+            # Look up the species row in df2
+            if latin_name not in df2.index:
+                print(f"Warning: '{latin_name}' (code: '{code}') not found in "
+                      f"{CSV2_PATH}. Returning NaN for all variables.")
+                predictions[code] = {var: np.nan for var in selected}
+                continue
+    
+            row = df2.loc[latin_name]
+            species_preds = {}
+    
+            for var, (formula_str, x_cols) in selected.items():
+                gam, _ = registry[formula_str]
+    
+                # Extract predictor values for this species
+                try:
+                    x_vals = np.array([[row[col] for col in x_cols]], dtype=float)
+                except KeyError as e:
+                    print(f"Warning: predictor {e} not found in {CSV2_PATH} "
+                          f"for species '{latin_name}'. Setting {var} to NaN.")
+                    species_preds[var] = np.nan
+                    continue
+    
+                if np.isnan(x_vals).any():
+                    print(f"Warning: NaN predictor value(s) for '{latin_name}' "
+                          f"when predicting {var}. Setting to NaN.")
+                    species_preds[var] = np.nan
+                else:
+                    species_preds[var] = float(gam.predict(x_vals)[0])
+    
+            predictions[code] = species_preds
+    
+        # ── Optionally add prediction columns to df ─
+        if return_df:
+            for var, (formula_str, x_cols) in selected.items():
+                gam, _ = registry[formula_str]
+                X_all = df[x_cols].values
+                mask = ~np.isnan(X_all).any(axis=1)
+                df[f"{var}_pred"] = np.nan
+                df.loc[mask, f"{var}_pred"] = gam.predict(X_all[mask])
+            return predictions, df
+    
+        return predictions, None
+
+    if return_df:
+        predictions, df = run_pipeline(species_map, return_df=True)
+        return(predictions, df)
+    else:
+        predictions, df = run_pipeline(species_map, return_df=False)
+        return(predictions)
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pygam import LinearGAM, s
+
+
+def predict_temperature_parameters_single_species(
+    species_code: str,
+    species_latin_name: str,
+    MAT_q05: float,
+    MAT_q95: float,
+    MTWM_q95: float,
+    return_df: bool = True,
+    plotAndSummaries: bool = True,
+):
+    CSV1_PATH = "./SpeciesParametersSets/PreviousStudies/GustafsonParameters_UserGuidev5.1_WithDroughtAndWtTolerance.csv"
+    CSV2_PATH = "./ReferencesAndData/Others/DendonckerEtAl2026_Average_niche_all_spp.csv"
+
+    # ── Load & merge (training data) ──────────────────────────────────────────
+    df1 = pd.read_csv(CSV1_PATH)
+    df2 = pd.read_csv(CSV2_PATH)
+    df1 = df1.rename(columns={"Species": "species"})
+    df = df1.merge(df2, on="species", how="left", suffixes=("", "_df2"))
+
+    # ── Helper: fit GAM + optional plot ──────────────────────────────────────
+    def fit_plot_gam(formula_str: str, y_col: str, x_cols: list[str],
+                     monotonic: bool = True) -> LinearGAM:
+        sub = df[[y_col] + x_cols].dropna()
+        y = sub[y_col].values
+        X = sub[x_cols].values
+        n = len(x_cols)
+
+        if monotonic:
+            if n == 1:
+                gam_terms = s(0, constraints="monotonic_inc")
+            elif n == 2:
+                gam_terms = s(0, constraints="monotonic_inc") + s(1, constraints="monotonic_inc")
+            else:
+                gam_terms = (s(0, constraints="monotonic_inc") +
+                             s(1, constraints="monotonic_inc") +
+                             s(2, constraints="monotonic_inc"))
+        else:
+            if n == 1:
+                gam_terms = s(0)
+            elif n == 2:
+                gam_terms = s(0) + s(1)
+            else:
+                gam_terms = s(0) + s(1) + s(2)
+
+        gam = LinearGAM(gam_terms)
+        gam.fit(X, y)
+
+        if plotAndSummaries:
+            print(f"\n{'='*60}\nModel: {formula_str}\n{'='*60}")
+            gam.summary()
+            if n == 1:
+                fig, ax = plt.subplots(figsize=(7, 4))
+                XX = gam.generate_X_grid(term=0, n=200)
+                preds = gam.predict(XX)
+                ci = gam.prediction_intervals(XX, width=0.95)
+                ax.scatter(sub[x_cols[0]], sub[y_col], color="steelblue", alpha=0.7,
+                           edgecolors="white", s=60, label="Observed", zorder=3)
+                ax.plot(XX[:, 0], preds, color="tomato", lw=2, label="GAM prediction")
+                ax.fill_between(XX[:, 0], ci[:, 0], ci[:, 1], color="tomato",
+                                alpha=0.15, label="95% CI")
+                ax.set_xlabel(x_cols[0]); ax.set_ylabel(y_col); ax.set_title(formula_str)
+                ax.legend(); plt.tight_layout(); plt.show()
+            else:
+                fig, axes = plt.subplots(1, n, figsize=(5 * n, 4))
+                y_centered = sub[y_col] - sub[y_col].mean()
+                for i, (ax, x_col) in enumerate(zip(axes, x_cols)):
+                    XX = gam.generate_X_grid(term=i, n=200)
+                    pdep, confi = gam.partial_dependence(term=i, X=XX, width=0.95)
+                    ax.scatter(sub[x_col], y_centered, color="steelblue", alpha=0.6,
+                               s=50, edgecolors="white", label="Observed (centred)", zorder=3)
+                    ax.plot(XX[:, i], pdep, color="tomato", lw=2, label="Partial effect")
+                    ax.fill_between(XX[:, i], confi[:, 0], confi[:, 1], color="tomato",
+                                    alpha=0.15, label="95% CI")
+                    ax.set_xlabel(x_col)
+                    ax.set_ylabel(f"Partial effect on {y_col}" if i == 0 else "")
+                    ax.legend(fontsize=8)
+                fig.suptitle(formula_str); plt.tight_layout(); plt.show()
+
+        return gam
+
+    # ── Fit all GAMs ──────────────────────────────────────────────────────────
+    # monotonic=True for all single-predictor models, False for PsnTOpt (2 predictors, free)
+    models = {
+        "PsnTMin":    ("PsnTMin = s(MAT.q05, constraints='monotonic_inc')",                ["MAT.q05"],              True),
+        "PsnTOpt":    ("PsnTOpt = s(MAT.q95) + s(MTWM.q95)",                              ["MAT.q95", "MTWM.q95"],  False),
+        "PsnTMax":    ("PsnTMax = s(MTWM.q95, constraints='monotonic_inc')",               ["MTWM.q95"],             True),
+        "LeafOnMinT": ("LeafOnMinT = s(MAT.q05, constraints='monotonic_inc')",             ["MAT.q05"],              True),
+    }
+    fitted = {var: fit_plot_gam(formula_str, var, x_cols, monotonic)
+              for var, (formula_str, x_cols, monotonic) in models.items()}
+
+    # ── Compute calibration bounds per predictor ──────────────────────────────
+    temp_inputs = {"MAT.q05": MAT_q05, "MAT.q95": MAT_q95, "MTWM.q95": MTWM_q95}
+
+    calib_bounds = {col: (df[col].dropna().min(), df[col].dropna().max())
+                    for col in temp_inputs}
+
+    # ── Check for extrapolation and warn ─────────────────────────────────────
+    for var, (_, x_cols, _) in models.items():
+        for col in x_cols:
+            val = temp_inputs[col]
+            lo, hi = calib_bounds[col]
+            if val < lo:
+                print(
+                    f"⚠️  EXTRAPOLATION WARNING | Species: {species_latin_name} ({species_code}) | "
+                    f"Predictor '{col}' = {val:.2f} is BELOW the calibration range "
+                    f"[{lo:.2f}, {hi:.2f}] → predicted parameter '{var}' may be unreliable."
+                )
+            elif val > hi:
+                print(
+                    f"⚠️  EXTRAPOLATION WARNING | Species: {species_latin_name} ({species_code}) | "
+                    f"Predictor '{col}' = {val:.2f} is ABOVE the calibration range "
+                    f"[{lo:.2f}, {hi:.2f}] → predicted parameter '{var}' may be unreliable."
+                )
+
+    # ── Predict for the species using provided temperature values ─────────────
+    species_preds = {}
+    for var, (_, x_cols, _) in models.items():
+        x_vals = np.array([[temp_inputs[col] for col in x_cols]], dtype=float)
+        if np.isnan(x_vals).any():
+            print(f"Warning: NaN temperature value(s) for '{species_latin_name}' "
+                  f"when predicting {var}. Setting to NaN.")
+            species_preds[var] = np.nan
+        else:
+            species_preds[var] = round(float(fitted[var].predict(x_vals)[0]), 2)
+
+    predictions = {species_code: species_preds}
+
+    # ── Optionally annotate df with predictions ───────────────────────────────
+    if return_df:
+        for var, (_, x_cols, _) in models.items():
+            X_all = df[x_cols].values
+            mask = ~np.isnan(X_all).any(axis=1)
+            df[f"{var}_pred"] = np.nan
+            df.loc[mask, f"{var}_pred"] = fitted[var].predict(X_all[mask])
+        return predictions, df
+
+    return predictions, None
+
+
+
+
+# GET PARAMETER VALUES FOR A NEW SPECIES ACCORDING TO THE CALIBRATION TIPS
+# OF ERIC GUSTAFSON
+
+import numpy as np
+
+def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_type: str) -> dict[str, str]:
+    """
+    This function uses the rules indicated by Eric Gustafson in the user guide of PnET-Succession v5.1.
+    There is two parameters from which Gustafson has no rule to get them : TOFol and FrActWd.
+    For these, I used the averaged values for deciduous/evergreen and hardwood/softwoods in previous publications of PnET-Succession parameters
+    this gives the following :
+    - TOFol : 1 for deciduous trees, 0.3 for evergreens
+    - FrActWd : 0.000035 for hardwoods, 0.000029 for softwoods
+
+    Args:
+        shade_tolerance: float from 1 (very intolerant) to 5 (very tolerant)
+        tree_type: 'deciduous' or 'evergreen'
+        wood_type: 'hardwood' or 'softwood'
+
+    Returns:
+        Dictionary of parameter names to string values.
+    """
+    assert 1 <= shade_tolerance <= 5, "shade_tolerance must be between 1 and 5"
+    tree_type = tree_type.lower()
+    wood_type = wood_type.lower()
+    assert tree_type in ("deciduous", "evergreen"), "tree_type must be 'deciduous' or 'evergreen'"
+    assert wood_type in ("hardwood", "softwood"), "wood_type must be 'hardwood' or 'softwood'"
+
+    # Shade tolerance scores corresponding to table columns (Tolerant=5 ... Intolerant=1)
+    scores = np.array([5, 4, 3, 2, 1], dtype=float)
+
+    def linear_predict(values: list[float], x: float) -> float:
+        """Fit a line through the 5 table points and predict at x."""
+        coeffs = np.polyfit(scores, values, 1)
+        return float(np.polyval(coeffs, x))
+
+    st = shade_tolerance
+
+    # --- Linear models from table of the calibration tips of Eric Gustafson ---
+    HalfSat = linear_predict([150, 181, 212.5, 244, 275], st)
+
+    if tree_type == "deciduous":
+        FolN       = linear_predict([2.2, 2.4, 2.6, 2.8, 2.9], st)
+        SLWmax     = linear_predict([70, 75, 80, 85, 90], st)
+        FracFol    = linear_predict([0.014, 0.014, 0.015, 0.017, 0.018], st)
+    else:  # evergreen
+        FolN       = linear_predict([1.1, 1.3, 1.5, 1.7, 1.9], st)
+        SLWmax     = linear_predict([150, 175, 200, 225, 250], st)
+        FracFol    = linear_predict([0.05, 0.055, 0.06, 0.065, 0.07], st)
+
+    # FracBelowG  = linear_predict([0.37, 0.35, 0.33, 0.31, 0.29], st)
+    EstRad      = linear_predict([0.976, 0.954, 0.928, 0.900, 0.870], st)
+    CFracBiomass = linear_predict([0.5, 0.475, 0.45, 0.425, 0.4], st)
+
+    # --- Fixed rules ---
+    if tree_type == "evergreen":
+        AmaxA  = 5.3
+        AmaxB  = 21.5
+        k      = 0.5
+        SLWDel = 0.0
+        TOFol  = 0.3
+    else:  # deciduous
+        AmaxA  = -46.0
+        AmaxB  = 71.9
+        k      = 0.58
+        SLWDel = 0.2
+        TOFol  = 1.0
+
+    KWLit    = 0.075 if wood_type == "hardwood" else 0.125
+    FrActWd  = 0.000035 if wood_type == "hardwood" else 0.000029
+
+    TOWood       = 0.03
+    TORoot       = 0.03
+    FracFolShape = 6
+    MaxFracFol   = FracFol
+    EstMoist     = 1
+
+    # --- Assemble dictionary (all values as strings) ---
+    params = {
+        "HalfSat":      str(round(HalfSat, 6)),
+        "FolN":         str(round(FolN, 6)),
+        "SLWmax":       str(round(SLWmax, 6)),
+        "FracFol":      str(round(FracFol, 6)),
+        # "FracBelowG":   str(round(FracBelowG, 6)), # Not this one, as we use it as a generic parameter
+        "EstRad":       str(round(EstRad, 6)),
+        "CFracBiomass": str(round(CFracBiomass, 6)),
+        "AmaxA":        str(AmaxA),
+        "AmaxB":        str(AmaxB),
+        "k":            str(k),
+        "TOWood":       str(TOWood),
+        "TORoot":       str(TORoot),
+        "KWLit":        str(KWLit),
+        "SLWDel":       str(SLWDel),
+        "FracFolShape": str(FracFolShape),
+        "MaxFracFol":   str(round(MaxFracFol, 6)),
+        "EstMoist":     str(EstMoist),
+        "TOFol":        str(TOFol),
+        "FrActWd":      str(FrActWd),
+    }
+
+    return params
+
+
+
+
+

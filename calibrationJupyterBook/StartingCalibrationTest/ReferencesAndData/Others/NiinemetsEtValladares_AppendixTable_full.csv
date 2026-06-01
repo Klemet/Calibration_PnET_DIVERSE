@@ -1,0 +1,807 @@
+Species,Aggregate species,Data set 1,Data set 2,Evergreen,Gymnosperm,Shade tolerance,Drought tolerance,Waterlogging tolerance
+Abelia × grandiflora (A. chinesis × A. uniflora),N,East Asia,East Asia,Y,N,3.5,2,1
+Abies alba,N,Europe,Europe,Y,Y,4.6,1.81,1.02
+Abies amabilis,N,North America,North America,Y,Y,4.21,0.83,1
+Abies balsamea,N,North America,North America,Y,Y,5.01,1,2
+Abies concolor,N,North America,North America,Y,Y,4.33,1.91,1.02
+Abies firma,N,East Asia,East Asia,Y,Y,4.5,3,1
+Abies fraseri,N,North America,North America,Y,Y,5,2,2
+Abies grandis,N,North America,North America,Y,Y,4.01,2.33,1.57
+Abies homolepis,N,East Asia,East Asia,Y,Y,4.5,2.5,1.5
+Abies lasiocarpa,N,North America,North America,Y,Y,4.83,2.02,0.97
+Abies magnifica,N,North America,North America,Y,Y,3.5,0.67,1
+Abies mariesii,N,East Asia,East Asia,Y,Y,5,2,2
+Abies nordmanniana,N,Europe,Europe,Y,Y,4.5,1,1.5
+Abies procera,N,North America,North America,Y,Y,2.45,2.5,1
+Abies sibirica,N,East Asia,East Asia,Y,Y,4.09,1.41,1.57
+Abies veitchii,N,East Asia,East Asia,Y,Y,4.5,2.5,2
+Acacia rigidula,N,North America,North America,N,N,1,5,1
+Acer barbatum,N,North America,North America,N,N,4.5,2.5,1
+Acer buergerianum,N,East Asia,East Asia,N,N,3,2.75,1.53
+Acer campestre,N,Europe,Europe,N,N,3.18,2.93,1.89
+Acer carpinfolium,N,East Asia,East Asia,N,N,3.5,1,1.5
+Acer circinatum,N,North America,North America,N,N,4.75,2,1
+Acer ginnala,N,East Asia,East Asia,N,N,3,2.88,1.27
+Acer glabrum,N,North America,North America,N,N,3.39,2.88,1.27
+Acer grandidentatum,N,North America,North America,N,N,3,2.63,1.27
+Acer griseum,N,East Asia,East Asia,N,N,3,1.53,1.53
+Acer macrophyllum,N,North America,North America,N,N,4.14,2,2
+Acer mono,N,East Asia,East Asia,N,N,4.25,2.67,1.5
+Acer monspessulanum,N,Europe,Europe,N,N,2.66,4.31,1.04
+Acer negundo,N,North America,North America,N,N,3.47,3.03,2.75
+Acer nigrum,N,North America,North America,N,N,3,3.35,1.52
+Acer opalus,Y,Europe,Europe,N,N,3.48,3.72,1.04
+Acer palmatum,N,East Asia,East Asia,N,N,4.19,1.77,1.52
+Acer pensylvanicum,N,North America,North America,N,N,3.56,2,1
+Acer platanoides,N,Europe,Europe,N,N,4.2,2.73,1.46
+Acer pseudoplatanus,N,Europe,Europe,N,N,3.73,2.75,1.1
+Acer rubrum,N,North America,North America,N,N,3.44,1.84,3.08
+Acer saccharinum,N,North America,North America,N,N,3.6,2.88,3.37
+Acer saccharum,N,North America,North America,N,N,4.76,2.25,1.09
+Acer spicatum,N,North America,North America,N,N,3.31,2,2
+Acer tataricum,N,Europe,Europe,N,N,3.48,3.37,1.47
+Acer truncatum,N,East Asia,East Asia,N,N,3,2.75,1.53
+Aesculus californica,N,North America,North America,N,N,2.5,2.88,1.77
+Aesculus flava,N,North America,North America,N,N,4.14,2,1.12
+Aesculus glabra,N,North America,North America,N,N,3.49,2.88,1.27
+Aesculus hippocastanum,N,Europe,Europe,N,N,3.43,2.82,1.39
+Aesculus pavia,N,North America,North America,N,N,4,2,2
+Aesculus sylvatica,N,North America,North America,N,N,3.56,2,2
+Aesculus turbinata,N,East Asia,East Asia,N,N,3.5,2.17,3
+Aesculus × carnea (A. hippocastaneum × A. pavia),N,North America,Europe,N,N,3,2.75,1.53
+Ailanthus altissima,N,East Asia,East Asia,N,N,2.44,2.96,1.52
+Alangium platanifolium,N,East Asia,East Asia,N,N,3.09,2.5,1.5
+Albizia julibrissin,N,East Asia,East Asia,N,N,1.17,4.47,1.52
+Alnus formosana,N,East Asia,East Asia,N,N,2.5,2.5,2.5
+Alnus glutinosa,N,Europe,Europe,N,N,2.71,2.22,3.9
+Alnus hirsuta,N,East Asia,East Asia,N,N,1.25,2.5,2.67
+Alnus incana,N,Europe,Europe,N,N,2.3,1.89,2.84
+Alnus incana ssp. rugosa,N,North America,North America,N,N,1,2,2.85
+Alnus incana ssp. tenuifolia,N,North America,North America,N,N,1.59,2.03,3.18
+Alnus japonica,N,East Asia,East Asia,N,N,1.5,2,4
+Alnus maximowiczii,N,East Asia,East Asia,N,N,1,2,3
+Alnus metoporina,N,North America,North America,N,N,1,2,3
+Alnus oblongifolia,N,North America,North America,N,N,1,1,3
+Alnus pendula,N,East Asia,East Asia,N,N,1.42,2,3
+Alnus rhombifolia,N,North America,North America,N,N,1.5,1,3.5
+Alnus rubra,N,North America,North America,N,N,1.83,2.5,2.56
+Alnus sieboldiana,N,East Asia,East Asia,N,N,1.5,1.75,3
+Alnus viridis,N,Europe,Europe,N,N,1.84,2.48,2.66
+Alnus viridis ssp. sinuata,N,North America,North America,N,N,1.5,2,3
+Amelanchier alnifolia,N,North America,North America,N,N,3,2.88,1.02
+Amelanchier arborea,N,North America,North America,N,N,4.33,2.38,3.5
+Amelanchier canadensis,N,North America,North America,N,N,2.86,2.52,1.39
+Amelanchier laevis,N,North America,North America,N,N,3.06,3,3
+Amelanchier ovalis,N,Europe,Europe,N,N,1.93,4.72,2.5
+Amelanchier utahensis,N,North America,North America,N,N,2.5,4.47,1.02
+Andromeda polifolia,N,Europe,North America,Y,N,1.2,0.53,4.27
+Aralia elata,N,East Asia,East Asia,N,N,1.67,3,1
+Aralia spinosa,N,North America,North America,N,N,1.25,4,2
+Arbutus menziesii,N,North America,North America,Y,N,3.32,3.83,1
+Arbutus unedo,N,Europe,Europe,Y,N,2.66,3.9,1.04
+Arctostaphylos alpina,N,Europe,North America,Y,N,1.93,2.62,2.5
+Arctostaphylos uva ursi,N,Europe,North America,Y,N,1.93,3.88,2.5
+Ardisia sieboldii,N,East Asia,East Asia,Y,N,4,2,1.5
+Asimina triloba,N,North America,North America,N,N,3.95,2,1.37
+Aucuba japonica,N,East Asia,East Asia,Y,N,4.5,3,1.5
+Berberis amurensis,N,East Asia,East Asia,N,N,1.75,3,1.75
+Berberis thunbergii,N,East Asia,East Asia,N,N,1.5,3.5,1.5
+Berberis vulgaris,N,Europe,Europe,N,N,1.93,3.88,1.32
+Betula alleghaniensis,N,North America,North America,N,N,3.17,3,2
+Betula apoiensis,N,East Asia,East Asia,N,N,1,2,2
+Betula ermanii,N,East Asia,East Asia,N,N,1.25,2,1.75
+Betula grossa,N,East Asia,East Asia,N,N,1.5,2,1.5
+Betula humilis,N,Europe,Europe,N,N,1.93,0.53,4.27
+Betula lenta,N,North America,North America,N,N,2.58,3,1
+Betula maximowicziana,N,East Asia,East Asia,N,N,1.25,1.57,1.25
+Betula nana,N,Europe,North America,N,N,1.56,0.11,4.27
+Betula nigra,N,North America,North America,N,N,1.45,1.53,2.85
+Betula occidentalis,N,North America,North America,N,N,3.28,1.27,2.63
+Betula papyrifera,N,North America,North America,N,N,1.54,2.02,1.25
+Betula pendula,N,Europe,Europe,N,N,2.03,1.85,1.67
+Betula platyphylla,N,East Asia,East Asia,N,N,1.25,2.5,1.83
+Betula populifolia,N,North America,North America,N,N,1.5,2.34,1
+Betula pubescens,N,Europe,Europe,N,N,1.85,1.27,2.98
+Betula pubescens ssp. carpatica,N,Europe,Europe,N,N,1.2,2.21,1.04
+Broussonetia kazinoki,N,East Asia,East Asia,N,N,1.5,4,1.5
+Buddleja davidii,N,East Asia,East Asia,N,N,1.56,3.46,1.04
+Buxus sempervirens,N,Europe,Europe,Y,N,4.05,3.88,1.04
+Calluna vulgaris,N,Europe,Europe,Y,N,1.56,2.21,3.19
+Calocedrus decurrens,N,North America,North America,Y,Y,3.21,3.79,1.27
+Camellia japonica,N,East Asia,East Asia,Y,N,4,2,1
+Caragana arborescens,N,East Asia,East Asia,N,N,1.5,4,1
+Caragana frutex,N,Europe,Europe,N,N,1.5,2.5,1
+Carpinus betulus,N,Europe,Europe,N,N,3.97,2.66,1.65
+Carpinus caroliniana,N,North America,North America,N,N,4.58,2.02,2.3
+Carpinus cordata,N,East Asia,East Asia,N,N,3.5,2,2.5
+Carpinus laxiflora,N,East Asia,East Asia,N,N,3,2,2
+Carpinus tschonoskii,N,East Asia,East Asia,N,N,2.83,3,1.5
+Carya aquatica,N,North America,North America,N,N,2.95,2,4.25
+Carya cordiformis,N,North America,North America,N,N,2.07,4,2.5
+Carya glabra,N,North America,North America,N,N,2.69,4,1.16
+Carya illinoiensis,N,North America,North America,N,N,1.74,2,2.98
+Carya laciniosa,N,North America,North America,N,N,4.42,2,1.48
+Carya myristiciformis,N,North America,North America,N,N,3.71,2,2
+Carya ovata,N,North America,North America,N,N,3.4,3,1.38
+Carya pallida,N,North America,North America,N,N,1.56,4,1
+Carya tomentosa,N,North America,North America,N,N,2.2,3,1.26
+Castanea crenata,N,East Asia,East Asia,N,N,3,2.5,1
+Castanea dentata,N,North America,North America,N,N,3.06,3,1
+Castanea mollissima,N,East Asia,East Asia,N,N,1.67,2.63,1.27
+Castanea pumila,N,North America,North America,N,N,2.5,4,1
+Castanea sativa,N,Europe,Europe,N,N,3.15,3.46,1.32
+Castanopsis cuspidata,N,East Asia,East Asia,Y,N,4.07,2.5,2
+Castanopsis eyrei,N,East Asia,East Asia,Y,N,3,3,1.5
+Castanopsis lamontii,N,East Asia,East Asia,Y,N,4,2,2
+Castanopsis sieboldii,N,East Asia,East Asia,Y,N,4,3,2
+Catalpa bignonioides,N,North America,North America,N,N,2.67,2.58,1.27
+Catalpa speciosa,N,North America,North America,N,N,2.33,4.22,1.27
+Cedrus deodara,N,East Asia,East Asia,Y,Y,2.59,3.85,1.02
+Cedrus libani,N,Europe,Europe,Y,Y,1.35,2.75,1.03
+Celtis laevigata,N,North America,North America,N,N,3.31,3.56,2.73
+Celtis occidentalis,N,North America,North America,N,N,3.17,3.85,2.65
+Celtis tenuifolia,N,North America,North America,N,N,1.56,4,1
+Cephalanthus occidentalis,N,North America,North America,N,N,2.75,3,4.92
+Cercidiphyllum japonicum,N,East Asia,East Asia,N,N,2.34,1.53,2.14
+Cercis canadensis,N,North America,North America,N,N,3,4.05,1.31
+Cercis occidentalis,N,North America,North America,N,N,2.09,3.35,1.03
+Cercocarpus ledifolius,N,North America,North America,Y,N,1.35,4.97,1.27
+Chamaecyparis lawsoniana,N,North America,North America,Y,Y,3.67,2.06,1.02
+Chamaecyparis nootkatensis,N,North America,North America,Y,Y,4.15,2,1.9
+Chamaecyparis obtusa,N,East Asia,East Asia,Y,Y,4.38,2.88,1.52
+Chamaecyparis thyoides,N,North America,North America,Y,Y,3.5,1,4.04
+Chamaecytisus ratisbonensis,N,Europe,Europe,N,N,2.66,3.88,1.04
+Chamaecytisus supinus,N,Europe,Europe,N,N,1.93,4.72,1.04
+Chamaedaphne calyculata,N,Europe,North America,Y,N,1.93,0.53,4.27
+Chamaespartium sagittale,N,Europe,Europe,N,N,1.2,3.88,1.04
+Chilopsis linearis,N,North America,North America,N,N,1.67,3.85,1.27
+Chimaphila umbellata,N,Europe,North America,Y,N,3.38,3.88,1.77
+Chionanthus virginicus,N,North America,North America,N,N,3.83,2.42,1.51
+Chrysoplepis chrysophylla,N,North America,North America,Y,N,3,4,1
+Cinnamomum camphora,N,East Asia,East Asia,Y,N,3.5,2.75,1.5
+Citrus limon,N,East Asia,East Asia,Y,N,2,3,1
+Citrus sinensis,N,East Asia,East Asia,Y,N,2,4,1
+Citrus × paradisi (C. maxima × C. sinensis),N,East Asia,East Asia,Y,N,2,3,1
+Cladrastis lutea,N,North America,North America,N,N,3,2.88,1.02
+Clematis alpina,N,Europe,Europe,N,N,3.38,3.04,1.04
+Clerodendrum trichotomum,N,East Asia,East Asia,N,N,1.33,3,2
+Clethra alnifolia,N,North America,North America,N,N,3,2,3.5
+Clethra barbinervis,N,East Asia,East Asia,N,N,2,2.75,2.75
+Cleyera japonica,N,East Asia,East Asia,Y,N,3.5,2,1.75
+Colutea arborescens,N,Europe,Europe,N,N,3.38,3.88,1.02
+Cornus alternifolia,N,North America,North America,N,N,4,1.77,1.02
+Cornus amomum,N,North America,North America,N,N,3,2,3
+Cornus controversa,N,East Asia,East Asia,N,N,2,2.5,2
+Cornus florida,N,North America,North America,N,N,4.87,2.92,1.1
+Cornus kousa,N,East Asia,East Asia,N,N,3,1.53,1.03
+Cornus mas,N,Europe,Europe,N,N,2.68,3.17,1.77
+Cornus nuttallii,N,North America,North America,N,N,4.5,2,1
+Cornus racemosa,N,North America,North America,N,N,4,3,1.5
+Cornus sanguinea,N,Europe,Europe,N,N,1.93,3.04,1.88
+Cornus sericea,N,North America,North America,N,N,2.86,2.48,2.12
+Coronilla emerus,N,Europe,Europe,N,N,1.93,4.72,1.04
+Corylus americana,N,North America,North America,N,N,3.5,2.88,1.27
+Corylus avellana,N,Europe,Europe,N,N,3.53,3.04,1.68
+Corylus colurna,N,Europe,Europe,N,N,1.35,3.13,1.53
+Corylus cornuta,N,North America,North America,N,N,3,2.88,1.27
+Corylus heterophylla,N,East Asia,East Asia,N,N,3.5,2.75,1.75
+Corylus sieboldiana,N,East Asia,East Asia,N,N,3.5,2.5,2
+Cotinus coggygria,N,Europe,Europe,N,N,1.93,3.74,1.04
+Cotinus obovatus,N,North America,North America,N,N,3,3.69,1.03
+Cotoneaster bullatus,N,East Asia,East Asia,N,N,1.93,3.88,1.04
+Cotoneaster horizontalis,N,East Asia,East Asia,N,N,3.38,3.46,1.04
+Cotoneaster integerrimus,N,Europe,Europe,N,N,1.2,3.46,1.04
+Cotoneaster integrifolius,N,Europe,Europe,N,N,1.93,3.46,1.04
+Cotoneaster simonsii,N,East Asia,East Asia,Y,N,2.66,3.04,1.04
+Cotoneaster tomentosus,N,Europe,Europe,N,N,1.93,3.46,1.04
+Cowania mexicana,N,North America,North America,Y,N,1.35,4.95,1.03
+Crataegus chlorosarca,N,East Asia,East Asia,N,N,1.5,3,1
+Crataegus crus galli,N,North America,North America,N,N,1.67,4.98,1.27
+Crataegus laevigata agg.,Y,Europe,Europe,N,N,2.45,2.9,1.1
+Crataegus maximowiczii,N,East Asia,East Asia,N,N,2,3,1
+Crataegus monogyna agg.,Y,Europe,Europe,N,N,1.93,3.46,1.68
+Crataegus phaenopyrum,N,North America,North America,N,N,2.59,2.88,1.27
+Crataegus viridis,N,North America,North America,N,N,1.67,3.85,2.13
+Crataegus × lavallei (C. stipulacea × C. crus galli),N,North America,Europe,N,N,3.25,3.69,1.27
+Cryptomeria japonica,N,East Asia,East Asia,Y,Y,3.17,2.75,2
+Cupressus arizonica,N,North America,North America,Y,Y,1.42,4.47,1.02
+Cupressus sempervirens,N,Europe,Europe,Y,Y,1.35,4.95,1.03
+Cydonia oblonga,N,Europe,Europe,N,N,1.2,3.88,1.77
+Cytisus scoparius,N,Europe,Europe,Y,N,1.2,3.46,1.04
+Daboecia cantabrica,N,Europe,Europe,Y,N,1.2,3.04,3.19
+Daphne alpina,N,Europe,Europe,N,N,1.2,3.88,1.04
+Daphne cneorum,N,Europe,Europe,Y,N,2.66,3.88,1.77
+Daphne kamtschatica,N,East Asia,East Asia,N,N,4.17,2,1
+Daphne laureola,N,Europe,Europe,Y,N,2.66,3.46,1.04
+Daphne mezereum,N,Europe,Europe,N,N,4.11,3.04,1.04
+Daphne striata,N,Europe,Europe,Y,N,1.93,3.88,1.04
+Daphniphyllum macropodum,N,East Asia,East Asia,Y,N,3.5,2.5,2.5
+Diospyros virginiana,N,North America,North America,N,N,4.21,1.5,2.6
+Distylium racemosum,N,East Asia,East Asia,Y,N,4.25,2,1.6
+Dorycnium germanicum,N,Europe,Europe,N,N,1.93,4.72,1.04
+Dryas octopetala,N,Europe,North America,Y,N,1.02,3.88,2.5
+Elaeagnus angustifolia,N,Europe,Europe,N,N,1.35,4.47,1.52
+Empetrum hermaphroditum,N,Europe,North America,Y,N,1.2,2.21,3.91
+Empetrum nigrum,N,Europe,North America,Y,N,1.93,2.21,3.91
+Erica ciliaris,N,Europe,Europe,Y,N,1.2,1.37,3.91
+Erica cinerea,N,Europe,Europe,Y,N,1.93,3.04,1.77
+Erica erigena,N,Europe,Europe,Y,N,1.2,0.53,2.83
+Erica mackaiana,N,Europe,Europe,Y,N,1.2,0.53,3.19
+Erica tetralix,N,Europe,Europe,Y,N,1.2,0.53,3.19
+Erica vagans,N,Europe,Europe,Y,N,1.2,2.21,2.83
+Eriobotrya japonica,N,East Asia,East Asia,Y,N,3.33,3.35,2.27
+Euonymus alatus,N,East Asia,East Asia,N,N,4.33,2,2
+Euonymus americanus,N,North America,North America,N,N,4,2.5,2
+Euonymus europaeus,N,Europe,Europe,N,N,3.02,3.04,2.11
+Euonymus latifolius,N,Europe,Europe,N,N,4.11,3.04,1.77
+Euonymus oxyphyllus,N,East Asia,East Asia,N,N,3.67,3,2
+Euonymus sieboldianus,N,East Asia,East Asia,N,N,2.75,3,2.5
+Euonymus verrucosus,N,Europe,Europe,N,N,3.38,3.04,1.77
+Eurya japonica,N,East Asia,East Asia,Y,N,3.83,2.5,1.5
+Fagus crenata,N,East Asia,East Asia,N,N,5,1.75,1.75
+Fagus engleriana,N,East Asia,East Asia,N,N,4.5,1,1.2
+Fagus grandifolia,N,North America,North America,N,N,4.75,1.5,1.5
+Fagus hayatae,N,East Asia,East Asia,N,N,4.5,1.5,1
+Fagus japonica,N,East Asia,East Asia,N,N,4.5,2,1.5
+Fagus longipetiolata,N,East Asia,East Asia,N,N,4.5,1.5,1.2
+Fagus lucida,N,East Asia,East Asia,N,N,4,1,1.2
+Fagus orientalis,N,Europe,Europe,N,N,4.2,2.7,1
+Fagus sylvatica,N,Europe,Europe,N,N,4.56,2.4,1.02
+Forestiera acuminata,N,North America,North America,N,N,1.5,2,4.89
+Frangula alnus,N,Europe,Europe,N,N,2.66,1.37,3.19
+Fraxinus americana,N,North America,North America,N,N,2.46,2.38,2.59
+Fraxinus anomala,N,North America,North America,N,N,1.17,2.88,1.27
+Fraxinus caroliniana,N,North America,North America,N,N,3.5,2,5
+Fraxinus excelsior,N,Europe,Europe,N,N,2.66,2.5,2.7
+Fraxinus lanuginosa,N,East Asia,East Asia,N,N,3.25,2.5,2
+Fraxinus latifolia,N,North America,North America,N,N,3,2,3
+Fraxinus mandshurica,N,East Asia,East Asia,N,N,2.75,1.75,3.25
+Fraxinus nigra,N,North America,North America,N,N,2.96,2,3.5
+Fraxinus ornus,N,Europe,Europe,N,N,3.02,4.31,2.5
+Fraxinus pennsylvanica,N,North America,North America,N,N,3.11,3.85,2.98
+Fraxinus platypoda,N,East Asia,East Asia,N,N,3,2,3
+Fraxinus profunda,N,North America,North America,N,N,3,2,5
+Fraxinus quadrangulata,N,North America,North America,N,N,1.84,2.75,1.53
+Fraxinus velutina,N,North America,North America,N,N,2.5,3.35,1.77
+Fumana procumbens,N,Europe,Europe,Y,N,1.2,4.72,1.04
+Gardenia jasminoides,N,East Asia,East Asia,Y,N,2.5,2,1
+Gaultheria shallon,N,North America,North America,Y,N,3,2,2.5
+Genista anglica,N,Europe,Europe,Y,N,1.2,3.46,1.77
+Genista germanica,N,Europe,Europe,N,N,1.93,3.88,1.77
+Genista pilosa,N,Europe,Europe,Y,N,1.56,3.46,1.41
+Genista tinctoria,N,Europe,Europe,N,N,1.2,3.88,1.77
+Ginkgo biloba,N,East Asia,East Asia,N,Y,1.34,3.99,1.13
+Gleditsia aquatica,N,North America,North America,N,N,2,2,4.38
+Gleditsia triacanthos,N,North America,North America,N,N,1.61,4.98,2.69
+Gordonia lasianthus,N,North America,North America,Y,N,3,2,4.07
+Gymnocladus dioica,N,North America,North America,N,N,2.5,3.69,1.14
+Halesia carolina,N,North America,North America,N,N,3.11,2,3
+Hamamelis virginiana,N,North America,North America,N,N,3,2,1.5
+Helianthemum alpestre,Y,Europe,Europe,Y,N,1.22,3.88,1.04
+Helianthemum apenninum,N,Europe,Europe,Y,N,1.22,4.72,1.04
+Helianthemum canum,N,Europe,Europe,Y,N,1.22,4.72,1.04
+Helianthemum nummularium,Y,Europe,Europe,Y,N,1.56,4.2,1.04
+Heteromeles arbutifolia,N,North America,North America,Y,N,1.5,4.5,1
+Hibiscus rosa sinensis,N,East Asia,East Asia,Y,N,1,3,2
+Hippophae rhamnoides,N,Europe,Europe,N,N,1.2,3.46,1.88
+Hydrangea macrophylla,N,East Asia,East Asia,N,N,2.92,3,3
+Hydrangea paniculata,N,East Asia,East Asia,N,N,2.33,3,2
+Hyssopus officinalis,N,Europe,Europe,Y,N,1.2,4.72,1.04
+Ilex aquifolium,N,Europe,Europe,Y,N,3.86,3.04,1.39
+Ilex cassine,N,North America,North America,Y,N,4,2.5,4
+Ilex cornuta,N,East Asia,East Asia,Y,N,3,3,2
+Ilex decidua,N,North America,North America,N,N,4,2,2.8
+Ilex opaca,N,North America,North America,Y,N,4.28,2.92,1.93
+Ilex verticillata,N,North America,North America,N,N,3,2,3.6
+Ilex vomitoria,N,North America,North America,Y,N,2.5,4.5,1
+Illicium anisatum,N,East Asia,East Asia,Y,N,3.83,2.5,2
+Itea virginica,N,North America,North America,N,N,4,2,4.5
+Juglans ailanthifolia,N,East Asia,East Asia,N,N,2.75,2,2
+Juglans cinerea,N,North America,North America,N,N,1.88,2.38,1.27
+Juglans major,N,North America,North America,N,N,1.35,4.95,1.77
+Juglans nigra,N,North America,North America,N,N,1.93,2.38,1.83
+Juglans regia,N,Europe,Europe,N,N,2.27,2.98,1.42
+Juniperus chinensis,N,East Asia,East Asia,Y,Y,1.35,4.97,1.02
+Juniperus communis,N,Europe,North America,Y,Y,1.71,4.41,2.07
+Juniperus deppeana,N,North America,North America,Y,Y,2,5,1
+Juniperus monosperma,N,North America,North America,Y,Y,2,5,1
+Juniperus occidentalis,N,North America,North America,Y,Y,1.67,5,1
+Juniperus osteosperma,N,North America,North America,Y,Y,1.84,4.97,1.02
+Juniperus sabina,N,Europe,Europe,Y,Y,1.93,4.72,1.04
+Juniperus scopulorum,N,North America,North America,Y,Y,1.48,4.97,1.02
+Juniperus sibirica,N,Europe,Europe,Y,Y,1.2,4.07,2.14
+Juniperus silicicola,N,North America,North America,Y,Y,1.5,5,1.5
+Juniperus virginiana,N,North America,North America,Y,Y,1.28,4.65,1.19
+Kalmia angustifolia,N,North America,North America,Y,N,1.61,1.68,2.75
+Kalmia latifolia,N,North America,North America,Y,N,2.5,4.5,1
+Kalopanax pictus,N,East Asia,East Asia,N,N,3,2.75,1.5
+Koelreuteria paniculata,N,East Asia,East Asia,N,N,2.09,4.47,1.27
+Laburnum × watereri (L. alpinum × L. anagyroides ),N,North America,Europe,N,N,1.17,2.38,1.53
+Laburnum alpinum,N,Europe,Europe,N,N,1,2,2
+Laburnum anagyroides,N,North America,North America,N,N,1,3,1.5
+Lagerstroemia indica,N,East Asia,East Asia,N,N,2.5,2.88,1.02
+Larix decidua,N,Europe,Europe,N,Y,1.46,2.31,1.1
+Larix gmelinii,N,East Asia,East Asia,N,Y,1.23,2.3,3.11
+Larix kaempferi,N,East Asia,East Asia,N,Y,1.38,3,1.58
+Larix laricina,N,North America,North America,N,Y,0.98,2,3
+Larix lyallii,N,North America,North America,N,Y,1,3,1
+Larix occidentalis,N,North America,North America,N,Y,1.35,2.42,1
+Larix sibirica,N,East Asia,East Asia,N,Y,1.35,1.63,1.92
+Larix × eurolepis (L. decidua × L. kaempferi),N,East Asia,Europe,N,Y,1.5,2.5,1
+Larix × marschlinsii (L. sibirica × L. kaempferi),N,East Asia,East Asia,N,Y,1.56,2.21,1.04
+Ledum palustre,N,Europe,North America,Y,N,2.66,0.53,4.27
+Lembotropis nigricans,N,Europe,Europe,N,N,2.66,3.88,1.04
+Leucothoe grayana,N,East Asia,East Asia,Y,N,3,3.25,2.5
+Ligustrum lucidum,N,East Asia,East Asia,Y,N,3.5,2.5,2
+Ligustrum ovalifolium,N,East Asia,East Asia,N,N,1.93,3.04,1.41
+Ligustrum vulgare,N,Europe,Europe,N,N,2.29,3.46,1.88
+Lindera benzoin,N,North America,North America,N,N,3,2,3
+Lindera umbellata,N,East Asia,East Asia,N,N,2.88,3,2.75
+Linnaea borealis,N,Europe,North America,Y,N,3.38,3.04,1.77
+Liquidambar styraciflua,N,North America,North America,N,N,1.59,2.92,2.69
+Liriodendron tulipifera,N,North America,North America,N,N,2.07,2.6,1.3
+Lithocarpus densiflorus,N,North America,North America,Y,N,3.67,4,1
+Loiseleuria procumbens,N,Europe,Europe,Y,N,1.02,3.88,1.04
+Lonicera alpigena,N,Europe,Europe,N,N,3.75,2.21,1.77
+Lonicera caerulea,N,Europe,North America,N,N,3.38,1.37,3.19
+Lonicera nigra,N,Europe,Europe,N,N,3.75,3.04,2.5
+Lonicera xylosteum,N,Europe,Europe,N,N,3.38,3.04,1.88
+Lycium barbarum,N,East Asia,East Asia,N,N,1.93,3.04,1.77
+Lycium chinense,N,East Asia,East Asia,N,N,1.93,3.04,2.14
+Maclura pomifera,N,North America,North America,N,N,1.45,4.22,1.27
+Magnolia acuminata,N,North America,North America,N,N,3.03,1.27,1.52
+Magnolia ashei,N,North America,North America,N,N,3,2,2
+Magnolia denudata,N,East Asia,East Asia,N,N,2,2,1.5
+Magnolia fraseri,N,North America,North America,N,N,3.06,2,1
+Magnolia grandiflora,N,North America,North America,Y,N,4.5,2.88,1.41
+Magnolia kobus,N,East Asia,East Asia,N,N,3,2.88,2.5
+Magnolia liliflora,N,East Asia,East Asia,N,N,2.5,2.5,1
+Magnolia macrophylla,N,North America,North America,N,N,3.11,1,1
+Magnolia obovata,N,East Asia,East Asia,N,N,2.5,2,2
+Magnolia stellata,N,East Asia,East Asia,N,N,3,1.77,3
+Magnolia tripetala,N,North America,North America,N,N,3.06,2,1
+Magnolia virginiana,N,North America,North America,N,N,3,1.5,3.65
+Magnolia X loebneri (M. kobus × M. stellata),N,North America,North America,N,N,3,1.53,1.03
+Magnolia X soulangeana (M. denudata × M. liliflora),N,East Asia,East Asia,N,N,3,1.77,1.02
+Mahonia aquifolium,N,North America,North America,Y,N,3.24,3.94,1.45
+Mallotus japonicus,N,East Asia,East Asia,N,N,1.5,3.5,1
+Malus angustifolia,N,North America,North America,N,N,1.5,2.5,1
+Malus domestica,N,Europe,Europe,N,N,1.93,3.04,1.04
+Malus pumila,N,Europe,Europe,N,N,2.17,3.13,1.52
+Malus sieboldii,N,East Asia,East Asia,N,N,2.5,3,1
+Malus sylvestris,N,Europe,Europe,N,N,2.32,3.16,1.68
+Melia azedarach,N,East Asia,East Asia,N,N,3,2.85,1.77
+Mespilus germanica,N,Europe,Europe,N,N,2.66,3.88,1.04
+Metasequoia glyptostroboides,N,East Asia,East Asia,N,Y,3,2.38,1.52
+Morus alba,N,East Asia,East Asia,N,N,1.35,2.88,1.27
+Morus bombycis,N,East Asia,East Asia,N,N,2.5,3,1.5
+Morus rubra,N,North America,North America,N,N,2.34,2.88,1.57
+Myrica californica,N,North America,North America,Y,N,2.5,2,2
+Myrica cerifera,N,North America,North America,Y,N,2,3,3.5
+Myrica gale,N,Europe,North America,Y,N,1.2,0.53,4.27
+Myricaria germanica,N,Europe,Europe,N,N,1.2,1.37,2.5
+Nyssa aquatica,N,North America,North America,N,N,3.47,1,5
+Nyssa biflora,N,North America,North America,N,N,2,1,5
+Nyssa ogeche,N,North America,North America,N,N,4,2,4.84
+Nyssa sylvatica,N,North America,North America,N,N,3.52,2,1.87
+Ostrya carpinifolia,N,Europe,Europe,N,N,3.94,3.07,1.41
+Ostrya japonica,N,East Asia,East Asia,N,N,2.5,3,2
+Ostrya knowltonii,N,North America,North America,N,N,3.83,3.69,1.03
+Ostrya virginiana,N,North America,North America,N,N,4.58,3.25,1.07
+Oxydendrum arboreum,N,North America,North America,N,N,2.7,3,1.12
+Pachysandra terminalis,N,East Asia,East Asia,Y,N,3.92,2,1
+Paulownia tomentosa,N,East Asia,East Asia,N,N,2,3,1
+Persea borbonia,N,North America,North America,Y,N,4,2,3.57
+Persea japonica,N,East Asia,East Asia,Y,N,4.25,2,1
+Persea thunbergii,N,East Asia,East Asia,Y,N,3.35,3,1
+Phellodendron amurense,N,East Asia,East Asia,N,N,1.67,4.1,2.27
+Photinia pyrifolia,N,North America,North America,N,N,2,2,3
+Physocarpus opulifolius,N,North America,North America,N,N,3,4,1
+Picea abies,N,Europe,Europe,Y,Y,4.45,1.75,1.22
+Picea breweriana,N,North America,North America,Y,Y,3.76,1.83,1
+Picea engelmannii,N,North America,North America,Y,Y,4.53,2.58,1.02
+Picea glauca,N,North America,North America,Y,Y,4.15,2.88,1.02
+Picea glehnii,N,East Asia,East Asia,Y,Y,4,2.5,2.5
+Picea jezoensis,N,East Asia,East Asia,Y,Y,4.25,2,1
+Picea mariana,N,North America,North America,Y,Y,4.08,2,2
+Picea obovata,N,East Asia,East Asia,Y,Y,3.82,1.86,2.07
+Picea omorika,N,Europe,Europe,Y,Y,4.65,2.75,1.03
+Picea pungens,N,North America,North America,Y,Y,3.54,2.88,1.02
+Picea rubens,N,North America,North America,Y,Y,4.39,2.5,2
+Picea sitchensis,N,North America,North America,Y,Y,3.85,1.52,1.99
+Pinus albicaulis,N,North America,North America,Y,Y,1,5,1
+Pinus aristata,N,North America,North America,Y,Y,1.25,4.97,1.02
+Pinus attenuata,N,North America,North America,Y,Y,1.5,3,1
+Pinus balfouriana,N,North America,North America,Y,Y,1,5,1
+Pinus banksiana,N,North America,North America,Y,Y,1.36,4,1
+Pinus bungeana,N,East Asia,East Asia,Y,Y,1,2.88,1.02
+Pinus cembra,N,Europe,Europe,Y,Y,2.87,3.01,1.04
+Pinus clausa,N,North America,North America,Y,Y,2.21,2.25,2.5
+Pinus contorta ssp. contorta,N,North America,North America,Y,Y,1.73,4.04,2.7
+Pinus contorta ssp. latifolia,N,North America,North America,Y,Y,1.48,4.21,2
+Pinus coulteri,N,North America,North America,Y,Y,1.5,3.5,2
+Pinus densiflora,N,East Asia,East Asia,Y,Y,1.35,3.38,1.03
+Pinus echinata,N,North America,North America,Y,Y,1.86,4,1.16
+Pinus edulis,N,North America,North America,Y,Y,1.44,4.97,1.02
+Pinus elliotti,N,North America,North America,Y,Y,2.65,3.5,2.57
+Pinus flexilis,N,North America,North America,Y,Y,1.56,4.72,1.02
+Pinus glabra,N,North America,North America,Y,Y,4.5,2.5,3.09
+Pinus halepensis,N,Europe,Europe,Y,Y,1.35,4.97,0.95
+Pinus jeffreyi,N,North America,North America,Y,Y,1.74,4.17,0.95
+Pinus koraiensis,N,East Asia,East Asia,Y,Y,2,3,1.5
+Pinus lambertiana,N,North America,North America,Y,Y,2.66,2.67,1
+Pinus monophylla,N,North America,North America,Y,Y,1.17,4.97,1.02
+Pinus monticola,N,North America,North America,Y,Y,2.97,2.42,1.02
+Pinus mugo,N,Europe,Europe,Y,Y,1.72,4.23,1.03
+Pinus muricata,N,North America,North America,Y,Y,2,2,1
+Pinus nigra,N,Europe,Europe,Y,Y,2.1,4.38,1.39
+Pinus palustris,N,North America,North America,Y,Y,0.87,4.75,2
+Pinus parviflora,N,East Asia,East Asia,Y,Y,1.68,3.38,1.03
+Pinus ponderosa,N,North America,North America,Y,Y,1.64,4.32,1.02
+Pinus radiata,N,North America,North America,Y,Y,2.97,3,1
+Pinus resinosa,N,North America,North America,Y,Y,1.89,3,1
+Pinus rigida,N,North America,North America,Y,Y,1.99,4,2
+Pinus sabiniana,N,North America,North America,Y,Y,1,4.5,1
+Pinus serotina,N,North America,North America,Y,Y,1.47,3,3.5
+Pinus sibirica,N,East Asia,East Asia,Y,Y,1.93,3.13,3.32
+Pinus strobiformis,N,North America,North America,Y,Y,1.35,2.88,1.52
+Pinus strobus,N,North America,North America,Y,Y,3.21,2.29,1.03
+Pinus sylvestris,N,Europe,Europe,Y,Y,1.67,4.34,2.63
+Pinus taeda,N,North America,North America,Y,Y,1.99,4.5,1.08
+Pinus thunbergii,N,East Asia,East Asia,Y,Y,1.35,4.03,1.02
+Pinus uncinata,N,Europe,Europe,Y,Y,1.2,3.88,1.77
+Pinus virginiana,N,North America,North America,Y,Y,1.99,4,1.5
+Pinus wallichiana,N,East Asia,East Asia,Y,Y,1.35,2.75,1.03
+Pistacia chinensis,N,East Asia,East Asia,N,N,1.35,4.95,1.53
+Pistacia vera,N,Europe,Europe,N,N,1.17,4.95,1.53
+Pittosporum tobira,N,East Asia,East Asia,Y,N,2.75,4,1
+Planera aquatica,N,North America,North America,N,N,4,2,4.89
+Platanus occidentalis,N,North America,North America,N,N,2.86,2.25,2.71
+Platanus orientalis,N,Europe,Europe,N,N,3,3.5,2
+Platanus × acerifolia (P. orientalis × P. occidentalis),N,North America,Europe,Y,N,3,3.35,2.63
+Polygala chamaebuxus,N,Europe,Europe,Y,N,2.66,2.21,1.04
+Populus alba,N,Europe,Europe,N,N,2.3,2.67,1.84
+Populus angustifolia,N,North America,North America,N,N,1.35,1.77,2.63
+Populus balsamifera,N,North America,North America,N,N,1.27,1.77,2.63
+Populus deltoides,N,North America,North America,N,N,1.76,1.57,3.03
+Populus fremontii,N,North America,North America,N,N,1.35,2.88,2.63
+Populus grandidentata,N,North America,North America,N,N,1.21,2.5,2
+Populus heterophylla,N,North America,North America,N,N,1.24,2,4
+Populus maximowiczii,N,East Asia,East Asia,N,N,1,2,2.75
+Populus nigra,N,Europe,Europe,N,N,2.46,2.2,3.7
+Populus sargentii,N,North America,North America,N,N,1.5,2,3.48
+Populus sieboldii,N,East Asia,East Asia,N,N,1,2.75,1.5
+Populus tremula,N,Europe,Europe,N,N,2.22,2.85,2.07
+Populus tremuloides,N,North America,North America,N,N,1.21,1.77,1.77
+Populus trichocarpa,N,North America,North America,N,N,1.27,1.77,1.35
+Populus × acuminata (P. angustifolia × . P. deltoides),N,North America,North America,N,N,1.85,2,3
+Populus × canadensis (P. deltoides × P. nigra),N,North America,Europe,N,N,1.67,1.77,2.13
+Populus × canescens (P. alba × P. tremula),N,Europe,Europe,N,N,2.66,2.21,1.77
+Prosopis juliflora,N,North America,North America,N,N,1.17,4.95,1.03
+Prunus armeniaca,N,Europe,Europe,N,N,1.35,2.75,1.03
+Prunus avium,N,Europe,Europe,N,N,3.33,2.66,1.19
+Prunus caroliniana,N,North America,North America,Y,N,1.5,3,1
+Prunus cerasifera,N,Europe,Europe,N,N,2.45,2.9,1.77
+Prunus cerasus,N,Europe,Europe,N,N,2.66,3.11,1.04
+Prunus domestica,N,Europe,Europe,N,N,1.93,2.9,1.02
+Prunus fruticosa,N,Europe,Europe,N,N,1.47,4.31,1.41
+Prunus glandulosa,N,East Asia,East Asia,N,N,2,3,1
+Prunus ilicifolia,N,North America,North America,Y,N,2,3.5,1.5
+Prunus japonica,N,East Asia,East Asia,Y,N,3,2,1.1
+Prunus laurocerasus,N,Europe,Europe,Y,N,4.11,2.21,1.41
+Prunus lusitanica,N,Europe,Europe,Y,N,2.5,3.5,1
+Prunus maackii,N,East Asia,East Asia,N,N,1.5,2,1.5
+Prunus mahaleb,N,Europe,Europe,N,N,2.29,4.31,1.2
+Prunus mume,N,East Asia,East Asia,N,N,2,2.5,1.1
+Prunus padus,N,Europe,Europe,N,N,3.26,1.93,3.19
+Prunus persica,N,East Asia,East Asia,N,N,1.67,2.38,1.02
+Prunus pumila,N,North America,North America,N,N,2.5,3,1
+Prunus sargentii,N,East Asia,East Asia,N,N,2.13,2.88,1.62
+Prunus serotina,N,North America,North America,N,N,2.46,3.02,1.06
+Prunus serrulata,N,East Asia,East Asia,N,N,2.34,2.75,1.43
+Prunus spinosa,N,Europe,Europe,N,N,1.86,3.46,1.68
+Prunus ssiori,N,East Asia,East Asia,N,N,3,2,1.5
+Prunus subhirtella,N,East Asia,East Asia,N,N,2.09,2.38,1.32
+Prunus tomentosa,N,East Asia,East Asia,N,N,1.5,3,1
+Prunus umbellata,N,North America,North America,N,N,2,2,1
+Prunus virginiana,N,North America,North America,N,N,2.59,2.88,1.11
+Prunus × incam (P. incisa × P. campanulata),N,East Asia,East Asia,N,N,2,2.5,1.3
+Prunus × yedoensis (P. serrulata × P. subhirtella),N,East Asia,East Asia,N,N,2.17,2.88,1.22
+Pseudotsuga macrocarpa,N,North America,North America,Y,Y,2.5,4,1
+Pseudotsuga menziesii,N,North America,North America,Y,Y,2.78,2.62,1.79
+Ptelea trifoliata,N,North America,North America,N,N,2.59,2.58,1.52
+Pterocarya rhoifolia,N,East Asia,East Asia,N,N,2.25,1.75,2.25
+Pterostyrax hispida,N,East Asia,East Asia,N,N,1.5,2,2
+Pyrus calleryana,N,East Asia,East Asia,N,N,1.35,4.47,1.77
+Pyrus communis,N,Europe,Europe,N,N,2.72,2.73,1.15
+Pyrus cordata,N,Europe,Europe,N,N,2.66,3.04,2.14
+Pyrus pyraster,N,Europe,Europe,N,N,2.26,3.31,1.77
+Pyrus ussuriensis,N,East Asia,East Asia,N,N,2.09,3.35,1.27
+Quercus acuta,N,East Asia,East Asia,Y,N,3.33,3.5,1.5
+Quercus acutissima,N,East Asia,East Asia,N,N,2.3,3.99,1.64
+Quercus agrifolia,N,North America,North America,Y,N,2,5,1
+Quercus alba,N,North America,North America,N,N,2.85,3.56,1.43
+Quercus aliena,N,East Asia,East Asia,N,N,2.85,3,1.75
+Quercus austrina,N,North America,North America,N,N,1.5,5,1
+Quercus bicolor,N,North America,North America,N,N,2.98,3.35,2.58
+Quercus cerris,N,Europe,Europe,N,N,2.55,4.29,1.29
+Quercus chapmanii,N,North America,North America,N,N,1.5,5,1
+Quercus chrysolepis,N,North America,North America,Y,N,2.5,5,1
+Quercus coccinea,N,North America,North America,N,N,2.07,4,1
+Quercus crispula,N,East Asia,East Asia,N,N,3.25,3,2.13
+Quercus dentata,N,East Asia,East Asia,N,N,2.5,3.75,1
+Quercus douglasii,N,North America,North America,N,N,2,5,1
+Quercus dumosa,N,North America,North America,Y,N,2,5,1
+Quercus emoryi,N,North America,North America,Y,N,3,4,1
+Quercus falcata,N,North America,North America,N,N,2.5,5,1.65
+Quercus gambelii,N,North America,North America,N,N,2.09,4.97,1.27
+Quercus garryana,N,North America,North America,N,N,2.4,5,2
+Quercus gilva,N,East Asia,East Asia,Y,N,3.4,2.7,2.5
+Quercus glauca,N,East Asia,East Asia,Y,N,3.25,4,1.5
+Quercus ilex,N,Europe,Europe,Y,N,3.02,4.72,1.04
+Quercus imbricaria,N,North America,North America,N,N,2.09,3.85,2.43
+Quercus incana,N,North America,North America,Y,N,2.5,4.5,1.5
+Quercus kelloggii,N,North America,North America,N,N,1.55,4.33,1
+Quercus laevis,N,North America,North America,N,N,2,5,1
+Quercus laurifolia,N,North America,North America,N,N,3.34,3,2.59
+Quercus lobata,N,North America,North America,N,N,3,3,1
+Quercus lyrata,N,North America,North America,N,N,2.97,1,4.58
+Quercus macrocarpa,N,North America,North America,N,N,2.71,3.85,1.82
+Quercus marilandica,N,North America,North America,N,N,3,4,1
+Quercus muehlenbergii,N,North America,North America,N,N,2.22,4.97,1.26
+Quercus multinervis,N,East Asia,East Asia,Y,N,2.7,3,1.5
+Quercus myrtifolia,N,North America,North America,Y,N,1.5,4.5,1
+Quercus nigra,N,North America,North America,N,N,2.24,3,2.47
+Quercus nuttallii,N,North America,North America,N,N,2.24,1,3.94
+Quercus pagoda,N,North America,North America,N,N,2.24,2.5,2.09
+Quercus palustris,N,North America,North America,N,N,2.49,2.38,3.49
+Quercus petraea,N,Europe,Europe,N,N,2.73,3.02,1.2
+Quercus phellos,N,North America,North America,N,N,2,1,2.89
+Quercus prinus,N,North America,North America,N,N,2.85,3.5,1
+Quercus pubescens,N,Europe,Europe,N,N,2.31,4.1,1.39
+Quercus robur,N,Europe,Europe,N,N,2.45,2.95,1.89
+Quercus rubra,N,North America,North America,N,N,2.75,2.88,1.12
+Quercus salicina,N,East Asia,East Asia,Y,N,3.5,3.5,1
+Quercus serrata,N,East Asia,East Asia,N,N,3,3,1.75
+Quercus sessilifolia,N,East Asia,East Asia,Y,N,3.35,3,1.5
+Quercus shumardii,N,North America,North America,N,N,2.35,4.65,1.49
+Quercus stellata,N,North America,North America,N,N,2.16,4.5,1.5
+Quercus turbinella,N,North America,North America,Y,N,2.17,4.97,1.53
+Quercus variabilis,N,East Asia,East Asia,N,N,2,3,1
+Quercus velutina,N,North America,North America,N,N,2.72,3,1.07
+Quercus virginiana,N,North America,North America,Y,N,2.24,4.5,2.59
+Quercus wislizeni,N,North America,North America,Y,N,2.5,4,1.5
+Quercus × bebbiana (Q. alba × Q. macrocarpa),N,North America,North America,N,N,3,3.5,2
+Quercus × pauciloba (Q. gambelii × Q. turbinella),N,North America,North America,N,N,2.17,4.95,1.53
+Quercus × runcinata (Q. imbricaria × Q. rubra),N,North America,North America,N,N,2.5,3.5,1.5
+Rhamnus alpina,N,Europe,Europe,N,N,2.66,3.88,1.04
+Rhamnus cathartica,N,Europe,Europe,N,N,1.93,3.46,2.25
+Rhamnus pumila,N,Europe,Europe,N,N,1.2,4.72,1.77
+Rhamnus purshiana,N,North America,North America,N,N,3,3,1
+Rhamnus saxatilis,N,Europe,Europe,N,N,1.93,4.72,1.77
+Rhododendron canadense,N,North America,North America,N,N,4,2,1
+Rhododendron catwbiense,N,North America,North America,Y,N,3.5,2.5,2
+Rhododendron dauricum,N,East Asia,East Asia,Y,N,3.5,2,2
+Rhododendron ferrugineum,N,Europe,Europe,Y,N,1.93,3.04,1.77
+Rhododendron hirsutum,N,Europe,Europe,Y,N,1.93,3.88,1.04
+Rhododendron lapponicum,N,Europe,North America,Y,N,1.93,3.88,2.14
+Rhododendron macrophyllum,N,North America,North America,Y,N,3,1,1
+Rhododendron maximum,N,North America,North America,Y,N,3.5,3,2
+Rhododendron obtusum,N,East Asia,East Asia,Y,N,3,2.5,1
+Rhododendron occidentale,N,North America,North America,N,N,3,1,1
+Rhododendron periclymenoides,N,North America,North America,N,N,4,3,3.5
+Rhododendron ponticum,N,Europe,Europe,Y,N,3.38,3.04,2
+Rhododendron viscosum,N,North America,North America,N,N,4,3,3.5
+Rhododendron × intermedium (R. hirsutum × R. ferrugineum),N,Europe,Europe,Y,N,1.93,3.04,1.04
+Rhodothamnus chamaecistus,N,Europe,Europe,Y,N,2.66,3.04,1.04
+Rhus copallina,N,North America,North America,N,N,1.5,3,3
+Rhus glabra,N,North America,North America,N,N,1.78,3,1
+Rhus javanica,N,East Asia,East Asia,N,N,1.75,3.5,1
+Rhus trichocarpa,N,East Asia,East Asia,N,N,2.17,3.5,1.5
+Rhus typhina,N,North America,North America,N,N,1.56,4,1
+Ribes alpinum,N,Europe,Europe,N,N,3.38,3.04,1.77
+Ribes nigrum,N,Europe,Europe,N,N,3.75,1.37,2.83
+Ribes petraeum,N,Europe,Europe,N,N,3.38,3.04,1.04
+Ribes rubrum,N,Europe,Europe,N,N,3.38,1.79,1.77
+Ribes spicatum,N,Europe,Europe,N,N,3.75,1.79,1.77
+Ribes uva crispa,N,Europe,Europe,N,N,2.5,3.04,1.77
+Robinia neomexicana,N,North America,North America,N,N,1.35,4.47,1.77
+Robinia pseudoacacia,N,North America,North America,N,N,1.72,4.11,1.07
+Robinia × ambigua (R. pseudoacacia × R. viscosa),N,North America,North America,N,N,1.35,4.47,1.03
+Rosa abietina,N,Europe,Europe,N,N,1.2,3.88,1.04
+Rosa acicularis,N,East Asia,East Asia,N,N,2.5,3,1
+Rosa agrestis,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa arkansana,N,North America,North America,N,N,1.5,3.5,2
+Rosa arvensis,N,Europe,Europe,N,N,2.66,3.46,1.04
+Rosa blanda,N,North America,North America,N,N,1.5,2.5,2.5
+Rosa californica,N,North America,North America,N,N,1.5,3,2
+Rosa canina,Y,Europe,Europe,N,N,1.93,3.46,1.77
+Rosa carolina,N,North America,North America,N,N,1.5,3.5,1
+Rosa ciezielskii,N,Europe,Europe,N,N,1.2,4,1
+Rosa coriifolia,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa corymbifera,N,Europe,Europe,N,N,1.2,3.88,1.04
+Rosa davurica,N,East Asia,East Asia,N,N,1.5,3.5,1
+Rosa elliptica,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa gallica,N,Europe,Europe,N,N,1.93,3.88,1.04
+Rosa hybrida,N,Europe,Europe,N,N,1,4,1
+Rosa jundzillii,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa majalis,N,Europe,Europe,N,N,2.5,3.04,1.77
+Rosa micrantha,N,Europe,Europe,N,N,1.93,4.72,1.04
+Rosa obtusifolia,N,Europe,Europe,N,N,1.93,3.88,1.04
+Rosa pendulina,N,Europe,Europe,N,N,2.66,3.04,1.04
+Rosa pimpinellifolia,N,Europe,Europe,N,N,1.2,4.3,1.77
+Rosa rubiginosa,N,Europe,Europe,N,N,1.93,4.5,1.04
+Rosa rubrifolia,N,Europe,Europe,N,N,1.2,3.88,1.04
+Rosa rugosa,N,East Asia,East Asia,N,N,1.2,4,2
+Rosa scabriuscula,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa sherardii,N,Europe,Europe,N,N,2.66,3.04,1.04
+Rosa stylosa,N,Europe,Europe,N,N,1.56,3.88,1.04
+Rosa subcanina,N,Europe,Europe,N,N,1.2,3.88,1.04
+Rosa subcollina,N,Europe,Europe,N,N,1.2,4.72,1.04
+Rosa tomentosa,N,Europe,Europe,N,N,1.56,3.88,1.04
+Rosa villosa,N,Europe,Europe,N,N,2.5,3.88,1.04
+Rosa virginiana,N,North America,North America,N,N,1,4,1
+Rosa vosagiaca,N,Europe,Europe,N,N,1.93,3.04,1.77
+Rubus allegheniensis,N,North America,North America,N,N,2.5,4,2
+Rubus alumnus,N,North America,North America,N,N,2,3,1
+Rubus caesius,N,Europe,Europe,N,N,2.29,3.04,2.5
+Rubus idaeus,N,Europe,North America,N,N,2.66,3.04,2.5
+Rubus mesogaeus,N,East Asia,East Asia,N,N,2.25,2.5,2
+Rubus phoenicolasius,N,East Asia,East Asia,N,N,1.83,2.5,1
+Rubus spectabilis,N,North America,North America,N,N,2.86,2.6,2.75
+Sabal palmetto,N,North America,North America,Y,N,2,4,3
+Salix alba,N,Europe,Europe,N,N,1.99,2,4.1
+Salix alpina,N,Europe,Europe,N,N,0.84,2.21,3.91
+Salix amygdaloides,N,North America,North America,N,N,1.17,1.77,3.43
+Salix appendiculata,N,Europe,Europe,N,N,1.93,2.21,2.84
+Salix arbuscula,N,Europe,Europe,N,N,1.2,3.04,3.91
+Salix aurita,N,Europe,Europe,N,N,1.93,0.53,4.27
+Salix babylonica,N,East Asia,East Asia,N,N,1.35,1.77,3.43
+Salix bebbiana,N,North America,North America,N,N,1,1,3
+Salix caprea,N,Europe,Europe,N,N,2.16,2.24,2.84
+Salix caroliniana,N,North America,North America,N,N,1.5,2,4
+Salix cinerea,N,Europe,Europe,N,N,1.93,0.11,4.13
+Salix daphnoides,N,Europe,Europe,N,N,2.66,1.37,3.95
+Salix discolor,N,North America,North America,N,N,1.5,2,4
+Salix eleagnos,N,Europe,Europe,N,N,1.93,1.37,3.95
+Salix foetida,N,Europe,Europe,N,N,1.2,1.37,3.91
+Salix fragilis,N,Europe,Europe,N,N,1.42,1.23,3.94
+Salix glabra,N,Europe,Europe,N,N,2.66,1.37,3.91
+Salix hastata,N,Europe,North America,N,N,1.93,2.21,3.91
+Salix herbacea,N,Europe,North America,N,N,1.56,2.21,3.91
+Salix hultenii,N,East Asia,East Asia,N,N,1.5,1.5,3
+Salix integra,N,East Asia,East Asia,N,N,1.33,2,4
+Salix jessoensis,N,East Asia,East Asia,N,N,1,1.25,4.5
+Salix lanata,N,Europe,Europe,N,N,1.2,2.21,3.91
+Salix lapponum,N,Europe,Europe,N,N,1.2,2.21,4.27
+Salix matsudana,N,East Asia,East Asia,N,N,1.35,1.77,3.5
+Salix myrsinifolia,N,Europe,Europe,N,N,2.29,0.95,3.95
+Salix myrsinites,N,Europe,Europe,N,N,1.2,3.04,3.91
+Salix myrtilloides,N,Europe,Europe,N,N,2.66,0.53,3.91
+Salix nigra,N,North America,North America,N,N,1.34,1.77,4.68
+Salix pentandra,N,Europe,Europe,N,N,1.93,0.53,3.95
+Salix phylicifolia,N,Europe,Europe,N,N,1.93,0.53,4.27
+Salix purpurea,N,Europe,Europe,N,N,1.2,1.37,3.55
+Salix repens,N,Europe,Europe,N,N,1.02,1.79,4.09
+Salix reticulata,N,Europe,North America,N,N,1.56,2.21,3.91
+Salix retusa,N,Europe,Europe,N,N,1.93,2.21,3.91
+Salix rosmarinifolia,N,Europe,Europe,N,N,1.2,0.53,3.91
+Salix sachalinensis,N,East Asia,East Asia,N,N,1,1.5,4
+Salix scouleriana,N,North America,North America,N,N,1,3,4
+Salix serpyllifolia,N,Europe,Europe,N,N,1.93,3.88,3.91
+Salix sitchensis,N,North America,North America,N,N,1,1,4.5
+Salix starkeana,N,Europe,Europe,N,N,1.93,1.37,3.91
+Salix subfragilis,N,East Asia,East Asia,N,N,1,1.75,4
+Salix triandra,N,Europe,Europe,N,N,1.93,0.9,3.9
+Salix udensis,N,East Asia,East Asia,N,N,1,1.5,4
+Salix viminalis,N,Europe,Europe,N,N,1.93,0.53,3.9
+Salix waldsteiniana,Y,Europe,Europe,N,N,1.93,2.21,3.91
+Salix × rubens (S. alba × S. fragilis),N,Europe,Europe,N,N,3.38,0.53,3.91
+Sambucus cerulea,N,North America,North America,N,N,1.35,2.88,2.63
+Sambucus ebulus,N,Europe,Europe,N,N,1.93,3.04,2.5
+Sambucus nigra,N,Europe,Europe,N,N,2.29,3.04,1.68
+Sambucus racemosa,N,Europe,North America,N,N,2.66,3.04,2.5
+Sambucus sieboldiana,N,East Asia,East Asia,N,N,2.59,2,3
+Sassafras albidum,N,North America,North America,N,N,1.68,5,1.11
+Sequoia sempervirens,N,North America,North America,Y,Y,4.21,2,0.95
+Sequoiadendron giganteum,N,North America,North America,Y,Y,3.05,2.88,1.27
+Shepherdia argentea,N,North America,North America,N,N,2.12,4,1
+Sideroxylon celastrinum,N,North America,North America,Y,N,1.5,3.5,3
+Sideroxylon reclinatum,N,North America,North America,Y,N,2.5,3,3.5
+Skimmia japonica,N,East Asia,East Asia,Y,N,4.28,2,1.5
+Sophora japonica,N,East Asia,East Asia,N,N,3,2.75,1.53
+Sorbaria sorbifolia,N,East Asia,East Asia,N,N,2.5,2,2
+Sorbus alnifolia,N,East Asia,East Asia,N,N,3.13,2.05,2
+Sorbus americana,N,North America,North America,N,N,2.59,1.77,1.27
+Sorbus aria,Y,Europe,Europe,N,N,3,3.55,1.32
+Sorbus arranensis (S. aucuparia × S. rupicola),N,Europe,Europe,N,N,1.93,3.88,1.04
+Sorbus aucuparia,N,Europe,Europe,N,N,2.73,2.11,1.76
+Sorbus bristolensis (S. rupicola × . S. torminalis),N,Europe,Europe,N,N,2.66,3.88,1.04
+Sorbus chamaemespilus,N,Europe,Europe,N,N,1.93,3.88,1.04
+Sorbus commixta,N,East Asia,East Asia,N,N,2.5,2,1.5
+Sorbus danubialis,N,Europe,Europe,N,N,2.66,3.88,1.04
+Sorbus domestica,N,Europe,Europe,N,N,3.53,3.52,1.04
+Sorbus intermedia,N,Europe,Europe,N,N,2.66,2.21,1.04
+Sorbus lancastriensis (S. aria × S. rupicola),N,Europe,Europe,N,N,1.2,3.88,1.04
+Sorbus mougeotii (S. aucuparia × S. aria),N,Europe,Europe,N,N,1.2,3.88,1.04
+Sorbus rupicola,N,Europe,Europe,N,N,1.2,3.88,1.04
+Sorbus scopulina,N,North America,North America,N,N,2.59,2.38,1.27
+Sorbus torminalis,N,Europe,Europe,N,N,3.38,3.74,1.04
+Spiraea salicifolia,N,East Asia,East Asia,N,N,1.93,2.21,3.35
+Staphylea pinnata,N,Europe,Europe,N,N,1.93,3.04,1.04
+Stewartia malacodendron,N,North America,North America,N,N,3,2.5,1
+Styrax americanus,N,North America,North America,N,N,2.5,2.5,1.5
+Styrax grandifolius,N,North America,North America,N,N,3,2,1.5
+Styrax japonicus,N,East Asia,East Asia,N,N,2.5,2.5,2.5
+Styrax obassis,N,East Asia,East Asia,N,N,2.5,2,2
+Swietenia mahagoni,N,North America,North America,N,N,3,4,1
+Symphoricarpos albus,N,North America,North America,N,N,3.24,3.02,1.02
+Symphoricarpos oreophilus,N,North America,North America,N,N,3.14,3.5,1
+Symplocos chinensis,N,East Asia,East Asia,N,N,3.67,3,1.5
+Symplocos tinctoria,N,North America,North America,Y,N,2.5,2.5,2
+Syringa reticulata,N,East Asia,East Asia,N,N,1.35,2.38,2.27
+Syringa vulgaris,N,Europe,Europe,N,N,2.66,3.04,1.02
+Tamarix ramosissima,N,East Asia,East Asia,N,N,1.35,4.1,3.36
+Taxodium distichum,N,North America,North America,N,Y,2.13,3.25,4.93
+Taxus baccata,N,Europe,Europe,Y,Y,4.43,3.01,1.32
+Taxus brevifolia,N,North America,North America,Y,Y,4.86,2.5,1
+Thuja occidentalis,N,North America,North America,Y,Y,3.45,2.71,1.46
+Thuja orientalis,N,East Asia,East Asia,Y,Y,2.17,2.88,1.02
+Thuja plicata,N,North America,North America,Y,Y,4.73,2.23,1.01
+Thymus serpyllum,N,Europe,Europe,Y,N,1.56,4.72,1.04
+Tilia americana,N,North America,North America,N,N,3.98,2.88,1.26
+Tilia caroliniana,N,North America,North America,N,N,3.25,2,1
+Tilia cordata,N,Europe,Europe,N,N,4.18,2.75,1.83
+Tilia euchlora,N,Europe,Europe,N,N,3,2.75,1.27
+Tilia heterophylla,N,North America,North America,N,N,3.77,2,1.12
+Tilia japonica,N,East Asia,East Asia,N,N,3.75,2.5,2
+Tilia maximowicziana,N,East Asia,East Asia,N,N,3.75,2.5,2
+Tilia platyphyllos,N,Europe,Europe,N,N,4,2.52,1.02
+Tilia tomentosa,N,Europe,Europe,N,N,3.34,2.81,1.52
+Tilia × vulgaris (T. cordata × T. platyphyllos),N,Europe,Europe,N,N,3.49,3.04,1.77
+Torreya californica,N,North America,North America,Y,Y,5,2,1
+Torreya taxifolia,N,North America,North America,Y,Y,4.5,2,1
+Trochodendron aralioides,N,East Asia,East Asia,Y,N,3.6,2.5,1.75
+Tsuga canadensis,N,North America,North America,Y,Y,4.83,1,1.25
+Tsuga heterophylla,N,North America,North America,Y,Y,4.96,1.17,0.95
+Tsuga mertensiana,N,North America,North America,Y,Y,4.48,1,0.95
+Tsuga sieboldii,N,East Asia,East Asia,Y,Y,4.25,3,1.5
+Ulex europaeus,N,Europe,Europe,Y,N,1.93,3.04,1.77
+Ulex gallii,N,Europe,Europe,Y,N,1.93,2.21,2.5
+Ulex minor,N,Europe,Europe,Y,N,1.2,2.21,2.5
+Ulmus alata,N,North America,North America,N,N,3.03,3.5,1.71
+Ulmus americana,N,North America,North America,N,N,3.14,2.92,2.46
+Ulmus crassifolia,N,North America,North America,N,N,3,3,2.09
+Ulmus davidiana,N,East Asia,East Asia,N,N,3,2,3
+Ulmus glabra,N,Europe,Europe,N,N,3.53,2.41,2.03
+Ulmus laciniata,N,East Asia,East Asia,N,N,3,2,2.75
+Ulmus laevis,N,Europe,Europe,N,N,3.67,1.45,2.83
+Ulmus minor,Y,Europe,Europe,N,N,3.36,3.39,2.06
+Ulmus parvifolia,N,East Asia,East Asia,N,N,2.5,2.88,1.27
+Ulmus pumila,N,East Asia,East Asia,N,N,2.5,3.35,1.52
+Ulmus rubra,N,North America,North America,N,N,3.31,3,1.73
+Ulmus thomasii,N,North America,North America,N,N,3.22,2,1
+Umbellularia californica,N,North America,North America,Y,N,3.84,2,0.95
+Vaccinium arboreum,N,North America,North America,Y,N,2,3,2
+Vaccinium corymbosum,N,North America,North America,N,N,2,2,3.5
+Vaccinium erythrocarpum,N,North America,North America,Y,N,1,2,3
+Vaccinium japonicum,N,East Asia,East Asia,N,N,2.83,4,2.5
+Vaccinium macrocarpon,N,North America,North America,Y,N,1.99,1.68,3.1
+Vaccinium myrtillus,N,Europe,North America,N,N,3.02,2.6,2.92
+Vaccinium oxycoccus,Y,Europe,North America,Y,N,1.56,0.32,4.45
+Vaccinium smallii,N,East Asia,East Asia,N,N,2.67,4,2.5
+Vaccinium uliginosum,Y,Europe,North America,Y,N,2.29,2.21,3.19
+Vaccinium vitis idaea,N,Europe,North America,Y,N,2.29,3.46,3.19
+Veronica fruticans,N,Europe,Europe,Y,N,1.2,3.46,1.04
+Viburnum dentatum,N,North America,North America,N,N,4,2,2.5
+Viburnum furcatum,N,East Asia,East Asia,N,N,3.33,1.5,3
+Viburnum lantana,N,Europe,Europe,N,N,1.93,3.46,1.68
+Viburnum lentago,N,North America,North America,N,N,4,2,2.5
+Viburnum opulus,N,Europe,North America,N,N,2.66,2.21,2.06
+Viburnum rufidulum,N,North America,North America,N,N,2,3,3
+Weigela hortensis,N,East Asia,East Asia,N,N,1.17,2.5,2.5
+Yucca brevifolia,N,North America,North America,Y,N,1.17,4.95,1.53
+Zanthoxylum ailanthoides,N,East Asia,East Asia,N,N,2,4,1
+Zanthoxylum clava herculis,N,North America,North America,N,N,2.5,4,1
+Zelkova serrata,N,East Asia,East Asia,N,N,2.09,3.35,1.02
+Zizyphus jujuba,N,East Asia,East Asia,N,N,1.35,4.95,1.53
