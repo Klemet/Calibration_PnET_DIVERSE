@@ -636,7 +636,7 @@ def write_PnET_ComplexTableParameterfile(outputFilePath, PnETSpeciesParametersDi
         # Write each species and its corresponding values
         for species_name, parameters in PnETSpeciesParametersDict[species_parameters_key].items():
             # Format each value to a string without trailing zeros
-            values_line = "\t".join([species_name] + [f"{value:.5f}".rstrip('0').rstrip('.') if isinstance(value, float) else str(value) for value in parameters.values()])
+            values_line = "\t".join([species_name] + [f"{value}".rstrip('0').rstrip('.') if isinstance(value, float) else str(value) for value in parameters.values()])
             file.write(f"{values_line}\n")
 
 # # Example usage:
@@ -6277,7 +6277,8 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     # Changing the soil if needed
     PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
     # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
-    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = "1900"
+    startYear = 1900
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
     # No dispersal, since we only simulate one pixel and the life of one cohort (monoculture and even-aged)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "NoDispersal"
@@ -6288,12 +6289,14 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     # Preparing the landscape
     # Removing Other species from the simulation
     speciesToRemove = []
-    for species in PnETGitHub_OneCellSim["species.txt"].keys():
+    for species in PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"].keys():
         if species != speciesToSimulate and species != "LandisData":
             speciesToRemove.append(species)
     for species in speciesToRemove:
-        del PnETGitHub_OneCellSim["species.txt"][species]
-        del PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"][species]
+        if species in PnETGitHub_OneCellSim["species.txt"].keys():
+            del PnETGitHub_OneCellSim["species.txt"][species]
+        if species in PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"].keys():
+            del PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"][species]
     # Inserting reading of the right climate file
     if climate == "mild":
         PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
@@ -6327,11 +6330,25 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
         os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv")
+        maxLongevity = dictOfInitialCoreSpeciesParameters[speciesToSimulate]["Longevity"]
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
     elif climate == "realHistorical":
         shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos.csv", simulationPath)
         os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv")
+        maxLongevity = dictOfInitialCoreSpeciesParameters[speciesToSimulate]["Longevity"]
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
     elif climate == "testFilesGithub":
         pass # The climate files from github are used by default if we don't input a climate config file
     else:
@@ -7340,7 +7357,8 @@ def getGamDiagnostics(
             json.dump(existing, f, indent=None)
 
 
-    return diag_df
+    return {"Peak_age" : diag_df.at[selected_mask, 'Peak_Age'],
+           "Peak_Biomass" : diag_df.at[selected_mask, 'Peak_Biomass']}
 
 
 ### FUNCTIONS FOR FIRST CALIBRATION STEP (MONOCULTURE IN IDEAL CONDITIONS)
@@ -7523,7 +7541,7 @@ def calibrate_phase1_1(
     generic_p = copy.deepcopy(dictOfInitialPnETGenericParameters)
     bounds    = DictOfBounds
     # EDIT : Put longevity veeeeery far away so that fAge
-    # doesn't influence the peak ?
+    # doesn't influence the peak
     core_p[species]["Longevity"]="999"
 
     target_peak_biomass = float(target_peak_biomass)
@@ -7674,15 +7692,12 @@ def calibrate_phase1_1(
     return {"TOWood": tw, "TORoot": tr, "outputs": best_outputs}
 
 
-import json
-import copy
-import shutil
-
 def calibrate_LAI_subphase_1_1_2(
     species,
     target_LAI_min,
     target_LAI_max,
     DictOfBounds,
+    target_peak_biomass,
     initial_core_params_path='./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json',
     initial_pnet_species_params_path='./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json',
     initial_generic_params_path='./SpeciesParametersSets/Initial/InitialGenericParameters.json',
@@ -7696,6 +7711,9 @@ def calibrate_LAI_subphase_1_1_2(
     """
     Calibrates Maximum LAI and LAI stability for a given species by tuning
     FracFol (coarse), SLWmax (fine), and FrActWd (stability).
+    Then recalibrates the biomass peak height via TOWood/TORoot (and FolN
+    as a fallback if bounds are hit), iterating the LAI + biomass
+    calibration up to 3 times if they pull each other out of bounds.
 
     Returns:
         dict: Updated parameter dictionaries and final simulation outputs.
@@ -7739,295 +7757,527 @@ def calibrate_LAI_subphase_1_1_2(
         stab_max = round(float(lai_stability[1]), 1)
         return (stab_min >= round(target_LAI_min, 1)) and (stab_max <= round(target_LAI_max, 1))
 
+    def set_towood_toroot(pnet_sp, towood_val, toroot_val):
+        """Return a deep copy of pnet_sp with TOWood and TORoot updated."""
+        p = copy.deepcopy(pnet_sp)
+        p["PnETSpeciesParameters"][species]["TOWood"] = towood_val
+        p["PnETSpeciesParameters"][species]["TORoot"] = toroot_val
+        return p
+
+    # --- TOWood/TORoot bounds ---
+    towood_lo = float(DictOfBounds[species]["TOWood"]["lower"])
+    towood_hi = float(DictOfBounds[species]["TOWood"]["upper"])
+    toroot_lo = float(DictOfBounds[species]["TORoot"]["lower"])
+    toroot_hi = float(DictOfBounds[species]["TORoot"]["upper"])
+    if species == "ACER.RUB":
+        if verbose:
+            print("WARNING : Red maple (ACER.RUB) detected.\n"
+                  "Will use a higher TOWood upper limit of 0.07\n"
+                  "to account for its higher growth, and the fact\n"
+                  "that it might be doing more self-thinning\n"
+                  "than other species.")
+        towood_hi = 0.07
+
+    # --- FolN bounds ---
+    foln_lo = float(DictOfBounds[species]["FolN"]["lower"])
+    foln_hi = float(DictOfBounds[species]["FolN"]["upper"])
+
+    target_peak_biomass = float(target_peak_biomass)
+    PEAK_TOLERANCE = 0.01
 
     # =========================================================================
-    # STAGE 1: Coarse adjustment of Maximum LAI via FracFol (bisection)
-    # If target is unreachable within empirical bounds, allow a 20% bypass.
-    # If still unreachable after bypass, use the extended bound directly.
+    # ITERATIVE LOOP: LAI calibration → biomass peak recalibration
+    # Up to 3 iterations; stop early if both LAI and peak are in range.
     # =========================================================================
-    if verbose:
-        print("=== Stage 1: Coarse LAI adjustment via FracFol ===")
-    
-    lo = float(DictOfBounds[species]["FracFol"]["lower"])
-    hi = float(DictOfBounds[species]["FracFol"]["upper"])
-    
-    res_lo = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", lo), generic_params)
-    res_hi = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", hi), generic_params)
-    
-    if verbose:
-        print(f"  FracFol={lo:.4f} -> Max LAI={float(res_lo['Maximum LAI']):.3f}")
-        print(f"  FracFol={hi:.4f} -> Max LAI={float(res_hi['Maximum LAI']):.3f}")
-    
-    best_fracfol = float(pnet_species_params["PnETSpeciesParameters"][species]["FracFol"])
-    skip_bisection = False
-    
-    # --- Check lower bound: LAI too high even at minimum FracFol ---
-    if float(res_lo["Maximum LAI"]) > target_LAI_max:
-        lo_extended = lo * (1.0 - fracfol_bypass_factor)
+    MAX_OUTER_ITER = 3
+
+    for outer_iter in range(1, MAX_OUTER_ITER + 1):
         if verbose:
-            print(f"  LAI too high at lower bound. Testing extended lower bound: "
-                  f"FracFol={lo_extended:.5f}.")
-        res_lo_ext = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", lo_extended), generic_params)
+            print(f"\n{'='*70}")
+            print(f"  OUTER ITERATION {outer_iter}/{MAX_OUTER_ITER}")
+            print(f"{'='*70}")
+
+        # =====================================================================
+        # STAGE 1: Coarse adjustment of Maximum LAI via FracFol (bisection)
+        # If target is unreachable within empirical bounds, allow a 20% bypass.
+        # If still unreachable after bypass, use the extended bound directly.
+        # =====================================================================
         if verbose:
-            print(f"  FracFol={lo_extended:.5f} -> Max LAI={float(res_lo_ext['Maximum LAI']):.3f}")
-        if not lai_in_target(float(res_lo_ext["Maximum LAI"])):
-            if verbose:
-                print(f"  Target still unreachable after bypass. Using extended lower bound directly.")
-            best_fracfol = lo_extended
-            skip_bisection = True
-        else:
-            lo = lo_extended
-            if verbose:
-                print(f"  Target reachable within extended bounds. Proceeding with bisection.")
-    
-    # --- Check upper bound: LAI too low even at maximum FracFol ---
-    elif float(res_hi["Maximum LAI"]) < target_LAI_min:
-        hi_extended = hi * (1.0 + fracfol_bypass_factor)
+            print("=== Stage 1: Coarse LAI adjustment via FracFol ===")
+
+        lo = float(DictOfBounds[species]["FracFol"]["lower"])
+        hi = float(DictOfBounds[species]["FracFol"]["upper"])
+
+        res_lo = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", lo), generic_params)
+        res_hi = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", hi), generic_params)
+
         if verbose:
-            print(f"  LAI too low at upper bound. Testing extended upper bound: "
-                  f"FracFol={hi_extended:.5f}.")
-        res_hi_ext = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", hi_extended), generic_params)
-        if verbose:
-            print(f"  FracFol={hi_extended:.5f} -> Max LAI={float(res_hi_ext['Maximum LAI']):.3f}")
-        if not lai_in_target(float(res_hi_ext["Maximum LAI"])):
+            print(f"  FracFol={lo:.4f} -> Max LAI={float(res_lo['Maximum LAI']):.3f}")
+            print(f"  FracFol={hi:.4f} -> Max LAI={float(res_hi['Maximum LAI']):.3f}")
+
+        best_fracfol = float(pnet_species_params["PnETSpeciesParameters"][species]["FracFol"])
+        skip_bisection = False
+
+        # --- Check lower bound: LAI too high even at minimum FracFol ---
+        if float(res_lo["Maximum LAI"]) > target_LAI_max:
+            lo_extended = lo * (1.0 - fracfol_bypass_factor)
             if verbose:
-                print(f"  Target still unreachable after bypass. Using extended upper bound directly.")
-            best_fracfol = hi_extended
-            skip_bisection = True
-        else:
-            hi = hi_extended
+                print(f"  LAI too high at lower bound. Testing extended lower bound: "
+                      f"FracFol={lo_extended:.5f}.")
+            res_lo_ext = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", lo_extended), generic_params)
             if verbose:
-                print(f"  Target reachable within extended bounds. Proceeding with bisection.")
-    
-    # --- Bisection toward midpoint of target LAI range ---
-    if not skip_bisection:
-        # Changing target : we'll target the maximum.
-        target_mid = target_LAI_max
-        # target_mid = (target_LAI_min + target_LAI_max) / 2.0
-        lo_b, hi_b = lo, hi
-    
-        for i in range(n_bisection_iterations):
-            mid = (lo_b + hi_b) / 2.0
-            res_mid = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", mid), generic_params)
-            max_lai = float(res_mid["Maximum LAI"])
-    
+                print(f"  FracFol={lo_extended:.5f} -> Max LAI={float(res_lo_ext['Maximum LAI']):.3f}")
+            if not lai_in_target(float(res_lo_ext["Maximum LAI"])):
+                if verbose:
+                    print(f"  Target still unreachable after bypass. Using extended lower bound directly.")
+                best_fracfol = lo_extended
+                skip_bisection = True
+            else:
+                lo = lo_extended
+                if verbose:
+                    print(f"  Target reachable within extended bounds. Proceeding with bisection.")
+
+        # --- Check upper bound: LAI too low even at maximum FracFol ---
+        elif float(res_hi["Maximum LAI"]) < target_LAI_min:
+            hi_extended = hi * (1.0 + fracfol_bypass_factor)
             if verbose:
-                print(f"  Iter {i+1}: FracFol={mid:.5f}, Max LAI={max_lai:.4f}")
-    
-            if lai_in_target(max_lai):
-                best_fracfol = mid
-                if max_lai < target_mid:
+                print(f"  LAI too low at upper bound. Testing extended upper bound: "
+                      f"FracFol={hi_extended:.5f}.")
+            res_hi_ext = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", hi_extended), generic_params)
+            if verbose:
+                print(f"  FracFol={hi_extended:.5f} -> Max LAI={float(res_hi_ext['Maximum LAI']):.3f}")
+            if not lai_in_target(float(res_hi_ext["Maximum LAI"])):
+                if verbose:
+                    print(f"  Target still unreachable after bypass. Using extended upper bound directly.")
+                best_fracfol = hi_extended
+                skip_bisection = True
+            else:
+                hi = hi_extended
+                if verbose:
+                    print(f"  Target reachable within extended bounds. Proceeding with bisection.")
+
+        # --- Bisection toward midpoint of target LAI range ---
+        if not skip_bisection:
+            # Changing target : we'll target the maximum.
+            target_mid = target_LAI_max
+            # target_mid = (target_LAI_min + target_LAI_max) / 2.0
+            lo_b, hi_b = lo, hi
+
+            for i in range(n_bisection_iterations):
+                mid = (lo_b + hi_b) / 2.0
+                res_mid = run_sim(core_params, set_pnet_param(pnet_species_params, "FracFol", mid), generic_params)
+                max_lai = float(res_mid["Maximum LAI"])
+
+                if verbose:
+                    print(f"  Iter {i+1}: FracFol={mid:.5f}, Max LAI={max_lai:.4f}")
+
+                if lai_in_target(max_lai):
+                    best_fracfol = mid
+                    if max_lai < target_mid:
+                        lo_b = mid
+                    else:
+                        hi_b = mid
+                elif max_lai < target_LAI_min:
                     lo_b = mid
                 else:
                     hi_b = mid
-            elif max_lai < target_LAI_min:
-                lo_b = mid
+
+                if (hi_b - lo_b) < 1e-6:
+                    break
+
+            best_fracfol = (lo_b + hi_b) / 2.0
+
+        pnet_species_params = set_pnet_param(pnet_species_params, "FracFol", best_fracfol)
+        res_stage1 = run_sim(core_params, pnet_species_params, generic_params)
+
+        if verbose:
+            print(f"  Stage 1 result: FracFol={best_fracfol:.5f}, Max LAI={float(res_stage1['Maximum LAI']):.4f}")
+
+        # =====================================================================
+        # STAGE 2: Fine-tuning via SLWmax (bisection, only if needed)
+        # Note: SLWmax is inversely related to LAI — increasing SLWmax decreases LAI.
+        # =====================================================================
+        if verbose:
+            print("=== Stage 2: Fine LAI tuning via SLWmax ===")
+
+        current_max_lai = float(res_stage1["Maximum LAI"])
+        best_slwmax = float(pnet_species_params["PnETSpeciesParameters"][species]["SLWmax"])
+
+        if not lai_in_target(current_max_lai):
+            lo_slw = float(DictOfBounds[species]["SLWmax"]["lower"])
+            hi_slw = float(DictOfBounds[species]["SLWmax"]["upper"])
+
+            res_lo_slw = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", lo_slw), generic_params)
+            res_hi_slw = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", hi_slw), generic_params)
+
+            if verbose:
+                print(f"  SLWmax={lo_slw:.4f} -> Max LAI={float(res_lo_slw['Maximum LAI']):.3f}")
+                print(f"  SLWmax={hi_slw:.4f} -> Max LAI={float(res_hi_slw['Maximum LAI']):.3f}")
+
+            if float(res_lo_slw["Maximum LAI"]) < target_LAI_min:
+                if verbose:
+                    print(f"  WARNING: Even at minimum SLWmax ({lo_slw:.4f}), LAI is below target min. Using lower bound.")
+                best_slwmax = lo_slw
+            elif float(res_hi_slw["Maximum LAI"]) > target_LAI_max:
+                if verbose:
+                    print(f"  WARNING: Even at maximum SLWmax ({hi_slw:.4f}), LAI exceeds target max. Using upper bound.")
+                best_slwmax = hi_slw
             else:
-                hi_b = mid
-    
-            if (hi_b - lo_b) < 1e-6:
-                break
-    
-        best_fracfol = (lo_b + hi_b) / 2.0
-    
-    pnet_species_params = set_pnet_param(pnet_species_params, "FracFol", best_fracfol)
-    res_stage1 = run_sim(core_params, pnet_species_params, generic_params)
-    
-    if verbose:
-        print(f"  Stage 1 result: FracFol={best_fracfol:.5f}, Max LAI={float(res_stage1['Maximum LAI']):.4f}")
+                # Targetting maximum instead
+                # target_mid_slw = (target_LAI_min + target_LAI_max) / 2.0
+                target_mid_slw = target_LAI_max
+                lo_s, hi_s = lo_slw, hi_slw
 
-    # =========================================================================
-    # STAGE 2: Fine-tuning via SLWmax (bisection, only if needed)
-    # Note: SLWmax is inversely related to LAI — increasing SLWmax decreases LAI.
-    # =========================================================================
-    if verbose:
-        print("=== Stage 2: Fine LAI tuning via SLWmax ===")
+                for i in range(n_bisection_iterations):
+                    mid_s = (lo_s + hi_s) / 2.0
+                    res_mid_s = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", mid_s), generic_params)
+                    max_lai_s = float(res_mid_s["Maximum LAI"])
 
-    current_max_lai = float(res_stage1["Maximum LAI"])
-    best_slwmax = float(pnet_species_params["PnETSpeciesParameters"][species]["SLWmax"])
+                    if verbose:
+                        print(f"  Iter {i+1}: SLWmax={mid_s:.5f}, Max LAI={max_lai_s:.4f}")
 
-    if not lai_in_target(current_max_lai):
-        lo_slw = float(DictOfBounds[species]["SLWmax"]["lower"])
-        hi_slw = float(DictOfBounds[species]["SLWmax"]["upper"])
-
-        res_lo_slw = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", lo_slw), generic_params)
-        res_hi_slw = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", hi_slw), generic_params)
-
-        if verbose:
-            print(f"  SLWmax={lo_slw:.4f} -> Max LAI={float(res_lo_slw['Maximum LAI']):.3f}")
-            print(f"  SLWmax={hi_slw:.4f} -> Max LAI={float(res_hi_slw['Maximum LAI']):.3f}")
-
-        if float(res_lo_slw["Maximum LAI"]) < target_LAI_min:
-            if verbose:
-                print(f"  WARNING: Even at minimum SLWmax ({lo_slw:.4f}), LAI is below target min. Using lower bound.")
-            best_slwmax = lo_slw
-        elif float(res_hi_slw["Maximum LAI"]) > target_LAI_max:
-            if verbose:
-                print(f"  WARNING: Even at maximum SLWmax ({hi_slw:.4f}), LAI exceeds target max. Using upper bound.")
-            best_slwmax = hi_slw
-        else:
-            # Targetting maximum instead
-            # target_mid_slw = (target_LAI_min + target_LAI_max) / 2.0
-            target_mid_slw = target_LAI_max
-            lo_s, hi_s = lo_slw, hi_slw
-
-            for i in range(n_bisection_iterations):
-                mid_s = (lo_s + hi_s) / 2.0
-                res_mid_s = run_sim(core_params, set_pnet_param(pnet_species_params, "SLWmax", mid_s), generic_params)
-                max_lai_s = float(res_mid_s["Maximum LAI"])
-
-                if verbose:
-                    print(f"  Iter {i+1}: SLWmax={mid_s:.5f}, Max LAI={max_lai_s:.4f}")
-
-                if lai_in_target(max_lai_s):
-                    best_slwmax = mid_s
-                    # Higher SLWmax -> lower LAI
-                    if max_lai_s > target_mid_slw:
-                        lo_s = mid_s  # increase SLWmax to bring LAI down
+                    if lai_in_target(max_lai_s):
+                        best_slwmax = mid_s
+                        # Higher SLWmax -> lower LAI
+                        if max_lai_s > target_mid_slw:
+                            lo_s = mid_s  # increase SLWmax to bring LAI down
+                        else:
+                            hi_s = mid_s  # decrease SLWmax to bring LAI up
+                    elif max_lai_s < target_LAI_min:
+                        hi_s = mid_s  # decrease SLWmax to raise LAI
                     else:
-                        hi_s = mid_s  # decrease SLWmax to bring LAI up
-                elif max_lai_s < target_LAI_min:
-                    hi_s = mid_s  # decrease SLWmax to raise LAI
-                else:
-                    lo_s = mid_s  # increase SLWmax to lower LAI
+                        lo_s = mid_s  # increase SLWmax to lower LAI
 
-                if (hi_s - lo_s) < 1e-6:
-                    break
+                    if (hi_s - lo_s) < 1e-6:
+                        break
 
-            best_slwmax = (lo_s + hi_s) / 2.0
+                best_slwmax = (lo_s + hi_s) / 2.0
 
-        pnet_species_params = set_pnet_param(pnet_species_params, "SLWmax", best_slwmax)
-        res_stage2 = run_sim(core_params, pnet_species_params, generic_params)
-    else:
-        res_stage2 = res_stage1
-        if verbose:
-            print("  LAI already in target range after Stage 1. Skipping SLWmax adjustment.")
-
-    if verbose:
-        print(f"  Stage 2 result: SLWmax={best_slwmax:.5f}, Max LAI={float(res_stage2['Maximum LAI']):.4f}")
-
-    # =========================================================================
-    # STAGE 3: LAI stability correction via FrActWd
-    # Start from the highest possible FrActWd value and decrease until we find
-    # the largest value that brings LAI stability within target bounds.
-    # =========================================================================
-    if verbose:
-        print("=== Stage 3: LAI stability correction via FrActWd ===")
-    
-    lai_stab = res_stage2["LAI stability"]
-    stab_min_val = float(lai_stab[0])
-    stab_max_val = float(lai_stab[1])
-    best_fracactwd = float(pnet_species_params["PnETSpeciesParameters"][species]["FrActWd"])
-    
-    if verbose:
-        print(f"  Initial LAI stability: min={stab_min_val:.4f}, max={stab_max_val:.4f}")
-    
-    if not stability_in_target(lai_stab):
-        lo_fw = float(DictOfBounds[species]["FrActWd"]["lower"])
-        hi_fw = float(DictOfBounds[species]["FrActWd"]["upper"])
-    
-        lo_f, hi_f = lo_fw, hi_fw
-    
-        # We want the largest FrActWd that keeps stability in target.
-        # Use bisection starting from the upper bound, tracking the best
-        # (highest) valid value found.
-        best_valid_fracactwd = None
-    
-        # First, test the upper bound directly
-        res_hi_fw = run_sim(core_params, set_pnet_param(pnet_species_params, "FrActWd", hi_fw), generic_params)
-        stab_hi = res_hi_fw["LAI stability"]
-    
-        if verbose:
-            print(f"  FrActWd={hi_fw:.4f} -> LAI stability: "
-                  f"min={float(stab_hi[0]):.4f}, max={float(stab_hi[1]):.4f}")
-    
-        if stability_in_target(stab_hi):
-            # Already valid at upper bound — use it directly
-            best_valid_fracactwd = hi_fw
-            if verbose:
-                print(f"  Stability in target at upper bound. Using FrActWd={hi_fw:.5f} directly.")
+            pnet_species_params = set_pnet_param(pnet_species_params, "SLWmax", best_slwmax)
+            res_stage2 = run_sim(core_params, pnet_species_params, generic_params)
         else:
-            # Bisect to find the largest valid value
-            for i in range(n_bisection_iterations):
-                mid_f = (lo_f + hi_f) / 2.0
-                res_mid_f = run_sim(
-                    core_params,
-                    set_pnet_param(pnet_species_params, "FrActWd", mid_f),
-                    generic_params
-                )
-                stab = res_mid_f["LAI stability"]
-                s_min = float(stab[0])
-                s_max = float(stab[1])
-    
+            res_stage2 = res_stage1
+            if verbose:
+                print("  LAI already in target range after Stage 1. Skipping SLWmax adjustment.")
+
+        if verbose:
+            print(f"  Stage 2 result: SLWmax={best_slwmax:.5f}, Max LAI={float(res_stage2['Maximum LAI']):.4f}")
+
+        # =====================================================================
+        # STAGE 3: LAI stability correction via FrActWd
+        # Start from the highest possible FrActWd value and decrease until we find
+        # the largest value that brings LAI stability within target bounds.
+        # =====================================================================
+        if verbose:
+            print("=== Stage 3: LAI stability correction via FrActWd ===")
+
+        lai_stab = res_stage2["LAI stability"]
+        stab_min_val = float(lai_stab[0])
+        stab_max_val = float(lai_stab[1])
+        best_fracactwd = float(pnet_species_params["PnETSpeciesParameters"][species]["FrActWd"])
+
+        if verbose:
+            print(f"  Initial LAI stability: min={stab_min_val:.4f}, max={stab_max_val:.4f}")
+
+        if not stability_in_target(lai_stab):
+            lo_fw = float(DictOfBounds[species]["FrActWd"]["lower"])
+            hi_fw = float(DictOfBounds[species]["FrActWd"]["upper"])
+
+            lo_f, hi_f = lo_fw, hi_fw
+
+            # We want the largest FrActWd that keeps stability in target.
+            # Use bisection starting from the upper bound, tracking the best
+            # (highest) valid value found.
+            best_valid_fracactwd = None
+
+            # First, test the upper bound directly
+            res_hi_fw = run_sim(core_params, set_pnet_param(pnet_species_params, "FrActWd", hi_fw), generic_params)
+            stab_hi = res_hi_fw["LAI stability"]
+
+            if verbose:
+                print(f"  FrActWd={hi_fw:.4f} -> LAI stability: "
+                      f"min={float(stab_hi[0]):.4f}, max={float(stab_hi[1]):.4f}")
+
+            if stability_in_target(stab_hi):
+                # Already valid at upper bound — use it directly
+                best_valid_fracactwd = hi_fw
                 if verbose:
-                    print(f"  Iter {i+1}: FrActWd={mid_f:.5f}, "
-                          f"LAI stability: min={s_min:.4f}, max={s_max:.4f}")
-    
-                if stability_in_target(stab):
-                    # Valid — record it and try to go higher
-                    best_valid_fracactwd = mid_f
-                    lo_f = mid_f
-                else:
-                    # Not valid — go lower
-                    hi_f = mid_f
-    
-                if (hi_f - lo_f) < 1e-6:
-                    break
-    
-        if best_valid_fracactwd is not None:
-            best_fracactwd = best_valid_fracactwd
-            if verbose:
-                print(f"  Best valid FrActWd found: {best_fracactwd:.5f}")
-        else:
-            best_fracactwd = lo_f
-            if verbose:
-                print(f"  No fully in-target candidate found. Using lowest tested value: "
-                      f"FrActWd={best_fracactwd:.5f}")
-    
-        pnet_species_params = set_pnet_param(pnet_species_params, "FrActWd", best_fracactwd)
-        res_stage3 = run_sim(core_params, pnet_species_params, generic_params)
-    else:
-        res_stage3 = res_stage2
-        if verbose:
-            print("  LAI stability already within target range. Skipping FrActWd adjustment.")
-    
-    final_stab = res_stage3["LAI stability"]
-    if verbose:
-        print(f"  Stage 3 result: FrActWd={best_fracactwd:.5f}, "
-              f"Max LAI={float(res_stage3['Maximum LAI']):.4f}, "
-              f"LAI stability: min={float(final_stab[0]):.4f}, max={float(final_stab[1]):.4f}")
+                    print(f"  Stability in target at upper bound. Using FrActWd={hi_fw:.5f} directly.")
+            else:
+                # Bisect to find the largest valid value
+                for i in range(n_bisection_iterations):
+                    mid_f = (lo_f + hi_f) / 2.0
+                    res_mid_f = run_sim(
+                        core_params,
+                        set_pnet_param(pnet_species_params, "FrActWd", mid_f),
+                        generic_params
+                    )
+                    stab = res_mid_f["LAI stability"]
+                    s_min = float(stab[0])
+                    s_max = float(stab[1])
 
-    
+                    if verbose:
+                        print(f"  Iter {i+1}: FrActWd={mid_f:.5f}, "
+                              f"LAI stability: min={s_min:.4f}, max={s_max:.4f}")
+
+                    if stability_in_target(stab):
+                        # Valid — record it and try to go higher
+                        best_valid_fracactwd = mid_f
+                        lo_f = mid_f
+                    else:
+                        # Not valid — go lower
+                        hi_f = mid_f
+
+                    if (hi_f - lo_f) < 1e-6:
+                        break
+
+            if best_valid_fracactwd is not None:
+                best_fracactwd = best_valid_fracactwd
+                if verbose:
+                    print(f"  Best valid FrActWd found: {best_fracactwd:.5f}")
+            else:
+                best_fracactwd = lo_f
+                if verbose:
+                    print(f"  No fully in-target candidate found. Using lowest tested value: "
+                          f"FrActWd={best_fracactwd:.5f}")
+
+            pnet_species_params = set_pnet_param(pnet_species_params, "FrActWd", best_fracactwd)
+            res_stage3 = run_sim(core_params, pnet_species_params, generic_params)
+        else:
+            res_stage3 = res_stage2
+            if verbose:
+                print("  LAI stability already within target range. Skipping FrActWd adjustment.")
+
+        final_stab = res_stage3["LAI stability"]
+        if verbose:
+            print(f"  Stage 3 result: FrActWd={best_fracactwd:.5f}, "
+                  f"Max LAI={float(res_stage3['Maximum LAI']):.4f}, "
+                  f"LAI stability: min={float(final_stab[0]):.4f}, max={float(final_stab[1]):.4f}")
+
+        # =====================================================================
+        # STAGE 4: Recalibrate biomass peak via TOWood/TORoot
+        # (inspired by calibrate_phase1_1 incremental search)
+        # If TOWood/TORoot hit their bounds, fall back to FolN adjustment.
+        # =====================================================================
+        if verbose:
+            print("=== Stage 4: Biomass peak recalibration via TOWood/TORoot ===")
+
+        towood_cur = float(pnet_species_params["PnETSpeciesParameters"][species]["TOWood"])
+        toroot_cur = float(pnet_species_params["PnETSpeciesParameters"][species]["TORoot"])
+
+        check_outputs = run_sim(core_params, pnet_species_params, generic_params)
+        cur_peak = float(check_outputs["Biomass peak height"])
+
+        if verbose:
+            print(f"  Current: TOWood={towood_cur:.6f}, TORoot={toroot_cur:.6f}, Peak={cur_peak:.1f} g/m² (target: {target_peak_biomass:.1f})")
+
+        if abs(cur_peak - target_peak_biomass) / target_peak_biomass < PEAK_TOLERANCE:
+            if verbose:
+                print("  Peak already within tolerance. No TOWood/TORoot adjustment needed.")
+            res_stage4 = check_outputs
+        else:
+            step     = max(towood_cur, toroot_cur) * 0.10
+            min_step = step * 1e-4
+            last_dir = None
+            best_towood, best_toroot = towood_cur, toroot_cur
+            best_peak = cur_peak
+            best_outputs_tw = check_outputs
+            iteration = 0
+            hit_bounds = False
+
+            while step >= min_step and iteration < 500:
+                iteration += 1
+                direction = +1.0 if cur_peak > target_peak_biomass else -1.0
+                if last_dir is not None and direction != last_dir:
+                    step *= 0.5
+                    if verbose:
+                        print(f"         → Direction changed. Halving step to {step:.6f}")
+                last_dir = direction
+
+                towood_new = max(towood_lo, min(towood_hi, towood_cur + direction * step))
+                toroot_new = max(toroot_lo, min(toroot_hi, toroot_cur + direction * step))
+
+                # --- Detect if we've hit the bounds and are stuck ---
+                if (towood_new == towood_cur and toroot_new == toroot_cur):
+                    if verbose:
+                        print(f"  Iter {iteration}: TOWood/TORoot at bounds "
+                              f"(TOWood={towood_cur:.6f}, TORoot={toroot_cur:.6f}) — "
+                              f"cannot move further. Switching to FolN adjustment.")
+                    hit_bounds = True
+                    break
+
+                trial_pnet = set_towood_toroot(pnet_species_params, towood_new, toroot_new)
+                trial_out  = run_sim(core_params, trial_pnet, generic_params)
+                trial_peak = float(trial_out["Biomass peak height"])
+                rel_error  = (trial_peak - target_peak_biomass) / target_peak_biomass
+
+                if verbose:
+                    print(f"  Iter {iteration:3d} | dir={direction:+.0f} | "
+                          f"TOWood={towood_new:.6f}  TORoot={toroot_new:.6f} | "
+                          f"Peak={trial_peak:.1f}  Error={rel_error*100:+.2f}%  Step={step:.6f}")
+
+                if abs(rel_error) < PEAK_TOLERANCE:
+                    if verbose:
+                        print(f"  Converged at iteration {iteration}. TOWood={towood_new:.6f}, TORoot={toroot_new:.6f}")
+                    best_towood, best_toroot = towood_new, toroot_new
+                    best_peak = trial_peak
+                    best_outputs_tw = trial_out
+                    break
+
+                towood_cur, toroot_cur = towood_new, toroot_new
+                cur_peak = trial_peak
+                best_towood, best_toroot = towood_new, toroot_new
+                best_peak = trial_peak
+                best_outputs_tw = trial_out
+
+            pnet_species_params = set_towood_toroot(pnet_species_params, best_towood, best_toroot)
+            res_stage4 = run_sim(core_params, pnet_species_params, generic_params)
+
+            if verbose:
+                print(f"  Stage 4 result: TOWood={best_towood:.6f}, TORoot={best_toroot:.6f}, "
+                      f"Peak={float(res_stage4['Biomass peak height']):.1f} g/m²")
+
+            # =================================================================
+            # STAGE 5: FolN fallback (only if TOWood/TORoot hit bounds)
+            # Lowering FolN → lowers peak; raising FolN → raises peak.
+            # Uses the same incremental-search pattern as TOWood/TORoot.
+            # =================================================================
+            if hit_bounds:
+                if verbose:
+                    print("=== Stage 5: FolN fallback for peak calibration ===")
+
+                foln_cur = float(pnet_species_params["PnETSpeciesParameters"][species]["FolN"])
+                cur_peak = float(res_stage4["Biomass peak height"])
+
+                if verbose:
+                    print(f"  Current: FolN={foln_cur:.4f}, Peak={cur_peak:.1f} g/m² (target: {target_peak_biomass:.1f})")
+
+                if abs(cur_peak - target_peak_biomass) / target_peak_biomass < PEAK_TOLERANCE:
+                    if verbose:
+                        print("  Peak already within tolerance after TOWood/TORoot bound fix. No FolN adjustment needed.")
+                else:
+                    step     = max(foln_cur * 0.10, 1e-4)
+                    min_step = step * 1e-4
+                    last_dir = None
+                    best_foln = foln_cur
+                    best_foln_peak = cur_peak
+                    iteration = 0
+
+                    while step >= min_step and iteration < 500:
+                        iteration += 1
+                        # Lower FolN → lower peak; higher FolN → higher peak
+                        direction = -1.0 if cur_peak > target_peak_biomass else +1.0
+                        if last_dir is not None and direction != last_dir:
+                            step *= 0.5
+                            if verbose:
+                                print(f"         → Direction changed. Halving step to {step:.6f}")
+                        last_dir = direction
+
+                        foln_new = max(foln_lo, min(foln_hi, foln_cur + direction * step))
+
+                        if foln_new == foln_cur:
+                            if verbose:
+                                print(f"  FolN at bounds (FolN={foln_cur:.4f}) — cannot move further. Stopping FolN adjustment.")
+                            break
+
+                        trial_pnet = set_pnet_param(pnet_species_params, "FolN", foln_new)
+                        trial_out  = run_sim(core_params, trial_pnet, generic_params)
+                        trial_peak = float(trial_out["Biomass peak height"])
+                        rel_error  = (trial_peak - target_peak_biomass) / target_peak_biomass
+
+                        if verbose:
+                            print(f"  Iter {iteration:3d} | dir={direction:+.0f} | "
+                                  f"FolN={foln_new:.4f} | "
+                                  f"Peak={trial_peak:.1f}  Error={rel_error*100:+.2f}%  Step={step:.6f}")
+
+                        if abs(rel_error) < PEAK_TOLERANCE:
+                            if verbose:
+                                print(f"  FolN converged at iteration {iteration}. FolN={foln_new:.4f}")
+                            best_foln = foln_new
+                            best_foln_peak = trial_peak
+                            break
+
+                        foln_cur = foln_new
+                        cur_peak = trial_peak
+                        best_foln = foln_new
+                        best_foln_peak = trial_peak
+
+                    pnet_species_params = set_pnet_param(pnet_species_params, "FolN", best_foln)
+                    res_stage4 = run_sim(core_params, pnet_species_params, generic_params)
+
+                    if verbose:
+                        print(f"  Stage 5 result: FolN={best_foln:.4f}, "
+                              f"Peak={float(res_stage4['Biomass peak height']):.1f} g/m²")
+
+        # =====================================================================
+        # Check convergence: are both LAI and peak in range?
+        # If so, break out of the outer loop early.
+        # =====================================================================
+        final_lai_ok = lai_in_target(res_stage4["Maximum LAI"]) and stability_in_target(res_stage4["LAI stability"])
+        final_peak_ok = abs(float(res_stage4["Biomass peak height"]) - target_peak_biomass) / target_peak_biomass < PEAK_TOLERANCE
+
+        if final_lai_ok and final_peak_ok:
+            if verbose:
+                print(f"\n  Converged after outer iteration {outer_iter}. Both LAI and peak are in range.")
+            break
+        elif not final_lai_ok:
+            if verbose:
+                print(f"\n  LAI out of bounds after biomass recalibration (Max LAI={float(res_stage4['Maximum LAI']):.4f}). "
+                      f"Will re-calibrate LAI{'.' if outer_iter < MAX_OUTER_ITER else ' — but no iterations remain.'}")
+        else:
+            if verbose:
+                print(f"\n  Peak still out of tolerance after iteration {outer_iter}.")
+
+    else:
+        # Loop exhausted without converging
+        print(f"\n[WARNING] Failed to converge after {MAX_OUTER_ITER} outer iterations: "
+              f"could not simultaneously satisfy LAI target [{target_LAI_min}, {target_LAI_max}] "
+              f"and peak biomass target {target_peak_biomass:.1f} g/m². "
+              f"Final Max LAI={float(res_stage4['Maximum LAI']):.4f}, "
+              f"Final Peak={float(res_stage4['Biomass peak height']):.1f} g/m².")
 
     # =========================================================================
     # Final summary
     # =========================================================================
+    final_stab = res_stage4["LAI stability"]
     final_params = {
         "FracFol": best_fracfol,
         "SLWmax": best_slwmax,
-        "FrActWd": best_fracactwd
+        "FrActWd": best_fracactwd,
+        "TOWood": float(pnet_species_params["PnETSpeciesParameters"][species]["TOWood"]),
+        "TORoot": float(pnet_species_params["PnETSpeciesParameters"][species]["TORoot"]),
+        "FolN": float(pnet_species_params["PnETSpeciesParameters"][species]["FolN"])
     }
 
     if verbose:
         print("\n=== Calibration Summary ===")
         print(f"  Species            : {species}")
         print(f"  Target LAI range   : [{target_LAI_min}, {target_LAI_max}]")
-        print(f"  Final Max LAI      : {float(res_stage3['Maximum LAI']):.4f}")
+        print(f"  Final Max LAI      : {float(res_stage4['Maximum LAI']):.4f}")
         print(f"  Final LAI stability: min={float(final_stab[0]):.4f}, max={float(final_stab[1]):.4f}")
+        print(f"  Target peak biomass: {target_peak_biomass:.1f} g/m²")
+        print(f"  Final peak biomass : {float(res_stage4['Biomass peak height']):.1f} g/m²")
         print(f"  FracFol            : {best_fracfol:.5f}")
         print(f"  SLWmax             : {best_slwmax:.5f}")
         print(f"  FrActWd            : {best_fracactwd:.5f}")
-        in_range = lai_in_target(res_stage3["Maximum LAI"]) and stability_in_target(res_stage3["LAI stability"])
-        print(f"  Calibration successful: {in_range}")
+        print(f"  TOWood             : {final_params['TOWood']:.6f}")
+        print(f"  TORoot             : {final_params['TORoot']:.6f}")
+        print(f"  FolN               : {final_params['FolN']:.4f}")
+        in_range = lai_in_target(res_stage4["Maximum LAI"]) and stability_in_target(res_stage4["LAI stability"])
+        peak_ok  = abs(float(res_stage4["Biomass peak height"]) - target_peak_biomass) / target_peak_biomass < PEAK_TOLERANCE
+        print(f"  LAI calibration successful : {in_range}")
+        print(f"  Peak calibration successful: {peak_ok}")
         run_sim(core_params, pnet_species_params, generic_params, True)
+        # print(pnet_species_params)
 
     return {
         "final_params": final_params,
-        "final_simulation_outputs": res_stage3,
+        "final_simulation_outputs": res_stage4,
         "updated_core_params": core_params,
         "updated_pnet_species_params": pnet_species_params,
         "updated_generic_params": generic_params
     }
+
 
 
 
@@ -8053,7 +8303,7 @@ def calibrate_subphase_1_1_3(
     pnet_params    = json.load(open(path_pnet))
     generic_params = json.load(open(path_generic))
     # EDIT : Put longevity veeeeery far away so that fAge
-    # doesn't influence the peak ?
+    # doesn't influence the peak
     core_params[species]["Longevity"]="999"
 
     # --- Retrieve FolN bounds ---
@@ -8175,7 +8425,6 @@ def calibrate_subphase_1_1_3(
     return best_foln
 
 
-
 import json
 import copy
 import numpy as np
@@ -8198,55 +8447,57 @@ def calibrate_subphase_1_2(
     # ─────────────────────────────────────────────
     # ARBITRARY INPUTS FOUND BY TRIAL AND ERROR
     # ─────────────────────────────────────────────
-        
+
     peak_time_tolerance    = 7.0   # ± years
     peak_biomass_rel_tol   = 0.05   # ± 5%
-    
+
     MaxFracFol_step  = 0.02
     FrActWd_step     = 0.000005
     FracFol_step     = 0.005
+    FolN_step        = 0.1       # step for FolN in Phase C
     turnover_pct_step = 0.05   # 5% increment per iteration for TOWood and TORoot
-        
+
     # FracFolShape coupling constants
     MAXFRACFOL_THRESHOLD  = 0.05
     MAXFRACFOL_CEILING    = 0.141
     FRACFOLSHAPE_LOW      = 8.0
     FRACFOLSHAPE_HIGH     = 16.0
-        
+
     # ─────────────────────────────────────────────
     # LOAD INITIAL PARAMETER DICTIONARIES
     # ─────────────────────────────────────────────
-    initial_core_params = json.load(
-        open('./SpeciesParametersSets/Calibrated_SubSubPhase1.1.3/initialCoreSpeciesParameters.json'))
-    initial_pnet_species_params = json.load(
-        open('./SpeciesParametersSets/Calibrated_SubSubPhase1.1.3/initialPnETSpeciesParameters.json'))
-    initial_generic_params = json.load(
-        open('./SpeciesParametersSets/Calibrated_SubSubPhase1.1.3/InitialGenericParameters.json'))
+    initial_core_params = json.load(open(path_core))
+    initial_pnet_species_params = json.load(open(path_pnet))
+    initial_generic_params = json.load(open(path_generic))
 
-    # We edit the longevity because at this step, we still want it to be unlimited to avoid confusion with the effect of age.
+    # We edit the longevity because at this step, we still want it to be 
+    # unlimited to avoid confusion with the effect of age.
     initial_core_params[species]["Longevity"]="999"
 
     # Initial value of FracFoLShape
     current_FracFolShape = float(6)
-    
+
     # ─────────────────────────────────────────────
     # BOUNDS
     # ─────────────────────────────────────────────
     lb_MaxFracFol = float(DictOfBounds[species]["MaxFracFol"]["lower"])
     ub_MaxFracFol = float(DictOfBounds[species]["MaxFracFol"]["upper"])
     ceiling_MaxFracFol = float(ub_MaxFracFol * 1.5)
-    
+
     lb_FrActWd = float(DictOfBounds[species]["FrActWd"]["lower"])
     ub_FrActWd = float(DictOfBounds[species]["FrActWd"]["upper"])
-    
+
     lb_FracFol = float(DictOfBounds[species]["FracFol"]["lower"])
     ub_FracFol = float(DictOfBounds[species]["FracFol"]["upper"])
-    
+
     lb_TOWood = float(DictOfBounds[species]["TOWood"]["lower"])
     ub_TOWood = float(DictOfBounds[species]["TOWood"]["upper"])
     lb_TORoot  = float(DictOfBounds[species]["TORoot"]["lower"])
     ub_TORoot  = float(DictOfBounds[species]["TORoot"]["upper"])
-    
+
+    lb_FolN = float(DictOfBounds[species]["FolN"]["lower"])
+    ub_FolN = float(DictOfBounds[species]["FolN"]["upper"])
+
     # ─────────────────────────────────────────────
     # CURRENT PARAMETER STATE (mutable working values)
     # ─────────────────────────────────────────────
@@ -8260,7 +8511,39 @@ def calibrate_subphase_1_2(
         initial_pnet_species_params["PnETSpeciesParameters"][species]["TOWood"])
     current_TORoot = float(
         initial_pnet_species_params["PnETSpeciesParameters"][species]["TORoot"])
-    
+    current_FolN = float(
+        initial_pnet_species_params["PnETSpeciesParameters"][species]["FolN"])
+
+    # ─────────────────────────────────────────────
+    # BEST PARAMETER SET TRACKER
+    # (closest peak age while having right peak height and right LAI)
+    # ─────────────────────────────────────────────
+    best_params = None          # will hold a dict of the best parameter set
+    best_peak_age_diff = None   # |peak_time - target| for that set
+
+    def update_best_params(sim_peak_time, sim_max_LAI, sim_peak_biomass):
+        """Register the current parameter set if peak height and LAI are matched
+        and the peak age is closer to target than any previously recorded set."""
+        nonlocal best_params, best_peak_age_diff
+        lai_ok = abs(sim_max_LAI - original_max_LAI_phB) / original_max_LAI_phB <= 0.05
+        biomass_ok = (abs(sim_peak_biomass - original_peak_biomass_phB)
+                      / original_peak_biomass_phB <= 0.05)
+        if lai_ok and biomass_ok:
+            age_diff = abs(sim_peak_time - target_peak_time)
+            if (best_peak_age_diff is None) or (age_diff < best_peak_age_diff):
+                best_peak_age_diff = age_diff
+                best_params = {
+                    "MaxFracFol": current_MaxFracFol,
+                    "FracFolShape": current_FracFolShape,
+                    "FrActWd": current_FrActWd,
+                    "FracFol": current_FracFol,
+                    "TOWood": current_TOWood,
+                    "TORoot": current_TORoot,
+                    "FolN": current_FolN,
+                }
+                print(f"    ★ New best parameter set registered "
+                      f"(peak age diff = {age_diff:.1f} yr)")
+
     # ─────────────────────────────────────────────
     # HELPERS FUNCTIONS
     # ─────────────────────────────────────────────
@@ -8274,20 +8557,21 @@ def calibrate_subphase_1_2(
             # Normalise position in [0, 1] across the active range
             t = (MaxFracFol - MAXFRACFOL_THRESHOLD) / (MAXFRACFOL_CEILING - MAXFRACFOL_THRESHOLD)
             t = min(t, 1.0)  # clamp before applying curve
-    
+
             # Reverse exponential: f(t) = (1 - e^(-k*t)) / (1 - e^(-k)), maps [0,1] -> [0,1]
             # Higher k = faster early rise, slower approach to ceiling
             k = 5.0
             curved_t = (1.0 - math.exp(-k * t)) / (1.0 - math.exp(-k))
-    
+
             value = FRACFOLSHAPE_LOW + curved_t * (FRACFOLSHAPE_HIGH - FRACFOLSHAPE_LOW)
             return float(min(max(value, FRACFOLSHAPE_LOW), FRACFOLSHAPE_HIGH))
-    
-    def build_param_dicts(MaxFracFol, FrActWd, FracFol, TOWood, TORoot, fracFolShape = current_FracFolShape):
+
+    def build_param_dicts(MaxFracFol, FrActWd, FracFol, TOWood, TORoot,
+                          FolN, fracFolShape=current_FracFolShape):
         core   = copy.deepcopy(initial_core_params)
         pnet_s = copy.deepcopy(initial_pnet_species_params)
         gen    = copy.deepcopy(initial_generic_params)
-    
+
         sp = pnet_s["PnETSpeciesParameters"][species]
         sp["MaxFracFol"]   = float(MaxFracFol)
         sp["FracFolShape"] = float(fracFolShape)
@@ -8295,11 +8579,14 @@ def calibrate_subphase_1_2(
         sp["FracFol"]      = float(FracFol)
         sp["TOWood"]       = float(TOWood)
         sp["TORoot"]        = float(TORoot)
-    
+        sp["FolN"]          = float(FolN)
+
         return core, pnet_s, gen
-    
-    def run_sim(MaxFracFol, FrActWd, FracFol, TOWood, TORoot, makePlots = False, printParams = False, fracFolShape = current_FracFolShape):
-        core, pnet_s, gen = build_param_dicts(MaxFracFol, FrActWd, FracFol, TOWood, TORoot, fracFolShape)
+
+    def run_sim(MaxFracFol, FrActWd, FracFol, TOWood, TORoot, FolN,
+                makePlots=False, printParams=False, fracFolShape=current_FracFolShape):
+        core, pnet_s, gen = build_param_dicts(
+            MaxFracFol, FrActWd, FracFol, TOWood, TORoot, FolN, fracFolShape)
         result = calibrationSimulationMonoculturemanawan(
             duration=duration,
             climate=climate,
@@ -8308,7 +8595,8 @@ def calibrate_subphase_1_2(
             dictOfInitialCoreSpeciesParameters=core,
             dictOfInitialPnETSpeciesParameters=pnet_s,
             dictOfInitialPnETGenericParameters=gen,
-            plotResults = makePlots
+            plotResults=makePlots,
+            
         )
         if printParams:
             print("Core species parameters : \n")
@@ -8317,8 +8605,14 @@ def calibrate_subphase_1_2(
             print(pnet_s)
             print("PnET generic parameters : \n")
             print(gen)
-        return float(result["Biomass peak 95% time"]), float(result["Maximum LAI"]), float(result["Biomass peak height"])
-    
+        # print("\033[42m\nPnET species parameters : \033[0m")
+        # print("\033[42m" + str(pnet_s) + "\033[0m")
+        # print("\n")
+        # print("\033[42mSim results : "+ str(result) + "\033[0m\n")
+        return (float(result["Biomass peak 95% time"]),
+                float(result["Maximum LAI"]),
+                float(result["Biomass peak height"]))
+
     # ─────────────────────────────────────────────
     # BASELINE RUN
     # ─────────────────────────────────────────────
@@ -8326,39 +8620,40 @@ def calibrate_subphase_1_2(
     print(f"Subphase 1.2 — Species: {species}")
     print("=" * 70)
     print("\n[Baseline] Running baseline simulation...")
-    
+
     baseline_peak_time, baseline_max_LAI, baseline_peak_biomass = run_sim(
-        current_MaxFracFol, current_FrActWd, current_FracFol, current_TOWood, current_TORoot)
-    
+        current_MaxFracFol, current_FrActWd, current_FracFol,
+        current_TOWood, current_TORoot, current_FolN, False, False)
+
     original_max_LAI = baseline_max_LAI
-    
+
     print(f"  Baseline peak time    : {baseline_peak_time:.1f} yr")
     print(f"  Baseline max LAI      : {baseline_max_LAI:.4f}")
     print(f"  Baseline peak biomass : {baseline_peak_biomass:.2f} g/m²")
-    
+
     peak_time_matched = abs(baseline_peak_time - target_peak_time) <= peak_time_tolerance
     too_slow = baseline_peak_time > target_peak_time + peak_time_tolerance
     too_fast = baseline_peak_time < target_peak_time - peak_time_tolerance
-    
+
     # ─────────────────────────────────────────────
     # PHASE A — ADJUST MaxFracFol (with coupled FracFolShape)
     # ─────────────────────────────────────────────
     print("\n--- Phase A: Adjusting MaxFracFol (FracFolShape coupled) ---")
-    
+
     closestPeakTime = -999
     finalMaxFracFol = 0
     finalFracFolShape = 0
-    
+
     if peak_time_matched:
         print("  Peak timing already within tolerance. Skipping Phase A.")
     else:
         direction = 1 if too_slow else -1
         iteration = 0
-    
+
         while not peak_time_matched:
             candidate_MaxFracFol = float(current_MaxFracFol + direction * MaxFracFol_step)
             candidate_FracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
-    
+
             # Check ceiling (too slow) or floor (too fast)
             if too_slow and candidate_MaxFracFol > MAXFRACFOL_CEILING:
                 print(f"  MaxFracFol reached ceiling ({MAXFRACFOL_CEILING:.4f}). Stopping Phase A.")
@@ -8366,47 +8661,48 @@ def calibrate_subphase_1_2(
             if too_fast and candidate_MaxFracFol < lb_MaxFracFol:
                 print(f"  MaxFracFol reached lower bound ({lb_MaxFracFol:.6f}). Stopping Phase A.")
                 break
-    
+
             sim_peak_time, sim_max_LAI, _ = run_sim(
                 candidate_MaxFracFol, current_FrActWd, current_FracFol,
-                current_TOWood, current_TORoot, False, False, candidate_FracFolShape)
-    
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, candidate_FracFolShape)
+
             iteration += 1
             print(
                 f"  [A-{iteration:>3d}] MaxFracFol={candidate_MaxFracFol:.4f}  "
                 f"FracFolShape={candidate_FracFolShape:.4f} | "
                 f"PeakTime={sim_peak_time:.1f} yr | MaxLAI={sim_max_LAI:.4f}"
             )
-    
-    
+
             current_MaxFracFol = float(candidate_MaxFracFol)
             peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
-    
+
             if peak_time_matched:
                 print(f"  ✓ Peak timing matched in Phase A.")
                 print(f"    MaxFracFol={current_MaxFracFol:.6f}  "
                       f"FracFolShape={coupled_FracFolShape(current_MaxFracFol):.6f}")
-    
+
             if (closestPeakTime == -999) or (abs(sim_peak_time - target_peak_time) < closestPeakTime):
                 closestPeakTime = abs(sim_peak_time - target_peak_time)
                 finalMaxFracFol = candidate_MaxFracFol
                 finalFracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
-    
-    current_MaxFracFol = finalMaxFracFol
-    current_FracFolShape = finalFracFolShape
-    
+
+    if closestPeakTime > -999:
+        current_MaxFracFol = finalMaxFracFol
+        current_FracFolShape = finalFracFolShape
+
     print(f"Final values of MaxFracFol and FracFolShape to be used going forward :"
           f"    MaxFracFol={current_MaxFracFol:.6f}  "
           f"FracFolShape={current_FracFolShape:.6f}")
-    
+
     # ─────────────────────────────────────────────
     # HELPER FUNCTION: Recalibrate LAI and Biomass Peak Height
     # ─────────────────────────────────────────────
     def recalibrate_LAI_and_biomass(
             current_MaxFracFol, current_FrActWd, current_FracFol,
-            current_TOWood, current_TORoot,
+            current_TOWood, current_TORoot, current_FolN,
             original_max_LAI, original_peak_biomass,
-            LAI_rel_tol=0.05, biomass_rel_tol=0.05, CalibratePeakHeight = False):
+            LAI_rel_tol=0.05, biomass_rel_tol=0.05, CalibratePeakHeight=False):
         """
         Adjusts FracFol to restore Maximum LAI to original_max_LAI,
         then adjusts TOWood and TORoot together to restore peak biomass
@@ -8414,49 +8710,49 @@ def calibrate_subphase_1_2(
         for both adjustments.
         Returns updated (current_FracFol, current_TOWood, current_TORoot).
         """
-    
+
         # ── Step 1: Recalibrate Biomass Peak Height via TOWood and TORoot ──
-        # if CalibratePeakHeight:
         if True:
             print("    [Helper] Recalibrating Biomass Peak Height via TOWood and TORoot...")
             _, _, sim_biomass = run_sim(
                 current_MaxFracFol, current_FrActWd, current_FracFol,
-                current_TOWood, current_TORoot, False, False, finalFracFolShape)
-        
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, current_FracFolShape)
+
             biomass_matched = abs(sim_biomass - original_peak_biomass) / original_peak_biomass <= biomass_rel_tol
-        
+
             if biomass_matched:
                 print(f"    [Helper] Biomass already within tolerance ({sim_biomass:.2f}). "
                       f"Skipping TOWood/TORoot adjustment.")
             else:
-                # Increase turnover → lower biomass; decrease turnover → higher biomass
                 direction_turnover = 1 if sim_biomass > original_peak_biomass else -1
                 turnover_step = turnover_pct_step
                 prev_biomass = sim_biomass
                 bio_iter = 0
-        
+
                 while not biomass_matched:
                     pct_change = 1.0 + direction_turnover * turnover_step
                     candidate_TOWood = float(current_TOWood * pct_change)
                     candidate_TORoot = float(current_TORoot * pct_change)
-        
+
                     if candidate_TOWood > ub_TOWood or candidate_TOWood < lb_TOWood:
                         print(f"    [Helper] ⚠ WARNING: TOWood={candidate_TOWood:.6f} outside empirical "
                               f"bounds [{lb_TOWood:.6f}, {ub_TOWood:.6f}].")
                     if candidate_TORoot > ub_TORoot or candidate_TORoot < lb_TORoot:
                         print(f"    [Helper] ⚠ WARNING: TORoot={candidate_TORoot:.6f} outside empirical "
                               f"bounds [{lb_TORoot:.6f}, {ub_TORoot:.6f}].")
-        
+
                     _, sim_LAI, sim_biomass = run_sim(
                         current_MaxFracFol, current_FrActWd, current_FracFol,
-                        candidate_TOWood, candidate_TORoot, False, False, finalFracFolShape)
-        
+                        candidate_TOWood, candidate_TORoot, current_FolN,
+                        False, False, current_FracFolShape)
+
                     bio_iter += 1
                     print(f"    [Helper-BIO {bio_iter:>3d}] TOWood={candidate_TOWood:.6f}  "
                           f"TORoot={candidate_TORoot:.6f} (step={turnover_step:.4f}) | "
                           f"PeakBiomass={sim_biomass:.2f} (target={original_peak_biomass:.2f}) | "
-                         f"MaxLAI={sim_LAI:.4f}")
-        
+                          f"MaxLAI={sim_LAI:.4f}")
+
                     # Overshoot detection
                     overshot = (
                         (direction_turnover == 1  and
@@ -8471,24 +8767,25 @@ def calibrate_subphase_1_2(
                               f"{sim_biomass:.2f}). Reversing direction, halving step to "
                               f"{turnover_step:.6f}.")
                         continue
-        
+
                     prev_biomass = sim_biomass
                     current_TOWood = candidate_TOWood
                     current_TORoot = candidate_TORoot
                     biomass_matched = (
                         abs(sim_biomass - original_peak_biomass) / original_peak_biomass <= biomass_rel_tol)
-        
+
                 print(f"    [Helper] ✓ Biomass recalibrated. TOWood={current_TOWood:.6f}  "
                       f"TORoot={current_TORoot:.6f} | PeakBiomass={sim_biomass:.2f}")
-    
+
         # ── Step 2: Recalibrate Maximum LAI via FracFol ──
         print("    [Helper] Recalibrating Maximum LAI via FracFol...")
         _, sim_LAI, _ = run_sim(
             current_MaxFracFol, current_FrActWd, current_FracFol,
-            current_TOWood, current_TORoot, False, False, finalFracFolShape)
-    
+            current_TOWood, current_TORoot, current_FolN,
+            False, False, current_FracFolShape)
+
         LAI_matched = abs(sim_LAI - original_max_LAI) / original_max_LAI <= LAI_rel_tol
-    
+
         if LAI_matched:
             print(f"    [Helper] LAI already within tolerance ({sim_LAI:.4f}). Skipping FracFol adjustment.")
         else:
@@ -8496,30 +8793,31 @@ def calibrate_subphase_1_2(
             direction_fracfol = 1 if sim_LAI < original_max_LAI else -1
             prev_LAI = sim_LAI
             lai_iter = 0
-    
+
             while not LAI_matched:
                 candidate_FracFol = float(current_FracFol + direction_fracfol * fracfol_step)
                 if candidate_FracFol < 0:
-                    raise ValueError("The algorithm has reached negative values for FracFol because it had"
-                                     "too much trouble reducing the LAI. FracFol cannot be negative."
+                    raise ValueError("The algorithm has reached negative values for FracFol because it had "
+                                     "too much trouble reducing the LAI. FracFol cannot be negative. "
                                      "Please check the assumptions or parameters for this species.")
-    
+
                 if candidate_FracFol > ub_FracFol:
                     print(f"    [Helper] ⚠ WARNING: FracFol={candidate_FracFol:.6f} exceeds upper "
                           f"empirical bound ({ub_FracFol:.6f}).")
                 elif candidate_FracFol < lb_FracFol:
                     print(f"    [Helper] ⚠ WARNING: FracFol={candidate_FracFol:.6f} is below lower "
                           f"empirical bound ({lb_FracFol:.6f}).")
-                
+
                 _, sim_LAI, _ = run_sim(
                     current_MaxFracFol, current_FrActWd, candidate_FracFol,
-                    current_TOWood, current_TORoot, False, False, finalFracFolShape)
-    
+                    current_TOWood, current_TORoot, current_FolN,
+                    False, False, current_FracFolShape)
+
                 lai_iter += 1
                 print(f"    [Helper-LAI {lai_iter:>3d}] FracFol={candidate_FracFol:.6f} "
                       f"(step={fracfol_step:.6f}) | MaxLAI={sim_LAI:.4f} "
                       f"(target={original_max_LAI:.4f})")
-    
+
                 # Overshoot detection
                 overshot = (
                     (direction_fracfol == 1  and sim_LAI > original_max_LAI * (1.0 + LAI_rel_tol)) or
@@ -8531,46 +8829,44 @@ def calibrate_subphase_1_2(
                     print(f"    [Helper] Overshoot detected (LAI: {prev_LAI:.4f} → {sim_LAI:.4f}). "
                           f"Reversing direction, halving step to {fracfol_step:.6f}.")
                     continue
-    
+
                 prev_LAI = sim_LAI
                 current_FracFol = candidate_FracFol
                 LAI_matched = abs(sim_LAI - original_max_LAI) / original_max_LAI <= LAI_rel_tol
-    
+
                 if lai_iter == 10:
+                    print("LAI recalibration seems to fail. Resetting FracFol to lower values and retrying.")
+                    current_FracFol = lb_FracFol
+                    fracfol_step = FracFol_step
+
+                if lai_iter == 25:
                     print("LAI recalibration seems to fail. Printing sim and parameters :")
                     _, sim_LAI, _ = run_sim(
-                    current_MaxFracFol, current_FrActWd, candidate_FracFol,
-                    current_TOWood, current_TORoot, True, True, finalFracFolShape)
+                        current_MaxFracFol, current_FrActWd, candidate_FracFol,
+                        current_TOWood, current_TORoot, current_FolN,
+                        False, False, current_FracFolShape)
                     raise ValueError("LAI recalibration is failing. Seems like the algorithm has dug itself into a hole.")
-    
+
             print(f"    [Helper] ✓ LAI recalibrated. FracFol={current_FracFol:.6f} | "
                   f"MaxLAI={sim_LAI:.4f}")
-    
-        
-    
+
         return current_FracFol, current_TOWood, current_TORoot
-    
+
     # ─────────────────────────────────────────────
     # RECORD ORIGINAL TARGETS FOR HELPER
     # ─────────────────────────────────────────────
-    # These are the LAI and biomass values we want to preserve while
-    # adjusting FrActWd. They come from the state at the end of Phase A.
-    # _, original_max_LAI_phB, original_peak_biomass_phB = run_sim(
-    #     current_MaxFracFol, current_FrActWd, current_FracFol,
-    #     current_TOWood, current_TORoot)
-    
     original_max_LAI_phB = baseline_max_LAI
     original_peak_biomass_phB = baseline_peak_biomass
-    
+
     print("Phase A Finished. Recalibrating LAI and peak before going to phase B.")
     current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
         current_MaxFracFol, current_FrActWd, current_FracFol,
-        current_TOWood, current_TORoot,
+        current_TOWood, current_TORoot, current_FolN,
         original_max_LAI_phB, original_peak_biomass_phB)
-    
+
     LAI_trigger_low  = 2.2
     LAI_trigger_high = 6.0
-    
+
     # ─────────────────────────────────────────────
     # PHASE B — ADJUST FrActWd
     # ─────────────────────────────────────────────
@@ -8578,48 +8874,67 @@ def calibrate_subphase_1_2(
     print(f"  Reference LAI for recalibration    : {original_max_LAI_phB:.4f}")
     print(f"  Reference biomass for recalibration: {original_peak_biomass_phB:.2f} g/m²")
     print(f"  LAI trigger range                  : [{LAI_trigger_low:.1f}, {LAI_trigger_high:.1f}]")
-    
+
+    # Flag: did FrActWd hit its upper bound, triggering Phase C?
+    frActWd_hit_ub = False
+    frActWd_hit_lb = False
+    # Flag: has full convergence been achieved?
+    fully_converged = False
+
     if peak_time_matched:
         print("  Peak timing already matched. Skipping Phase B.")
+        fully_converged = True
     else:
         sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
             current_MaxFracFol, current_FrActWd, current_FracFol,
-            current_TOWood, current_TORoot, False, False, finalFracFolShape)
-    
+            current_TOWood, current_TORoot, current_FolN,
+            False, False, current_FracFolShape)
+
         too_slow = sim_peak_time > target_peak_time + peak_time_tolerance
         direction = 1 if too_slow else -1
         current_step = FrActWd_step
         prev_peak_time = sim_peak_time
         iteration = 0
-    
+
         # Outer loop: keep going until peak timing, LAI and biomass are all matched
         all_matched = (
             abs(sim_peak_time - target_peak_time) <= peak_time_tolerance and
             abs(sim_max_LAI - original_max_LAI_phB) / original_max_LAI_phB <= 0.05 and
             abs(sim_peak_biomass - original_peak_biomass_phB) / original_peak_biomass_phB <= 0.05
         )
-    
+
         iterationsWithoutRecalibration = 0
-    
+
         while not all_matched:
-    
+
             # ── Adjust FrActWd until peak timing is matched ──
             peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
-    
+
             while not peak_time_matched:
                 candidate_FrActWd = float(current_FrActWd + direction * current_step)
-    
+
+                # ── NEW: Stop Phase B if FrActWd exceeds upper bound ──
                 if candidate_FrActWd > ub_FrActWd:
-                    print(f"  ⚠ WARNING: FrActWd={candidate_FrActWd:.6f} exceeds upper empirical "
-                          f"bound ({ub_FrActWd:.6f}). Proceeding anyway.")
+                    print(f"  ⚠ FrActWd={candidate_FrActWd:.8f} exceeds upper bound "
+                          f"({ub_FrActWd:.6f}). Stopping Phase B, will proceed to Phase C.")
+                    frActWd_hit_ub = True
+                    # Clamp FrActWd to its upper bound before exiting
+                    current_FrActWd = float(ub_FrActWd)
+                    break
+
                 if candidate_FrActWd < lb_FrActWd:
                     print(f"  ⚠ WARNING: FrActWd={candidate_FrActWd:.6f} is below lower empirical "
-                          f"bound ({lb_FrActWd:.6f}). Proceeding anyway.")
-    
+                          f"bound ({lb_FrActWd:.6f}). Stopping Phase B, will proceed to Phase C.")
+                    frActWd_hit_lb = True
+                    # Clamp FrActWd to its upper bound before exiting
+                    current_FrActWd = float(lb_FrActWd)
+                    break
+
                 sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
                     current_MaxFracFol, candidate_FrActWd, current_FracFol,
-                    current_TOWood, current_TORoot, False, False, finalFracFolShape)
-    
+                    current_TOWood, current_TORoot, current_FolN,
+                    False, False, current_FracFolShape)
+
                 iteration += 1
                 iterationsWithoutRecalibration += 1
                 print(
@@ -8629,7 +8944,7 @@ def calibrate_subphase_1_2(
                     f"MaxLAI={sim_max_LAI:.4f} | "
                     f"PeakBiomass={sim_peak_biomass:.2f} g/m²"
                 )
-    
+
                 # Overshoot detection for peak timing
                 overshot = (
                     (direction == 1  and
@@ -8644,48 +8959,52 @@ def calibrate_subphase_1_2(
                           f"{sim_peak_time:.1f} yr). Reversing direction, halving step to "
                           f"{current_step:.6f}.")
                     continue
-    
+
                 prev_peak_time = sim_peak_time
                 current_FrActWd = candidate_FrActWd
                 peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
-    
-                # Trigger helper if LAI goes out of [2, 6] range mid-search
-                # if sim_max_LAI < LAI_trigger_low or sim_max_LAI > LAI_trigger_high:
-                if iterationsWithoutRecalibration == 2:
-                    print(f"  LAI={sim_max_LAI:.4f} outside trigger range "
-                          f"[{LAI_trigger_low:.1f}, {LAI_trigger_high:.1f}]. "
-                          f"Launching helper recalibration...")
+
+                # Trigger helper if iterationsWithoutRecalibration == 2
+                if iterationsWithoutRecalibration >= 4:
+                    print("  Relacalibrating LAI after 4 iterations of changing FrActWd...")
                     current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
                         current_MaxFracFol, current_FrActWd, current_FracFol,
-                        current_TOWood, current_TORoot,
+                        current_TOWood, current_TORoot, current_FolN,
                         original_max_LAI_phB, original_peak_biomass_phB)
                     # Re-evaluate after helper
                     sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
                         current_MaxFracFol, current_FrActWd, current_FracFol,
-                        current_TOWood, current_TORoot, False, False, finalFracFolShape)
+                        current_TOWood, current_TORoot, current_FolN,
+                        False, False, current_FracFolShape)
                     peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
                     iterationsWithoutRecalibration = 0
-    
+
+            # If FrActWd hit its upper bound, break out of the outer loop too
+            if frActWd_hit_ub or frActWd_hit_lb:
+                break
+
             if peak_time_matched:
                 print(f"  ✓ Peak timing matched. FrActWd={current_FrActWd:.6f}. "
                       f"Launching final helper recalibration...")
-    
+
             # ── Final recalibration of LAI and biomass once timing is matched ──
             current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
                 current_MaxFracFol, current_FrActWd, current_FracFol,
-                current_TOWood, current_TORoot,
-                original_max_LAI_phB, original_peak_biomass_phB, CalibratePeakHeight = True)
-    
+                current_TOWood, current_TORoot, current_FolN,
+                original_max_LAI_phB, original_peak_biomass_phB,
+                CalibratePeakHeight=True)
+
             # ── Final check: are all three targets met? ──
             sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
                 current_MaxFracFol, current_FrActWd, current_FracFol,
-                current_TOWood, current_TORoot, False, False, finalFracFolShape)
-    
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, current_FracFolShape)
+
             peak_time_ok    = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
             lai_ok          = abs(sim_max_LAI - original_max_LAI_phB) / original_max_LAI_phB <= 0.05
-            biomass_ok      = (abs(sim_peak_biomass - original_peak_biomass_phB) /
-                               original_peak_biomass_phB <= 0.05)
-    
+            biomass_ok      = (abs(sim_peak_biomass - original_peak_biomass_phB)
+                               / original_peak_biomass_phB <= 0.05)
+
             print(f"\n  [B — End-of-cycle check]")
             print(f"    PeakTime={sim_peak_time:.1f} yr  "
                   f"(target={target_peak_time:.1f} ± {peak_time_tolerance:.1f})  "
@@ -8696,43 +9015,243 @@ def calibrate_subphase_1_2(
             print(f"    PeakBiomass={sim_peak_biomass:.2f}  "
                   f"(target={original_peak_biomass_phB:.2f} ± 5%)  "
                   f"{'✓' if biomass_ok else '✗'}")
-    
+
+            # ── NEW: Register best parameter set at end-of-cycle ──
+            update_best_params(sim_peak_time, sim_max_LAI, sim_peak_biomass)
+
             all_matched = peak_time_ok and lai_ok and biomass_ok
-    
+
             if not all_matched:
-                # Peak timing drifted after helper recalibration; re-enter FrActWd loop
                 too_slow = sim_peak_time > target_peak_time + peak_time_tolerance
                 direction = 1 if too_slow else -1
                 prev_peak_time = sim_peak_time
                 print("  One or more targets not yet met. Continuing FrActWd adjustment...\n")
-    
-        print(f"\n  ✓ Phase B complete.")
-        print(f"    FrActWd={current_FrActWd:.6f} | FracFol={current_FracFol:.6f} | "
-              f"TOWood={current_TOWood:.6f} | TORoot={current_TORoot:.6f}")
 
-    
+        if not frActWd_hit_ub and not frActWd_hit_lb:
+            print(f"\n  ✓ Phase B complete.")
+            print(f"    FrActWd={current_FrActWd:.6f} | FracFol={current_FracFol:.6f} | "
+                  f"TOWood={current_TOWood:.6f} | TORoot={current_TORoot:.6f}")
+            fully_converged = all_matched
+
+    # ─────────────────────────────────────────────
+    # PHASE C — ADJUST FolN (optional, entered when FrActWd hit ub)
+    # ─────────────────────────────────────────────
+    folN_hit_ub = False
+
+    if (frActWd_hit_ub or frActWd_hit_lb) and not fully_converged:
+        print("\n--- Phase C: Adjusting FolN (FrActWd reached upper bound) ---")
+        print(f"  FolN bounds: [{lb_FolN:.6f}, {ub_FolN:.6f}]")
+        print(f"  Current FolN: {current_FolN:.6f}")
+        print(f"  Reference LAI for recalibration    : {original_max_LAI_phB:.4f}")
+        print(f"  Reference biomass for recalibration: {original_peak_biomass_phB:.2f} g/m²")
+
+        # Recalibrate LAI and biomass at the start of Phase C
+        # (since we clamped FrActWd to ub, values may have shifted)
+        current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
+            current_MaxFracFol, current_FrActWd, current_FracFol,
+            current_TOWood, current_TORoot, current_FolN,
+            original_max_LAI_phB, original_peak_biomass_phB)
+
+        sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
+            current_MaxFracFol, current_FrActWd, current_FracFol,
+            current_TOWood, current_TORoot, current_FolN,
+            False, False, current_FracFolShape)
+
+        too_slow = sim_peak_time > target_peak_time + peak_time_tolerance
+        direction = 1 if too_slow else -1
+        current_step_c = FolN_step
+        prev_peak_time = sim_peak_time
+        iteration_c = 0
+
+        all_matched_c = (
+            abs(sim_peak_time - target_peak_time) <= peak_time_tolerance and
+            abs(sim_max_LAI - original_max_LAI_phB) / original_max_LAI_phB <= 0.05 and
+            abs(sim_peak_biomass - original_peak_biomass_phB) / original_peak_biomass_phB <= 0.05
+        )
+
+        iterationsWithoutRecalibration_c = 0
+
+        while not all_matched_c:
+
+            # ── Adjust FolN until peak timing is matched ──
+            peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
+
+            while not peak_time_matched:
+                candidate_FolN = float(current_FolN + direction * current_step_c)
+
+                # ── Stop Phase C if FolN exceeds upper bound ──
+                if candidate_FolN > ub_FolN:
+                    print(f"  ⚠ FolN={candidate_FolN:.6f} exceeds upper bound "
+                          f"({ub_FolN:.6f}). Stopping Phase C.")
+                    folN_hit_ub = True
+                    current_FolN = float(ub_FolN)
+                    break
+
+                if candidate_FolN < lb_FolN:
+                    print(f"  ⚠ WARNING: FolN={candidate_FolN:.6f} is below lower empirical "
+                          f"bound ({lb_FolN:.6f}). Proceeding anyway.")
+
+                sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
+                    current_MaxFracFol, current_FrActWd, current_FracFol,
+                    current_TOWood, current_TORoot, candidate_FolN,
+                    False, False, current_FracFolShape)
+
+                iteration_c += 1
+                iterationsWithoutRecalibration_c += 1
+                print(
+                    f"  [C-{iteration_c:>3d}] FolN={candidate_FolN:.6f} "
+                    f"(step={current_step_c:.6f}) | "
+                    f"PeakTime={sim_peak_time:.1f} yr | "
+                    f"MaxLAI={sim_max_LAI:.4f} | "
+                    f"PeakBiomass={sim_peak_biomass:.2f} g/m²"
+                )
+
+                # Overshoot detection for peak timing
+                overshot = (
+                    (direction == 1  and
+                     sim_peak_time < target_peak_time - peak_time_tolerance) or
+                    (direction == -1 and
+                     sim_peak_time > target_peak_time + peak_time_tolerance)
+                )
+                if overshot:
+                    current_step_c = float(current_step_c / 2.0)
+                    direction = -direction
+                    print(f"  Overshoot detected (PeakTime: {prev_peak_time:.1f} → "
+                          f"{sim_peak_time:.1f} yr). Reversing direction, halving step to "
+                          f"{current_step_c:.6f}.")
+                    continue
+
+                prev_peak_time = sim_peak_time
+                current_FolN = candidate_FolN
+                peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
+
+                # Trigger helper recalibration every 2 iterations (same as Phase B)
+                if iterationsWithoutRecalibration_c == 2:
+                    print(f"  Launching helper recalibration after {iterationsWithoutRecalibration_c} FolN steps...")
+                    current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
+                        current_MaxFracFol, current_FrActWd, current_FracFol,
+                        current_TOWood, current_TORoot, current_FolN,
+                        original_max_LAI_phB, original_peak_biomass_phB)
+                    sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
+                        current_MaxFracFol, current_FrActWd, current_FracFol,
+                        current_TOWood, current_TORoot, current_FolN,
+                        False, False, current_FracFolShape)
+                    peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
+                    iterationsWithoutRecalibration_c = 0
+
+            # If FolN hit its upper bound, break out of the outer loop too
+            if folN_hit_ub:
+                break
+
+            if peak_time_matched:
+                print(f"  ✓ Peak timing matched. FolN={current_FolN:.6f}. "
+                      f"Launching final helper recalibration...")
+
+            # ── Final recalibration of LAI and biomass once timing is matched ──
+            current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
+                current_MaxFracFol, current_FrActWd, current_FracFol,
+                current_TOWood, current_TORoot, current_FolN,
+                original_max_LAI_phB, original_peak_biomass_phB,
+                CalibratePeakHeight=True)
+
+            # ── Final check: are all three targets met? ──
+            sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
+                current_MaxFracFol, current_FrActWd, current_FracFol,
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, current_FracFolShape)
+
+            peak_time_ok    = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
+            lai_ok          = abs(sim_max_LAI - original_max_LAI_phB) / original_max_LAI_phB <= 0.05
+            biomass_ok      = (abs(sim_peak_biomass - original_peak_biomass_phB)
+                               / original_peak_biomass_phB <= 0.05)
+
+            print(f"\n  [C — End-of-cycle check]")
+            print(f"    PeakTime={sim_peak_time:.1f} yr  "
+                  f"(target={target_peak_time:.1f} ± {peak_time_tolerance:.1f})  "
+                  f"{'✓' if peak_time_ok else '✗'}")
+            print(f"    MaxLAI={sim_max_LAI:.4f}  "
+                  f"(target={original_max_LAI_phB:.4f} ± 5%)  "
+                  f"{'✓' if lai_ok else '✗'}")
+            print(f"    PeakBiomass={sim_peak_biomass:.2f}  "
+                  f"(target={original_peak_biomass_phB:.2f} ± 5%)  "
+                  f"{'✓' if biomass_ok else '✗'}")
+
+            # ── Register best parameter set at end-of-cycle ──
+            update_best_params(sim_peak_time, sim_max_LAI, sim_peak_biomass)
+
+            all_matched_c = peak_time_ok and lai_ok and biomass_ok
+
+            if not all_matched_c:
+                too_slow = sim_peak_time > target_peak_time + peak_time_tolerance
+                direction = 1 if too_slow else -1
+                prev_peak_time = sim_peak_time
+                print("  One or more targets not yet met. Continuing FolN adjustment...\n")
+
+        if not folN_hit_ub:
+            print(f"\n  ✓ Phase C complete.")
+            print(f"    FolN={current_FolN:.6f} | FrActWd={current_FrActWd:.6f} | "
+                  f"FracFol={current_FracFol:.6f} | TOWood={current_TOWood:.6f} | "
+                  f"TORoot={current_TORoot:.6f}")
+            fully_converged = all_matched_c
+        else:
+            # FolN reached its upper bound without full convergence
+            fully_converged = False
+
+    # Final recalibration of LAI and peak
+    print("  Calibrating LAI and biomass peak one last time...\n")
+    current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
+        current_MaxFracFol, current_FrActWd, current_FracFol,
+        current_TOWood, current_TORoot, current_FolN,
+        original_max_LAI_phB, original_peak_biomass_phB,
+        CalibratePeakHeight=True)
+
+    # ─────────────────────────────────────────────
+    # DETERMINE FINAL PARAMETERS
+    # ─────────────────────────────────────────────
+    # If not fully converged, fall back to the best recorded parameter set
+    if not fully_converged and best_params is not None:
+        print("\n  ⚠ WARNING: Peak timing was NOT achieved.")
+        print(f"    Falling back to the best parameter set recorded "
+              f"(peak age diff = {best_peak_age_diff:.1f} yr, "
+              f"with matched peak height and LAI).")
+        current_MaxFracFol  = best_params["MaxFracFol"]
+        current_FracFolShape = best_params["FracFolShape"]
+        current_FrActWd      = best_params["FrActWd"]
+        current_FracFol      = best_params["FracFol"]
+        current_TOWood       = best_params["TOWood"]
+        current_TORoot       = best_params["TORoot"]
+        current_FolN         = best_params["FolN"]
+    elif not fully_converged and best_params is None:
+        print("\n  ⚠ WARNING: Peak timing was NOT achieved and no valid "
+              "fallback parameter set was recorded (no end-of-cycle had both "
+              "peak height and LAI matched). Returning current parameters.")
+
     # ─────────────────────────────────────────────
     # FINAL REPORT
     # ─────────────────────────────────────────────
-    
+
     print("\n" + "=" * 70)
-        # Final sim run to show a plot
+    # Final sim run to show a plot
     sim_peak_time, sim_max_LAI, sim_peak_biomass = run_sim(
-            current_MaxFracFol, current_FrActWd, current_FracFol,
-            current_TOWood, current_TORoot, True, True, finalFracFolShape)
-    
+        current_MaxFracFol, current_FrActWd, current_FracFol,
+        current_TOWood, current_TORoot, current_FolN,
+        True, False, current_FracFolShape)
+
     print("CALIBRATION RESULTS — Subphase 1.2")
     print("=" * 70)
     print(f"  MaxFracFol        : {current_MaxFracFol:.6f}")
     print(f"  FracFolShape      : {current_FracFolShape:.6f}")
     print(f"  FrActWd           : {current_FrActWd:.6f}")
+    print(f"  FolN              : {current_FolN:.6f}"
+          + (" ⚠ WARNING: outside empirical bounds"
+             if current_FolN > ub_FolN or current_FolN < lb_FolN else ""))
     print(f"  FracFol           : {current_FracFol:.6f}"
           + (" ⚠ WARNING: outside empirical bounds"
              if current_FracFol > ub_FracFol or current_FracFol < lb_FracFol else ""))
     print(f"  TOWood            : {current_TOWood:.6f}"
           + (" ⚠ WARNING: outside empirical bounds"
              if current_TOWood > ub_TOWood or current_TOWood < lb_TOWood else ""))
-    print(f"  TORoot             : {current_TORoot:.6f}"
+    print(f"  TORoot            : {current_TORoot:.6f}"
           + (" ⚠ WARNING: outside empirical bounds"
              if current_TORoot > ub_TORoot or current_TORoot < lb_TORoot else ""))
     print()
@@ -8746,20 +9265,23 @@ def calibrate_subphase_1_2(
           f"(target: {target_peak_biomass:.2f} ± {peak_biomass_rel_tol*100:.0f}%)  "
           f"{'✓ OK' if peak_biomass_matched else '✗ Not matched'}")
     print()
-    
-    if not peak_time_matched:
-        print("  ✗ Peak timing was NOT matched. Consider revising targets or "
-              "adjusting additional parameters (e.g. TORoot manually).")
+
+    if not fully_converged:
+        print("  ✗ Peak timing was NOT fully matched. The returned parameters are the "
+              "best set found (closest peak age with correct peak height and LAI). "
+              "Consider revising targets or adjusting additional parameters.")
     else:
         print("  ✓ Subphase 1.2 calibration complete.")
     print("=" * 70)
 
-    return {"MaxFracFol" : current_MaxFracFol,
-            "FracFolShape" : current_FracFolShape,
-            "FrActWd" : current_FrActWd,
-            "FracFol" : current_FracFol,
-            "TOWood" : current_TOWood,
-            "TORoot" : current_TORoot} 
+    return {"MaxFracFol": current_MaxFracFol,
+            "FracFolShape": current_FracFolShape,
+            "FrActWd": current_FrActWd,
+            "FracFol": current_FracFol,
+            "TOWood": current_TOWood,
+            "TORoot": current_TORoot,
+            "FolN": current_FolN}
+
 
 
 import copy
@@ -9366,8 +9888,8 @@ def calibrate_senescence(
         new_TORoot = round(TORoot_current + direction * step_size, 8)
 
         # Clamp to bounds
-        new_TOWood = max(0, min(TOWood_upper, new_TOWood))
-        new_TORoot = max(0, min(TORoot_upper, new_TORoot))
+        # new_TOWood = max(0, min(TOWood_upper, new_TOWood))
+        # new_TORoot = max(0, min(TORoot_upper, new_TORoot))
 
         TOWood_current = new_TOWood
         TORoot_current = new_TORoot
@@ -9983,8 +10505,8 @@ def predict_temperature_parameters_single_species(
     # ── Load & merge (training data) ──────────────────────────────────────────
     df1 = pd.read_csv(CSV1_PATH)
     df2 = pd.read_csv(CSV2_PATH)
-    df1 = df1.rename(columns={"Species": "species"})
-    df = df1.merge(df2, on="species", how="left", suffixes=("", "_df2"))
+    # df1 = df1.rename(columns={"Species": "species"})
+    df = df1.merge(df2, on="Species", how="left", suffixes=("", "_df2"))
 
     # ── Helper: fit GAM + optional plot ──────────────────────────────────────
     def fit_plot_gam(formula_str: str, y_col: str, x_cols: list[str],
@@ -10150,21 +10672,26 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
     # --- Linear models from table of the calibration tips of Eric Gustafson ---
     HalfSat = linear_predict([150, 181, 212.5, 244, 275], st)
 
-    if tree_type == "deciduous":
+    # I'm changing things here; I'm making the difference being one of gymnosperm or not
+    # rather than deciduous or evergreen
+    if wood_type == "hardwood":
         FolN       = linear_predict([2.2, 2.4, 2.6, 2.8, 2.9], st)
         SLWmax     = linear_predict([70, 75, 80, 85, 90], st)
-        FracFol    = linear_predict([0.014, 0.014, 0.015, 0.017, 0.018], st)
-    else:  # evergreen
+    else:  # softwood
         FolN       = linear_predict([1.1, 1.3, 1.5, 1.7, 1.9], st)
         SLWmax     = linear_predict([150, 175, 200, 225, 250], st)
-        FracFol    = linear_predict([0.05, 0.055, 0.06, 0.065, 0.07], st)
 
+    if tree_type == "deciduous":
+        FracFol    = linear_predict([0.014, 0.014, 0.015, 0.017, 0.018], st)
+    else:  # evergreen
+        FracFol    = linear_predict([0.05, 0.055, 0.06, 0.065, 0.07], st)
+    
     # FracBelowG  = linear_predict([0.37, 0.35, 0.33, 0.31, 0.29], st)
     EstRad      = linear_predict([0.976, 0.954, 0.928, 0.900, 0.870], st)
     CFracBiomass = linear_predict([0.5, 0.475, 0.45, 0.425, 0.4], st)
 
     # --- Fixed rules ---
-    if tree_type == "evergreen":
+    if tree_type == "softwood":
         AmaxA  = 5.3
         AmaxB  = 21.5
         k      = 0.5
@@ -10177,7 +10704,7 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
         SLWDel = 0.2
         TOFol  = 1.0
 
-    KWLit    = 0.075 if wood_type == "hardwood" else 0.125
+    KWdLit    = 0.075 if wood_type == "hardwood" else 0.125
     FrActWd  = 0.000035 if wood_type == "hardwood" else 0.000029
 
     TOWood       = 0.03
@@ -10200,7 +10727,7 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
         "k":            str(k),
         "TOWood":       str(TOWood),
         "TORoot":       str(TORoot),
-        "KWLit":        str(KWLit),
+        "KWdLit":        str(KWdLit),
         "SLWDel":       str(SLWDel),
         "FracFolShape": str(FracFolShape),
         "MaxFracFol":   str(round(MaxFracFol, 6)),
