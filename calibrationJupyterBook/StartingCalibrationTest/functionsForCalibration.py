@@ -10636,7 +10636,9 @@ def predict_temperature_parameters_single_species(
 
 import numpy as np
 
-def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_type: str) -> dict[str, str]:
+def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_type: str,
+                                   fullLatinSpeciesName : str, IMAX : int,
+                                   diazDatasetPath : str = "./ReferencesAndData/Others/DiazEtAlDatasetTraits.csv") -> dict[str, str]:
     """
     This function uses the rules indicated by Eric Gustafson in the user guide of PnET-Succession v5.1.
     There is two parameters from which Gustafson has no rule to get them : TOFol and FrActWd.
@@ -10672,15 +10674,17 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
     # --- Linear models from table of the calibration tips of Eric Gustafson ---
     HalfSat = linear_predict([150, 181, 212.5, 244, 275], st)
 
-    # I'm changing things here; I'm making the difference being one of gymnosperm or not
-    # rather than deciduous or evergreen
+    # I'm changing things here; I'm making the difference in FolN being one of gymnosperm or not
+    # rather than deciduous or evergreen, as it seems from the literature than the biggest differences
+    # in productivity is between angiosperms/gymnosperms
     if wood_type == "hardwood":
         FolN       = linear_predict([2.2, 2.4, 2.6, 2.8, 2.9], st)
-        SLWmax     = linear_predict([70, 75, 80, 85, 90], st)
+        # SLWmax     = linear_predict([70, 75, 80, 85, 90], st) # Now estimated with data from Diaz et al., see below
     else:  # softwood
         FolN       = linear_predict([1.1, 1.3, 1.5, 1.7, 1.9], st)
-        SLWmax     = linear_predict([150, 175, 200, 225, 250], st)
+        # SLWmax     = linear_predict([150, 175, 200, 225, 250], st) # Now estimated with data from Diaz et al., see below
 
+    # For FracFol, however, the difference will obviously be between deciduous and evergreen.
     if tree_type == "deciduous":
         FracFol    = linear_predict([0.014, 0.014, 0.015, 0.017, 0.018], st)
     else:  # evergreen
@@ -10712,6 +10716,24 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
     FracFolShape = 6
     MaxFracFol   = FracFol
     EstMoist     = 1
+
+    # Determining SLWmax from Diaz et al.
+
+    # We retrieve LMA (= SLW) from Diaz et al. using the full latin species name; we will consider it as the average for the species
+    diazDataSet = pd.read_csv(diazDatasetPath)
+    if fullLatinSpeciesName in list(diazDataSet["Species name standardized against TPL"]):
+        SLWaverage = diazDataSet.loc[diazDataSet['Species name standardized against TPL'] == fullLatinSpeciesName, 'LMA (g/m2)'].values[0]
+        # We use the function to get SLWMax from IMAX, SLWDel and SLWAverage.
+        SLWmax = float(SLWaverage) / (1 - (float(SLWDel) * (int(IMAX) - 1) / 2))
+    else: # If the species is not found in Diaz et al., we return a warning and use previous rules to determine SLWmax
+        print("WARNING : Species not found in the data of Diaz et al. for retrieving its SLW value.\n"
+              "This is most probably a problem with the latin name of the species you provided.\n"
+              "Please look at the Diaz et al. dataset in /Others to understand why your species is not found.\n")
+        if wood_type == "hardwood":
+            SLWmax     = linear_predict([70, 75, 80, 85, 90], st) # From Gustafson's rules
+        else:  # softwood
+            SLWmax     = linear_predict([150, 175, 200, 225, 250], st) # From Gustafson's rules
+
 
     # --- Assemble dictionary (all values as strings) ---
     params = {
