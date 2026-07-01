@@ -1004,7 +1004,7 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True, pr
 
 #%% FUNCTIONS TO LAUNCH A LANDIS-II SIMULATION
 
-def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, timeout = None):
+def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, timeout = None, printRunning = True):
     """
     Function used to run a LANDIS-II simulation from inside Jupyter notebook.
     ⚠ THIS WILL ONLY WORK IF JUPYTER NOTEBOOK/JUPYTER LAB HAS BEEN LAUNCHED
@@ -1049,7 +1049,8 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, t
 
     try:
         # Spawn the command
-        print("Launching LANDIS-II simulation with command : " + str(command))
+        if printRunning:
+            print("Launching LANDIS-II simulation with command : " + str(command))
         child = pexpect.spawn(command)
         
         # Read output until EOF or timeout
@@ -1072,7 +1073,8 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, t
                 if child.exitstatus != 0 or foundError:
                     print("The LANDIS-II simulation seem to have encountered an error; please check the landis log file for more details.")
                 else:
-                    print("The LANDIS-II simulation has finished properly!")
+                    if printRunning:
+                        print("The LANDIS-II simulation has finished properly!")
                 break
         
             # Prints the last line
@@ -6250,6 +6252,9 @@ def min_max_top30_contiguous(series) -> tuple:
     selected_values = values[window_indices]
     return selected_values.min(), selected_values.max()
 
+
+import copy
+
 def calibrationSimulationMonoculturemanawan(duration = 100,
                                             climate = "mild",
                                             soil = "SILO",
@@ -6258,18 +6263,20 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
                                             dictOfInitialPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
                                             dictOfInitialPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
                                             plotResults = False,
+                                            plotAdjustedParameters = False,
                                             saveGrowthCurvePath = False):
+    
     # We prepare the simulation files
     PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
     
     # - Species.txt : replace with the right initial core species parameters from the JSON file
-    PnETGitHub_OneCellSim["species.txt"] = dictOfInitialCoreSpeciesParameters
+    PnETGitHub_OneCellSim["species.txt"] = copy.deepcopy(dictOfInitialCoreSpeciesParameters)
     
     # - SpeciesParameters.txt : replace with the initial PnET species parameters from the JSOn file
-    PnETGitHub_OneCellSim["SpeciesParameters.txt"] = dictOfInitialPnETSpeciesParameters
+    PnETGitHub_OneCellSim["SpeciesParameters.txt"] = copy.deepcopy(dictOfInitialPnETSpeciesParameters)
     
     # - PnETGenericParameters.txt : replace with initial generic parameters from the JSON file
-    PnETGitHub_OneCellSim["PnETGenericParameters.txt"] = dictOfInitialPnETGenericParameters
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"] = copy.deepcopy(dictOfInitialPnETGenericParameters)
     
     # Setting duration and timestep (minimal timestep for maximum spatial resolution, although it shouldn't change anything)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = "1"
@@ -6525,6 +6532,83 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
 
     if plotResults: plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
 
+    if plotAdjustedParameters:
+        fRad = csv_file_cohort['fRad(-)']
+        
+        # --- Parameters ---
+        MaxFracFol   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFracFol"])
+        FracFolShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"])
+        FracFol      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFol"])
+        
+        # --- Rolling average window ---
+        rolling_window = 12  # <-- specify window size here
+        
+        # --- Computation ---
+        AdjustedFracFol = FracFol + ((MaxFracFol - FracFol) * (fRad ** FracFolShape))
+        RollingAvg      = AdjustedFracFol.rolling(window=rolling_window, center=True).mean()
+        RollingAvgFRad  = fRad.rolling(window=rolling_window, center=True).mean()
+        
+        # --- Plot ---
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax2     = ax.twinx()  # secondary y-axis sharing the same x-axis
+        
+        # Push ax2 (fRad) behind ax (everything else)
+        ax.set_zorder(ax2.get_zorder() + 1)
+        ax.patch.set_visible(False)   # let ax2's content show through ax's transparent background
+        
+        # fRad (background, noisy) + its rolling average (background, solid green)
+        l5, = ax2.plot(csv_file_cohort['Year'], fRad, color="lightgreen", linewidth=1,
+                       alpha=0.6, zorder=1, label="fRad")
+        l6, = ax2.plot(csv_file_cohort['Year'], RollingAvgFRad, color="green", linewidth=2,
+                       zorder=2, label=f"fRad rolling avg (window={rolling_window})")
+        
+        # Foreground curves
+        l1, = ax.plot(csv_file_cohort['Year'], AdjustedFracFol, color="darkorange", linewidth=1,
+                      zorder=3, linestyle="--", alpha = 0.5, label="AdjFracFol (FracFolShape = " + str(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"]) + ")")
+        l2, = ax.plot(csv_file_cohort['Year'], RollingAvg, color="darkorange", linewidth=2,
+                      zorder=4, label=f"AdjFracFol Rolling avg (window={rolling_window})")
+        l3  = ax.axhline(FracFol,    color="blue",   linestyle="--", linewidth=1, zorder=4,
+                          label=f"FracFol = {FracFol}")
+        l4  = ax.axhline(MaxFracFol, color="tomato", linestyle="--", linewidth=1, zorder=4,
+                          label=f"MaxFracFol = {MaxFracFol}")
+        
+        ax.set_xlabel("Timestep")
+        ax.set_ylabel("AdjustedFracFol")
+        ax2.set_ylabel("fRad (-)")
+        ax.set_title("AdjustedFracFol over time")
+        
+        # Combined legend, drawn on ax so it sits above everything (including ax2's patch)
+        lines  = [l1, l2, l3, l4, l5, l6]
+        labels = [l.get_label() for l in lines]
+        ax.legend(lines, labels, loc="best").set_zorder(5)
+        
+        plt.tight_layout()
+        plt.show()
+
+
+
+        # --- Parameters ---
+        MaxFolN   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFolN"])
+        FolNShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolNShape"])
+        FolN      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolN"])
+        
+        # --- Computation ---
+        AdjustedFolN = FolN + ((MaxFolN - FolN) * (fRad ** FolNShape))
+        
+        # --- Plot ---
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(csv_file_cohort['Year'], AdjustedFolN, color="steelblue", linewidth=1, label="AdjustedFolN")
+        ax.axhline(FolN,    color="gray",   linestyle="--", linewidth=1, label=f"FolN = {FolN}")
+        ax.axhline(MaxFolN, color="tomato", linestyle="--", linewidth=1, label=f"MaxFolN = {MaxFolN}")
+        
+        ax.set_xlabel("Timestep")
+        ax.set_ylabel("AdjustedFolN")
+        ax.set_title("AdjustedFolN over time")
+        ax.legend()
+        plt.tight_layout()
+        plt.show()
+
+    
     if saveGrowthCurvePath:
         output_path = Path(saveGrowthCurvePath)
 
@@ -8442,13 +8526,15 @@ def calibrate_subphase_1_2(
     path_generic: str = './SpeciesParametersSets/Calibrated_SubSubPhase1.1.3/InitialGenericParameters.json',
     duration: int = 300,
     climate: str = "mild",
-    soil: str = "SILO"):
+    soil: str = "SILO",
+    disableLongevity = True,
+    peak_time_tolerance = 7.0):
 
     # ─────────────────────────────────────────────
     # ARBITRARY INPUTS FOUND BY TRIAL AND ERROR
     # ─────────────────────────────────────────────
 
-    peak_time_tolerance    = 7.0   # ± years
+    # peak_time_tolerance    = 7.0   # ± years
     peak_biomass_rel_tol   = 0.05   # ± 5%
 
     MaxFracFol_step  = 0.02
@@ -8457,7 +8543,8 @@ def calibrate_subphase_1_2(
     FolN_step        = 0.1       # step for FolN in Phase C
     turnover_pct_step = 0.05   # 5% increment per iteration for TOWood and TORoot
 
-    # FracFolShape coupling constants
+    # FracFolShape coupling constants - Arbitrary, found via trial and error.
+    # Will need to change these if PnET-Succession code changes
     MAXFRACFOL_THRESHOLD  = 0.05
     MAXFRACFOL_CEILING    = 0.141
     FRACFOLSHAPE_LOW      = 8.0
@@ -8472,10 +8559,8 @@ def calibrate_subphase_1_2(
 
     # We edit the longevity because at this step, we still want it to be 
     # unlimited to avoid confusion with the effect of age.
-    initial_core_params[species]["Longevity"]="999"
-
-    # Initial value of FracFoLShape
-    current_FracFolShape = float(6)
+    if disableLongevity:
+        initial_core_params[species]["Longevity"]="999"
 
     # ─────────────────────────────────────────────
     # BOUNDS
@@ -8514,6 +8599,30 @@ def calibrate_subphase_1_2(
     current_FolN = float(
         initial_pnet_species_params["PnETSpeciesParameters"][species]["FolN"])
 
+    # Initial value of FracFoLShape
+    def coupled_FracFolShape(MaxFracFol):
+        """Return FracFolShape with a fast-rise/slow-approach curve coupled to MaxFracFol."""
+        MaxFracFol = float(MaxFracFol)
+        if MaxFracFol <= MAXFRACFOL_THRESHOLD:
+            return float(FRACFOLSHAPE_LOW)
+        else:
+            # Normalise position in [0, 1] across the active range
+            t = (MaxFracFol - MAXFRACFOL_THRESHOLD) / (MAXFRACFOL_CEILING - MAXFRACFOL_THRESHOLD)
+            t = min(t, 1.0)  # clamp before applying curve
+    
+            # Reverse exponential: f(t) = (1 - e^(-k*t)) / (1 - e^(-k)), maps [0,1] -> [0,1]
+            # Higher k = faster early rise, slower approach to ceiling
+            k = 5.0
+            curved_t = (1.0 - math.exp(-k * t)) / (1.0 - math.exp(-k))
+    
+            value = FRACFOLSHAPE_LOW + curved_t * (FRACFOLSHAPE_HIGH - FRACFOLSHAPE_LOW)
+            return float(min(max(value, FRACFOLSHAPE_LOW), FRACFOLSHAPE_HIGH))
+
+    if "FracFolShape" in initial_pnet_species_params["PnETSpeciesParameters"][species].keys():
+        current_FracFolShape = initial_pnet_species_params["PnETSpeciesParameters"][species]["FracFolShape"]
+    else:
+        current_FracFolShape = coupled_FracFolShape(current_MaxFracFol)
+
     # ─────────────────────────────────────────────
     # BEST PARAMETER SET TRACKER
     # (closest peak age while having right peak height and right LAI)
@@ -8547,24 +8656,6 @@ def calibrate_subphase_1_2(
     # ─────────────────────────────────────────────
     # HELPERS FUNCTIONS
     # ─────────────────────────────────────────────
-
-    def coupled_FracFolShape(MaxFracFol):
-        """Return FracFolShape with a fast-rise/slow-approach curve coupled to MaxFracFol."""
-        MaxFracFol = float(MaxFracFol)
-        if MaxFracFol <= MAXFRACFOL_THRESHOLD:
-            return float(FRACFOLSHAPE_LOW)
-        else:
-            # Normalise position in [0, 1] across the active range
-            t = (MaxFracFol - MAXFRACFOL_THRESHOLD) / (MAXFRACFOL_CEILING - MAXFRACFOL_THRESHOLD)
-            t = min(t, 1.0)  # clamp before applying curve
-
-            # Reverse exponential: f(t) = (1 - e^(-k*t)) / (1 - e^(-k)), maps [0,1] -> [0,1]
-            # Higher k = faster early rise, slower approach to ceiling
-            k = 5.0
-            curved_t = (1.0 - math.exp(-k * t)) / (1.0 - math.exp(-k))
-
-            value = FRACFOLSHAPE_LOW + curved_t * (FRACFOLSHAPE_HIGH - FRACFOLSHAPE_LOW)
-            return float(min(max(value, FRACFOLSHAPE_LOW), FRACFOLSHAPE_HIGH))
 
     def build_param_dicts(MaxFracFol, FrActWd, FracFol, TOWood, TORoot,
                           FolN, fracFolShape=current_FracFolShape):
@@ -8612,88 +8703,6 @@ def calibrate_subphase_1_2(
         return (float(result["Biomass peak 95% time"]),
                 float(result["Maximum LAI"]),
                 float(result["Biomass peak height"]))
-
-    # ─────────────────────────────────────────────
-    # BASELINE RUN
-    # ─────────────────────────────────────────────
-    print("=" * 70)
-    print(f"Subphase 1.2 — Species: {species}")
-    print("=" * 70)
-    print("\n[Baseline] Running baseline simulation...")
-
-    baseline_peak_time, baseline_max_LAI, baseline_peak_biomass = run_sim(
-        current_MaxFracFol, current_FrActWd, current_FracFol,
-        current_TOWood, current_TORoot, current_FolN, False, False)
-
-    original_max_LAI = baseline_max_LAI
-
-    print(f"  Baseline peak time    : {baseline_peak_time:.1f} yr")
-    print(f"  Baseline max LAI      : {baseline_max_LAI:.4f}")
-    print(f"  Baseline peak biomass : {baseline_peak_biomass:.2f} g/m²")
-
-    peak_time_matched = abs(baseline_peak_time - target_peak_time) <= peak_time_tolerance
-    too_slow = baseline_peak_time > target_peak_time + peak_time_tolerance
-    too_fast = baseline_peak_time < target_peak_time - peak_time_tolerance
-
-    # ─────────────────────────────────────────────
-    # PHASE A — ADJUST MaxFracFol (with coupled FracFolShape)
-    # ─────────────────────────────────────────────
-    print("\n--- Phase A: Adjusting MaxFracFol (FracFolShape coupled) ---")
-
-    closestPeakTime = -999
-    finalMaxFracFol = 0
-    finalFracFolShape = 0
-
-    if peak_time_matched:
-        print("  Peak timing already within tolerance. Skipping Phase A.")
-    else:
-        direction = 1 if too_slow else -1
-        iteration = 0
-
-        while not peak_time_matched:
-            candidate_MaxFracFol = float(current_MaxFracFol + direction * MaxFracFol_step)
-            candidate_FracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
-
-            # Check ceiling (too slow) or floor (too fast)
-            if too_slow and candidate_MaxFracFol > MAXFRACFOL_CEILING:
-                print(f"  MaxFracFol reached ceiling ({MAXFRACFOL_CEILING:.4f}). Stopping Phase A.")
-                break
-            if too_fast and candidate_MaxFracFol < lb_MaxFracFol:
-                print(f"  MaxFracFol reached lower bound ({lb_MaxFracFol:.6f}). Stopping Phase A.")
-                break
-
-            sim_peak_time, sim_max_LAI, _ = run_sim(
-                candidate_MaxFracFol, current_FrActWd, current_FracFol,
-                current_TOWood, current_TORoot, current_FolN,
-                False, False, candidate_FracFolShape)
-
-            iteration += 1
-            print(
-                f"  [A-{iteration:>3d}] MaxFracFol={candidate_MaxFracFol:.4f}  "
-                f"FracFolShape={candidate_FracFolShape:.4f} | "
-                f"PeakTime={sim_peak_time:.1f} yr | MaxLAI={sim_max_LAI:.4f}"
-            )
-
-            current_MaxFracFol = float(candidate_MaxFracFol)
-            peak_time_matched = abs(sim_peak_time - target_peak_time) <= peak_time_tolerance
-
-            if peak_time_matched:
-                print(f"  ✓ Peak timing matched in Phase A.")
-                print(f"    MaxFracFol={current_MaxFracFol:.6f}  "
-                      f"FracFolShape={coupled_FracFolShape(current_MaxFracFol):.6f}")
-
-            if (closestPeakTime == -999) or (abs(sim_peak_time - target_peak_time) < closestPeakTime):
-                closestPeakTime = abs(sim_peak_time - target_peak_time)
-                finalMaxFracFol = candidate_MaxFracFol
-                finalFracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
-
-    if closestPeakTime > -999:
-        current_MaxFracFol = finalMaxFracFol
-        current_FracFolShape = finalFracFolShape
-
-    print(f"Final values of MaxFracFol and FracFolShape to be used going forward :"
-          f"    MaxFracFol={current_MaxFracFol:.6f}  "
-          f"FracFolShape={current_FracFolShape:.6f}")
 
     # ─────────────────────────────────────────────
     # HELPER FUNCTION: Recalibrate LAI and Biomass Peak Height
@@ -8851,6 +8860,28 @@ def calibrate_subphase_1_2(
                   f"MaxLAI={sim_LAI:.4f}")
 
         return current_FracFol, current_TOWood, current_TORoot
+    
+    # ─────────────────────────────────────────────
+    # BASELINE RUN
+    # ─────────────────────────────────────────────
+    print("=" * 70)
+    print(f"Subphase 1.2 — Species: {species}")
+    print("=" * 70)
+    print("\n[Baseline] Running baseline simulation...")
+    
+    baseline_peak_time, baseline_max_LAI, baseline_peak_biomass = run_sim(
+        current_MaxFracFol, current_FrActWd, current_FracFol,
+        current_TOWood, current_TORoot, current_FolN, False, False)
+    
+    original_max_LAI = baseline_max_LAI
+    
+    print(f"  Baseline peak time    : {baseline_peak_time:.1f} yr")
+    print(f"  Baseline max LAI      : {baseline_max_LAI:.4f}")
+    print(f"  Baseline peak biomass : {baseline_peak_biomass:.2f} g/m²")
+    
+    peak_time_matched = abs(baseline_peak_time - target_peak_time) <= peak_time_tolerance
+    too_slow = baseline_peak_time > target_peak_time + peak_time_tolerance
+    too_fast = baseline_peak_time < target_peak_time - peak_time_tolerance
 
     # ─────────────────────────────────────────────
     # RECORD ORIGINAL TARGETS FOR HELPER
@@ -8858,14 +8889,105 @@ def calibrate_subphase_1_2(
     original_max_LAI_phB = baseline_max_LAI
     original_peak_biomass_phB = baseline_peak_biomass
 
-    print("Phase A Finished. Recalibrating LAI and peak before going to phase B.")
-    current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
-        current_MaxFracFol, current_FrActWd, current_FracFol,
-        current_TOWood, current_TORoot, current_FolN,
-        original_max_LAI_phB, original_peak_biomass_phB)
-
     LAI_trigger_low  = 2.2
     LAI_trigger_high = 6.0
+    
+    # ─────────────────────────────────────────────
+    # PHASE A — ADJUST MaxFracFol (with coupled FracFolShape)
+    # ─────────────────────────────────────────────
+    print("\n--- Phase A: Adjusting MaxFracFol (FracFolShape coupled) ---")
+    
+    # closestPeakTime = -999
+    # finalMaxFracFol  = current_MaxFracFol
+    # finalFracFolShape = current_FracFolShape
+    
+    if peak_time_matched:
+        print("  Peak timing already within tolerance. Skipping Phase A.")
+    else:
+        direction  = 1 if too_slow else -1
+        step       = MaxFracFol_step          # adaptive step size
+        prev_error = baseline_peak_time - target_peak_time   # signed error
+        iteration  = 0
+    
+        while not peak_time_matched:
+            candidate_MaxFracFol  = float(current_MaxFracFol + direction * step)
+            candidate_FracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
+    
+            # ── Bounds check (use the current direction to pick the right bound) ──
+            if direction > 0 and candidate_MaxFracFol > MAXFRACFOL_CEILING:
+                print(f"  MaxFracFol reached ceiling ({MAXFRACFOL_CEILING:.4f}). Stopping Phase A.")
+                break
+            if direction < 0 and candidate_MaxFracFol < lb_MaxFracFol:
+                print(f"  MaxFracFol reached lower bound ({lb_MaxFracFol:.6f}). Stopping Phase A.")
+                break
+    
+            sim_peak_time, sim_max_LAI, _ = run_sim(
+                candidate_MaxFracFol, current_FrActWd, current_FracFol,
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, candidate_FracFolShape)
+    
+            iteration += 1
+            print(
+                f"  [A-{iteration:>3d}] MaxFracFol={candidate_MaxFracFol:.4f}  "
+                f"FracFolShape={candidate_FracFolShape:.4f} | "
+                f"PeakTime={sim_peak_time:.1f} yr | MaxLAI={sim_max_LAI:.4f}"
+            )
+    
+            current_error = sim_peak_time - target_peak_time
+    
+            # ── Bisection: if we crossed the target, flip direction & halve step ──
+            if prev_error * current_error < 0:      # sign change → overshot
+                direction = -direction
+                step      = step / 2.0
+    
+            prev_error           = current_error
+            current_MaxFracFol   = float(candidate_MaxFracFol)
+            peak_time_matched    = abs(current_error) <= peak_time_tolerance
+    
+            if peak_time_matched:
+                print(f"  ✓ Peak timing matched in Phase A.")
+                print(f"    MaxFracFol={current_MaxFracFol:.6f}  "
+                      f"FracFolShape={coupled_FracFolShape(current_MaxFracFol):.6f}")
+                # Now that the peak time has matched, we attempt to recalirate LAI and peak.
+                # We then re-check if the peak time is OK before we go.
+                print("Phase A Finished. Recalibrating LAI and peak before going to phase B.")
+                current_FracFol, current_TOWood, current_TORoot = recalibrate_LAI_and_biomass(
+                    current_MaxFracFol, current_FrActWd, current_FracFol,
+                    current_TOWood, current_TORoot, current_FolN,
+                    original_max_LAI_phB, original_peak_biomass_phB)
+                print("Re-checking peak time one last time before going into phase B")
+                sim_peak_time, sim_max_LAI, _ = run_sim(
+                candidate_MaxFracFol, current_FrActWd, current_FracFol,
+                current_TOWood, current_TORoot, current_FolN,
+                False, False, candidate_FracFolShape)
+                # Same code as above
+                current_error = sim_peak_time - target_peak_time
+                # ── Bisection: if we crossed the target, flip direction & halve step ──
+                if prev_error * current_error < 0:      # sign change → overshot
+                    direction = -direction
+                    step      = step / 2.0
+        
+                prev_error           = current_error
+                current_MaxFracFol   = float(candidate_MaxFracFol)
+                peak_time_matched    = abs(current_error) <= peak_time_tolerance # If true, we escape the loop and go to phase B. If False, we go back into phase A.
+                if peak_time_matched:
+                    print("Peak time is OK after recalibration of LAI and peak. Going to phase B.")
+                else:
+                    print("Peak time has changed too much after recalibration of LAI and peak. Going back to phase A.")
+                
+    
+    #         if (closestPeakTime == -999) or (abs(current_error) < closestPeakTime):
+    #             closestPeakTime   = abs(current_error)
+    #             finalMaxFracFol   = candidate_MaxFracFol
+    #             finalFracFolShape = float(coupled_FracFolShape(candidate_MaxFracFol))
+    
+    # if closestPeakTime > -999:
+    #     current_MaxFracFol    = finalMaxFracFol
+    #     current_FracFolShape  = finalFracFolShape
+    
+    print(f"Final values of MaxFracFol and FracFolShape to be used going forward :"
+          f"    MaxFracFol={current_MaxFracFol:.6f}  "
+          f"FracFolShape={current_FracFolShape:.6f}")
 
     # ─────────────────────────────────────────────
     # PHASE B — ADJUST FrActWd
@@ -9708,9 +9830,9 @@ def calibrate_senescence(
     maximum_mortality,
     target_peak_biomass,
     DictOfBounds,
-    path_core='./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json',
-    path_pnet='./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json',
-    path_generic='./SpeciesParametersSets/Initial/InitialGenericParameters.json',
+    dictOfInitialCoreSpeciesParameters,
+    dictOfInitialPnETSpeciesParameters,
+    dictOfInitialPnETGenericParameters,
     tolerance=3,
     max_iterations=50,
     simulation_duration=500,
@@ -9724,9 +9846,9 @@ def calibrate_senescence(
     tolerance          = float(tolerance)
 
     # --- Load parameter dictionaries ---
-    core_params    = copy.deepcopy(json.load(open(path_core)))
-    pnet_params    = copy.deepcopy(json.load(open(path_pnet)))
-    generic_params = copy.deepcopy(json.load(open(path_generic)))
+    core_params    = copy.deepcopy(dictOfInitialCoreSpeciesParameters)
+    pnet_params    = copy.deepcopy(dictOfInitialPnETSpeciesParameters)
+    generic_params = copy.deepcopy(dictOfInitialPnETGenericParameters)
 
     # --- Retrieve bounds for PsnAgeRed, TOWood, TORoot ---
     psn_age_red_lower = float(DictOfBounds[species]["PsnAgeRed"]["lower"])
@@ -10762,5 +10884,1815 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
 
 
 
+#######################################################
+# FUNCTIONS FOR INVESTIGATING COMPETITION OUTCOMES
+#######################################################
+
+import copy
+
+def competitionSimulationMonoculturemanawan(duration = 200,
+                                            climate = "mild",
+                                            soil = "SILO",
+                                            speciesToSimulate = ["ABIE.BAL", "ACER.RUB"],
+                                            dictOfInitialCoreSpeciesParameters_path = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/initialCoreSpeciesParameters.json',
+                                            dictOfInitialPnETSpeciesParameters_path = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/initialPnETSpeciesParameters.json',
+                                            dictOfInitialPnETGenericParameters_path = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/InitialGenericParameters.json',
+                                            equalizeWater = False, # Can be false to keep the differences in water parameters between the two species
+                                            equalizeTemperature = False, # Can be false to keep the differences in water parameters between the two species,
+                                            equalizeRest = False, # Can be false to keep the differences in the rest of the parameters
+                                            numberOfCells = 100,
+                                            timestep = 10,
+                                            plotResults = False,
+                                            dispersal = True,
+                                            simulationPath = "/tmp/competitionCalibrationPnET/"):
 
 
+    # Dicts are loaded here because without it, there was a strange interaction in the run_all_pairs() function
+    # where the edited dict where kept in the loop. By loading them here, we avoid this.
+    dictOfInitialCoreSpeciesParameters = json.load(open(dictOfInitialCoreSpeciesParameters_path))
+    dictOfInitialPnETSpeciesParameters = json.load(open(dictOfInitialPnETSpeciesParameters_path))
+    dictOfInitialPnETGenericParameters = json.load(open(dictOfInitialPnETGenericParameters_path))
+
+    # print("\n")
+    # print(dictOfInitialCoreSpeciesParameters)
+    # print("\n")
+    
+    # We prepare the simulation files
+    PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
+    
+    # - Species.txt : replace with the right initial core species parameters from the JSON file
+    PnETGitHub_OneCellSim["species.txt"] = dictOfInitialCoreSpeciesParameters
+    
+    # - SpeciesParameters.txt : replace with the initial PnET species parameters from the JSOn file
+    PnETGitHub_OneCellSim["SpeciesParameters.txt"] = dictOfInitialPnETSpeciesParameters
+    
+    # - PnETGenericParameters.txt : replace with initial generic parameters from the JSON file
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"] = dictOfInitialPnETGenericParameters
+    
+    # Setting duration and timestep
+    # WARNING : Timestep can change things here by increasing the amount
+    # of opportunities of implantation of younger cohorts
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = str(timestep)
+    PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
+    # Changing the soil if needed
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
+    # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
+    startYear = 1900
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
+    if dispersal:
+        # Full dispersal (but without influence of neighbouring cells) so that competition takes into account regeneration
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "UniversalDispersal"
+        PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["PreventEstablishment"] = "False"
+    else:
+        # No dispersal
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "NoDispersal"
+        PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["PreventEstablishment"] = "True"
+    # Setting other parameters
+    PnETGitHub_OneCellSim["scenario.txt"]["CellLength"] = "100"
+
+    # Preparing the landscape
+    # Removing Other species from the simulation
+    speciesToRemove = []
+    for species in PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"].keys():
+        if species not in speciesToSimulate and species != "LandisData":
+            speciesToRemove.append(species)
+    for species in speciesToRemove:
+        if species in PnETGitHub_OneCellSim["species.txt"].keys():
+            del PnETGitHub_OneCellSim["species.txt"][species]
+        if species in PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"].keys():
+            del PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"][species]
+    # Inserting reading of the right climate file
+    if climate == "mild":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
+    elif climate == "realHistorical":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims.txt"
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
+    
+    # -  PnEToutputsites_onecell.txt : replace site location
+    PnETGitHub_OneCellSim["PnEToutputsites_onecell.txt"]["Site1"] = '1 1'
+
+    # EQUILIZATION
+    # We put parameters at intermediate value between the two species
+    parametersToEqualize = []
+    waterParameters = ["H1", "H2", "H3", "H4"]
+    temperatureParameters = ["LeafOnMinT", "PsnTMin", "PsnTOpt", "PsnTMax"]
+    coreParameters = ['Longevity', 'Sexual Maturity', 'Seed Dispersal Distance - Effective', 'Seed Dispersal Distance - Maximum', 'Vegetative Reproduction Probability', 'Sprout Age - Min', 'Sprout Age - Max', 'Post Fire Regen']
+    coreParametersIntegers = ["Longevity", 'Sexual Maturity', 'Seed Dispersal Distance - Effective', 'Seed Dispersal Distance - Maximum', 'Sprout Age - Min', 'Sprout Age - Max']
+    if equalizeWater:
+        for parameter in waterParameters:
+            parametersToEqualize.append(parameter)
+    if equalizeTemperature:
+        for parameter in temperatureParameters:
+            parametersToEqualize.append(parameter)
+    if equalizeRest:
+        for parameter in dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[0]]:
+            if parameter not in waterParameters and parameter not in temperatureParameters:
+                parametersToEqualize.append(parameter)
+
+    for parameter in parametersToEqualize:
+        halfValue = (float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[0]][parameter]) + float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[1]][parameter])) / 2
+        dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[0]][parameter] = str(halfValue)
+        dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[1]][parameter] = str(halfValue)
+
+    # If we equalize "The rest", we also have to equalize longevity, etc.
+    if equalizeRest:
+        for parameter in coreParameters:
+            if parameter != 'Post Fire Regen': #Post Fire regen is ignored - no fires.
+                halfValue = (float(dictOfInitialCoreSpeciesParameters[speciesToSimulate[0]][parameter]) + float(dictOfInitialCoreSpeciesParameters[speciesToSimulate[1]][parameter])) / 2
+                if parameter in coreParametersIntegers:
+                    halfValue = int(halfValue)
+                dictOfInitialCoreSpeciesParameters[speciesToSimulate[0]][parameter] = str(halfValue)
+                dictOfInitialCoreSpeciesParameters[speciesToSimulate[1]][parameter] = str(halfValue)
+                
+
+    # Writing the files in a temporary folder
+    # We create the folder
+    if not os.path.exists(simulationPath):
+        os.mkdir(simulationPath)
+    else:
+        shutil.rmtree(simulationPath)
+        os.mkdir(simulationPath)
+
+    simulationPath = simulationPath + "/"
+    
+    write_all_LANDIS_files(simulationPath,
+                           PnETGitHub_OneCellSim,
+                           True)
+
+
+    # print(dictOfInitialCoreSpeciesParameters)
+    # print("\n")
+    # print(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[0]].keys())
+    # print("\n")
+    # print(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate[1]].keys())
+    # Copy the climate files
+    if climate == "mild":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv")
+        maxLongevity = 0
+        for species in speciesToSimulate:
+            maxLongevity = max(maxLongevity, int(float(dictOfInitialCoreSpeciesParameters[species]["Longevity"])))
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
+    elif climate == "realHistorical":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv")
+        maxLongevity = 0
+        for species in speciesToSimulate:
+            maxLongevity = max(maxLongevity, int(float(dictOfInitialCoreSpeciesParameters[species]["Longevity"])))
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
+    # Removing climate.txt (old climate file from the test files)
+
+    # Preparing rasters
+    # All cohorts start at 1 year olf
+    ageRange = [1, 1]
+    # Preparing the data we will put in the rasters
+    data = np.ones((1, numberOfCells), dtype=np.uint8)
+    # Transform used to settle the size of cells - not sure is very useful
+    transform = Affine.translation(0, 0) * Affine.scale(1, 1)
+    # Creating the ecoregion raster
+    with rasterio.open(
+    simulationPath + '/ecoregion.img',
+    'w',
+    driver='GTiff',
+    height=1,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    # Preparing the initial communities raster
+    with rasterio.open(
+    simulationPath + '/initial-communities.img',
+    'w',
+    driver='GTiff',
+    height=1,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    data = np.arange(1, numberOfCells+1, dtype="int32").reshape(1, numberOfCells)
+    # Creating initial community .csv
+    create_species_csv(speciesToSimulate, numberOfCells, ageRange, filename = simulationPath + "/initial-communities.csv")
+
+    # We launch the simulation
+    runLANDIS_Simulation(simulationPath,
+                         "scenario.txt",
+                        False,
+                        printRunning = False)
+
+    
+
+    if plotResults:
+        plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate[0]:"#5e81ac", speciesToSimulate[1]:"#bf616a"})
+
+    
+    return(compute_Y(
+    species1 = speciesToSimulate[0],
+    species2 = speciesToSimulate[1],
+    base_dir = simulationPath + "/output/WoodFoliageBiomass",
+    timestep_short = 40,
+    timestep_long = 200,
+    long_term_mode = "snapshot"))
+    # Delete the folder
+    # shutil.rmtree(simulationPath)
+
+
+import numpy as np
+import rasterio
+from pathlib import Path
+from dataclasses import dataclass, field
+
+
+@dataclass
+class CompetitionResult:
+    """Holds Y indices, win fractions, and growth curves for one species pair."""
+    Y_short: float          # mean relative competitive index at short-term timestep
+    Y_long: float           # mean relative competitive index at long-term timestep
+    p_short: float          # fraction of cells where sp1 wins short-term
+    p_long: float           # fraction of cells where sp1 wins long-term
+    n_cells: int            # number of valid (non-masked) cells used
+
+    # Growth curves: shape (n_cells, n_timesteps)
+    biomass_sp1: np.ndarray = field(repr=False)  # biomass of species 1 across time
+    biomass_sp2: np.ndarray = field(repr=False)  # biomass of species 2 across time
+    timesteps: np.ndarray   = field(repr=False)  # 1D array of timestep values
+
+
+def _get_available_timesteps(species_name: str, base_dir: Path) -> list[int]:
+    """
+    Scan the species folder and return a sorted list of available timesteps,
+    inferred from filenames matching 'WoodFoliageBiomass-{timestep}.img'.
+    """
+    folder = base_dir / species_name
+    timesteps = sorted(
+        int(f.stem.split("-")[-1])
+        for f in folder.glob("WoodFoliageBiomass-*.img")
+    )
+    if not timesteps:
+        raise FileNotFoundError(f"No WoodFoliageBiomass-*.img files found in {folder}")
+    return timesteps
+
+
+def _load_biomass(species_name: str, timestep: int, base_dir: Path) -> np.ndarray:
+    """
+    Load a flat 1D array of valid (non-NoData) biomass values for a given
+    species and timestep.
+
+    Returns
+    -------
+    np.ndarray
+        1D array of valid biomass values across all cells.
+    """
+    path = base_dir / species_name / f"WoodFoliageBiomass-{timestep}.img"
+
+    with rasterio.open(path) as src:
+        data = src.read(1).astype(np.float64)
+        nodata = src.nodata
+
+    if nodata is not None:
+        valid_mask = data != nodata
+    else:
+        valid_mask = np.isfinite(data)
+
+    return data[valid_mask]
+
+
+def _load_all_timesteps(
+    species_name: str,
+    timesteps: list[int],
+    base_dir: Path,
+) -> tuple[np.ndarray, np.ndarray]:
+    """
+    Load biomass for all timesteps for a species.
+
+    Returns
+    -------
+    biomass : np.ndarray, shape (n_cells, n_timesteps)
+        Biomass values per cell per timestep.
+    valid_cells : np.ndarray of bool, shape (n_cells_total,)
+        Mask of cells that are valid across ALL timesteps (intersection).
+    """
+    # Load each timestep as a 2D raster, keep the full grid for mask intersection
+    arrays = []
+    masks = []
+
+    for ts in timesteps:
+        path = base_dir / species_name / f"WoodFoliageBiomass-{ts}.img"
+        with rasterio.open(path) as src:
+            data = src.read(1).astype(np.float64).ravel()  # flatten to 1D
+            nodata = src.nodata
+
+        if nodata is not None:
+            mask = data != nodata
+        else:
+            mask = np.isfinite(data)
+
+        arrays.append(data)
+        masks.append(mask)
+
+    # Intersect masks: a cell is valid only if it's valid at every timestep
+    combined_mask = np.ones(len(arrays[0]), dtype=bool)
+    for m in masks:
+        combined_mask &= m
+
+    # Stack into (n_cells, n_timesteps), keeping only consistently valid cells
+    biomass = np.column_stack([a[combined_mask] for a in arrays])  # (n_cells, n_timesteps)
+
+    return biomass, combined_mask
+
+
+def compute_Y(
+    species1: str,
+    species2: str,
+    base_dir: str | Path = "/output/WoodFoliageBiomass",
+    timestep_short: int = 40,
+    timestep_long: int = 200,
+    long_term_mode: str = "snapshot",  # "snapshot" or "gain"
+) -> CompetitionResult:
+    """
+    Compute the relative competitive index Y for a pair of species,
+    and return full biomass growth curves across all available timesteps.
+
+    Y = mean over cells of (B1 - B2) / (B1 + B2), in [-1, 1].
+    Y > 0 means species1 dominates, Y < 0 means species2 dominates.
+
+    Parameters
+    ----------
+    species1, species2 : str
+        Species folder names.
+    base_dir : str or Path
+        Root directory containing per-species subfolders.
+    timestep_short : int
+        Timestep used for short-term comparison (default: 40).
+    timestep_long : int
+        Timestep used for long-term comparison (default: 200).
+    long_term_mode : str
+        "snapshot" : compare raw biomass at timestep_long.
+        "gain"     : compare biomass gained between timestep_short
+                     and timestep_long.
+
+    Returns
+    -------
+    CompetitionResult
+        Includes Y indices, win fractions, and full growth curves.
+    """
+    base_dir = Path(base_dir)
+
+    # --- Discover timesteps (use union of both species, warn on mismatch) ---
+    ts1 = _get_available_timesteps(species1, base_dir)
+    ts2 = _get_available_timesteps(species2, base_dir)
+
+    if ts1 != ts2:
+        common = sorted(set(ts1) & set(ts2))
+        print(
+            f"Warning: timestep mismatch between '{species1}' and '{species2}'. "
+            f"Using {len(common)} common timesteps."
+        )
+    else:
+        common = ts1
+
+    # Validate that the key timesteps are present
+    for ts, label in [(timestep_short, "timestep_short"), (timestep_long, "timestep_long")]:
+        if ts not in common:
+            raise ValueError(f"{label}={ts} not found among available timesteps: {common}")
+
+    # --- Load full growth curves (n_cells, n_timesteps) ---
+    biomass_sp1, mask1 = _load_all_timesteps(species1, common, base_dir)
+    biomass_sp2, mask2 = _load_all_timesteps(species2, common, base_dir)
+
+    # Align cells: keep only cells valid for both species across all timesteps
+    if biomass_sp1.shape[0] != biomass_sp2.shape[0]:
+        raise ValueError(
+            f"Cell count mismatch after masking: "
+            f"{biomass_sp1.shape[0]} (sp1) vs {biomass_sp2.shape[0]} (sp2). "
+            "Check that both species rasters share the same grid."
+        )
+
+    n_cells = biomass_sp1.shape[0]
+    ts_array = np.array(common)
+
+    # --- Extract slices at key timesteps ---
+    idx_short = common.index(timestep_short)
+    idx_long  = common.index(timestep_long)
+
+    b1_short = biomass_sp1[:, idx_short]
+    b2_short = biomass_sp2[:, idx_short]
+    b1_long  = biomass_sp1[:, idx_long]
+    b2_long  = biomass_sp2[:, idx_long]
+
+    # --- Helper for ties --
+    def _win_fraction_with_tiebreak(a: np.ndarray, b: np.ndarray) -> float:
+        """
+        Compute fraction of cells where a 'wins' over b,
+        with ties broken randomly (50/50) instead of always favouring a.
+        """
+        wins  = a > b                          # strict win for species 1
+        ties  = a == b                         # exact ties
+        # Each tie is independently assigned to species 1 with p=0.5
+        tie_wins = ties & (np.random.random(ties.shape) < 0.5)
+        return float(np.mean(wins | tie_wins))
+    
+    # --- Short-term Y ---
+    denom_short = b1_short + b2_short
+    valid_short = denom_short > 0
+    rci_short = np.where(valid_short, (b1_short - b2_short) / denom_short, np.nan)
+
+    Y_short = float(np.nanmean(rci_short))
+    p_short = _win_fraction_with_tiebreak(b1_short[valid_short], b2_short[valid_short])
+
+    # --- Long-term Y ---
+    if long_term_mode == "gain":
+        b1_eff = b1_long - b1_short
+        b2_eff = b2_long - b2_short
+    elif long_term_mode == "snapshot":
+        b1_eff = b1_long
+        b2_eff = b2_long
+    else:
+        raise ValueError(f"long_term_mode must be 'snapshot' or 'gain', got '{long_term_mode}'")
+
+    denom_long = b1_eff + b2_eff
+    valid_long = denom_long > 0
+    rci_long = np.where(valid_long, (b1_eff - b2_eff) / denom_long, np.nan)
+
+    Y_long = float(np.nanmean(rci_long))
+    p_long  = _win_fraction_with_tiebreak(b1_eff[valid_long],   b2_eff[valid_long])
+    
+    return CompetitionResult(
+        Y_short=Y_short,
+        Y_long=Y_long,
+        p_short=p_short,
+        p_long=p_long,
+        n_cells=n_cells,
+        biomass_sp1=biomass_sp1,   # shape: (n_cells, n_timesteps)
+        biomass_sp2=biomass_sp2,   # shape: (n_cells, n_timesteps)
+        timesteps=ts_array,        # shape: (n_timesteps,)
+    )
+
+
+from itertools import combinations
+from dataclasses import dataclass, field
+import numpy as np
+
+
+# Represents one row in the full factorial design (one of the 8 configurations)
+FACTORIAL_CONFIGS = [
+    # (equalizeWater, equalizeTemperature, equalizeRest)  — all 2^3 combinations
+    (False, False, False),  # full competition         (+1, +1, +1)
+    (True,  False, False),  # water equalized          (-1, +1, +1)
+    (False, True,  False),  # temperature equalized    (+1, -1, +1)
+    (False, False, True),   # rest equalized           (+1, +1, -1)
+    (True,  True,  False),  # water + temp equalized   (-1, -1, +1)
+    (True,  False, True),   # water + rest equalized   (-1, +1, -1)
+    (False, True,  True),   # temp + rest equalized    (+1, -1, -1)
+    (True,  True,  True),   # all equalized            (-1, -1, -1)
+]
+
+# Corresponding ±1 codes for the factorial model (W, T, R)
+FACTORIAL_CODES = np.array([
+    [+1, +1, +1],
+    [-1, +1, +1],
+    [+1, -1, +1],
+    [+1, +1, -1],
+    [-1, -1, +1],
+    [-1, +1, -1],
+    [+1, -1, -1],
+    [-1, -1, -1],
+], dtype=float)
+
+
+@dataclass
+class PairSimulationResults:
+    """All 8 factorial CompetitionResults for a single species pair."""
+    species1: str
+    species2: str
+    # Keyed by (equalizeWater, equalizeTemperature, equalizeRest)
+    results: dict = field(default_factory=dict)   # config_tuple -> CompetitionResult
+
+
+# def run_all_pairs(
+#     species_list: list[str],
+#     base_dir: str = "/output/WoodFoliageBiomass",
+#     timestep_short: int = 40,
+#     timestep_long: int = 200,
+#     long_term_mode: str = "snapshot",
+# ) -> list[PairSimulationResults]:
+#     """
+#     For every unique (unordered) pair of species, run all 8 factorial
+#     configurations of competitionSimulationMonoculturemanawan and collect
+#     CompetitionResult objects.
+
+#     The all-equalized config (equalizeWater=True, equalizeTemperature=True,
+#     equalizeRest=True) is never actually simulated: by definition, both species
+#     are identical in that configuration, so the outcome is a perfect tie.
+#     A CompetitionResult reflecting that is injected directly.
+
+#     Parameters
+#     ----------
+#     species_list : list[str]
+#         All species names to consider.
+#     base_dir : str
+#         Root output directory passed to compute_Y.
+#     timestep_short, timestep_long : int
+#         Passed through to compute_Y.
+#     long_term_mode : str
+#         Passed through to compute_Y.
+
+#     Returns
+#     -------
+#     list[PairSimulationResults]
+#         One entry per unique species pair, each holding 8 CompetitionResults.
+#     """
+#     # Sentinel CompetitionResult representing a perfect tie (all-equalized config).
+#     # biomass arrays are empty since we will never plot this configuration.
+#     PERFECT_TIE = CompetitionResult(
+#         Y_short=0.0,
+#         Y_long=0.0,
+#         p_short=0.5,
+#         p_long=0.5,
+#         n_cells=0,
+#         biomass_sp1=np.array([]),
+#         biomass_sp2=np.array([]),
+#         timesteps=np.array([]),
+#     )
+
+#     ALL_EQUALIZED = (True, True, True)
+
+#     all_pairs = []
+
+#     for sp1, sp2 in combinations(species_list, 2):
+#         print(f"\n=== Pair: {sp1} vs {sp2} ===")
+#         pair_result = PairSimulationResults(species1=sp1, species2=sp2)
+
+#         for config in FACTORIAL_CONFIGS:
+#             eq_water, eq_temp, eq_rest = config
+
+#             if config == ALL_EQUALIZED:
+#                 # Both species are identical → guaranteed tie, skip simulation
+#                 print("  Skipping all-equalized config (injecting perfect tie)")
+#                 pair_result.results[config] = PERFECT_TIE
+#                 continue
+
+#             print(
+#                 f"  Running config: equalizeWater={eq_water}, "
+#                 f"equalizeTemperature={eq_temp}, equalizeRest={eq_rest}"
+#             )
+
+#             result = competitionSimulationMonoculturemanawan(
+#                 speciesToSimulate=[sp1, sp2],
+#                 equalizeWater=eq_water,
+#                 equalizeTemperature=eq_temp,
+#                 equalizeRest=eq_rest,
+#             )
+
+#             # result = compute_Y(
+#             #     species1=sp1,
+#             #     species2=sp2,
+#             #     base_dir=base_dir,
+#             #     timestep_short=timestep_short,
+#             #     timestep_long=timestep_long,
+#             #     long_term_mode=long_term_mode,
+#             # )
+
+#             pair_result.results[config] = result
+
+#         all_pairs.append(pair_result)
+
+#     return all_pairs
+
+import numpy as np
+from itertools import combinations
+from pathlib import Path
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from dataclasses import dataclass, field
+
+
+# ── Worker (must be top-level for pickling) ────────────────────────────────────
+
+def _run_single_config(
+    sp1: str,
+    sp2: str,
+    dictOfInitialCoreSpeciesParameters_path: str,
+    dictOfInitialPnETSpeciesParameters_path: str,
+    dictOfInitialPnETGenericParameters_path: str,
+    climate: str,
+    soil: str,
+    config: tuple,
+    worker_output_dir: str,
+    timestep_short: int,
+    timestep_long: int,
+    long_term_mode: str,
+    *_,  # absorbs the now-unused extra positional arg passed by run_all_pairs
+) -> tuple[tuple, "CompetitionResult"]:
+    """
+    Top-level worker function executed in a separate process.
+
+    Delegates entirely to competitionSimulationMonoculturemanawan, which
+    already calls compute_Y internally and returns a CompetitionResult.
+    We do NOT call compute_Y again here — the simulator handles the correct
+    output path (simulationPath + "/output/WoodFoliageBiomass") itself.
+    """
+    eq_water, eq_temp, eq_rest = config
+
+    result = competitionSimulationMonoculturemanawan(
+        speciesToSimulate=[sp1, sp2],
+        dictOfInitialCoreSpeciesParameters_path=dictOfInitialCoreSpeciesParameters_path,
+        dictOfInitialPnETSpeciesParameters_path=dictOfInitialPnETSpeciesParameters_path,
+        dictOfInitialPnETGenericParameters_path=dictOfInitialPnETGenericParameters_path,
+        climate = climate,
+        soil = soil,
+        equalizeWater=eq_water,
+        equalizeTemperature=eq_temp,
+        equalizeRest=eq_rest,
+        simulationPath=worker_output_dir,
+    )
+
+    return config, result
+
+
+
+# ── Main automation function ───────────────────────────────────────────────────
+
+def run_all_pairs(
+    species_list: list[str],
+    base_dir: str = "/output/WoodFoliageBiomass",
+    timestep_short: int = 40,
+    timestep_long: int = 200,
+    long_term_mode: str = "snapshot",
+    n_workers: int = 1,
+    temp_dir: str = "/tmp/manawan_parallel",
+    dictOfInitialCoreSpeciesParameters_path: str = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/initialCoreSpeciesParameters.json',
+    dictOfInitialPnETSpeciesParameters_path: str = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/initialPnETSpeciesParameters.json',
+    dictOfInitialPnETGenericParameters_path: str = './SpeciesParametersSets/Calibrated_SubSubPhase1.4/InitialGenericParameters.json',
+    climate: str = "mild",
+    soil: str = "SILO"
+) -> list[PairSimulationResults]:
+    """
+    For every unique (unordered) pair of species, run all 8 factorial
+    configurations of competitionSimulationMonoculturemanawan and collect
+    CompetitionResult objects.
+
+    The all-equalized config (equalizeWater=True, equalizeTemperature=True,
+    equalizeRest=True) is never simulated: both species are identical in that
+    configuration so a perfect-tie CompetitionResult is injected directly.
+
+    Parallel execution
+    ------------------
+    When n_workers > 1, up to `n_workers` simulation configs are run
+    simultaneously in separate processes. Each worker writes its raster
+    outputs to an isolated subdirectory under `temp_dir` to avoid file
+    collisions, then compute_Y reads from that same subdirectory.
+    The final structure of the returned list is identical regardless of
+    n_workers.
+
+    Parameters
+    ----------
+    species_list : list[str]
+        All species names to consider.
+    base_dir : str
+        Root output directory used for sequential runs (n_workers=1).
+    timestep_short, timestep_long : int
+        Passed through to compute_Y.
+    long_term_mode : str
+        Passed through to compute_Y.
+    n_workers : int
+        Number of parallel simulation processes. 1 = sequential (default).
+        A sensible value is the number of available CPU cores minus one.
+    temp_dir : str
+        Root temporary directory under which per-worker isolated output
+        folders are created when n_workers > 1. Created automatically if
+        it does not exist.
+
+    Returns
+    -------
+    list[PairSimulationResults]
+        One entry per unique species pair, each holding 8 CompetitionResults.
+        Order matches the iteration order of combinations(species_list, 2).
+    """
+    PERFECT_TIE = CompetitionResult(
+        Y_short=0.0,
+        Y_long=0.0,
+        p_short=0.5,
+        p_long=0.5,
+        n_cells=0,
+        biomass_sp1=np.array([]),
+        biomass_sp2=np.array([]),
+        timesteps=np.array([]),
+    )
+
+    ALL_EQUALIZED = (True, True, True)
+
+    # Pre-build the ordered list of pairs so we can preserve output order
+    pairs = list(combinations(species_list, 2))
+
+    # Initialise result containers (one per pair, in order)
+    pair_results_map: dict[tuple, PairSimulationResults] = {
+        (sp1, sp2): PairSimulationResults(species1=sp1, species2=sp2)
+        for sp1, sp2 in pairs
+    }
+
+    # Inject the guaranteed tie for the all-equalized config upfront
+    for sp1, sp2 in pairs:
+        pair_results_map[(sp1, sp2)].results[ALL_EQUALIZED] = PERFECT_TIE
+
+    # Build the list of jobs to actually run (all configs except ALL_EQUALIZED)
+    jobs = [
+        (sp1, sp2, config)
+        for sp1, sp2 in pairs
+        for config in FACTORIAL_CONFIGS
+        if config != ALL_EQUALIZED
+    ]
+
+    # ── Sequential path ────────────────────────────────────────────────────────
+    if n_workers == 1:
+        for sp1, sp2, config in jobs:
+            eq_water, eq_temp, eq_rest = config
+            print(
+                f"[{sp1} vs {sp2}] "
+                f"W={eq_water} T={eq_temp} R={eq_rest}"
+            )
+            competitionSimulationMonoculturemanawan(
+                speciesToSimulate=[sp1, sp2],
+                dictOfInitialCoreSpeciesParameters_path=dictOfInitialCoreSpeciesParameters_path,
+                dictOfInitialPnETSpeciesParameters_path=dictOfInitialPnETSpeciesParameters_path,
+                dictOfInitialPnETGenericParameters_path=dictOfInitialPnETGenericParameters_path,
+                climate = climate,
+                soil = soil,
+                equalizeWater=eq_water,
+                equalizeTemperature=eq_temp,
+                equalizeRest=eq_rest,
+            )
+            result = compute_Y(
+                species1=sp1,
+                species2=sp2,
+                base_dir=base_dir,
+                timestep_short=timestep_short,
+                timestep_long=timestep_long,
+                long_term_mode=long_term_mode,
+            )
+            pair_results_map[(sp1, sp2)].results[config] = result
+
+    # ── Parallel path ──────────────────────────────────────────────────────────
+    else:
+        temp_root = Path(temp_dir)
+        temp_root.mkdir(parents=True, exist_ok=True)
+
+        # Map each job to a unique isolated output directory so workers never
+        # write to the same path simultaneously.
+        def _worker_dir(sp1: str, sp2: str, config: tuple) -> str:
+            tag = f"{sp1}__{sp2}__W{int(config[0])}T{int(config[1])}GS{int(config[2])}"
+            d = temp_root / tag
+            d.mkdir(parents=True, exist_ok=True)
+            return str(d)
+
+        futures = {}
+        with ProcessPoolExecutor(max_workers=n_workers) as executor:
+            for sp1, sp2, config in jobs:
+                worker_out = _worker_dir(sp1, sp2, config)
+                future = executor.submit(
+                    _run_single_config,
+                    sp1, sp2,
+                    dictOfInitialCoreSpeciesParameters_path, dictOfInitialPnETSpeciesParameters_path, dictOfInitialPnETGenericParameters_path,
+                    climate, soil,
+                    config,
+                    worker_out,       # passed as outputDir to the simulator
+                    timestep_short,
+                    timestep_long,
+                    long_term_mode,
+                    # no second worker_out needed anymore
+                )
+                futures[future] = (sp1, sp2)
+
+            completed = 0
+            total = len(futures)
+            for future in as_completed(futures):
+                sp1, sp2 = futures[future]
+                completed += 1
+                try:
+                    config, result = future.result()
+                    pair_results_map[(sp1, sp2)].results[config] = result
+                    print(
+                        f"[{completed}/{total}] Done: {sp1} vs {sp2} "
+                        f"W={config[0]} T={config[1]} GS={config[2]}"
+                    )
+                except Exception as exc:
+                    print(
+                        f"[{completed}/{total}] FAILED: {sp1} vs {sp2} "
+                        f"config={futures[future]} → {exc}"
+                    )
+                    raise  # re-raise so the caller knows something went wrong
+
+    # Return in the original pair order
+    return [pair_results_map[(sp1, sp2)] for sp1, sp2 in pairs]
+
+
+@dataclass
+class EffectDecomposition:
+    """
+    Factorial effect decomposition for one species pair, one time window.
+
+    Attributes
+    ----------
+    Y_full : float
+        Competitive index under full (unmodified) competition.
+    beta : dict
+        All 7 factorial contrasts (main effects + interactions), keyed by
+        label strings: 'W', 'T', 'R', 'WT', 'WR', 'TR', 'WTR'.
+    e_W, e_T, e_R : float
+        Main-effect shares in [0, 1], summing to 1.
+        Proportion of the main-effect variance explained by each factor.
+    iota : float
+        Non-additivity index in [0, 1].
+        Share of total variance carried by interaction terms.
+        High iota means W/T/R effects are entangled; interpret e_W/T/R with caution.
+    var_total : float
+        Total variance of Y across the 8 configurations (denominator of iota).
+    """
+    species1: str
+    species2: str
+    window: str          # "short" or "long"
+    Y_full: float
+    beta: dict
+    e_W: float
+    e_T: float
+    e_R: float
+    iota: float
+    var_total: float
+
+
+def compute_effects(
+    pair_results: PairSimulationResults,
+) -> tuple[EffectDecomposition, EffectDecomposition]:
+    """
+    Apply the 2^3 factorial contrast decomposition to extract the contribution
+    of water (W), temperature (T), and 'rest' (R) parameters to competition
+    outcome, for both the short-term and long-term time windows.
+
+    The model is:
+        Y = β0 + βW·xW + βT·xT + βR·xR
+              + βWT·xW·xT + βWR·xW·xR + βTR·xT·xR + βWTR·xW·xT·xR
+
+    where xW, xT, xR ∈ {-1, +1}:
+        +1 = real (species-specific) parameter values
+        -1 = equalized (mean of both species) parameter values
+
+    Because the design matrix is orthogonal, each coefficient is simply:
+        βj = (1/8) * Σ_i [ φj(i) * Y(i) ]
+    where φj(i) is the product of the ±1 codes for effect j at run i.
+
+    The variance of Y across the 8 runs partitions exactly as:
+        Var(Y) = βW² + βT² + βR² + βWT² + βWR² + βTR² + βWTR²
+
+    Main-effect shares (sum to 1 over W, T, R):
+        e_W = βW² / (βW² + βT² + βR²)
+
+    Non-additivity index (share of variance in interactions):
+        ι = (βWT² + βWR² + βTR² + βWTR²) / Var(Y)
+
+    Parameters
+    ----------
+    pair_results : PairSimulationResults
+        Output of run_all_pairs for a single species pair.
+
+    Returns
+    -------
+    (decomp_short, decomp_long) : tuple of EffectDecomposition
+    """
+    # Collect Y values in the same row order as FACTORIAL_CONFIGS / FACTORIAL_CODES
+    Y_short_vec = np.array([
+        pair_results.results[cfg].Y_short for cfg in FACTORIAL_CONFIGS
+    ])
+    Y_long_vec = np.array([
+        pair_results.results[cfg].Y_long for cfg in FACTORIAL_CONFIGS
+    ])
+
+    results = []
+    for Y_vec, window_label in [(Y_short_vec, "short"), (Y_long_vec, "long")]:
+
+        # ── Step 1: build the full contrast matrix (8×8) ──────────────────────
+        # Columns: intercept, W, T, R, WT, WR, TR, WTR
+        X = np.column_stack([
+            np.ones(8),                                          # β0 (intercept)
+            FACTORIAL_CODES[:, 0],                               # βW
+            FACTORIAL_CODES[:, 1],                               # βT
+            FACTORIAL_CODES[:, 2],                               # βR
+            FACTORIAL_CODES[:, 0] * FACTORIAL_CODES[:, 1],      # βWT
+            FACTORIAL_CODES[:, 0] * FACTORIAL_CODES[:, 2],      # βWR
+            FACTORIAL_CODES[:, 1] * FACTORIAL_CODES[:, 2],      # βTR
+            FACTORIAL_CODES[:, 0] * FACTORIAL_CODES[:, 1] * FACTORIAL_CODES[:, 2],  # βWTR
+        ])
+
+        # ── Step 2: compute all 8 coefficients via orthogonal contrasts ───────
+        # Because X is orthogonal with column norms = sqrt(8),
+        # β = (X'X)^{-1} X' Y = (1/8) X' Y
+        beta_vec = X.T @ Y_vec / 8.0
+
+        beta_labels = ["intercept", "W", "T", "R", "WT", "WR", "TR", "WTR"]
+        beta_dict = dict(zip(beta_labels, beta_vec))
+
+        # ── Step 3: variance partition ────────────────────────────────────────
+        # Var(Y) across the 8 design points = sum of squared non-intercept betas
+        # (exact identity for a saturated 2^k design)
+        var_total = float(np.sum(beta_vec[1:] ** 2))  # exclude intercept
+
+        beta_W   = float(beta_vec[1])
+        beta_T   = float(beta_vec[2])
+        beta_R   = float(beta_vec[3])
+        beta_WT  = float(beta_vec[4])
+        beta_WR  = float(beta_vec[5])
+        beta_TR  = float(beta_vec[6])
+        beta_WTR = float(beta_vec[7])
+
+        # ── Step 4: main-effect shares (normalized to sum to 1 over W, T, R) ──
+        main_var = beta_W**2 + beta_T**2 + beta_R**2
+
+        if main_var > 0:
+            e_W = beta_W**2 / main_var
+            e_T = beta_T**2 / main_var
+            e_R = beta_R**2 / main_var
+        else:
+            # No main effects at all — competition is purely stochastic or
+            # driven entirely by interactions; set shares to equal thirds
+            e_W = e_T = e_R = 1.0 / 3.0
+
+        # ── Step 5: non-additivity index ──────────────────────────────────────
+        interaction_var = beta_WT**2 + beta_WR**2 + beta_TR**2 + beta_WTR**2
+        iota = float(interaction_var / var_total) if var_total > 0 else 0.0
+
+        # ── Step 6: Y under full (unmodified) competition ─────────────────────
+        Y_full = float(pair_results.results[(False, False, False)].Y_short
+                       if window_label == "short"
+                       else pair_results.results[(False, False, False)].Y_long)
+
+        results.append(EffectDecomposition(
+            species1=pair_results.species1,
+            species2=pair_results.species2,
+            window=window_label,
+            Y_full=Y_full,
+            beta=beta_dict,
+            e_W=e_W,
+            e_T=e_T,
+            e_R=e_R,
+            iota=iota,
+            var_total=var_total,
+        ))
+
+    return results[0], results[1]  # (short, long)
+
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import matplotlib.patches as mpatches
+from matplotlib.cm import ScalarMappable
+import numpy as np
+
+# def plot_win_matrices(
+#     all_pairs: list[PairSimulationResults],
+#     species_list: list[str],
+#     figsize_per_panel: float = 4.0,
+# ) -> plt.Figure:
+#     """
+#     Display two side-by-side diagonal (upper-triangle) matrices showing
+#     the short-term and long-term win fraction (p_short / p_long) of
+#     species on the row vs species on the column, under full competition.
+
+#     Color scale: white = 0.5 (tie), dark blue = 1.0 (row species always wins),
+#                  light red = 0.0 (column species always wins).
+
+#     Parameters
+#     ----------
+#     all_pairs : list[PairSimulationResults]
+#         Output of run_all_pairs.
+#     species_list : list[str]
+#         Ordered list of species (determines axis order).
+#     figsize_per_panel : float
+#         Width/height of each matrix panel in inches.
+#     """
+#     n = len(species_list)
+#     sp_idx = {sp: i for i, sp in enumerate(species_list)}
+
+#     # Build n×n matrices; NaN = diagonal or lower triangle (unused)
+#     mat_short = np.full((n, n), np.nan)
+#     mat_long  = np.full((n, n), np.nan)
+
+#     full_config = (False, False, False)
+
+#     for pair in all_pairs:
+#         i = sp_idx[pair.species1]
+#         j = sp_idx[pair.species2]
+#         # Always store with i < j (upper triangle)
+#         if i > j:
+#             i, j = j, i
+#             p_s = 1.0 - pair.results[full_config].p_short
+#             p_l = 1.0 - pair.results[full_config].p_long
+#         else:
+#             p_s = pair.results[full_config].p_short
+#             p_l = pair.results[full_config].p_long
+
+#         mat_short[i, j] = p_s
+#         mat_long[i, j]  = p_l
+
+#     # Colormap: diverging around 0.5
+#     cmap = plt.cm.RdBu   # red (col wins) → white (tie) → blue (row wins)
+
+#     fig, axes = plt.subplots(
+#         1, 2,
+#         figsize=(figsize_per_panel * 2 + 1.5, figsize_per_panel),
+#         constrained_layout=True,
+#     )
+
+#     titles = ["Short-term win fraction (t=40)", "Long-term win fraction (t=200)"]
+
+#     for ax, mat, title in zip(axes, [mat_short, mat_long], titles):
+#         im = ax.imshow(mat, cmap=cmap, vmin=0, vmax=1, aspect="equal")
+
+#         # Annotate each cell with the numeric value
+#         for i in range(n):
+#             for j in range(n):
+#                 if not np.isnan(mat[i, j]):
+#                     ax.text(
+#                         j, i, f"{mat[i, j]:.2f}",
+#                         ha="center", va="center", fontsize=8,
+#                         color="white" if abs(mat[i, j] - 0.5) > 0.3 else "black",
+#                     )
+
+#         ax.set_xticks(range(n))
+#         ax.set_yticks(range(n))
+#         ax.set_xticklabels(species_list, rotation=45, ha="right", fontsize=9)
+#         ax.set_yticklabels(species_list, fontsize=9)
+#         ax.set_title(title, fontsize=11, fontweight="bold")
+
+#         # Hide lower triangle + diagonal
+#         for i in range(n):
+#             for j in range(i + 1):
+#                 ax.add_patch(
+#                     mpatches.Rectangle(
+#                         (j - 0.5, i - 0.5), 1, 1,
+#                         color="lightgrey", zorder=2,
+#                     )
+#                 )
+
+#     # Single shared colorbar
+#     sm = ScalarMappable(cmap=cmap, norm=mcolors.Normalize(vmin=0, vmax=1))
+#     sm.set_array([])
+#     cbar = fig.colorbar(sm, ax=axes, shrink=0.7, pad=0.02)
+#     cbar.set_label("Win fraction of row species →", fontsize=9)
+#     cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+#     cbar.set_ticklabels(["0\n(col wins)", "0.25", "0.5\n(tie)", "0.75", "1.0\n(row wins)"])
+
+#     return fig
+
+def _to_ternary(e_W, e_T, e_R):
+    """
+    Convert (e_W, e_T, e_R) barycentric coordinates (summing to 1)
+    to 2D Cartesian coordinates for a standard equilateral triangle.
+
+    Triangle corners:
+        Water       → bottom-left  (0, 0)
+        Temperature → bottom-right (1, 0)
+        Rest        → top-center   (0.5, sqrt(3)/2)
+    """
+    x = e_T + e_R * 0.5
+    y = e_R * (3 ** 0.5 / 2)
+    return x, y
+
+
+# def plot_ternary_effects(
+#     decompositions_short: list[EffectDecomposition],
+#     decompositions_long:  list[EffectDecomposition],
+#     figsize: tuple = (8, 7),
+#     label_fontsize: float = 7.5,
+#     min_label_dist: float = 0.06,
+# ) -> plt.Figure:
+#     """
+#     Ternary (simplex) plot showing the balance of Water / Temperature / Rest
+#     effects for each species pair.
+
+#     Each pair is shown as two points connected by an arrow:
+#         ○  open circle  = short-term
+#         ●  filled circle = long-term
+
+#     Points are colored by the sign of Y_full (blue = sp1 dominates, red = sp2).
+#     Transparency encodes the non-additivity index ι (faded = less trustworthy).
+
+#     Parameters
+#     ----------
+#     decompositions_short, decompositions_long : list[EffectDecomposition]
+#         Outputs of compute_effects for all pairs.
+#     figsize : tuple
+#         Figure size.
+#     label_fontsize : float
+#         Font size for pair labels.
+#     min_label_dist : float
+#         Minimum distance (in data units) between label positions before
+#         a small offset is applied to reduce overlap.
+#     """
+#     fig, ax = plt.subplots(figsize=figsize)
+#     ax.set_aspect("equal")
+#     ax.axis("off")
+
+#     # ── Draw triangle ──────────────────────────────────────────────────────────
+#     corners = np.array([[0, 0], [1, 0], [0.5, 3**0.5 / 2], [0, 0]])
+#     ax.plot(corners[:, 0], corners[:, 1], "k-", lw=1.5, zorder=1)
+
+#     # Corner labels
+#     offset = 0.06
+#     ax.text(0 - offset,       0 - offset,       "Water",       ha="center", fontsize=11, fontweight="bold")
+#     ax.text(1 + offset,       0 - offset,       "Temperature", ha="center", fontsize=11, fontweight="bold")
+#     ax.text(0.5,  3**0.5/2 + offset, "Rest\n(shade + growth)", ha="center", fontsize=11, fontweight="bold")
+
+#     # Light grid lines at 0.25, 0.5, 0.75 for each axis
+#     for level in [0.25, 0.5, 0.75]:
+#         # Lines parallel to each side
+#         for (a1, a2, a3) in [(level, 0, 1-level), (0, level, 1-level), (level, 1-level, 0)]:
+#             p1 = np.array(_to_ternary(a1, a2, a3))
+#             # The iso-line for e_W=level: vary e_T from 0 to 1-level, e_R = 1-level-e_T
+#             pts = []
+#             for t in np.linspace(0, 1 - level, 50):
+#                 pts.append(_to_ternary(level, t, 1 - level - t))
+#             pts = np.array(pts)
+#             ax.plot(pts[:, 0], pts[:, 1], color="lightgrey", lw=0.6, zorder=0)
+
+#     # ── Plot points ────────────────────────────────────────────────────────────
+#     label_positions = []   # track placed labels to reduce overlap
+
+#     for d_short, d_long in zip(decompositions_short, decompositions_long):
+#         label = f"{d_short.species1}\n{d_short.species2}"
+
+#         xs, ys = _to_ternary(d_short.e_W, d_short.e_T, d_short.e_R)
+#         xl, yl = _to_ternary(d_long.e_W,  d_long.e_T,  d_long.e_R)
+
+#         # Color by who wins (Y_full sign), alpha by trust (1 - iota)
+#         color = "#2166ac" if d_short.Y_full >= 0 else "#d6604d"
+#         alpha_s = max(0.3, 1.0 - d_short.iota)
+#         alpha_l = max(0.3, 1.0 - d_long.iota)
+
+#         # Arrow from short to long
+#         ax.annotate(
+#             "", xy=(xl, yl), xytext=(xs, ys),
+#             arrowprops=dict(arrowstyle="-|>", color="grey", lw=0.8),
+#             zorder=2,
+#         )
+
+#         # Short-term: open circle
+#         ax.scatter(xs, ys, s=60, facecolors="none", edgecolors=color,
+#                    linewidths=1.5, alpha=alpha_s, zorder=3)
+#         # Long-term: filled circle
+#         ax.scatter(xl, yl, s=60, facecolors=color, edgecolors=color,
+#                    alpha=alpha_l, zorder=3)
+
+#         # ── Label placement: nudge if too close to an existing label ──────────
+#         lx, ly = (xs + xl) / 2, (ys + yl) / 2 + 0.03  # start near midpoint
+#         for (px, py) in label_positions:
+#             dist = ((lx - px)**2 + (ly - py)**2) ** 0.5
+#             if dist < min_label_dist:
+#                 lx += min_label_dist * 0.8
+#                 ly += min_label_dist * 0.8
+#         label_positions.append((lx, ly))
+
+#         ax.text(lx, ly, label, ha="center", va="bottom",
+#                 fontsize=label_fontsize, color="black",
+#                 bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.6),
+#                 zorder=4)
+
+#     # ── Legend ─────────────────────────────────────────────────────────────────
+#     legend_elements = [
+#         plt.scatter([], [], s=60, facecolors="none", edgecolors="grey",
+#                     linewidths=1.5, label="Short-term"),
+#         plt.scatter([], [], s=60, facecolors="grey", edgecolors="grey",
+#                     label="Long-term"),
+#         plt.scatter([], [], s=60, facecolors="#2166ac", edgecolors="#2166ac",
+#                     label="Species 1 dominates (Y > 0)"),
+#         plt.scatter([], [], s=60, facecolors="#d6604d", edgecolors="#d6604d",
+#                     label="Species 2 dominates (Y < 0)"),
+#     ]
+#     ax.legend(handles=legend_elements, loc="lower center",
+#               bbox_to_anchor=(0.5, -0.12), ncol=2, fontsize=8, frameon=False)
+
+#     ax.set_title("Effect decomposition: Water / Temperature / Rest",
+#                  fontsize=13, fontweight="bold", pad=20)
+
+#     return fig
+
+def _assign_species_colors(species_list: list[str]) -> dict[str, str]:
+    """Assign a unique, visually distinct color to each species."""
+    palette = plt.cm.tab20.colors  # 20 distinct colors
+    return {sp: palette[i % len(palette)] for i, sp in enumerate(species_list)}
+
+
+# def plot_growth_curves(
+#     all_pairs: list[PairSimulationResults],
+#     species_list: list[str],
+#     n_cols: int = 2,
+#     alpha: float = 0.15,
+#     figsize_per_row: tuple = (12, 3.5),
+# ) -> plt.Figure:
+#     """
+#     Grid of growth curve plots, one row per species pair, two panels per row:
+#         Left panel  : species 1 growth curves across all cells
+#         Right panel : species 2 growth curves across all cells
+
+#     All cells are overlaid as semi-transparent lines to show variability.
+#     Species colors are consistent across all panels.
+#     Within each row, both panels share the same x- and y-axis limits.
+
+#     Parameters
+#     ----------
+#     all_pairs : list[PairSimulationResults]
+#         Output of run_all_pairs. Growth curves are taken from the full
+#         competition config (equalizeWater=False, equalizeTemperature=False,
+#         equalizeRest=False).
+#     species_list : list[str]
+#         Full species list (used for color assignment).
+#     n_cols : int
+#         Number of panel-pairs per figure row (default 2 = one pair per row).
+#         Set to 1 to stack pairs vertically.
+#     alpha : float
+#         Transparency of individual cell curves (lower = more transparent).
+#     figsize_per_row : tuple
+#         (width, height) per figure row.
+#     """
+#     colors = _assign_species_colors(species_list)
+#     full_config = (False, False, False)
+
+#     n_pairs = len(all_pairs)
+#     n_rows = int(np.ceil(n_pairs / n_cols))
+
+#     fig, axes = plt.subplots(
+#         n_rows, n_cols * 2,          # 2 panels per pair column
+#         figsize=(figsize_per_row[0], figsize_per_row[1] * n_rows),
+#         squeeze=False,
+#     )
+
+#     for pair_idx, pair in enumerate(all_pairs):
+#         row = pair_idx // n_cols
+#         col_offset = (pair_idx % n_cols) * 2   # left panel of this pair
+
+#         ax1 = axes[row, col_offset]
+#         ax2 = axes[row, col_offset + 1]
+
+#         result = pair.results[full_config]
+#         timesteps = result.timesteps
+#         b1 = result.biomass_sp1   # (n_cells, n_timesteps)
+#         b2 = result.biomass_sp2
+
+#         c1 = colors[pair.species1]
+#         c2 = colors[pair.species2]
+
+#         # Plot all cell curves
+#         for cell_curve in b1:
+#             ax1.plot(timesteps, cell_curve, color=c1, alpha=alpha, lw=0.8)
+#         for cell_curve in b2:
+#             ax2.plot(timesteps, cell_curve, color=c2, alpha=alpha, lw=0.8)
+
+#         # Median curve on top for readability
+#         ax1.plot(timesteps, np.median(b1, axis=0), color=c1, lw=2.0,
+#                  alpha=0.9, label="median")
+#         ax2.plot(timesteps, np.median(b2, axis=0), color=c2, lw=2.0,
+#                  alpha=0.9, label="median")
+
+#         # Shared y-axis limits across both panels in this row
+#         y_max = max(b1.max(), b2.max()) * 1.05
+#         y_min = min(b1.min(), b2.min())
+#         for ax in (ax1, ax2):
+#             ax.set_ylim(y_min, y_max)
+#             ax.set_xlim(timesteps[0], timesteps[-1])
+#             ax.spines[["top", "right"]].set_visible(False)
+
+#         ax1.set_title(pair.species1, fontsize=9, fontweight="bold", color=c1)
+#         ax2.set_title(pair.species2, fontsize=9, fontweight="bold", color=c2)
+
+#         # y-label only on leftmost panel of each pair
+#         ax1.set_ylabel("Biomass (kg/ha)", fontsize=8)
+#         ax2.set_yticklabels([])   # share scale but avoid duplicate labels
+
+#         # x-label only on bottom row
+#         if row == n_rows - 1:
+#             ax1.set_xlabel("Year", fontsize=8)
+#             ax2.set_xlabel("Year", fontsize=8)
+
+#         # Pair label as a shared suptitle-style annotation
+#         mid_x = (ax1.get_position().x0 + ax2.get_position().x1) / 2
+#         fig.text(
+#             mid_x, ax1.get_position().y1 + 0.005,
+#             f"{pair.species1} vs {pair.species2}",
+#             ha="center", va="bottom", fontsize=9, style="italic", color="grey",
+#         )
+
+#     # Hide any unused axes (if n_pairs doesn't fill the grid perfectly)
+#     for pair_idx in range(n_pairs, n_rows * n_cols):
+#         row = pair_idx // n_cols
+#         col_offset = (pair_idx % n_cols) * 2
+#         axes[row, col_offset].set_visible(False)
+#         axes[row, col_offset + 1].set_visible(False)
+
+#     fig.suptitle("Growth curves across all cells — full competition",
+#                  fontsize=12, fontweight="bold", y=1.01)
+#     plt.tight_layout()
+
+#     return fig
+
+import warnings
+import matplotlib.colors as mcolors
+
+def make_species_colors(
+    species_list: list[str],
+    use_glasbey: bool = True,
+) -> dict[str, str]:
+    """
+    Assign a unique color to each species from a curated palette.
+
+    If `use_glasbey` is True, uses the Glasbey palette from the `colorcet`
+    package, which is algorithmically designed to maximize perceptual distance
+    between colors — ideal for large categorical sets (supports up to 256).
+
+    If `use_glasbey` is False (default), uses the hardcoded curated palette,
+    falling back to Matplotlib's tab20/tab20b qualitative colors with a warning
+    if the species list exceeds the palette length.
+
+    Parameters
+    ----------
+    species_list : list[str]
+    use_glasbey : bool, optional
+        If True, use the Glasbey palette from `colorcet`. Default is False.
+
+    Returns
+    -------
+    dict mapping species name -> hex color string
+    """
+    PALETTE = [
+        "#0F4C81", "#A23E48", "#4C956C", "#E0A458", "#6B6D76",
+        "#E69F00", "#56B4E9", "#009E73", "#F0E442",
+        "#0072B2", "#D55E00", "#CC79A7", "#000000", "#4477AA",
+        "#66CCEE", "#228833", "#CCBB44", "#EE6677", "#AA3377",
+        "#BBBBBB", "#1F77B4", "#D62728", "#2CA02C", "#9467BD",
+        "#FF7F0E", "#17BECF",
+    ]
+    MAX_GLASBEY = 256
+
+    if use_glasbey:
+        try:
+            import colorcet as cc
+        except ImportError as e:
+            raise ImportError(
+                "The `colorcet` package is required when use_glasbey=True. "
+                "Install it with: pip install colorcet"
+            ) from e
+
+        if len(species_list) > MAX_GLASBEY:
+            raise ValueError(
+                f"Species list ({len(species_list)}) exceeds the maximum "
+                f"Glasbey palette size ({MAX_GLASBEY})."
+            )
+
+        return {sp: cc.glasbey[i] for i, sp in enumerate(species_list)}
+
+    # --- Hardcoded palette path ---
+    if len(species_list) > len(PALETTE):
+        warnings.warn(
+            f"Species list ({len(species_list)}) exceeds curated palette "
+            f"({len(PALETTE)} colors). Falling back to Matplotlib tab20 colors.",
+            UserWarning,
+        )
+        fallback = [mcolors.to_hex(c) for c in plt.cm.tab20.colors]
+        fallback += [mcolors.to_hex(c) for c in plt.cm.tab20b.colors]
+        return {sp: fallback[i % len(fallback)] for i, sp in enumerate(species_list)}
+
+    return {sp: PALETTE[i] for i, sp in enumerate(species_list)}
+
+
+def plot_win_matrices(
+    all_pairs: list[PairSimulationResults],
+    species_list: list[str],
+    species_colors: dict[str, str],
+    figsize_per_panel: float = 4.0,
+) -> plt.Figure:
+    """
+    Two side-by-side full matrices showing short-term and long-term
+    win fraction (p_short / p_long) of the row species ("Challenger") vs the
+    column species ("Opponent"), under full competition.
+
+    Color scale: dark blue = 1.0 (challenger always wins),
+                 dark red  = 0.0 (opponent always wins),
+                 white     = 0.5 (tie).
+
+    Tick labels are colored with each species' color from species_colors.
+
+    Parameters
+    ----------
+    all_pairs : list[PairSimulationResults]
+    species_list : list[str]
+        Ordered list of species (determines axis order).
+    species_colors : dict[str, str]
+        Output of make_species_colors.
+    figsize_per_panel : float
+    """
+    n = len(species_list)
+    sp_idx = {sp: i for i, sp in enumerate(species_list)}
+
+    mat_short = np.full((n, n), np.nan)
+    mat_long  = np.full((n, n), np.nan)
+
+    full_config = (False, False, False)
+
+    for pair in all_pairs:
+        i = sp_idx[pair.species1]
+        j = sp_idx[pair.species2]
+        p_s = pair.results[full_config].p_short
+        p_l = pair.results[full_config].p_long
+
+        # Fill both triangles: [i,j] = win fraction of species1 vs species2
+        #                       [j,i] = mirror (win fraction of species2 vs species1)
+        mat_short[i, j] = p_s
+        mat_short[j, i] = 1.0 - p_s
+        mat_long[i, j]  = p_l
+        mat_long[j, i]  = 1.0 - p_l
+
+    cmap = plt.cm.RdBu  # red (opponent wins) → white (tie) → blue (challenger wins)
+
+    fig, axes = plt.subplots(
+        1, 2,
+        figsize=(figsize_per_panel * 2 + 4.0, figsize_per_panel),
+        constrained_layout=True,
+    )
+    fig.get_layout_engine().set(w_pad=0.4, wspace=0.15)
+
+    titles = ["Short-term win fraction (t=40)", "Long-term win fraction (t=200)"]
+
+    for ax, mat, title in zip(axes, [mat_short, mat_long], titles):
+        ax.imshow(mat, cmap=cmap, vmin=0, vmax=1, aspect="equal")
+
+        # Annotate non-diagonal cells
+        for i in range(n):
+            for j in range(n):
+                if i == j:
+                    continue
+                if not np.isnan(mat[i, j]):
+                    ax.text(
+                        j, i, f"{mat[i, j]:.2f}",
+                        ha="center", va="center", fontsize=8,
+                        color="white" if abs(mat[i, j] - 0.5) > 0.3 else "black",
+                    )
+
+        # Grey out only the diagonal
+        for i in range(n):
+            ax.add_patch(
+                mpatches.Rectangle(
+                    (i - 0.5, i - 0.5), 1, 1,
+                    color="lightgrey", zorder=2,
+                )
+            )
+
+        # Axis ticks
+        ax.set_xticks(range(n))
+        ax.set_yticks(range(n))
+
+        # Color tick labels by species color
+        ax.set_xticklabels(species_list, rotation=45, ha="right", fontsize=9)
+        ax.set_yticklabels(species_list, fontsize=9)
+
+        for tick, sp in zip(ax.get_xticklabels(), species_list):
+            tick.set_color(species_colors[sp])
+        for tick, sp in zip(ax.get_yticklabels(), species_list):
+            tick.set_color(species_colors[sp])
+
+        ax.set_xlabel("Opponent →", fontsize=10, fontweight="bold")
+        ax.set_ylabel("← Challenger", fontsize=10, fontweight="bold")
+        ax.set_title(title, fontsize=11, fontweight="bold")
+
+    # Single shared colorbar
+    sm = ScalarMappable(cmap=cmap, norm=mcolors.Normalize(vmin=0, vmax=1))
+    sm.set_array([])
+    cbar = fig.colorbar(sm, ax=axes, shrink=0.7, pad=0.02)
+    cbar.set_label("Win fraction", fontsize=9)
+    cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+    cbar.set_ticklabels(
+        ["0\n(opponent wins)", "0.25", "0.5\n(tie)", "0.75", "1.0\n(challenger wins)"]
+    )
+
+    return fig
+
+
+def plot_ternary_effects(
+    decompositions_short: list[EffectDecomposition],
+    decompositions_long:  list[EffectDecomposition],
+    species_colors: dict[str, str],
+    n_cols: int = 3,
+    subplot_size: float = 3.5,
+) -> plt.Figure:
+    """
+    One small ternary subplot per SPECIES (not per pair), arranged in a grid.
+
+    Each subplot shows all competition outcomes involving that species.
+    For each pair the species appears in:
+        ○  open circle  = short-term effect balance
+        ●  filled circle = long-term effect balance
+        →  arrow connecting short to long, colored with the OPPONENT's species color
+
+    The short- and long-term dots are colored on a blue/red scale:
+        blue  = the focal species won (Y_full > 0 if focal == species1, < 0 if focal == species2)
+        red   = the focal species lost
+        grey  = tie (|Y_full| < 0.05)
+
+    Opacity of the dots encodes trust: faded = high non-additivity (ι).
+
+    Parameters
+    ----------
+    decompositions_short, decompositions_long : list[EffectDecomposition]
+        Outputs of compute_effects for all pairs, in the same order.
+    species_colors : dict[str, str]
+        Output of make_species_colors.
+    n_cols : int
+        Number of subplots per row.
+    subplot_size : float
+        Size of each square subplot in inches.
+    """
+
+    # ── Collect all species that appear in at least one decomposition ─────────
+    all_species = sorted({
+        sp
+        for d in decompositions_short
+        for sp in (d.species1, d.species2)
+    })
+    n_species = len(all_species)
+    n_rows = int(np.ceil(n_species / n_cols))
+
+    fig, axes = plt.subplots(
+        n_rows, n_cols,
+        figsize=(subplot_size * n_cols, subplot_size * n_rows + 0.6),
+        squeeze=False,
+    )
+
+    fig.subplots_adjust(hspace=0.5)
+
+    # Pre-build a lookup: (species1, species2) -> (d_short, d_long)
+    pair_lookup = {
+        (d.species1, d.species2): (d_s, d_l)
+        for d_s, d_l in zip(decompositions_short, decompositions_long)
+        for d in [d_s]   # key by species1/species2 as stored
+    }
+
+    def _draw_triangle(ax):
+        """Draw the ternary triangle, corner labels, and grid lines."""
+        corners = np.array([[0, 0], [1, 0], [0.5, 3**0.5 / 2], [0, 0]])
+        ax.plot(corners[:, 0], corners[:, 1], "k-", lw=1.2, zorder=1)
+        off = 0.04
+        ax.text(0 - off,            0 - off,            "W", ha="center", fontsize=8, fontweight="bold")
+        ax.text(1 + off,            0 - off,            "T", ha="center", fontsize=8, fontweight="bold")
+        ax.text(0.5, 3**0.5/2 + off, "G/S",               ha="center", fontsize=8, fontweight="bold")
+        for level in [0.25, 0.5, 0.75]:
+            for fixed_axis in range(3):
+                pts = []
+                for t in np.linspace(0, 1 - level, 40):
+                    coords = [0.0, 0.0, 0.0]
+                    coords[fixed_axis] = level
+                    remaining = [k for k in range(3) if k != fixed_axis]
+                    coords[remaining[0]] = t
+                    coords[remaining[1]] = 1 - level - t
+                    pts.append(_to_ternary(coords[0], coords[1], coords[2]))
+                pts = np.array(pts)
+                ax.plot(pts[:, 0], pts[:, 1], color="lightgrey", lw=0.5, zorder=0)
+
+    for sp_idx, focal_species in enumerate(all_species):
+        row, col = divmod(sp_idx, n_cols)
+        ax = axes[row, col]
+        ax.set_aspect("equal")
+        ax.axis("off")
+        _draw_triangle(ax)
+
+        # ── Find all pairs involving this focal species ────────────────────────
+        for (d_short, d_long) in zip(decompositions_short, decompositions_long):
+            if focal_species not in (d_short.species1, d_short.species2):
+                continue
+
+            # Determine opponent and whether focal species won
+            focal_is_sp1 = (focal_species == d_short.species1)
+            opponent = d_short.species2 if focal_is_sp1 else d_short.species1
+
+            # Y_full > 0 means species1 wins; adjust sign for focal perspective
+            y_focal_short = d_short.Y_full if focal_is_sp1 else -d_short.Y_full
+            y_focal_long  = d_long.Y_full  if focal_is_sp1 else -d_long.Y_full
+
+            # Dot color: blue = focal wins, red = focal loses, grey = tie
+            def _outcome_color(y_val):
+                if abs(y_val) < 0.05:
+                    return "grey"
+                return "#2166ac" if y_val > 0 else "#d6604d"
+
+            color_short = _outcome_color(y_focal_short)
+            color_long  = _outcome_color(y_focal_long)
+
+            # Arrow/line color = opponent's species color
+            opponent_color = species_colors.get(opponent, "grey")
+
+            alpha_s = max(0.3, 1.0 - d_short.iota)
+            alpha_l = max(0.3, 1.0 - d_long.iota)
+            alpha_line = (alpha_s + alpha_l) / 2
+
+            xs, ys = _to_ternary(d_short.e_W, d_short.e_T, d_short.e_R)
+            xl, yl = _to_ternary(d_long.e_W,  d_long.e_T,  d_long.e_R)
+
+            # Connecting arrow colored by opponent
+            ax.annotate(
+                "", xy=(xl, yl), xytext=(xs, ys),
+                arrowprops=dict(
+                    arrowstyle="-|>",
+                    color=opponent_color,
+                    lw=1.2,
+                    alpha=alpha_line,
+                ),
+                zorder=2,
+            )
+
+            # Short-term: open circle
+            ax.scatter(xs, ys, s=55,
+                       facecolors="none", edgecolors=color_short,
+                       linewidths=1.5, alpha=alpha_s, zorder=3)
+            # Long-term: filled circle
+            ax.scatter(xl, yl, s=55,
+                       facecolors=color_long, edgecolors=color_long,
+                       alpha=alpha_l, zorder=3)
+
+        # ── Subplot title: focal species in its own color ──────────────────────
+        focal_color = species_colors.get(focal_species, "black")
+        title_y = 3**0.38 / 2 + 0.22
+        ax.text(
+            0.5, title_y, focal_species,
+            ha="center", va="bottom", fontsize=10, fontweight="bold",
+            color=focal_color, transform=ax.transData,
+        )
+
+    # Hide unused subplots
+    for sp_idx in range(n_species, n_rows * n_cols):
+        row, col = divmod(sp_idx, n_cols)
+        axes[row, col].set_visible(False)
+
+    # ── Shared legend ──────────────────────────────────────────────────────────
+    legend_elements = [
+        plt.scatter([], [], s=55, facecolors="none", edgecolors="grey",
+                    linewidths=1.5, label="Short-term"),
+        plt.scatter([], [], s=55, facecolors="grey", edgecolors="grey",
+                    label="Long-term"),
+        plt.scatter([], [], s=55, facecolors="#2166ac", edgecolors="#2166ac",
+                    label="Focal species wins"),
+        plt.scatter([], [], s=55, facecolors="#d6604d", edgecolors="#d6604d",
+                    label="Focal species loses"),
+        plt.Line2D([0], [0], color="grey", lw=1.5,
+                   label="Arrow color = opponent species"),
+    ]
+    fig.legend(
+        handles=legend_elements,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.0),
+        ncol=3, fontsize=8, frameon=False,
+    )
+
+    fig.suptitle(
+        "Effect decomposition per species  —  W: Water · T: Temperature · G/S: Growth and Shade",
+        fontsize=11, fontweight="bold",
+    )
+    plt.tight_layout(rect=[0, 0.06, 1, 0.95], h_pad=4.0)
+
+    return fig
+
+
+def plot_growth_curves_competition(
+    all_pairs: list[PairSimulationResults],
+    species_colors: dict[str, str],
+    alpha: float = 0.15,
+    figsize_per_row: tuple = (14, 2.0),  # ← height halved from 4.0 to 2.0; adjust here
+) -> plt.Figure:
+    """
+    Grid of growth curve plots, one row per species pair, three panels per row:
+        Left panel   : water-equalized simulation   (equalizeWater=True,  
+equalizeTemperature=False, equalizeRest=False)
+        Middle panel : temperature-equalized sim     (equalizeWater=False, 
+equalizeTemperature=True,  equalizeRest=False)
+        Right panel  : full competition (no equalization)
+
+    Each panel superimposes the growth curves of both species across all cells.
+    Biomass is converted from g/m² to metric ton/ha (× 0.01).
+    Individual cell curves are semi-transparent; a solid median is drawn on top.
+    Within each row, all three panels share the same x- and y-axis limits.
+
+    Parameters
+    ----------
+    all_pairs : list[PairSimulationResults]
+    species_colors : dict[str, str]
+        Output of make_species_colors.
+    alpha : float
+        Transparency of individual cell curves.
+    figsize_per_row : tuple
+        (width, height) per figure row. Change the second value to adjust row height.
+    """
+    CONFIGS = {
+        "Water equalized":       (True,  False, False),
+        "Temperature equalized": (False, True,  False),
+        "Full competition":      (False, False, False),
+    }
+
+    G_M2_TO_T_HA = 0.01  # conversion factor
+
+    n_pairs = len(all_pairs)
+
+    fig, axes = plt.subplots(
+        n_pairs, 3,
+        figsize=(figsize_per_row[0], figsize_per_row[1] * n_pairs),
+        squeeze=False,
+    )
+
+    for pair_idx, pair in enumerate(all_pairs):
+        c1 = species_colors.get(pair.species1, "#333333")
+        c2 = species_colors.get(pair.species2, "#333333")
+
+        # Compute shared y-axis limits across all 3 configs for this row
+        y_max_all, y_min_all = -np.inf, np.inf
+        for config in CONFIGS.values():
+            result = pair.results[config]
+            b1 = result.biomass_sp1 * G_M2_TO_T_HA
+            b2 = result.biomass_sp2 * G_M2_TO_T_HA
+            if b1.size > 0:
+                y_max_all = max(y_max_all, b1.max(), b2.max())
+                y_min_all = min(y_min_all, b1.min(), b2.min())
+        y_max_all *= 1.05
+
+        for col_idx, (panel_title, config) in enumerate(CONFIGS.items()):
+            ax = axes[pair_idx, col_idx]
+
+            result    = pair.results[config]
+            timesteps = result.timesteps
+            b1        = result.biomass_sp1 * G_M2_TO_T_HA
+            b2        = result.biomass_sp2 * G_M2_TO_T_HA
+
+            # Individual cell curves (transparent)
+            for cell_curve in b1:
+                ax.plot(timesteps, cell_curve, color=c1, alpha=alpha, lw=0.8)
+            for cell_curve in b2:
+                ax.plot(timesteps, cell_curve, color=c2, alpha=alpha, lw=0.8)
+
+            # Median curves
+            ax.plot(timesteps, np.median(b1, axis=0), color=c1, lw=2.0,
+                    alpha=0.9, label=pair.species1)
+            ax.plot(timesteps, np.median(b2, axis=0), color=c2, lw=2.0,
+                    alpha=0.9, label=pair.species2)
+
+            ax.set_ylim(y_min_all, y_max_all)
+            ax.set_xlim(timesteps[0], timesteps[-1])
+            ax.spines[["top", "right"]].set_visible(False)
+
+            # Panel title (config name) on EVERY row  ← changed
+            ax.set_title(panel_title, fontsize=9, fontweight="bold")
+
+            # y-axis label and ticks only on leftmost panel
+            if col_idx == 0:
+                ax.set_ylabel("Biomass (t/ha)", fontsize=8)
+            else:
+                ax.set_yticklabels([])
+
+            # x-axis label only on bottom row
+            if pair_idx == n_pairs - 1:
+                ax.set_xlabel("Year", fontsize=8)
+
+            # Legend on EVERY panel  ← changed
+            ax.legend(fontsize=7.5, frameon=False, loc="upper left")
+
+        # Row label (pair name) on the left margin
+        axes[pair_idx, 0].annotate(
+            f"{pair.species1} vs {pair.species2}",
+            xy=(-0.22, 0.5), xycoords="axes fraction",
+            fontsize=8, style="italic", color="grey",
+            ha="center", va="center", rotation=90,
+        )
+
+    fig.suptitle(
+        "Growth curves across all cells",
+        fontsize=12, fontweight="bold", y=1.01,
+    )
+    plt.tight_layout()
+
+    return fig
