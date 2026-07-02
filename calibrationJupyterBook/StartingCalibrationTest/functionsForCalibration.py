@@ -6284,7 +6284,7 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     # Changing the soil if needed
     PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
     # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
-    startYear = 1900
+    startYear = 1950
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
     # No dispersal, since we only simulate one pixel and the life of one cohort (monoculture and even-aged)
@@ -8619,7 +8619,7 @@ def calibrate_subphase_1_2(
             return float(min(max(value, FRACFOLSHAPE_LOW), FRACFOLSHAPE_HIGH))
 
     if "FracFolShape" in initial_pnet_species_params["PnETSpeciesParameters"][species].keys():
-        current_FracFolShape = initial_pnet_species_params["PnETSpeciesParameters"][species]["FracFolShape"]
+        current_FracFolShape = float(initial_pnet_species_params["PnETSpeciesParameters"][species]["FracFolShape"])
     else:
         current_FracFolShape = coupled_FracFolShape(current_MaxFracFol)
 
@@ -8942,6 +8942,7 @@ def calibrate_subphase_1_2(
     
             prev_error           = current_error
             current_MaxFracFol   = float(candidate_MaxFracFol)
+            current_FracFolShape = float(candidate_FracFolShape)
             peak_time_matched    = abs(current_error) <= peak_time_tolerance
     
             if peak_time_matched:
@@ -8972,6 +8973,8 @@ def calibrate_subphase_1_2(
                 peak_time_matched    = abs(current_error) <= peak_time_tolerance # If true, we escape the loop and go to phase B. If False, we go back into phase A.
                 if peak_time_matched:
                     print("Peak time is OK after recalibration of LAI and peak. Going to phase B.")
+                    current_MaxFracFol = candidate_MaxFracFol
+                    current_FracFolShape = candidate_FracFolShape
                 else:
                     print("Peak time has changed too much after recalibration of LAI and peak. Going back to phase A.")
                 
@@ -11085,6 +11088,7 @@ def competitionSimulationMonoculturemanawan(duration = 200,
     ) as dst:
         dst.write(data, 1)
     # Preparing the initial communities raster
+    data = np.arange(1, numberOfCells+1, dtype="int32").reshape(1, numberOfCells)
     with rasterio.open(
     simulationPath + '/initial-communities.img',
     'w',
@@ -11097,7 +11101,6 @@ def competitionSimulationMonoculturemanawan(duration = 200,
     transform=transform
     ) as dst:
         dst.write(data, 1)
-    data = np.arange(1, numberOfCells+1, dtype="int32").reshape(1, numberOfCells)
     # Creating initial community .csv
     create_species_csv(speciesToSimulate, numberOfCells, ageRange, filename = simulationPath + "/initial-communities.csv")
 
@@ -11395,96 +11398,6 @@ class PairSimulationResults:
     # Keyed by (equalizeWater, equalizeTemperature, equalizeRest)
     results: dict = field(default_factory=dict)   # config_tuple -> CompetitionResult
 
-
-# def run_all_pairs(
-#     species_list: list[str],
-#     base_dir: str = "/output/WoodFoliageBiomass",
-#     timestep_short: int = 40,
-#     timestep_long: int = 200,
-#     long_term_mode: str = "snapshot",
-# ) -> list[PairSimulationResults]:
-#     """
-#     For every unique (unordered) pair of species, run all 8 factorial
-#     configurations of competitionSimulationMonoculturemanawan and collect
-#     CompetitionResult objects.
-
-#     The all-equalized config (equalizeWater=True, equalizeTemperature=True,
-#     equalizeRest=True) is never actually simulated: by definition, both species
-#     are identical in that configuration, so the outcome is a perfect tie.
-#     A CompetitionResult reflecting that is injected directly.
-
-#     Parameters
-#     ----------
-#     species_list : list[str]
-#         All species names to consider.
-#     base_dir : str
-#         Root output directory passed to compute_Y.
-#     timestep_short, timestep_long : int
-#         Passed through to compute_Y.
-#     long_term_mode : str
-#         Passed through to compute_Y.
-
-#     Returns
-#     -------
-#     list[PairSimulationResults]
-#         One entry per unique species pair, each holding 8 CompetitionResults.
-#     """
-#     # Sentinel CompetitionResult representing a perfect tie (all-equalized config).
-#     # biomass arrays are empty since we will never plot this configuration.
-#     PERFECT_TIE = CompetitionResult(
-#         Y_short=0.0,
-#         Y_long=0.0,
-#         p_short=0.5,
-#         p_long=0.5,
-#         n_cells=0,
-#         biomass_sp1=np.array([]),
-#         biomass_sp2=np.array([]),
-#         timesteps=np.array([]),
-#     )
-
-#     ALL_EQUALIZED = (True, True, True)
-
-#     all_pairs = []
-
-#     for sp1, sp2 in combinations(species_list, 2):
-#         print(f"\n=== Pair: {sp1} vs {sp2} ===")
-#         pair_result = PairSimulationResults(species1=sp1, species2=sp2)
-
-#         for config in FACTORIAL_CONFIGS:
-#             eq_water, eq_temp, eq_rest = config
-
-#             if config == ALL_EQUALIZED:
-#                 # Both species are identical → guaranteed tie, skip simulation
-#                 print("  Skipping all-equalized config (injecting perfect tie)")
-#                 pair_result.results[config] = PERFECT_TIE
-#                 continue
-
-#             print(
-#                 f"  Running config: equalizeWater={eq_water}, "
-#                 f"equalizeTemperature={eq_temp}, equalizeRest={eq_rest}"
-#             )
-
-#             result = competitionSimulationMonoculturemanawan(
-#                 speciesToSimulate=[sp1, sp2],
-#                 equalizeWater=eq_water,
-#                 equalizeTemperature=eq_temp,
-#                 equalizeRest=eq_rest,
-#             )
-
-#             # result = compute_Y(
-#             #     species1=sp1,
-#             #     species2=sp2,
-#             #     base_dir=base_dir,
-#             #     timestep_short=timestep_short,
-#             #     timestep_long=timestep_long,
-#             #     long_term_mode=long_term_mode,
-#             # )
-
-#             pair_result.results[config] = result
-
-#         all_pairs.append(pair_result)
-
-#     return all_pairs
 
 import numpy as np
 from itertools import combinations
@@ -11871,102 +11784,6 @@ import matplotlib.patches as mpatches
 from matplotlib.cm import ScalarMappable
 import numpy as np
 
-# def plot_win_matrices(
-#     all_pairs: list[PairSimulationResults],
-#     species_list: list[str],
-#     figsize_per_panel: float = 4.0,
-# ) -> plt.Figure:
-#     """
-#     Display two side-by-side diagonal (upper-triangle) matrices showing
-#     the short-term and long-term win fraction (p_short / p_long) of
-#     species on the row vs species on the column, under full competition.
-
-#     Color scale: white = 0.5 (tie), dark blue = 1.0 (row species always wins),
-#                  light red = 0.0 (column species always wins).
-
-#     Parameters
-#     ----------
-#     all_pairs : list[PairSimulationResults]
-#         Output of run_all_pairs.
-#     species_list : list[str]
-#         Ordered list of species (determines axis order).
-#     figsize_per_panel : float
-#         Width/height of each matrix panel in inches.
-#     """
-#     n = len(species_list)
-#     sp_idx = {sp: i for i, sp in enumerate(species_list)}
-
-#     # Build n×n matrices; NaN = diagonal or lower triangle (unused)
-#     mat_short = np.full((n, n), np.nan)
-#     mat_long  = np.full((n, n), np.nan)
-
-#     full_config = (False, False, False)
-
-#     for pair in all_pairs:
-#         i = sp_idx[pair.species1]
-#         j = sp_idx[pair.species2]
-#         # Always store with i < j (upper triangle)
-#         if i > j:
-#             i, j = j, i
-#             p_s = 1.0 - pair.results[full_config].p_short
-#             p_l = 1.0 - pair.results[full_config].p_long
-#         else:
-#             p_s = pair.results[full_config].p_short
-#             p_l = pair.results[full_config].p_long
-
-#         mat_short[i, j] = p_s
-#         mat_long[i, j]  = p_l
-
-#     # Colormap: diverging around 0.5
-#     cmap = plt.cm.RdBu   # red (col wins) → white (tie) → blue (row wins)
-
-#     fig, axes = plt.subplots(
-#         1, 2,
-#         figsize=(figsize_per_panel * 2 + 1.5, figsize_per_panel),
-#         constrained_layout=True,
-#     )
-
-#     titles = ["Short-term win fraction (t=40)", "Long-term win fraction (t=200)"]
-
-#     for ax, mat, title in zip(axes, [mat_short, mat_long], titles):
-#         im = ax.imshow(mat, cmap=cmap, vmin=0, vmax=1, aspect="equal")
-
-#         # Annotate each cell with the numeric value
-#         for i in range(n):
-#             for j in range(n):
-#                 if not np.isnan(mat[i, j]):
-#                     ax.text(
-#                         j, i, f"{mat[i, j]:.2f}",
-#                         ha="center", va="center", fontsize=8,
-#                         color="white" if abs(mat[i, j] - 0.5) > 0.3 else "black",
-#                     )
-
-#         ax.set_xticks(range(n))
-#         ax.set_yticks(range(n))
-#         ax.set_xticklabels(species_list, rotation=45, ha="right", fontsize=9)
-#         ax.set_yticklabels(species_list, fontsize=9)
-#         ax.set_title(title, fontsize=11, fontweight="bold")
-
-#         # Hide lower triangle + diagonal
-#         for i in range(n):
-#             for j in range(i + 1):
-#                 ax.add_patch(
-#                     mpatches.Rectangle(
-#                         (j - 0.5, i - 0.5), 1, 1,
-#                         color="lightgrey", zorder=2,
-#                     )
-#                 )
-
-#     # Single shared colorbar
-#     sm = ScalarMappable(cmap=cmap, norm=mcolors.Normalize(vmin=0, vmax=1))
-#     sm.set_array([])
-#     cbar = fig.colorbar(sm, ax=axes, shrink=0.7, pad=0.02)
-#     cbar.set_label("Win fraction of row species →", fontsize=9)
-#     cbar.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
-#     cbar.set_ticklabels(["0\n(col wins)", "0.25", "0.5\n(tie)", "0.75", "1.0\n(row wins)"])
-
-#     return fig
-
 def _to_ternary(e_W, e_T, e_R):
     """
     Convert (e_W, e_T, e_R) barycentric coordinates (summing to 1)
@@ -11982,240 +11799,12 @@ def _to_ternary(e_W, e_T, e_R):
     return x, y
 
 
-# def plot_ternary_effects(
-#     decompositions_short: list[EffectDecomposition],
-#     decompositions_long:  list[EffectDecomposition],
-#     figsize: tuple = (8, 7),
-#     label_fontsize: float = 7.5,
-#     min_label_dist: float = 0.06,
-# ) -> plt.Figure:
-#     """
-#     Ternary (simplex) plot showing the balance of Water / Temperature / Rest
-#     effects for each species pair.
-
-#     Each pair is shown as two points connected by an arrow:
-#         ○  open circle  = short-term
-#         ●  filled circle = long-term
-
-#     Points are colored by the sign of Y_full (blue = sp1 dominates, red = sp2).
-#     Transparency encodes the non-additivity index ι (faded = less trustworthy).
-
-#     Parameters
-#     ----------
-#     decompositions_short, decompositions_long : list[EffectDecomposition]
-#         Outputs of compute_effects for all pairs.
-#     figsize : tuple
-#         Figure size.
-#     label_fontsize : float
-#         Font size for pair labels.
-#     min_label_dist : float
-#         Minimum distance (in data units) between label positions before
-#         a small offset is applied to reduce overlap.
-#     """
-#     fig, ax = plt.subplots(figsize=figsize)
-#     ax.set_aspect("equal")
-#     ax.axis("off")
-
-#     # ── Draw triangle ──────────────────────────────────────────────────────────
-#     corners = np.array([[0, 0], [1, 0], [0.5, 3**0.5 / 2], [0, 0]])
-#     ax.plot(corners[:, 0], corners[:, 1], "k-", lw=1.5, zorder=1)
-
-#     # Corner labels
-#     offset = 0.06
-#     ax.text(0 - offset,       0 - offset,       "Water",       ha="center", fontsize=11, fontweight="bold")
-#     ax.text(1 + offset,       0 - offset,       "Temperature", ha="center", fontsize=11, fontweight="bold")
-#     ax.text(0.5,  3**0.5/2 + offset, "Rest\n(shade + growth)", ha="center", fontsize=11, fontweight="bold")
-
-#     # Light grid lines at 0.25, 0.5, 0.75 for each axis
-#     for level in [0.25, 0.5, 0.75]:
-#         # Lines parallel to each side
-#         for (a1, a2, a3) in [(level, 0, 1-level), (0, level, 1-level), (level, 1-level, 0)]:
-#             p1 = np.array(_to_ternary(a1, a2, a3))
-#             # The iso-line for e_W=level: vary e_T from 0 to 1-level, e_R = 1-level-e_T
-#             pts = []
-#             for t in np.linspace(0, 1 - level, 50):
-#                 pts.append(_to_ternary(level, t, 1 - level - t))
-#             pts = np.array(pts)
-#             ax.plot(pts[:, 0], pts[:, 1], color="lightgrey", lw=0.6, zorder=0)
-
-#     # ── Plot points ────────────────────────────────────────────────────────────
-#     label_positions = []   # track placed labels to reduce overlap
-
-#     for d_short, d_long in zip(decompositions_short, decompositions_long):
-#         label = f"{d_short.species1}\n{d_short.species2}"
-
-#         xs, ys = _to_ternary(d_short.e_W, d_short.e_T, d_short.e_R)
-#         xl, yl = _to_ternary(d_long.e_W,  d_long.e_T,  d_long.e_R)
-
-#         # Color by who wins (Y_full sign), alpha by trust (1 - iota)
-#         color = "#2166ac" if d_short.Y_full >= 0 else "#d6604d"
-#         alpha_s = max(0.3, 1.0 - d_short.iota)
-#         alpha_l = max(0.3, 1.0 - d_long.iota)
-
-#         # Arrow from short to long
-#         ax.annotate(
-#             "", xy=(xl, yl), xytext=(xs, ys),
-#             arrowprops=dict(arrowstyle="-|>", color="grey", lw=0.8),
-#             zorder=2,
-#         )
-
-#         # Short-term: open circle
-#         ax.scatter(xs, ys, s=60, facecolors="none", edgecolors=color,
-#                    linewidths=1.5, alpha=alpha_s, zorder=3)
-#         # Long-term: filled circle
-#         ax.scatter(xl, yl, s=60, facecolors=color, edgecolors=color,
-#                    alpha=alpha_l, zorder=3)
-
-#         # ── Label placement: nudge if too close to an existing label ──────────
-#         lx, ly = (xs + xl) / 2, (ys + yl) / 2 + 0.03  # start near midpoint
-#         for (px, py) in label_positions:
-#             dist = ((lx - px)**2 + (ly - py)**2) ** 0.5
-#             if dist < min_label_dist:
-#                 lx += min_label_dist * 0.8
-#                 ly += min_label_dist * 0.8
-#         label_positions.append((lx, ly))
-
-#         ax.text(lx, ly, label, ha="center", va="bottom",
-#                 fontsize=label_fontsize, color="black",
-#                 bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.6),
-#                 zorder=4)
-
-#     # ── Legend ─────────────────────────────────────────────────────────────────
-#     legend_elements = [
-#         plt.scatter([], [], s=60, facecolors="none", edgecolors="grey",
-#                     linewidths=1.5, label="Short-term"),
-#         plt.scatter([], [], s=60, facecolors="grey", edgecolors="grey",
-#                     label="Long-term"),
-#         plt.scatter([], [], s=60, facecolors="#2166ac", edgecolors="#2166ac",
-#                     label="Species 1 dominates (Y > 0)"),
-#         plt.scatter([], [], s=60, facecolors="#d6604d", edgecolors="#d6604d",
-#                     label="Species 2 dominates (Y < 0)"),
-#     ]
-#     ax.legend(handles=legend_elements, loc="lower center",
-#               bbox_to_anchor=(0.5, -0.12), ncol=2, fontsize=8, frameon=False)
-
-#     ax.set_title("Effect decomposition: Water / Temperature / Rest",
-#                  fontsize=13, fontweight="bold", pad=20)
-
-#     return fig
 
 def _assign_species_colors(species_list: list[str]) -> dict[str, str]:
     """Assign a unique, visually distinct color to each species."""
     palette = plt.cm.tab20.colors  # 20 distinct colors
     return {sp: palette[i % len(palette)] for i, sp in enumerate(species_list)}
 
-
-# def plot_growth_curves(
-#     all_pairs: list[PairSimulationResults],
-#     species_list: list[str],
-#     n_cols: int = 2,
-#     alpha: float = 0.15,
-#     figsize_per_row: tuple = (12, 3.5),
-# ) -> plt.Figure:
-#     """
-#     Grid of growth curve plots, one row per species pair, two panels per row:
-#         Left panel  : species 1 growth curves across all cells
-#         Right panel : species 2 growth curves across all cells
-
-#     All cells are overlaid as semi-transparent lines to show variability.
-#     Species colors are consistent across all panels.
-#     Within each row, both panels share the same x- and y-axis limits.
-
-#     Parameters
-#     ----------
-#     all_pairs : list[PairSimulationResults]
-#         Output of run_all_pairs. Growth curves are taken from the full
-#         competition config (equalizeWater=False, equalizeTemperature=False,
-#         equalizeRest=False).
-#     species_list : list[str]
-#         Full species list (used for color assignment).
-#     n_cols : int
-#         Number of panel-pairs per figure row (default 2 = one pair per row).
-#         Set to 1 to stack pairs vertically.
-#     alpha : float
-#         Transparency of individual cell curves (lower = more transparent).
-#     figsize_per_row : tuple
-#         (width, height) per figure row.
-#     """
-#     colors = _assign_species_colors(species_list)
-#     full_config = (False, False, False)
-
-#     n_pairs = len(all_pairs)
-#     n_rows = int(np.ceil(n_pairs / n_cols))
-
-#     fig, axes = plt.subplots(
-#         n_rows, n_cols * 2,          # 2 panels per pair column
-#         figsize=(figsize_per_row[0], figsize_per_row[1] * n_rows),
-#         squeeze=False,
-#     )
-
-#     for pair_idx, pair in enumerate(all_pairs):
-#         row = pair_idx // n_cols
-#         col_offset = (pair_idx % n_cols) * 2   # left panel of this pair
-
-#         ax1 = axes[row, col_offset]
-#         ax2 = axes[row, col_offset + 1]
-
-#         result = pair.results[full_config]
-#         timesteps = result.timesteps
-#         b1 = result.biomass_sp1   # (n_cells, n_timesteps)
-#         b2 = result.biomass_sp2
-
-#         c1 = colors[pair.species1]
-#         c2 = colors[pair.species2]
-
-#         # Plot all cell curves
-#         for cell_curve in b1:
-#             ax1.plot(timesteps, cell_curve, color=c1, alpha=alpha, lw=0.8)
-#         for cell_curve in b2:
-#             ax2.plot(timesteps, cell_curve, color=c2, alpha=alpha, lw=0.8)
-
-#         # Median curve on top for readability
-#         ax1.plot(timesteps, np.median(b1, axis=0), color=c1, lw=2.0,
-#                  alpha=0.9, label="median")
-#         ax2.plot(timesteps, np.median(b2, axis=0), color=c2, lw=2.0,
-#                  alpha=0.9, label="median")
-
-#         # Shared y-axis limits across both panels in this row
-#         y_max = max(b1.max(), b2.max()) * 1.05
-#         y_min = min(b1.min(), b2.min())
-#         for ax in (ax1, ax2):
-#             ax.set_ylim(y_min, y_max)
-#             ax.set_xlim(timesteps[0], timesteps[-1])
-#             ax.spines[["top", "right"]].set_visible(False)
-
-#         ax1.set_title(pair.species1, fontsize=9, fontweight="bold", color=c1)
-#         ax2.set_title(pair.species2, fontsize=9, fontweight="bold", color=c2)
-
-#         # y-label only on leftmost panel of each pair
-#         ax1.set_ylabel("Biomass (kg/ha)", fontsize=8)
-#         ax2.set_yticklabels([])   # share scale but avoid duplicate labels
-
-#         # x-label only on bottom row
-#         if row == n_rows - 1:
-#             ax1.set_xlabel("Year", fontsize=8)
-#             ax2.set_xlabel("Year", fontsize=8)
-
-#         # Pair label as a shared suptitle-style annotation
-#         mid_x = (ax1.get_position().x0 + ax2.get_position().x1) / 2
-#         fig.text(
-#             mid_x, ax1.get_position().y1 + 0.005,
-#             f"{pair.species1} vs {pair.species2}",
-#             ha="center", va="bottom", fontsize=9, style="italic", color="grey",
-#         )
-
-#     # Hide any unused axes (if n_pairs doesn't fill the grid perfectly)
-#     for pair_idx in range(n_pairs, n_rows * n_cols):
-#         row = pair_idx // n_cols
-#         col_offset = (pair_idx % n_cols) * 2
-#         axes[row, col_offset].set_visible(False)
-#         axes[row, col_offset + 1].set_visible(False)
-
-#     fig.suptitle("Growth curves across all cells — full competition",
-#                  fontsize=12, fontweight="bold", y=1.01)
-#     plt.tight_layout()
-
-#     return fig
 
 import warnings
 import matplotlib.colors as mcolors
@@ -12696,3 +12285,396 @@ equalizeTemperature=True,  equalizeRest=False)
     plt.tight_layout()
 
     return fig
+
+#######################################################
+# FUNCTIONS TO CALIBRATE MAXPEST
+#######################################################
+
+import random
+
+def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange, filename='output.csv'):
+    """Function used to create the .csv files to initialize
+    the landscapes for the little simulations used for the calibration.
+    This function is adapted to make the larger landscape to calibrate MaxPest."""
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+
+        # Write header
+        writer.writerow(['MapCode', 'SpeciesName', 'CohortAge', 'CohortBiomass'])
+
+        # Loop through MapCode 1 to 1001
+        for map_code in range(1, (numberOfCells*numberOfCells)+2):
+            # Pick a random number of species
+            # Pick a random number of elements between 1 and the length of the list
+            k = random.randint(1, len(listOfSpecies))
+            # Select k unique elements
+            random_species = random.sample(listOfSpecies, k)
+            
+            # Write one row for each species
+            for species in random_species:
+                random_age = random.randint(ageRange[0], ageRange[1])
+                writer.writerow([map_code, species, random_age, 0])
+
+
+import copy
+
+def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
+                                                climate = "mild",
+                                                soil = "SILO",
+                                                timestep = 10,
+                                                 numberOfCells = 100,
+                                                dictOfCoreSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json')),
+                                                dictOfPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
+                                                dictOfPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
+                                                plotResults = False):    
+    # We prepare the simulation files
+    PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
+    
+    # - Species.txt : replace with the right initial core species parameters from the JSON file
+    PnETGitHub_OneCellSim["species.txt"] = copy.deepcopy(dictOfCoreSpeciesParameters)
+    
+    # - SpeciesParameters.txt : replace with the initial PnET species parameters from the JSOn file
+    PnETGitHub_OneCellSim["SpeciesParameters.txt"] = copy.deepcopy(dictOfPnETSpeciesParameters)
+    
+    # - PnETGenericParameters.txt : replace with initial generic parameters from the JSON file
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"] = copy.deepcopy(dictOfPnETGenericParameters)
+
+    listOfSpeciesToSimulate = list(PnETGitHub_OneCellSim["SpeciesParameters.txt"]["PnETSpeciesParameters"].keys())
+    
+    # Setting duration and timestep (minimal timestep for maximum spatial resolution, although it shouldn't change anything)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = str(timestep)
+    PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
+    # Changing the soil if needed
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
+    # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
+    startYear = 1950
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["Latitude"] = "47.2223"
+    # Dispersal activated
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["SeedingAlgorithm"] = "WardSeedDispersal"
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["PreventEstablishment"] = "False"
+    # Setting other parameters
+    PnETGitHub_OneCellSim["scenario.txt"]["CellLength"] = "100"
+
+    # Preparing the landscape
+    # Inserting reading of the right climate file
+    if climate == "mild":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims_MonthlyAveraged.txt"
+    elif climate == "realHistorical":
+        PnETGitHub_OneCellSim["pnetsuccession.txt"]["ClimateConfigFile"] = "ClimateConfigSimpleSims.txt"
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
+
+    # Writing the files in a temporary folder
+    simulationPath = "/tmp/landscapeCalibrationMaxPest/"
+
+    # Removing PnET Output Site
+    del PnETGitHub_OneCellSim["pnetsuccession.txt"]["PNEToutputsites"]
+    del PnETGitHub_OneCellSim["PnEToutputsites_onecell.txt"]
+
+    # We create the folder
+    if not os.path.exists(simulationPath):
+        os.mkdir(simulationPath)
+    else:
+        shutil.rmtree(simulationPath)
+        os.mkdir(simulationPath)
+    
+    write_all_LANDIS_files(simulationPath,
+                           PnETGitHub_OneCellSim,
+                           True)
+
+    # Copy the climate files
+    if climate == "mild":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv")
+        maxLongevity = 0
+        for species in listOfSpeciesToSimulate:
+            maxLongevity = max(float(dictOfCoreSpeciesParameters[species]["Longevity"]), maxLongevity)
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
+    elif climate == "realHistorical":
+        shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
+        shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_SpinupMonthly_Ouranos.csv", simulationPath)
+        os.remove(simulationPath + "/climate.txt")
+        # I'm getting an issue when starting simulations at year 1900 with low longevity values. See https://github.com/LANDIS-II-Foundation/Library-Climate/issues/32
+        # It seems to be related to the spinup code taking the wrong amount of year based on the longevity of the species
+        # I'm removing years from the spinup file to avoid this
+        spinupData = pd.read_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv")
+        maxLongevity = 0
+        for species in listOfSpeciesToSimulate:
+            maxLongevity = max(float(dictOfCoreSpeciesParameters[species]["Longevity"]), maxLongevity)
+        spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
+        spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
+    elif climate == "testFilesGithub":
+        pass # The climate files from github are used by default if we don't input a climate config file
+    else:
+        raise ValueError("Climate value : " + str(climate) + " not recognized.")
+    # Removing climate.txt (old climate file from the test files)
+    
+
+    # Preparing rasters
+    # numberOfCells = 500
+    ageRange = [1, 100]
+    # Preparing the data we will put in the rasters
+    data = np.ones((1, numberOfCells), dtype=np.uint8)
+    # Transform used to settle the size of cells - not sure is very useful
+    transform = Affine.translation(0, 0) * Affine.scale(1, 1)
+    # Creating the ecoregion raster
+    with rasterio.open(
+    simulationPath + '/ecoregion.img',
+    'w',
+    driver='GTiff',
+    height=numberOfCells,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    # Preparing the initial communities raster
+    data = np.arange(1, numberOfCells**2 + 1, dtype="int32").reshape(numberOfCells, numberOfCells)
+    with rasterio.open(
+    simulationPath + '/initial-communities.img',
+    'w',
+    driver='GTiff',
+    height=numberOfCells,
+    width=numberOfCells,
+    count=1,
+    dtype=data.dtype,
+    crs='EPSG:4326',
+    transform=transform
+    ) as dst:
+        dst.write(data, 1)
+    # Creating initial community .csv
+    create_species_csv_maxpestcalibration(listOfSpeciesToSimulate, numberOfCells, ageRange, filename = simulationPath + "/initial-communities.csv")
+
+    # We launch the simulation
+    runLANDIS_Simulation(simulationPath,
+                         "scenario.txt",
+                        False)
+
+    # # We get the result file : only .csv file that should represent the cohort
+    # csv_file_cohort = pd.read_csv(glob.glob(f'{simulationPath}/Output/Site1/Cohort_*.csv')[0])
+    # # print(csv_file_cohort)
+    # # Add a measure of total biomass
+    # csv_file_cohort["SumFoliageWood_Site"] = csv_file_cohort["SiteFol(gDW)"] + csv_file_cohort["SiteWood(gDW)"]
+    # # We also get the foliage biomass from another output; this is because the foliage+wood biomass in the cohort file
+    # # is in gDW, or gram of dry weight. But we want g/m2 to compare to NFI data.
+    # csv_file_WoodFoliageBiomass = pd.read_csv(f'{simulationPath}output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
+    # # We also get the site csv that has the temperatures (for diagnostics)
+    # csv_file_site = pd.read_csv(f'{simulationPath}/Output/Site1/Site.csv')
+    
+    # # We get the results we need
+    # variablesOutput = ["Biomass peak height", "Biomass peak time", "Biomass peak 95% time",
+    #                    "Initation of decline", "Time of death",
+    #                    "Maximum LAI", "LAI stability", "Average Fwater",
+    #                   "Average July Temperature", "Biomass at 50% of biomass peak 95% time"]
+    # dictOfOutput = {}
+    # for variable in variablesOutput:
+    #     if variable == "Biomass peak height":
+    #         dictOfOutput[variable] = (csv_file_WoodFoliageBiomass[str(speciesToSimulate) + "_g/m2"].max())
+    #     elif variable == "Biomass peak time":
+    #         max_index = csv_file_cohort['SumFoliageWood_Site'].idxmax()
+    #         # Here, we want the age of the cohort when it reaches the maximum
+    #         # Since there is one row per month, and since the first row is the first month of life
+    #         # of the cohort (even if there is a spinup), then the age of the cohorts (in years) is
+    #         # simply row/12 (since 12 rows make a year of life.
+    #         dictOfOutput[variable] = ((max_index+1)/12)
+    #     elif variable == "Biomass peak 95% time":
+    #         # Calculate 95% of the maximum value in the column
+    #         threshold_value = csv_file_cohort['SumFoliageWood_Site'].max() * 0.95
+            
+    #         # Find the index of the first row where the column value is greater than or equal to the threshold
+    #         # The .idxmax() method returns the index of the first occurrence of the maximum value.
+    #         # To find the first occurrence of a value that meets a condition, we can create a boolean series.
+    #         # However, idxmax() is for maximum values. A more direct approach for a threshold is to filter.
+            
+    #         # Filter the DataFrame to get rows that meet the condition
+    #         rows_meeting_condition = csv_file_cohort[csv_file_cohort['SumFoliageWood_Site'] >= threshold_value]
+            
+    #         # Get the index of the first row from the filtered DataFrame
+    #         if not rows_meeting_condition.empty:
+    #             first_index = rows_meeting_condition.index[0]
+    #             dictOfOutput[variable] = ((first_index+1)/12)
+    #             # print(f"The first index where the column value is at least 95% of the maximum is: {first_index}")
+    #         else:
+    #             # print("No rows found that meet the condition.")
+    #             dictOfOutput[variable] = "None"
+    #     elif variable == "Initation of decline":
+    #         # When fAge goes under 0.90 for the first time
+    #         # Create a boolean mask for rows where 'my_column' is less than the threshold
+    #         condition_met = csv_file_cohort['fage(-)'] < 0.9
+    #         first_occurrence_index = csv_file_cohort.index[condition_met].min()
+    #         # We want to get the age of the cohort where fAge goes under 0.90
+    #         # Since one row per month, it's simply the number of row/index divided by 12.
+    #         dictOfOutput[variable] = ((first_occurrence_index+1)/12)
+    #     elif variable == "Time of death":
+    #         # Cohort dies when NSCfrac is inferior to 0.01 at the end of a year (december)
+    #         # We get the index of the row when this happens and divided it by 12 (since there
+    #         # is one row per month), this gives us the age (in years) of death.
+    #         mask = (csv_file_cohort['Month'] == 12) & (csv_file_cohort['NSCfrac(-)'] < 0.01)
+    #         try:
+    #             idx = csv_file_cohort[mask].index[0]
+    #             dictOfOutput[variable] = ((idx+1)/12)
+    #         except:
+    #             # Code to handle any other error
+    #             # print("Havent found the index where the cohort died. Might be an issue with the cohort.csv")
+    #             dictOfOutput[variable] = "None"
+    #     elif variable == "Maximum LAI":
+    #         dictOfOutput[variable] = csv_file_cohort["LAI(m2)"].max()
+    #     elif variable == "LAI stability":
+    #         # dictOfOutput[variable] = min_max_top30_contiguous(csv_file_cohort["LAI(m2)"])
+
+    #         # Step 1: Get max yearly LAI per year
+    #         yearly_max_lai = csv_file_cohort.groupby("Year")["LAI(m2)"].max()
+            
+    #         # Step 2: Find the year where LAI reaches its overall maximum
+    #         year_of_max_lai = yearly_max_lai.idxmax()
+            
+    #         # Step 3: Find the last year before fAge(-) drops below 0.6
+    #         year_before_fage = csv_file_cohort[csv_file_cohort["fage(-)"] >= 0.7]["Year"].max()
+            
+    #         # Step 4: Filter and get the range (min, max) of yearly max LAI values in that window
+    #         result = yearly_max_lai.loc[year_of_max_lai:year_before_fage]
+    #         dictOfOutput[variable] = (result.min(), result.max())
+            
+    #     elif variable == "Average Fwater":
+    #         dictOfOutput[variable] = csv_file_cohort["fWater(-)"].mean()
+    #     elif variable == "Average July Temperature":
+    #         dictOfOutput[variable] = csv_file_site[csv_file_site['Month'] == 7]['Tday(C)'].mean()
+    #     elif variable == "Biomass at 50% of biomass peak 95% time":
+    #         # Used to check if a cohort grows fast enough in its young years (see subphase 1.3)
+    #         # We need to interpolate because the peak time is from the cohort file with a monthly timestep,
+    #         # while the biomass peak heigh is from the csv file with the same timestep as PnET-Succession (e.g. 5 years)
+    #         df = csv_file_WoodFoliageBiomass[["Time", str(speciesToSimulate) + "_g/m2"]].copy()
+    #         df = df.sort_values("Time").reset_index(drop=True)
+        
+    #         # Rows below and above the target time
+    #         below = df[df["Time"] <= 0.5*dictOfOutput["Biomass peak 95% time"]]
+    #         above = df[df["Time"] >= 0.5*dictOfOutput["Biomass peak 95% time"]]
+        
+    #         # Exact match — no interpolation needed
+    #         if not below.empty and below.iloc[-1]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
+    #             return below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
+    #         if not above.empty and above.iloc[0]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
+    #             return above.iloc[0][str(speciesToSimulate) + "_g/m2"]
+        
+    #         # Check that bracketing rows exist on both sides
+    #         if below.empty or above.empty:
+    #             # raise ValueError(
+    #             #     f"dictOfOutput["Biomass peak 95% time"]={dictOfOutput["Biomass peak 95% time"]} is outside the range "
+    #             #     f"of {"Time"} in csv_file_WoodFoliageBiomass "
+    #             #     f"({df["Time"].min()} – {df["Time"].max()})."
+    #             # )
+    #             dictOfOutput[variable] = "Biomass peak 95% time is outside the range in csv_file_WoodFoliageBiomass"
+        
+    #         t0, b0 = below.iloc[-1]["Time"], below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
+    #         t1, b1 = above.iloc[0]["Time"],  above.iloc[0][str(speciesToSimulate) + "_g/m2"]
+        
+    #         # Linear interpolation
+    #         interpolated_biomass = b0 + (b1 - b0) * (0.5*dictOfOutput["Biomass peak 95% time"] - t0) / (t1 - t0)
+        
+    #         dictOfOutput[variable] = interpolated_biomass
+    #     else:
+    #         raise ValueError("Value not recognized for output variable : " + str(variable))
+
+    # if plotResults: plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
+
+    # if plotAdjustedParameters:
+    #     fRad = csv_file_cohort['fRad(-)']
+        
+    #     # --- Parameters ---
+    #     MaxFracFol   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFracFol"])
+    #     FracFolShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"])
+    #     FracFol      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFol"])
+        
+    #     # --- Rolling average window ---
+    #     rolling_window = 12  # <-- specify window size here
+        
+    #     # --- Computation ---
+    #     AdjustedFracFol = FracFol + ((MaxFracFol - FracFol) * (fRad ** FracFolShape))
+    #     RollingAvg      = AdjustedFracFol.rolling(window=rolling_window, center=True).mean()
+    #     RollingAvgFRad  = fRad.rolling(window=rolling_window, center=True).mean()
+        
+    #     # --- Plot ---
+    #     fig, ax = plt.subplots(figsize=(10, 4))
+    #     ax2     = ax.twinx()  # secondary y-axis sharing the same x-axis
+        
+    #     # Push ax2 (fRad) behind ax (everything else)
+    #     ax.set_zorder(ax2.get_zorder() + 1)
+    #     ax.patch.set_visible(False)   # let ax2's content show through ax's transparent background
+        
+    #     # fRad (background, noisy) + its rolling average (background, solid green)
+    #     l5, = ax2.plot(csv_file_cohort['Year'], fRad, color="lightgreen", linewidth=1,
+    #                    alpha=0.6, zorder=1, label="fRad")
+    #     l6, = ax2.plot(csv_file_cohort['Year'], RollingAvgFRad, color="green", linewidth=2,
+    #                    zorder=2, label=f"fRad rolling avg (window={rolling_window})")
+        
+    #     # Foreground curves
+    #     l1, = ax.plot(csv_file_cohort['Year'], AdjustedFracFol, color="darkorange", linewidth=1,
+    #                   zorder=3, linestyle="--", alpha = 0.5, label="AdjFracFol (FracFolShape = " + str(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"]) + ")")
+    #     l2, = ax.plot(csv_file_cohort['Year'], RollingAvg, color="darkorange", linewidth=2,
+    #                   zorder=4, label=f"AdjFracFol Rolling avg (window={rolling_window})")
+    #     l3  = ax.axhline(FracFol,    color="blue",   linestyle="--", linewidth=1, zorder=4,
+    #                       label=f"FracFol = {FracFol}")
+    #     l4  = ax.axhline(MaxFracFol, color="tomato", linestyle="--", linewidth=1, zorder=4,
+    #                       label=f"MaxFracFol = {MaxFracFol}")
+        
+    #     ax.set_xlabel("Timestep")
+    #     ax.set_ylabel("AdjustedFracFol")
+    #     ax2.set_ylabel("fRad (-)")
+    #     ax.set_title("AdjustedFracFol over time")
+        
+    #     # Combined legend, drawn on ax so it sits above everything (including ax2's patch)
+    #     lines  = [l1, l2, l3, l4, l5, l6]
+    #     labels = [l.get_label() for l in lines]
+    #     ax.legend(lines, labels, loc="best").set_zorder(5)
+        
+    #     plt.tight_layout()
+    #     plt.show()
+
+
+
+    #     # --- Parameters ---
+    #     MaxFolN   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFolN"])
+    #     FolNShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolNShape"])
+    #     FolN      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolN"])
+        
+    #     # --- Computation ---
+    #     AdjustedFolN = FolN + ((MaxFolN - FolN) * (fRad ** FolNShape))
+        
+    #     # --- Plot ---
+    #     fig, ax = plt.subplots(figsize=(10, 4))
+    #     ax.plot(csv_file_cohort['Year'], AdjustedFolN, color="steelblue", linewidth=1, label="AdjustedFolN")
+    #     ax.axhline(FolN,    color="gray",   linestyle="--", linewidth=1, label=f"FolN = {FolN}")
+    #     ax.axhline(MaxFolN, color="tomato", linestyle="--", linewidth=1, label=f"MaxFolN = {MaxFolN}")
+        
+    #     ax.set_xlabel("Timestep")
+    #     ax.set_ylabel("AdjustedFolN")
+    #     ax.set_title("AdjustedFolN over time")
+    #     ax.legend()
+    #     plt.tight_layout()
+    #     plt.show()
+
+    
+    # if saveGrowthCurvePath:
+    #     output_path = Path(saveGrowthCurvePath)
+
+    #     # Create all parent directories if they don't exist
+    #     output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    #     csv_file_WoodFoliageBiomass.to_csv(output_path)
+    
+    # return(dictOfOutput)
+    # Delete the folder
+    # shutil.rmtree(simulationPath)
