@@ -12319,14 +12319,16 @@ def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange
 import copy
 
 def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
-                                                climate = "mild",
-                                                soil = "SILO",
+                                                climate = "realHistorical",
+                                                soilsProportions = {"SILO":0.5, "SAND":0.25, "CLAY":0.25},
                                                 timestep = 10,
-                                                 numberOfCells = 100,
+                                                numberOfCells = 100,
+                                                maxPest = 1,
                                                 dictOfCoreSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json')),
                                                 dictOfPnETSpeciesParameters = json.load(open('./SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json')),
                                                 dictOfPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
-                                                plotResults = False):    
+                                                plotResults = False,
+                                                parallel = 0):    
     # We prepare the simulation files
     PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
     
@@ -12344,8 +12346,30 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     # Setting duration and timestep (minimal timestep for maximum spatial resolution, although it shouldn't change anything)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = str(timestep)
     PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
-    # Changing the soil if needed
-    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = soil
+    # Adding all of the soil types we will need
+    # In the default file, we have two SAND ecoregions.
+    # First, we modify the second
+    # Then, we add others
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = "SILO"
+    soilTypesAlreadyThere = ["SAND", "SILO"]
+    soilsTypesNumberDict = {"SILO":1, "SAND":2}
+    ecoNumber = 2
+    for soilType in soilsProportions.keys():
+        if soilType not in soilTypesAlreadyThere:
+            PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco" + str(ecoNumber)] = copy.deepcopy(PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"])
+            PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco" + str(ecoNumber)]["SoilType"] = soilType
+            soilsTypesNumberDict[soilType] = ecoNumber + 1
+            ecoNumber += 1
+    # Finally, we need to add these in the ecoregion file too
+    PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"]["active"] = "yes"
+    PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"]["Map Code"] = "1"
+    PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"]["Map Code"] = "2"
+    for ecoregion in PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"].keys():
+        if ecoregion not in PnETGitHub_OneCellSim["ecoregion.txt"].keys():
+            PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion] = copy.deepcopy(PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"])
+            PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion]["Map Code"] = str(soilsTypesNumberDict[PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"][ecoregion]["SoilType"]])
+        PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion]["Description"] = f'\"{PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"][ecoregion]["SoilType"]} soils\"'
+    
     # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
     startYear = 1950
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
@@ -12355,6 +12379,12 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["PreventEstablishment"] = "False"
     # Setting other parameters
     PnETGitHub_OneCellSim["scenario.txt"]["CellLength"] = "100"
+    # Changing MaxPest
+    PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["MaxPest"] = str(maxPest)
+
+    # Activating parallelisation for faster sim
+    if parallel > 0:
+        PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["Parallel"] = str(parallel)
 
     # Preparing the landscape
     # Inserting reading of the right climate file
@@ -12400,6 +12430,16 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
             maxLongevity = max(float(dictOfCoreSpeciesParameters[species]["Longevity"]), maxLongevity)
         spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
         spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
+        # We edit the climate files to add the missing ecoregions to it
+        dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged = pd.read_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv")
+        dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged = pd.read_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv")
+        for ecoregion in PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"].keys():
+            if ecoregion != "eco1":
+                dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged[ecoregion] = dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged['eco1']
+                dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged[ecoregion] = dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged['eco1']
+        dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.to_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", index=False)
+        dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.to_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
+        
     elif climate == "realHistorical":
         shutil.copy("./SimulationFiles/ClimateConfigSimpleSims.txt", simulationPath)
         shutil.copy("./ReferencesAndData/Climate Data/dataFrameClimate_historicalMonthly_Ouranos.csv", simulationPath)
@@ -12414,6 +12454,17 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
             maxLongevity = max(float(dictOfCoreSpeciesParameters[species]["Longevity"]), maxLongevity)
         spinupData = spinupData[spinupData["Year"] > (spinupData['Year'].max() - int(maxLongevity))]
         spinupData.to_csv(simulationPath + "dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
+        # We edit the climate files to add the missing ecoregions to it
+        dataFrameClimate_historicalMonthly_Ouranos = pd.read_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos.csv")
+        dataFrameClimate_SpinupMonthly_Ouranos = pd.read_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos.csv")
+        for ecoregion in PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"].keys():
+            if ecoregion != "eco1":
+                dataFrameClimate_historicalMonthly_Ouranos[ecoregion] = dataFrameClimate_historicalMonthly_Ouranos['eco1']
+                dataFrameClimate_SpinupMonthly_Ouranos[ecoregion] = dataFrameClimate_SpinupMonthly_Ouranos['eco1']
+        dataFrameClimate_historicalMonthly_Ouranos.to_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos.csv", index=False)
+        dataFrameClimate_SpinupMonthly_Ouranos.to_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
+
+        
     elif climate == "testFilesGithub":
         pass # The climate files from github are used by default if we don't input a climate config file
     else:
@@ -12429,6 +12480,18 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     # Transform used to settle the size of cells - not sure is very useful
     transform = Affine.translation(0, 0) * Affine.scale(1, 1)
     # Creating the ecoregion raster
+    # First, we need to translate the soil proportions into ecoregion codes
+    finalSoilsProportionsDict = {}
+    for soilType in soilsProportions.keys():
+        if soilType not in soilsTypesNumberDict.keys():
+            raise ValueError(f"Error : Soil type {soilType} not found in soilsTypesNumberDict.")
+        finalSoilsProportionsDict[soilsTypesNumberDict[soilType]] = soilsProportions[soilType]
+    # Then, we generate the map
+    data_ecoregions = generate_soil_map((numberOfCells,numberOfCells),
+                                        finalSoilsProportionsDict,
+                                        20, # Mean patch size; can be adjusted
+                                        soil_names = soilsTypesNumberDict, plot=True, seed=22)
+    
     with rasterio.open(
     simulationPath + '/ecoregion.img',
     'w',
@@ -12440,7 +12503,7 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     crs='EPSG:4326',
     transform=transform
     ) as dst:
-        dst.write(data, 1)
+        dst.write(data_ecoregions, 1)
     # Preparing the initial communities raster
     data = np.arange(1, numberOfCells**2 + 1, dtype="int32").reshape(numberOfCells, numberOfCells)
     with rasterio.open(
@@ -12462,6 +12525,42 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     runLANDIS_Simulation(simulationPath,
                          "scenario.txt",
                         False)
+
+    cohort_balance_csv = pd.read_csv(f'{simulationPath}/output/CohortBalance.csv')
+
+    cohortPerCellVector = [x / (numberOfCells*numberOfCells) for x in cohort_balance_csv["#Cohorts"].tolist()]
+
+    if plotResults:
+        # We plot the evolution in the average number of cohorts per cell
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(cohort_balance_csv["Time"], cohort_balance_csv["#Cohorts"]/(numberOfCells*numberOfCells), color="steelblue", linewidth=1, label="Cohorts per cell (average)")
+        
+        ax.set_xlabel("Timestep")
+        ax.set_ylabel("Cohorts per cell (average)")
+        ax.set_title(f"Cohorts per cell (average) through time in a landscape of dimensions {numberOfCells} * {numberOfCells} cells")
+        plt.tight_layout()
+        plt.show()
+
+        # We plot a stack plot of the biomass per species
+        speciesBiomass = pd.read_csv(f'{simulationPath}/output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
+        speciesBiomass = speciesBiomass.drop(columns=['AllSpp_g/m2'])
+        speciesBiomass = speciesBiomass.set_index("Time").copy()
+        percentage = True # Switch if you want absolute values
+        if percentage:
+            speciesBiomass = speciesBiomass.div(speciesBiomass.sum(axis=1), axis=0) * 100
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+    
+        ax.stackplot(speciesBiomass.index, speciesBiomass.T, labels=speciesBiomass.columns)
+        ax.legend(loc="upper left")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Biomass (%)" if percentage else "Biomass")
+        ax.set_title("Species biomass through time")
+        if percentage:
+            ax.set_ylim(0, 100)
+
+
+    return(cohortPerCellVector)
 
     # # We get the result file : only .csv file that should represent the cohort
     # csv_file_cohort = pd.read_csv(glob.glob(f'{simulationPath}/Output/Site1/Cohort_*.csv')[0])
@@ -12678,3 +12777,194 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     # return(dictOfOutput)
     # Delete the folder
     # shutil.rmtree(simulationPath)
+
+
+#######
+# Functions to make soil maps
+#######
+
+import random
+from collections import defaultdict
+import numpy as np
+
+
+class _IndexedSet:
+    """Set with O(1) add / discard / uniform random pick."""
+    __slots__ = ("items", "index")
+
+    def __init__(self):
+        self.items = []
+        self.index = {}
+
+    def add(self, item):
+        if item not in self.index:
+            self.index[item] = len(self.items)
+            self.items.append(item)
+
+    def discard(self, item):
+        idx = self.index.pop(item, None)
+        if idx is None:
+            return
+        last = self.items.pop()
+        if idx < len(self.items):
+            self.items[idx] = last
+            self.index[last] = idx
+
+    def random(self, rng):
+        return self.items[rng.randrange(len(self.items))]
+
+    def __len__(self):
+        return len(self.items)
+
+    def __bool__(self):
+        return bool(self.items)
+
+
+def generate_soil_map(size, proportions, mean_patch_size, soil_names=None,
+                       plot=False, seed=None):
+    """
+    Generate a 2-D numpy array representing a randomized soil map made of
+    organic patches, matching the requested proportions per soil code.
+
+    Parameters
+    ----------
+    size : tuple(int, int)
+        (rows, cols) of the map.
+    proportions : dict[int, float]
+        {soil_code: proportion}. Must sum to 1.
+    mean_patch_size : float
+        Target average number of cells per patch (controls patch size).
+    soil_names : dict[str, int], optional
+        {soil_name: soil_code}, used to label the plot legend.
+    plot : bool, optional
+        If True, display the map with matplotlib.
+    seed : int, optional
+        Seed for reproducibility.
+
+    Returns
+    -------
+    np.ndarray (rows, cols) of int, dtype matching soil codes.
+    """
+    rows, cols = size
+    n_cells = rows * cols
+    if n_cells <= 0:
+        raise ValueError("size must contain two positive integers.")
+    if mean_patch_size <= 0:
+        raise ValueError("mean_patch_size must be > 0.")
+
+    codes = list(proportions.keys())
+    props = np.array([proportions[c] for c in codes], dtype=float)
+    if not np.isclose(props.sum(), 1.0):
+        raise ValueError("Proportions must sum to 1.")
+
+    rng = random.Random(seed)
+
+    # --- Exact cell counts via largest-remainder method ---
+    raw = props * n_cells
+    counts = np.floor(raw).astype(int)
+    remainder = n_cells - counts.sum()
+    order = np.argsort(-(raw - counts))
+    for i in range(remainder):
+        counts[order[i]] += 1
+    target_counts = {c: int(n) for c, n in zip(codes, counts)}
+    remaining = dict(target_counts)
+
+    # --- Seeds per code (controls patch size) ---
+    n_seeds = {
+        c: max(1, min(target_counts[c], round(target_counts[c] / mean_patch_size)))
+        for c in codes
+    }
+
+    grid = np.full((rows, cols), -1, dtype=int)
+
+    unassigned = _IndexedSet()
+    for r in range(rows):
+        for c in range(cols):
+            unassigned.add((r, c))
+
+    def neighbours(cell):
+        r, c = cell
+        if r > 0: yield (r - 1, c)
+        if r < rows - 1: yield (r + 1, c)
+        if c > 0: yield (r, c - 1)
+        if c < cols - 1: yield (r, c + 1)
+
+    frontier = defaultdict(_IndexedSet)
+
+    def place_seed(code):
+        if remaining[code] <= 0 or not unassigned:
+            return False
+        cell = unassigned.random(rng)
+        grid[cell] = code
+        unassigned.discard(cell)
+        remaining[code] -= 1
+        frontier[code].add(cell)
+        return True
+
+    # initial seeds
+    for c in codes:
+        for _ in range(n_seeds[c]):
+            if not place_seed(c):
+                break
+
+    # --- Random growth loop ---
+    active_codes = [c for c in codes if remaining[c] > 0]
+    while active_codes and unassigned:
+        code = rng.choice(active_codes)
+
+        if not frontier[code]:
+            place_seed(code)
+            active_codes = [c for c in codes if remaining[c] > 0]
+            continue
+
+        fcell = frontier[code].random(rng)
+        candidates = [n for n in neighbours(fcell) if grid[n] == -1]
+
+        if not candidates:
+            frontier[code].discard(fcell)
+            continue
+
+        new_cell = rng.choice(candidates)
+        grid[new_cell] = code
+        unassigned.discard(new_cell)
+        remaining[code] -= 1
+        frontier[code].add(new_cell)
+
+        if not any(grid[n] == -1 for n in neighbours(fcell)):
+            frontier[code].discard(fcell)
+
+        active_codes = [c for c in codes if remaining[c] > 0]
+
+    if plot:
+        _plot_soil_map(grid, codes, soil_names)
+
+    return grid
+
+
+def _plot_soil_map(grid, codes, soil_names):
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap, BoundaryNorm
+    from matplotlib.patches import Patch
+
+    # code -> name lookup (fallback to str(code) if not provided/missing)
+    code_to_name = {}
+    if soil_names:
+        code_to_name = {code: name for name, code in soil_names.items()}
+
+    sorted_codes = sorted(codes)
+    cmap = plt.get_cmap("tab20", len(sorted_codes))
+    boundaries = [c - 0.5 for c in sorted_codes] + [sorted_codes[-1] + 0.5]
+    norm = BoundaryNorm(boundaries, cmap.N)
+
+    plt.figure(figsize=(6, 6))
+    plt.imshow(grid, cmap=cmap, norm=norm)
+    plt.title("Randomized Soil Map")
+
+    legend_handles = [
+        Patch(color=cmap(i), label=code_to_name.get(code, str(code)))
+        for i, code in enumerate(sorted_codes)
+    ]
+    plt.legend(handles=legend_handles, bbox_to_anchor=(1.02, 1), loc="upper left",
+               title="Soil type", borderaxespad=0.)
+    plt.tight_layout()
+    plt.show()
