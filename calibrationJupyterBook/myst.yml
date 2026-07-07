@@ -22,6 +22,8 @@ project:
         - file: StartingCalibrationTest/4.Getting_the_empirical_data.ipynb
         - file: StartingCalibrationTest/5.Getting_climate_and_soil_data.ipynb
         - file: StartingCalibrationTest/6.Monoculture_ideal_conditions.ipynb
+        - file: StartingCalibrationTest/7.Calibrating_competition_between_species.ipynb
+        - file: StartingCalibrationTest/8.Calibration_of_the_probability_of_establishment.ipynb
 site:
   options:
     logo: ../DIVERSE_PnET_Calibration_Logo.png

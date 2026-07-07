@@ -31,4 +31,10 @@
   <url>
     <loc>http://localhost:3000/startingcalibrationtest/monoculture-ideal-conditions</loc>
   </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/calibrating-competition-between-species</loc>
+  </url>
+  <url>
+    <loc>http://localhost:3000/startingcalibrationtest/calibration-of-the-probability-of-establishment</loc>
+  </url>
 </urlset>
