@@ -12292,7 +12292,7 @@ equalizeTemperature=True,  equalizeRest=False)
 
 import random
 
-def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange, filename='output.csv'):
+def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange, averageNumberOfCohorts = 12, standardDeviationNumberOfCohorts = 2.71, medianAge = 50, filename='output.csv'):
     """Function used to create the .csv files to initialize
     the landscapes for the little simulations used for the calibration.
     This function is adapted to make the larger landscape to calibrate MaxPest."""
@@ -12302,25 +12302,53 @@ def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange
         # Write header
         writer.writerow(['MapCode', 'SpeciesName', 'CohortAge', 'CohortBiomass'])
 
+        # We define the weibull distribution for the age of trees
+        median_age = medianAge    # your desired median
+        shape = 2.0        # controls skewness (1.5–3.0 typical)
+        scale = median_age / (np.log(2) ** (1.0 / shape))
+
         # Loop through MapCode 1 to 1001
         for map_code in range(1, (numberOfCells*numberOfCells)+2):
-            # Pick a random number of species
-            # Pick a random number of elements between 1 and the length of the list
-            k = random.randint(1, len(listOfSpecies))
+            # Pick a random number of cohorts
+            # Using a normal distribution with a mean = averageNumberOfCohorts,
+            # and a standard deviation = standardDeviationNumberOfCohorts
+            # Default values center on 12 cohorts (number recommended per gustafson),
+            # and avoid numbers below 1
+            # Generate a float and round it to the nearest integer
+            numberOfCohorts = round(random.gauss(averageNumberOfCohorts, standardDeviationNumberOfCohorts))
+            if numberOfCohorts < 0:
+                numberOfCohorts = 1
+
+            # Then, we randomly create cohorts
+            randomCohorts = {}
+            for iteration in range(0, numberOfCohorts + 1):
+                # We choose a random species
+                random_species = random.sample(listOfSpecies, 1)[0]
+                # We choose a random age
+                random_age = int(np.round(np.random.weibull(shape) * scale))
+                if random_age <= 0: random_age = 1
+                if random_age > 150: random_age = 150 # Maximum age of 150 to avoid spinup errors
+                # We add the cohort to the dict
+                if random_species not in randomCohorts.keys():
+                    randomCohorts[random_species] = list()
+                randomCohorts[random_species].append(random_age)
+            
+            # k = random.randint(1, len(listOfSpecies))
             # Select k unique elements
-            random_species = random.sample(listOfSpecies, k)
+            # random_species = random.sample(listOfSpecies, k)
             
             # Write one row for each species
-            for species in random_species:
-                random_age = random.randint(ageRange[0], ageRange[1])
-                writer.writerow([map_code, species, random_age, 0])
+            for species in randomCohorts:
+                # random_age = random.randint(ageRange[0], ageRange[1])
+                for cohortAge in randomCohorts[species]:
+                    writer.writerow([map_code, species, cohortAge, 0])
 
 
 import copy
 
 def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
                                                 climate = "realHistorical",
-                                                soilsProportions = {"SILO":0.5, "SAND":0.25, "CLAY":0.25},
+                                                soilsProportions = {"highlands":0.2, "lowlands":0.6, "mucky_peat":0.2},
                                                 timestep = 10,
                                                 numberOfCells = 100,
                                                 maxPest = 1,
@@ -12329,8 +12357,12 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
                                                 dictOfPnETGenericParameters = json.load(open('./SpeciesParametersSets/Initial/InitialGenericParameters.json')),
                                                 plotResults = False,
                                                 parallel = 0):    
+    
     # We prepare the simulation files
     PnETGitHub_OneCellSim = parse_All_LANDIS_PnET_Files(r"./SimulationFiles/PnETGitHub_OneCellSim_v8")
+
+    # Path for outputs
+    simulationPath = "/tmp/landscapeCalibrationMaxPest/"
     
     # - Species.txt : replace with the right initial core species parameters from the JSON file
     PnETGitHub_OneCellSim["species.txt"] = copy.deepcopy(dictOfCoreSpeciesParameters)
@@ -12346,30 +12378,8 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     # Setting duration and timestep (minimal timestep for maximum spatial resolution, although it shouldn't change anything)
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"] = str(timestep)
     PnETGitHub_OneCellSim["scenario.txt"]["Duration"] = str(duration)
-    # Adding all of the soil types we will need
-    # In the default file, we have two SAND ecoregions.
-    # First, we modify the second
-    # Then, we add others
-    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]["SoilType"] = "SILO"
-    soilTypesAlreadyThere = ["SAND", "SILO"]
-    soilsTypesNumberDict = {"SILO":1, "SAND":2}
-    ecoNumber = 2
-    for soilType in soilsProportions.keys():
-        if soilType not in soilTypesAlreadyThere:
-            PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco" + str(ecoNumber)] = copy.deepcopy(PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"])
-            PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco" + str(ecoNumber)]["SoilType"] = soilType
-            soilsTypesNumberDict[soilType] = ecoNumber + 1
-            ecoNumber += 1
-    # Finally, we need to add these in the ecoregion file too
-    PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"]["active"] = "yes"
-    PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"]["Map Code"] = "1"
-    PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"]["Map Code"] = "2"
-    for ecoregion in PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"].keys():
-        if ecoregion not in PnETGitHub_OneCellSim["ecoregion.txt"].keys():
-            PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion] = copy.deepcopy(PnETGitHub_OneCellSim["ecoregion.txt"]["eco0"])
-            PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion]["Map Code"] = str(soilsTypesNumberDict[PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"][ecoregion]["SoilType"]])
-        PnETGitHub_OneCellSim["ecoregion.txt"][ecoregion]["Description"] = f'\"{PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"][ecoregion]["SoilType"]} soils\"'
     
+
     # - pnetsuccession.txt : change startyear to 1900 and latitude to village of Manawan (47.2223)
     startYear = 1950
     PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"] = str(startYear)
@@ -12386,6 +12396,78 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     if parallel > 0:
         PnETGitHub_OneCellSim["PnETGenericParameters.txt"]["Parallel"] = str(parallel)
 
+
+    ################################
+    # TAKING CARE OF THE SOIL TYPES
+    
+    # Adding all of the soil types we will need
+    # We will make 3 soils/ecoregions :
+    # Highlands (thin soils with slopes, favors drought-tolerant species)
+    # Lowlands (fertile soils with almost no slope, favors all species)
+    # Peat/bog (waterlogged soils, favors waterlogging-tolerant species)
+    # Creating the Highlands ecoregion
+    # Parameters of soils are taken from Gustafon's calibration tips; soil type will be put to Sandy Loam (SALO).
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"] = copy.deepcopy(PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"])
+    # Relatively shallow soil to imitate mountainous terrain
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"]["RootingDepth"] = "300"
+    # No runoff capture
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"]["RunoffCapture"] = "0"
+    # Leakage fraction is default
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"]["LeakageFrac"] = "1"
+    # PrecLossFrac - loss of precipitations because of slope - is higher for this soil
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"]["PrecLossFrac"] = "0.25"
+    # Soil type is Sandy loam
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["highlands"]["SoilType"] = "SALO"
+    # We put the ecoregion in the core ecoregion file
+    PnETGitHub_OneCellSim["ecoregion.txt"]["highlands"] = copy.deepcopy(PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"])
+    PnETGitHub_OneCellSim["ecoregion.txt"]["highlands"]["Map Code"] = "1" # Arbitrary
+    PnETGitHub_OneCellSim["ecoregion.txt"]["highlands"]["Description"] = '"Highlands : shallow soil, loss of precipitation because of slope, sandy loam."'
+    
+    
+    # Lowlands - SILO soil (fertile), and pretty deep (Parameters of soils are taken from Gustafon's calibration tips)
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"] = copy.deepcopy(PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"])
+    # Relatively deep soil
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"]["RootingDepth"] = "1000"
+    # No runoff capture
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"]["RunoffCapture"] = "0"
+    # Leakage fraction is default
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"]["LeakageFrac"] = "1"
+    # PrecLossFrac - loss of precipitations because of slope - is quite low
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"]["PrecLossFrac"] = "0.05"
+    # Soil type is Silt Loam (SILO)
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["lowlands"]["SoilType"] = "SILO"
+    # We put the ecoregion in the core ecoregion file
+    PnETGitHub_OneCellSim["ecoregion.txt"]["lowlands"] = copy.deepcopy(PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"])
+    PnETGitHub_OneCellSim["ecoregion.txt"]["lowlands"]["Map Code"] = "2" # Arbitrary
+    PnETGitHub_OneCellSim["ecoregion.txt"]["lowlands"]["Description"] = '"Lowland : fertile deep soil, few losses of precipitations, silt loam."'
+
+    # Mucky peat - Custom soil type + soil parameters from Brian S. team (personal communication)
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"] = copy.deepcopy(PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"])
+    # Relatively deep soil
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"]["RootingDepth"] = "1000"
+    # High runoff capture
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"]["RunoffCapture"] = "75"
+    # Leakage fraction is low
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"]["LeakageFrac"] = "0.01"
+    # PrecLossFrac - loss of precipitations because of slope - is very low here
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"]["PrecLossFrac"] = "0.02"
+    # Soil type is a custom Mucky peat type (we will add afterwards)
+    PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["mucky_peat"]["SoilType"] = "mucky_peat_custom"
+    # We put the ecoregion in the core ecoregion file
+    PnETGitHub_OneCellSim["ecoregion.txt"]["mucky_peat"] = copy.deepcopy(PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"])
+    PnETGitHub_OneCellSim["ecoregion.txt"]["mucky_peat"]["Map Code"] = "3" # Arbitrary
+    PnETGitHub_OneCellSim["ecoregion.txt"]["mucky_peat"]["Description"] = '"Mucky peat : accumulation of water with custom soil type from Brian S. team."'
+    
+    # Now, we remove eco1 and eco0 since they will not be used
+    del PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco0"]
+    del PnETGitHub_OneCellSim["EcoregionParameters.txt"]["EcoregionParameters"]["eco1"]
+    del PnETGitHub_OneCellSim["ecoregion.txt"]["eco1"]
+    # We keep eco0 in the core file as an inactive region (mapcode 0) if needed
+
+    # Finally, we tell PnET-Succession to use this custom file with the custom mucky peat soil (we will create this file later)
+    PnETGitHub_OneCellSim["pnetsuccession.txt"]["SaxtonAndRawlsParameters"] = "./SaxtonAndRawlsParameters_CustomPeat.txt"
+    ################################
+
     # Preparing the landscape
     # Inserting reading of the right climate file
     if climate == "mild":
@@ -12398,7 +12480,6 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
         raise ValueError("Climate value : " + str(climate) + " not recognized.")
 
     # Writing the files in a temporary folder
-    simulationPath = "/tmp/landscapeCalibrationMaxPest/"
 
     # Removing PnET Output Site
     del PnETGitHub_OneCellSim["pnetsuccession.txt"]["PNEToutputsites"]
@@ -12415,6 +12496,19 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
                            PnETGitHub_OneCellSim,
                            True)
 
+    # Creating the custom Saxton And Rawls file for the mucky peat soil
+    # We copy the SaxtonAndRawls default file from StartingCalibrationTest/SimulationFiles/
+    # and create the custom mucky peat soil type from Brian S. team
+    saxtonAndRawlsParameters = parse_PnET_ComplexTableParameterfile("./SimulationFiles/SaxtonAndRawlsParameters.txt")
+    saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["mucky_peat_custom"] = copy.deepcopy(saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["SILO"])
+    # Following values are from Brian S. team
+    saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["mucky_peat_custom"]["Sand"] = "0.14"
+    saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["mucky_peat_custom"]["clay"] = "0.14"
+    saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["mucky_peat_custom"]["pctOM"] = "12.7"
+    saxtonAndRawlsParameters["SaxtonAndRawlsParameters"]["mucky_peat_custom"]["densFactor"] = "0.9"
+    write_PnET_ComplexTableParameterfile(simulationPath + "/SaxtonAndRawlsParameters_CustomPeat.txt", saxtonAndRawlsParameters)
+
+    
     # Copy the climate files
     if climate == "mild":
         shutil.copy("./SimulationFiles/ClimateConfigSimpleSims_MonthlyAveraged.txt", simulationPath)
@@ -12437,6 +12531,9 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
             if ecoregion != "eco1":
                 dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged[ecoregion] = dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged['eco1']
                 dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged[ecoregion] = dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged['eco1']
+        # Removing ecoregion 1 as it's not used here
+        dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged = dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.drop('eco1', axis=1)
+        dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged = dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.drop('eco1', axis=1)
         dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.to_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos_MonthlyAveraged.csv", index=False)
         dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.to_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos_MonthlyAveraged.csv", index=False)
         
@@ -12461,6 +12558,9 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
             if ecoregion != "eco1":
                 dataFrameClimate_historicalMonthly_Ouranos[ecoregion] = dataFrameClimate_historicalMonthly_Ouranos['eco1']
                 dataFrameClimate_SpinupMonthly_Ouranos[ecoregion] = dataFrameClimate_SpinupMonthly_Ouranos['eco1']
+        # Removing ecoregion 1 as it's not used here
+        dataFrameClimate_historicalMonthly_Ouranos = dataFrameClimate_historicalMonthly_Ouranos.drop('eco1', axis=1)
+        dataFrameClimate_SpinupMonthly_Ouranos = dataFrameClimate_SpinupMonthly_Ouranos.drop('eco1', axis=1)
         dataFrameClimate_historicalMonthly_Ouranos.to_csv(simulationPath + "/dataFrameClimate_historicalMonthly_Ouranos.csv", index=False)
         dataFrameClimate_SpinupMonthly_Ouranos.to_csv(simulationPath + "/dataFrameClimate_SpinupMonthly_Ouranos.csv", index=False)
 
@@ -12482,6 +12582,7 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
     # Creating the ecoregion raster
     # First, we need to translate the soil proportions into ecoregion codes
     finalSoilsProportionsDict = {}
+    soilsTypesNumberDict = {"highlands":1, "lowlands":2, "mucky_peat":3}
     for soilType in soilsProportions.keys():
         if soilType not in soilsTypesNumberDict.keys():
             raise ValueError(f"Error : Soil type {soilType} not found in soilsTypesNumberDict.")
@@ -12545,238 +12646,32 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
         speciesBiomass = pd.read_csv(f'{simulationPath}/output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
         speciesBiomass = speciesBiomass.drop(columns=['AllSpp_g/m2'])
         speciesBiomass = speciesBiomass.set_index("Time").copy()
-        percentage = True # Switch if you want absolute values
-        if percentage:
-            speciesBiomass = speciesBiomass.div(speciesBiomass.sum(axis=1), axis=0) * 100
+        speciesBiomass = speciesBiomass.div(speciesBiomass.sum(axis=1), axis=0) * 100
 
         fig, ax = plt.subplots(figsize=(10, 6))
     
         ax.stackplot(speciesBiomass.index, speciesBiomass.T, labels=speciesBiomass.columns)
         ax.legend(loc="upper left")
         ax.set_xlabel("Time")
-        ax.set_ylabel("Biomass (%)" if percentage else "Biomass")
+        ax.set_ylabel("Biomass (%)")
         ax.set_title("Species biomass through time")
-        if percentage:
-            ax.set_ylim(0, 100)
+        ax.set_ylim(0, 100)
 
+        # Same, but in absolute biomass
+        speciesBiomass = pd.read_csv(f'{simulationPath}/output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
+        speciesBiomass = speciesBiomass.drop(columns=['AllSpp_g/m2'])
+        speciesBiomass = speciesBiomass.set_index("Time").copy()
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+    
+        ax.stackplot(speciesBiomass.index, speciesBiomass.T, labels=speciesBiomass.columns)
+        ax.legend(loc="upper left")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Biomass (g/m2)")
+        ax.set_title("Species biomass through time")
 
     return(cohortPerCellVector)
 
-    # # We get the result file : only .csv file that should represent the cohort
-    # csv_file_cohort = pd.read_csv(glob.glob(f'{simulationPath}/Output/Site1/Cohort_*.csv')[0])
-    # # print(csv_file_cohort)
-    # # Add a measure of total biomass
-    # csv_file_cohort["SumFoliageWood_Site"] = csv_file_cohort["SiteFol(gDW)"] + csv_file_cohort["SiteWood(gDW)"]
-    # # We also get the foliage biomass from another output; this is because the foliage+wood biomass in the cohort file
-    # # is in gDW, or gram of dry weight. But we want g/m2 to compare to NFI data.
-    # csv_file_WoodFoliageBiomass = pd.read_csv(f'{simulationPath}output/WoodFoliageBiomass/WoodFoliageBiomass-AllYears.csv')
-    # # We also get the site csv that has the temperatures (for diagnostics)
-    # csv_file_site = pd.read_csv(f'{simulationPath}/Output/Site1/Site.csv')
-    
-    # # We get the results we need
-    # variablesOutput = ["Biomass peak height", "Biomass peak time", "Biomass peak 95% time",
-    #                    "Initation of decline", "Time of death",
-    #                    "Maximum LAI", "LAI stability", "Average Fwater",
-    #                   "Average July Temperature", "Biomass at 50% of biomass peak 95% time"]
-    # dictOfOutput = {}
-    # for variable in variablesOutput:
-    #     if variable == "Biomass peak height":
-    #         dictOfOutput[variable] = (csv_file_WoodFoliageBiomass[str(speciesToSimulate) + "_g/m2"].max())
-    #     elif variable == "Biomass peak time":
-    #         max_index = csv_file_cohort['SumFoliageWood_Site'].idxmax()
-    #         # Here, we want the age of the cohort when it reaches the maximum
-    #         # Since there is one row per month, and since the first row is the first month of life
-    #         # of the cohort (even if there is a spinup), then the age of the cohorts (in years) is
-    #         # simply row/12 (since 12 rows make a year of life.
-    #         dictOfOutput[variable] = ((max_index+1)/12)
-    #     elif variable == "Biomass peak 95% time":
-    #         # Calculate 95% of the maximum value in the column
-    #         threshold_value = csv_file_cohort['SumFoliageWood_Site'].max() * 0.95
-            
-    #         # Find the index of the first row where the column value is greater than or equal to the threshold
-    #         # The .idxmax() method returns the index of the first occurrence of the maximum value.
-    #         # To find the first occurrence of a value that meets a condition, we can create a boolean series.
-    #         # However, idxmax() is for maximum values. A more direct approach for a threshold is to filter.
-            
-    #         # Filter the DataFrame to get rows that meet the condition
-    #         rows_meeting_condition = csv_file_cohort[csv_file_cohort['SumFoliageWood_Site'] >= threshold_value]
-            
-    #         # Get the index of the first row from the filtered DataFrame
-    #         if not rows_meeting_condition.empty:
-    #             first_index = rows_meeting_condition.index[0]
-    #             dictOfOutput[variable] = ((first_index+1)/12)
-    #             # print(f"The first index where the column value is at least 95% of the maximum is: {first_index}")
-    #         else:
-    #             # print("No rows found that meet the condition.")
-    #             dictOfOutput[variable] = "None"
-    #     elif variable == "Initation of decline":
-    #         # When fAge goes under 0.90 for the first time
-    #         # Create a boolean mask for rows where 'my_column' is less than the threshold
-    #         condition_met = csv_file_cohort['fage(-)'] < 0.9
-    #         first_occurrence_index = csv_file_cohort.index[condition_met].min()
-    #         # We want to get the age of the cohort where fAge goes under 0.90
-    #         # Since one row per month, it's simply the number of row/index divided by 12.
-    #         dictOfOutput[variable] = ((first_occurrence_index+1)/12)
-    #     elif variable == "Time of death":
-    #         # Cohort dies when NSCfrac is inferior to 0.01 at the end of a year (december)
-    #         # We get the index of the row when this happens and divided it by 12 (since there
-    #         # is one row per month), this gives us the age (in years) of death.
-    #         mask = (csv_file_cohort['Month'] == 12) & (csv_file_cohort['NSCfrac(-)'] < 0.01)
-    #         try:
-    #             idx = csv_file_cohort[mask].index[0]
-    #             dictOfOutput[variable] = ((idx+1)/12)
-    #         except:
-    #             # Code to handle any other error
-    #             # print("Havent found the index where the cohort died. Might be an issue with the cohort.csv")
-    #             dictOfOutput[variable] = "None"
-    #     elif variable == "Maximum LAI":
-    #         dictOfOutput[variable] = csv_file_cohort["LAI(m2)"].max()
-    #     elif variable == "LAI stability":
-    #         # dictOfOutput[variable] = min_max_top30_contiguous(csv_file_cohort["LAI(m2)"])
-
-    #         # Step 1: Get max yearly LAI per year
-    #         yearly_max_lai = csv_file_cohort.groupby("Year")["LAI(m2)"].max()
-            
-    #         # Step 2: Find the year where LAI reaches its overall maximum
-    #         year_of_max_lai = yearly_max_lai.idxmax()
-            
-    #         # Step 3: Find the last year before fAge(-) drops below 0.6
-    #         year_before_fage = csv_file_cohort[csv_file_cohort["fage(-)"] >= 0.7]["Year"].max()
-            
-    #         # Step 4: Filter and get the range (min, max) of yearly max LAI values in that window
-    #         result = yearly_max_lai.loc[year_of_max_lai:year_before_fage]
-    #         dictOfOutput[variable] = (result.min(), result.max())
-            
-    #     elif variable == "Average Fwater":
-    #         dictOfOutput[variable] = csv_file_cohort["fWater(-)"].mean()
-    #     elif variable == "Average July Temperature":
-    #         dictOfOutput[variable] = csv_file_site[csv_file_site['Month'] == 7]['Tday(C)'].mean()
-    #     elif variable == "Biomass at 50% of biomass peak 95% time":
-    #         # Used to check if a cohort grows fast enough in its young years (see subphase 1.3)
-    #         # We need to interpolate because the peak time is from the cohort file with a monthly timestep,
-    #         # while the biomass peak heigh is from the csv file with the same timestep as PnET-Succession (e.g. 5 years)
-    #         df = csv_file_WoodFoliageBiomass[["Time", str(speciesToSimulate) + "_g/m2"]].copy()
-    #         df = df.sort_values("Time").reset_index(drop=True)
-        
-    #         # Rows below and above the target time
-    #         below = df[df["Time"] <= 0.5*dictOfOutput["Biomass peak 95% time"]]
-    #         above = df[df["Time"] >= 0.5*dictOfOutput["Biomass peak 95% time"]]
-        
-    #         # Exact match — no interpolation needed
-    #         if not below.empty and below.iloc[-1]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
-    #             return below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
-    #         if not above.empty and above.iloc[0]["Time"] == 0.5*dictOfOutput["Biomass peak 95% time"]:
-    #             return above.iloc[0][str(speciesToSimulate) + "_g/m2"]
-        
-    #         # Check that bracketing rows exist on both sides
-    #         if below.empty or above.empty:
-    #             # raise ValueError(
-    #             #     f"dictOfOutput["Biomass peak 95% time"]={dictOfOutput["Biomass peak 95% time"]} is outside the range "
-    #             #     f"of {"Time"} in csv_file_WoodFoliageBiomass "
-    #             #     f"({df["Time"].min()} – {df["Time"].max()})."
-    #             # )
-    #             dictOfOutput[variable] = "Biomass peak 95% time is outside the range in csv_file_WoodFoliageBiomass"
-        
-    #         t0, b0 = below.iloc[-1]["Time"], below.iloc[-1][str(speciesToSimulate) + "_g/m2"]
-    #         t1, b1 = above.iloc[0]["Time"],  above.iloc[0][str(speciesToSimulate) + "_g/m2"]
-        
-    #         # Linear interpolation
-    #         interpolated_biomass = b0 + (b1 - b0) * (0.5*dictOfOutput["Biomass peak 95% time"] - t0) / (t1 - t0)
-        
-    #         dictOfOutput[variable] = interpolated_biomass
-    #     else:
-    #         raise ValueError("Value not recognized for output variable : " + str(variable))
-
-    # if plotResults: plot_all_cohort_results(str(simulationPath) + "/Output/Site1", {speciesToSimulate:"#5e81ac"})
-
-    # if plotAdjustedParameters:
-    #     fRad = csv_file_cohort['fRad(-)']
-        
-    #     # --- Parameters ---
-    #     MaxFracFol   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFracFol"])
-    #     FracFolShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"])
-    #     FracFol      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFol"])
-        
-    #     # --- Rolling average window ---
-    #     rolling_window = 12  # <-- specify window size here
-        
-    #     # --- Computation ---
-    #     AdjustedFracFol = FracFol + ((MaxFracFol - FracFol) * (fRad ** FracFolShape))
-    #     RollingAvg      = AdjustedFracFol.rolling(window=rolling_window, center=True).mean()
-    #     RollingAvgFRad  = fRad.rolling(window=rolling_window, center=True).mean()
-        
-    #     # --- Plot ---
-    #     fig, ax = plt.subplots(figsize=(10, 4))
-    #     ax2     = ax.twinx()  # secondary y-axis sharing the same x-axis
-        
-    #     # Push ax2 (fRad) behind ax (everything else)
-    #     ax.set_zorder(ax2.get_zorder() + 1)
-    #     ax.patch.set_visible(False)   # let ax2's content show through ax's transparent background
-        
-    #     # fRad (background, noisy) + its rolling average (background, solid green)
-    #     l5, = ax2.plot(csv_file_cohort['Year'], fRad, color="lightgreen", linewidth=1,
-    #                    alpha=0.6, zorder=1, label="fRad")
-    #     l6, = ax2.plot(csv_file_cohort['Year'], RollingAvgFRad, color="green", linewidth=2,
-    #                    zorder=2, label=f"fRad rolling avg (window={rolling_window})")
-        
-    #     # Foreground curves
-    #     l1, = ax.plot(csv_file_cohort['Year'], AdjustedFracFol, color="darkorange", linewidth=1,
-    #                   zorder=3, linestyle="--", alpha = 0.5, label="AdjFracFol (FracFolShape = " + str(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FracFolShape"]) + ")")
-    #     l2, = ax.plot(csv_file_cohort['Year'], RollingAvg, color="darkorange", linewidth=2,
-    #                   zorder=4, label=f"AdjFracFol Rolling avg (window={rolling_window})")
-    #     l3  = ax.axhline(FracFol,    color="blue",   linestyle="--", linewidth=1, zorder=4,
-    #                       label=f"FracFol = {FracFol}")
-    #     l4  = ax.axhline(MaxFracFol, color="tomato", linestyle="--", linewidth=1, zorder=4,
-    #                       label=f"MaxFracFol = {MaxFracFol}")
-        
-    #     ax.set_xlabel("Timestep")
-    #     ax.set_ylabel("AdjustedFracFol")
-    #     ax2.set_ylabel("fRad (-)")
-    #     ax.set_title("AdjustedFracFol over time")
-        
-    #     # Combined legend, drawn on ax so it sits above everything (including ax2's patch)
-    #     lines  = [l1, l2, l3, l4, l5, l6]
-    #     labels = [l.get_label() for l in lines]
-    #     ax.legend(lines, labels, loc="best").set_zorder(5)
-        
-    #     plt.tight_layout()
-    #     plt.show()
-
-
-
-    #     # --- Parameters ---
-    #     MaxFolN   = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["MaxFolN"])
-    #     FolNShape = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolNShape"])
-    #     FolN      = float(dictOfInitialPnETSpeciesParameters["PnETSpeciesParameters"][speciesToSimulate]["FolN"])
-        
-    #     # --- Computation ---
-    #     AdjustedFolN = FolN + ((MaxFolN - FolN) * (fRad ** FolNShape))
-        
-    #     # --- Plot ---
-    #     fig, ax = plt.subplots(figsize=(10, 4))
-    #     ax.plot(csv_file_cohort['Year'], AdjustedFolN, color="steelblue", linewidth=1, label="AdjustedFolN")
-    #     ax.axhline(FolN,    color="gray",   linestyle="--", linewidth=1, label=f"FolN = {FolN}")
-    #     ax.axhline(MaxFolN, color="tomato", linestyle="--", linewidth=1, label=f"MaxFolN = {MaxFolN}")
-        
-    #     ax.set_xlabel("Timestep")
-    #     ax.set_ylabel("AdjustedFolN")
-    #     ax.set_title("AdjustedFolN over time")
-    #     ax.legend()
-    #     plt.tight_layout()
-    #     plt.show()
-
-    
-    # if saveGrowthCurvePath:
-    #     output_path = Path(saveGrowthCurvePath)
-
-    #     # Create all parent directories if they don't exist
-    #     output_path.parent.mkdir(parents=True, exist_ok=True)
-    
-    #     csv_file_WoodFoliageBiomass.to_csv(output_path)
-    
-    # return(dictOfOutput)
-    # Delete the folder
-    # shutil.rmtree(simulationPath)
 
 
 #######
@@ -12941,7 +12836,7 @@ def generate_soil_map(size, proportions, mean_patch_size, soil_names=None,
     return grid
 
 
-def _plot_soil_map(grid, codes, soil_names):
+def _plot_soil_map(grid, codes, soil_names, soilsTypesFixed = True):
     import matplotlib.pyplot as plt
     from matplotlib.colors import ListedColormap, BoundaryNorm
     from matplotlib.patches import Patch
@@ -12952,9 +12847,17 @@ def _plot_soil_map(grid, codes, soil_names):
         code_to_name = {code: name for name, code in soil_names.items()}
 
     sorted_codes = sorted(codes)
-    cmap = plt.get_cmap("tab20", len(sorted_codes))
-    boundaries = [c - 0.5 for c in sorted_codes] + [sorted_codes[-1] + 0.5]
-    norm = BoundaryNorm(boundaries, cmap.N)
+    if not soilsTypesFixed:
+        cmap = plt.get_cmap("tab20", len(sorted_codes))
+        boundaries = [c - 0.5 for c in sorted_codes] + [sorted_codes[-1] + 0.5]
+        norm = BoundaryNorm(boundaries, cmap.N)
+    else:
+        # Create a colormap with 3 colors
+        # Highlands in white grey, lowlands in yellow, peat/bog in purple
+        cmap = mcolors.ListedColormap(["#d8dee9", "#ebcb8b", "#b48ead"])
+        boundaries = [0.5, 1.5, 2.5, 3.5]
+        norm = mcolors.BoundaryNorm(boundaries, cmap.N)
+        
 
     plt.figure(figsize=(6, 6))
     plt.imshow(grid, cmap=cmap, norm=norm)
