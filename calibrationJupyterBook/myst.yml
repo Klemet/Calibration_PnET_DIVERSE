@@ -1,6 +1,6 @@
 version: 1
 project:
-  title: Calibration of PnET Succession for the DIVERSE project
+  title: PnET-Succession Calibration Tool
   authors:
     - name: Clément Hardy, PhD.
   github: Klemet/PnET-Succession_Calibration_Tool

@@ -4,13 +4,13 @@ This [Jupyter book](https://jupyterbook.org) was created by [Clement Hardy](http
 
 ## 🎯 Goal of this documentation
 
-The objective here is to calibrate the parameters of [PnET Succession extension](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession) for the [LANDIS-II model](https://www.landis-ii.org/), in the context of the different landscape that will be simulated for the [DIVERSE project](https://diverseproject.uqo.ca/).
+The objective here is to calibrate the parameters of [PnET Succession extension](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession) for the [LANDIS-II model](https://www.landis-ii.org/). These notebooks are a proof of concept that calibrate 6 species for a Canadian landscape.
 
 PnET-Succession is one of the most complex extensions of LANDIS-II, based on the PnET familly of eco-physiological models. To be certain that the vegetation dynamics that it simulates will be realistic, we need to calibrate it carefully.
 
 The [PnET succession User Guide](https://github.com/LANDIS-II-Foundation/Extension-PnET-Succession/blob/master/deploy/docs/LANDIS-II%20PnET-Succession%20v5.1%20User%20Guide.pdf) contains a lengthy section of calibration tips by [Eric Gustafson](https://research.fs.usda.gov/about/people/gustafson) that I will use as a guide for this calibration process.
 
-```{admonition} Making the calibration of PnET easier for everyone
+```{admonition} Making the calibration of PnET-Succession easier for everyone
 :class: tip
 One of the main goals of this documentation is to translate the calibration tips of Eric Gustafson into a replicable and entirely documented procedure. As such, any research team should find here a calibration of PnET Succession from A to Z that can be replicated and reused freely.
 ```
