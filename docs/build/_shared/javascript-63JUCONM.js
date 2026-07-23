@@ -1,1 +1,1 @@
-import{a,b,c,d,e}from"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-265RPIE7.js";import"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-OZE3FFNP.js";e();export{a as javascript,b as json,c as jsonld,d as typescript};
+import{a,b,c,d,e}from"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-265RPIE7.js";import"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-OZE3FFNP.js";e();export{a as javascript,b as json,c as jsonld,d as typescript};

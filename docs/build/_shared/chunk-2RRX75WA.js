@@ -1,1 +1,1 @@
-import{b as i}from"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-7DW7L33J.js";function t(c,e){c.accDescr&&e.setAccDescription?.(c.accDescr),c.accTitle&&e.setAccTitle?.(c.accTitle),c.title&&e.setDiagramTitle?.(c.title)}i(t,"populateCommonDb");export{t as a};
+import{b as i}from"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-7DW7L33J.js";function t(c,e){c.accDescr&&e.setAccDescription?.(c.accDescr),c.accTitle&&e.setAccTitle?.(c.accTitle),c.title&&e.setDiagramTitle?.(c.title)}i(t,"populateCommonDb");export{t as a};

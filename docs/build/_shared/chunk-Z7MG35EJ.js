@@ -1,1 +1,1 @@
-import{c as e}from"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-OZE3FFNP.js";var n=e((t,a)=>{a.exports=s;s.displayName="csv";s.aliases=[];function s(c){c.languages.csv={value:/[^\r\n,"]+|"(?:[^"]|"")*"(?!")/,punctuation:/,/}}});export{n as a};
+import{c as e}from"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-OZE3FFNP.js";var n=e((t,a)=>{a.exports=s;s.displayName="csv";s.aliases=[];function s(c){c.languages.csv={value:/[^\r\n,"]+|"(?:[^"]|"")*"(?!")/,punctuation:/,/}}});export{n as a};

@@ -31,7 +31,7 @@ This approach goes through the following steps :
 
 ## 📖 Format of this documentation
 
-This documentation is a Jupyter Book (the HTML pages that you can read at [https://klemet.github.io/Calibration_PnET_DIVERSE/](https://klemet.github.io/Calibration_PnET_DIVERSE/)), composed of several files (markdown files and Jupyter notebooks) that you can find in [the Github repository that contains the book](https://github.com/Klemet/Calibration_PnET_DIVERSE).
+This documentation is a Jupyter Book (the HTML pages that you can read at [https://klemet.github.io/PnET-Succession_Calibration_Tool/](https://klemet.github.io/PnET-Succession_Calibration_Tool/)), composed of several files (markdown files and Jupyter notebooks) that you can find in [the Github repository that contains the book](https://github.com/Klemet/PnET-Succession_Calibration_Tool).
 
 The Jupyter notebooks can be run in a Docker container by using the files present in the Github repository, so as to reproduce the exact same environment with which the notebooks were executed. This ensures replicability on the long term.
 
@@ -39,7 +39,7 @@ The Jupyter notebooks can then be transformed into a HTML version using the scri
 
 ➡️ **📖 If you simply want to inform yourself as to the calibration process, just keep reading !**
 
-➡️ **💻 If you want to run the code used for this calibration process on your own computer (for example, to calibrate new species for your own study area), read the instructions of [the readme of the repository](https://github.com/Klemet/Calibration_PnET_DIVERSE/blob/main/README.md)**. They will help you deploy a Docker image on your computer that will contain the entire environment (including LANDIS-II) used for this calibration within minutes. You can then edit the notebooks so as to calibrate the parameters in your own study area and with different species.
+➡️ **💻 If you want to run the code used for this calibration process on your own computer (for example, to calibrate new species for your own study area), read the instructions of [the readme of the repository](https://github.com/Klemet/PnET-Succession_Calibration_Tool/blob/main/README.md)**. They will help you deploy a Docker image on your computer that will contain the entire environment (including LANDIS-II) used for this calibration within minutes. You can then edit the notebooks so as to calibrate the parameters in your own study area and with different species.
 
 **📖 Happy reading !**
 

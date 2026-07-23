@@ -1,1 +1,1 @@
-import{a}from"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-45W5NISM.js";import"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-OZE3FFNP.js";export default a();
+import{a}from"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-45W5NISM.js";import"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-OZE3FFNP.js";export default a();

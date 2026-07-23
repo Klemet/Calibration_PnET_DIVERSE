@@ -3,7 +3,7 @@ project:
   title: Calibration of PnET Succession for the DIVERSE project
   authors:
     - name: Clément Hardy, PhD.
-  github: Klemet/Calibration_PnET_DIVERSE
+  github: Klemet/PnET-Succession_Calibration_Tool
   bibliography:
     - references.bib
   exports:
@@ -27,7 +27,7 @@ project:
     - file: StartingCalibrationTest/100.Future_additions_todo.ipynb
 site:
   options:
-    logo: ../DIVERSE_PnET_Calibration_Logo.png
+    logo: ../logoPnETSuccessionCalibrationTool.svg
     folders: true
     only_build_toc_files: true
     execute:

@@ -22,5 +22,5 @@ Usage :
 docker build -t landis_ii_v8_calibration_pnet ./
 
 
-docker run -it -p 8888:8888 -p 3000:3000 --mount type=bind,source="PATH_TO_FOLDER\Calibration_PnET_DIVERSE",target=/calibrationFolder landis_ii_v8_calibration_pnet
+docker run -it -p 8888:8888 -p 3000:3000 --mount type=bind,source="PATH_TO_FOLDER\PnET-Succession_Calibration_Tool",target=/calibrationFolder landis_ii_v8_calibration_pnet
 

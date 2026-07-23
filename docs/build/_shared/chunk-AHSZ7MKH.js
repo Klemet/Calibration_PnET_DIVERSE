@@ -1,4 +1,4 @@
-import{b as e}from"https://klemet.github.io/Calibration_PnET_DIVERSE/build/_shared/chunk-7DW7L33J.js";var l=e(()=>`
+import{b as e}from"https://klemet.github.io/PnET-Succession_Calibration_Tool/build/_shared/chunk-7DW7L33J.js";var l=e(()=>`
   /* Font Awesome icon styling - consolidated */
   .label-icon {
     display: inline-block;
