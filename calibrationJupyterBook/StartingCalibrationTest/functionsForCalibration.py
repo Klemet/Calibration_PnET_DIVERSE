@@ -32,7 +32,19 @@ I made this choice as the amount of work needed for calibrating PnET is enormous
 and I wanted this to be done as quickly as possible.
 """
 
-#%% PACKAGES NEEDED FOR THE FUNCTIONS
+
+
+
+
+# =============================================================================
+# PACKAGES NEEDED FOR THE FUNCTIONS
+#
+# After a while, I realized that it was not good practice to put all of these
+# import statements for all of the functions I was using at the same place,
+# like this. It as a bit too late, some I'm letting these here.
+#
+# =============================================================================
+
 import os
 import re
 import glob
@@ -82,7 +94,12 @@ from rasterio.transform import Affine
 import csv
 import random
 
-#%% FUNCTIONS TO PARSE PARAMETERS
+
+
+
+# =============================================================================
+# FUNCTIONS TO PARSE LANDIS-II PARAMETERS FILES INTO PYTHON DICTONARIES (Notebook 2 and others)
+# =============================================================================
 
 def parse_PnET_ComplexTableParameterfile(file_path):
     """
@@ -187,10 +204,6 @@ def parse_PnET_ComplexTableParameterfile(file_path):
 
     return result_dict
 
-# Example usage:
-# Assuming 'data.txt' is your input file with the specified format.
-# data_dict = parse_landis_data('data.txt')
-# print(data_dict)
 
 def parse_LANDIS_SpeciesCoreFile(file_path):
     """
@@ -293,11 +306,6 @@ def parse_LANDIS_SpeciesCoreFile(file_path):
 
     return data_dict
 
-# # Example usage:
-# file_path = r'D:\OneDrive - UQAM\1 - Projets\Post-Doc - Parametrer LANDIS-II pour DIVERSE\4 - Beginning PnET Calibration\Calibration_PnET_DIVERSE\StartingCalibrationTest\SimulationFiles\PnETGitHub_OneCellSim\species.txt'  # Replace with your actual file path
-# landis_data_dict = parse_LANDIS_SpeciesCoreFile(file_path)
-# print(landis_data_dict)
-
 
 def parse_LANDIS_SimpleParameterFile(file_path):
     """
@@ -350,11 +358,6 @@ def parse_LANDIS_SimpleParameterFile(file_path):
                 result[key] = value
     
     return result
-
-# # Example Usage
-# file_path = r'calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim/scenario.txt'  # Replace with your actual file path
-# config_dict = parse_LANDIS_ScenarioCoreFile(file_path)
-# print(config_dict)
 
 
 def parse_ecoregions_file(file_path):
@@ -473,12 +476,6 @@ def parse_LANDIS_ClimateDataFile(file_path):
             }
     
     return result
-
-# # Example usage:
-# file_path = rcalibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim/Climate.txt'  # Replace with your actual file path
-# climate_data = read_climate_data(file_path)
-# print(climate_data)
-
 
 
 def parse_All_LANDIS_PnET_Files(folder_path, printFiles = False):
@@ -601,7 +598,12 @@ def parse_All_LANDIS_PnET_Files(folder_path, printFiles = False):
                     
     return results
 
-#%% FUNCTIONS TO WRITE THE PARAMETERS INTO TEXTE FILES
+
+
+
+# =============================================================================
+# FUNCTIONS TO WRITE THE LANDIS-II PARAMETERS INTO FILES (Notebook 2 and others)
+# =============================================================================
 
 def write_PnET_ComplexTableParameterfile(outputFilePath, PnETSpeciesParametersDict):
     """
@@ -639,9 +641,6 @@ def write_PnET_ComplexTableParameterfile(outputFilePath, PnETSpeciesParametersDi
             values_line = "\t".join([species_name] + [f"{value}".rstrip('0').rstrip('.') if isinstance(value, float) else str(value) for value in parameters.values()])
             file.write(f"{values_line}\n")
 
-# # Example usage:
-# PnETSpeciesParametersDict = {'LandisData': 'DisturbanceReductions', 'DisturbanceReductions': {'WoodReduction': {'fire': 0.33, 'wind': 0.0, 'harvest': 0.7, 'bda': 0.0}, 'FolReduction': {'fire': 1.0, 'wind': 0.0, 'harvest': 0.0, 'bda': 0.0}, 'RootReduction': {'fire': 0.0, 'wind': 0.0, 'harvest': 0.0, 'bda': 0.0}, 'DeadWoodReduction': {'fire': 0.7, 'wind': 0.0, 'harvest': 0.0, 'bda': 0.0}, 'LitterReduction': {'fire': 0.9, 'wind': 0.0, 'harvest': 0.1, 'bda': 0.0}}}
-# write_PnET_ComplexTableParameterfile('D:\Klemet\Desktop\TEMP\outputTESTPNET.txt', PnETSpeciesParametersDict)
 
 def write_LANDIS_SpeciesCoreFile(file_path, data_dict):
     """
@@ -711,38 +710,6 @@ def write_LANDIS_SpeciesCoreFile(file_path, data_dict):
             # Write the line to the file
             file.write(line)
 
-# # Example usage:
-# data_dict = {
-#     'LandisData': 'Species',
-#     'querrubr': {
-#         'Longevity': '100',
-#         'Sexual Maturity': '50',
-#         'Shade Tolerance': '3',
-#         'Fire Tolerance': '2',
-#         'Seed Dispersal Distance - Effective': '30',
-#         'Seed Dispersal Distance - Maximum': '3000',
-#         'Vegetative Reproduction Probability': '0.9',
-#         'Sprout Age - Min': '20',
-#         'Sprout Age - Max': '100',
-#         'Post Fire Regen': 'resprout'
-#     },
-#     'pinubank': {
-#         'Longevity': '100',
-#         'Sexual Maturity': '15',
-#         'Shade Tolerance': '1',
-#         'Fire Tolerance': '3',
-#         'Seed Dispersal Distance - Effective': '20',
-#         'Seed Dispersal Distance - Maximum': '100',
-#         'Vegetative Reproduction Probability': '0',
-#         'Sprout Age - Min': '0',
-#         'Sprout Age - Max': '0',
-#         'Post Fire Regen': 'serotiny'
-#     }
-# }
-
-# file_path = r"D:\Klemet\Desktop\TEMP\output_landis_data.txt"  # Replace with your desired output file path
-# write_LANDIS_SpeciesCoreFile(file_path, data_dict)
-
 
 def write_LANDIS_SimpleParameterFile(file_path, config_dict):
     """
@@ -772,20 +739,6 @@ def write_LANDIS_SimpleParameterFile(file_path, config_dict):
             # Write the line to the file
             file.write(f"{key}  {value}\n")
 
-# # Usage example
-# config_dict = {
-#     "LandisData": "Scenario",
-#     "Duration": 50,
-#     "Species": "species.txt",
-#     "Ecoregions": "ecoregion.txt",
-#     "EcoregionsMap": "ecoregion.img",
-#     "CellLength": 30,
-#     '"PnET-Succession"': "pnetsuccession.txt",
-#     '"Output-PnET"': "biomass.outputPnET.txt",
-#     "RandomNumberSeed": 1111
-# }
-
-# write_config_file(config_dict, 'D:\Klemet\Desktop\TEMP\output_config.txt')
 
 def write_LANDIS_MainEcoregionsFile(file_path, data_dict):
     """
@@ -839,12 +792,6 @@ def write_LANDIS_MainEcoregionsFile(file_path, data_dict):
             # Write the line to the file
             file.write(line)
 
-# # Example usage:
-# data_dict = {'LandisData': 'Ecoregions', 'eco0': {'active': 'no', 'Map Code': '0', 'Description': '"inactive"'}, 'eco1': {'active': 'yes', 'Map Code': '1', 'Description': '"well-drained rocky slopes - SW aspect"'}}
-
-# file_path = r"D:\Klemet\Desktop\TEMP\output_landis_data.txt"  # Replace with your desired output file path
-# write_LANDIS_MainEcoregionsFile(file_path, data_dict)
-
 
 def write_climate_data(file_path, data):
     """
@@ -875,10 +822,6 @@ def write_climate_data(file_path, data):
                 line = f"{year}\t{month}\t{values['TMax']}\t{values['TMin']}\t{values['PAR']}\t{values['Prec']}\t{values['CO2']}\n"
                 file.write(line)
 
-# # Example usage:
-# climate_data = {'1600-1996': {'1': {'TMax': '2.1', 'TMin': '-6.1', 'PAR': '350.9959848079', 'Prec': '12.14', 'CO2': '313.065'}, '2': {'TMax': '4.1', 'TMin': '-5', 'PAR': '422.8764365948', 'Prec': '27.27', 'CO2': '313.065'}, '3': {'TMax': '9.6', 'TMin': '-1.1', 'PAR': '681.9568657618', 'Prec': '13.93', 'CO2': '313.065'}, '4': {'TMax': '16.5', 'TMin': '4.6', 'PAR': '829.6802172436', 'Prec': '50.08', 'CO2': '313.065'}, '5': {'TMax': '21.6', 'TMin': '9.6', 'PAR': '814.6535078721', 'Prec': '93.63', 'CO2': '313.065'}, '6': {'TMax': '26.2', 'TMin': '14.7', 'PAR': '722.9276678308', 'Prec': '160.56', 'CO2': '313.065'}, '7': {'TMax': '28.1', 'TMin': '17.1', 'PAR': '872.8925973439', 'Prec': '89.87', 'CO2': '313.065'}, '8': {'TMax': '27.4', 'TMin': '16.4', 'PAR': '722.1271241014', 'Prec': '80.46', 'CO2': '313.065'}, '9': {'TMax': '23.5', 'TMin': '12.2', 'PAR': '538.6992001016', 'Prec': '101.9', 'CO2': '313.065'}, '10': {'TMax': '17', 'TMin': '6.1', 'PAR': '398.4617125821', 'Prec': '92.88', 'CO2': '313.065'}, '11': {'TMax': '10.7', 'TMin': '1.5', 'PAR': '286.6469988492', 'Prec': '51.52', 'CO2': '313.065'}, '12': {'TMax': '4.1', 'TMin': '-3.7', 'PAR': '256.5194056339', 'Prec': '18.33', 'CO2': '313.065'}}, '1997': {'1': {'TMax': '2.1', 'TMin': '-6.1', 'PAR': '297.6606941234', 'Prec': '26.416', 'CO2': '313.065'}, '2': {'TMax': '4.1', 'TMin': '-5', 'PAR': '459.687347277', 'Prec': '29.972', 'CO2': '313.065'}, '3': {'TMax': '9.6', 'TMin': '-1.1', 'PAR': '639.2213468298', 'Prec': '123.19', 'CO2': '313.065'}, '4': {'TMax': '16.5', 'TMin': '4.6', 'PAR': '757.6523826222', 'Prec': '36.576', 'CO2': '313.065'}, '5': {'TMax': '21.6', 'TMin': '9.6', 'PAR': '820.4509999536', 'Prec': '54.864', 'CO2': '313.065'}, '6': {'TMax': '26.2', 'TMin': '14.7', 'PAR': '718.279288454', 'Prec': '38.862', 'CO2': '313.065'}, '7': {'TMax': '28.1', 'TMin': '17.1', 'PAR': '813.0007719273', 'Prec': '39.37', 'CO2': '313.065'}, '8': {'TMax': '27.4', 'TMin': '16.4', 'PAR': '745.4156095801', 'Prec': '54.864', 'CO2': '313.065'}, '9': {'TMax': '23.5', 'TMin': '12.2', 'PAR': '585.7956123241', 'Prec': '136.652', 'CO2': '313.065'}, '10': {'TMax': '17', 'TMin': '6.1', 'PAR': '422.2229098247', 'Prec': '105.156', 'CO2': '313.065'}, '11': {'TMax': '10.7', 'TMin': '1.5', 'PAR': '301.6793240297', 'Prec': '160.528', 'CO2': '313.065'}, '12': {'TMax': '4.1', 'TMin': '-3.7', 'PAR': '277.9706075513', 'Prec': '28.702', 'CO2': '313.065'}}, '1998': {'1': {'TMax': '2.1', 'TMin': '-6.1', 'PAR': '308.6888052882', 'Prec': '190.5', 'CO2': '313.065'}, '2': {'TMax': '4.1', 'TMin': '-5', 'PAR': '513.1942832055', 'Prec': '144.018', 'CO2': '313.065'}, '3': {'TMax': '9.6', 'TMin': '-1.1', 'PAR': '564.5587479666', 'Prec': '154.94', 'CO2': '313.065'}, '4': {'TMax': '16.5', 'TMin': '4.6', 'PAR': '801.777901273', 'Prec': '118.618', 'CO2': '313.065'}, '5': {'TMax': '21.6', 'TMin': '9.6', 'PAR': '809.1306271837', 'Prec': '116.84', 'CO2': '313.065'}, '6': {'TMax': '26.2', 'TMin': '14.7', 'PAR': '785.4460606177', 'Prec': '130.048', 'CO2': '313.065'}, '7': {'TMax': '28.1', 'TMin': '17.1', 'PAR': '709.353639689', 'Prec': '42.926', 'CO2': '313.065'}, '8': {'TMax': '27.4', 'TMin': '16.4', 'PAR': '714.033867377', 'Prec': '63.246', 'CO2': '313.065'}, '9': {'TMax': '23.5', 'TMin': '12.2', 'PAR': '618.1866783245', 'Prec': '22.606', 'CO2': '313.065'}, '10': {'TMax': '17', 'TMin': '6.1', 'PAR': '476.891657399', 'Prec': '142.748', 'CO2': '313.065'}, '11': {'TMax': '10.7', 'TMin': '1.5', 'PAR': '289.9886518071', 'Prec': '1.778', 'CO2': '313.065'}, '12': {'TMax': '4.1', 'TMin': '-3.7', 'PAR': '248.2078448468', 'Prec': '20.574', 'CO2': '313.065'}}, '1999-2300': {'1': {'TMax': '2.1', 'TMin': '-6.1', 'PAR': '350.9959848079', 'Prec': '12.14', 'CO2': '313.065'}, '2': {'TMax': '4.1', 'TMin': '-5', 'PAR': '422.8764365948', 'Prec': '27.27', 'CO2': '313.065'}, '3': {'TMax': '9.6', 'TMin': '-1.1', 'PAR': '681.9568657618', 'Prec': '13.93', 'CO2': '313.065'}, '4': {'TMax': '16.5', 'TMin': '4.6', 'PAR': '829.6802172436', 'Prec': '50.08', 'CO2': '313.065'}, '5': {'TMax': '21.6', 'TMin': '9.6', 'PAR': '814.6535078721', 'Prec': '93.63', 'CO2': '313.065'}, '6': {'TMax': '26.2', 'TMin': '14.7', 'PAR': '722.9276678308', 'Prec': '160.56', 'CO2': '313.065'}, '7': {'TMax': '28.1', 'TMin': '17.1', 'PAR': '872.8925973439', 'Prec': '89.87', 'CO2': '313.065'}, '8': {'TMax': '27.4', 'TMin': '16.4', 'PAR': '722.1271241014', 'Prec': '80.46', 'CO2': '313.065'}, '9': {'TMax': '23.5', 'TMin': '12.2', 'PAR': '538.6992001016', 'Prec': '101.9', 'CO2': '313.065'}, '10': {'TMax': '17', 'TMin': '6.1', 'PAR': '398.4617125821', 'Prec': '92.88', 'CO2': '313.065'}, '11': {'TMax': '10.7', 'TMin': '1.5', 'PAR': '286.6469988492', 'Prec': '51.52', 'CO2': '313.065'}, '12': {'TMax': '4.1', 'TMin': '-3.7', 'PAR': '256.5194056339', 'Prec': '18.33', 'CO2': '313.065'}}}
-# output_file = 'D:\Klemet\Desktop\TEMP\climate_data_output.txt'
-# write_climate_data(climate_data, output_file)
 
 def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True, printFiles = False):
     """
@@ -1002,7 +945,11 @@ def write_all_LANDIS_files(outputFolder, dataDict, copyNonParsedFiles = True, pr
                 print("WARNING : " + str(filename) + " is neither a file or a folder, can't copy to " + str(outputFolder))
     
 
-#%% FUNCTIONS TO LAUNCH A LANDIS-II SIMULATION
+
+
+# =============================================================================
+# FUNCTIONS TO LAUNCH A LANDIS-II SIMULATION (Notebook 2 and others)
+# =============================================================================
 
 def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, timeout = None, printRunning = True):
     """
@@ -1089,12 +1036,11 @@ def runLANDIS_Simulation(simulationFolder, scenarioFileName, printSim = False, t
         return f"An error occurred: {str(e)}"
 
 
-        
 
-# runLANDIS_Simulation(testScenarioPath,
-#                      "scenario.txt")
 
-#%% FUNCTION TO PARSE OUTPUTS
+# =============================================================================
+# FUNCTIONS TO PARSE THE OUTPUTS OF A LANDIS-II SIMULATION (Notebook 2)
+# =============================================================================
 
 def list_immediate_folders(directory):
     """
@@ -1112,6 +1058,7 @@ def list_immediate_folders(directory):
         A list of directories directly inside (not recursive) the folder given as an argument.
     """
     return [folder for folder in os.listdir(directory) if os.path.isdir(os.path.join(directory, folder))]
+
 
 def parse_outputRasters_PnET(base_folder, species_names, outputsUnitDict, cellLength, ecoregionsRasterPath):
     """
@@ -1273,15 +1220,6 @@ def parse_outputRasters_PnET(base_folder, species_names, outputsUnitDict, cellLe
 
     return results
 
-# # Example usage
-# species_list = ['AllSpecies', 'pinubank', 'querrubr']
-# result_dict = parse_outputRasters_PnET("/calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim/output",
-#                               species_list,
-#                              outputsUnitDict,
-#                              int(PnETGitHub_OneCellSim["scenario.txt"]["CellLength"]),
-#                              PnETGitHub_OneCellSim["ecoregion.img"])
-# print(result_dict)
-
 
 def parse_CSVFiles_PnET_SitesOutput(folder_path, start_year):
     """
@@ -1349,13 +1287,12 @@ def parse_CSVFiles_PnET_SitesOutput(folder_path, start_year):
     
     return dataframes
 
-# Example usage:
-# dataframes_dict = parse_CSVFiles_PnET_SitesOutput("/calibrationFolder/StartingCalibrationTest/SimulationFiles/PnETGitHub_OneCellSim/output/Site1",
-#                                  int(PnETGitHub_OneCellSim["pnetsuccession.txt"]["StartYear"]))
 
-# print(dataframes_dict)
 
-#%% FUNCTIONS TO PLOT THE VARIABLES
+
+# =============================================================================
+# FUNCTIONS TO PLOT THE VARIABLES FROM A LANDIS-II SIMULATION (Notebook 2)
+# =============================================================================
 
 def plot_TimeSeries_RasterPnETOutputs(data_dict, outputs_unit_dict, timestep, simulationDuration):
     """
@@ -1420,11 +1357,6 @@ def plot_TimeSeries_RasterPnETOutputs(data_dict, outputs_unit_dict, timestep, si
                 plt.ylim(0)
                 plt.grid()
                 plt.show()
-
-# Example usage:
-# plot_TimeSeries_RasterPnETOutputs(result_dict, outputsUnitDict,
-#                 int(PnETGitHub_OneCellSim["pnetsuccession.txt"]["Timestep"]),
-#                 int(PnETGitHub_OneCellSim["scenario.txt"]["Duration"]))
 
 
 def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSelector = [], trueTime = False, realBiomass = True, cellLength = 30, referenceLabel = "Reference curve", labelOfFirstCurve = ""):
@@ -1557,430 +1489,94 @@ def plot_TimeSeries_CSV_PnETSitesOutputs(df, referenceDict = {}, columnToPlotSel
 
     print("All plots have been generated and saved.")
 
-# # Call the function
-# referenceBiomassDict = {"Wood(gDW)":{"Time":range(0, 70, 10), "Values":[1, 3, 3, 3, 3, 4, 5]}}
-# plot_TimeSeries_CSV_PnETSitesOutputs(dataframes_dict["querrubr - 9 years old at start"],
-#                     referenceBiomassDict,
-#                     ["Wood(gDW)"],
-#                     trueTime = False,
-#                     realBiomass = True,
-#                     cellLength = int(PnETGitHub_OneCellSim["scenario.txt"]["CellLength"]))
-
-#%% FUNCTIONS TO LAUNCH AND PARSE A FVS (FOREST VEGETATION SIMULATOR) SIMULATION
-
-def FVS_on_simulationOnSingleEmptyStand(Latitude,
-                                        Longitude,
-                                        Slope,
-                                        Elevation,
-                                        treeSpeciesCode,
-                                        treesPerHectares,
-                                        siteIndex,
-                                        variant = "FVSon",
-                                        Max_BA = "",
-                                        timestep = 10,
-                                        numberOfTimesteps = 12,
-                                        outputFormatBiomass = "Metric tons per hectares",
-                                        outputFormatYears = "Real date",
-                                        folderForFiles = "/tmp/FVS_SingleEmptyStandRun",
-                                        clearFiles = True,
-                                        printOutput = False):
 
 
-    # Check if the directory exists
-    if os.path.exists(folderForFiles):
-        # Remove the directory and all its contents
-        shutil.rmtree(folderForFiles)
-        print(f"The directory '{folderForFiles}' has been deleted.")
+
+# =============================================================================
+# FUNCTIONS TO PARSE THE PARAMETER TABLES OF NOTEBOOK 3 INTO PYTHON DICTIONARIES (Notebook 3)
+# =============================================================================
+
+def parseTableSpeciesParameters(markdown_table):
+    """Parse a markdown table like the ones used in 3.Initial_Species_Parameters.ipynb
+    into a Python Dictionnary we can then use for the previous functions that write LANDIS-II
+    scenario files (see above)."""
     
-    # Create the directory
-    os.makedirs(folderForFiles)
-    print(f"The directory '{folderForFiles}' has been created.")
-
-    print("Creating Database with stand and tree ini values")
-    # Connect to the SQLite database (or create it if it doesn't exist)
-    conn = sqlite3.connect(folderForFiles + "/FVSData.db")
-    cursor = conn.cursor()
+    # Split the input into lines
+    lines = markdown_table.strip().split('\n')
     
-    # Create table FVS_StandInit
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS "FVS_StandInit" (
-            	"Stand_CN"	TEXT,
-            	"Stand_ID"	TEXT,
-            	"Variant"	TEXT,
-            	"Inv_Year"	INTEGER,
-            	"Groups"	REAL,
-            	"AddFiles"	TEXT,
-            	"FVSKeywords"	TEXT,
-            	"Latitude"	REAL,
-            	"Longitude"	REAL,
-            	"Region"	INTEGER,
-            	"Forest"	INTEGER,
-            	"District"	INTEGER,
-            	"Compartment"	INTEGER,
-            	"Location"	INTEGER,
-            	"Ecoregion"	TEXT,
-            	"BEC"	TEXT,
-            	"PV_Code"	TEXT,
-            	"PV_Ref_Code"	INTEGER,
-            	"Age"	INTEGER,
-            	"Aspect"	REAL,
-            	"Slope"	REAL,
-            	"Elevation"	REAL,
-            	"ElevFt"	REAL,
-            	"Basal_Area_Factor"	REAL,
-            	"Inv_Plot_Size"	REAL,
-            	"Brk_DBH"	TEXT,
-            	"Num_Plots"	INTEGER,
-            	"NonStk_Plots"	INTEGER,
-            	"Sam_Wt"	REAL,
-            	"Stk_Pcnt"	REAL,
-            	"DG_Trans"	INTEGER,
-            	"DG_Measure"	INTEGER,
-            	"HTG_Trans"	INTEGER,
-            	"HTG_Measure"	INTEGER,
-            	"Mort_Measure"	INTEGER,
-            	"Max_BA"	REAL,
-            	"Max_SDI"	REAL,
-            	"Site_Species"	TEXT,
-            	"Site_Index"	REAL,
-            	"Model_Type"	INTEGER,
-            	"Physio_Region"	INTEGER,
-            	"Forest_Type"	INTEGER,
-            	"State"	INTEGER,
-            	"County"	INTEGER,
-            	"Fuel_Model"	INTEGER,
-            	"Fuel_0_25_H"	REAL,
-            	"Fuel_25_1_H"	REAL,
-            	"Fuel_1_3_H"	REAL,
-            	"Fuel_3_6_H"	REAL,
-            	"Fuel_6_12_H"	REAL,
-            	"Fuel_12_20_H"	REAL,
-            	"Fuel_20_35_H"	REAL,
-            	"Fuel_35_50_H"	REAL,
-            	"Fuel_gt_50_H"	REAL,
-            	"Fuel_0_25_S"	REAL,
-            	"Fuel_25_1_S"	REAL,
-            	"Fuel_1_3_S"	REAL,
-            	"Fuel_3_6_S"	REAL,
-            	"Fuel_6_12_S"	REAL,
-            	"Fuel_12_20_S"	REAL,
-            	"Fuel_20_35_S"	REAL,
-            	"Fuel_35_50_S"	REAL,
-            	"Fuel_gt_50_S"	REAL,
-            	"Fuel_Litter"	REAL,
-            	"Fuel_Duff"	REAL,
-            	"Fuel_0_06_H"	REAL,
-            	"Fuel_06_25_H"	REAL,
-            	"Fuel_25_76_H"	REAL,
-            	"Fuel_76_152_H"	REAL,
-            	"Fuel_152_305_H"	REAL,
-            	"Fuel_305_508_H"	BLOB,
-            	"Fuel_508_889_H"	REAL,
-            	"Fuel_889_1270_H"	REAL,
-            	"Fuel_gt_1270_H"	REAL,
-            	"Fuel_0_06_S"	REAL,
-            	"Fuel_06_25_S"	REAL,
-            	"Fuel_25_76_S"	REAL,
-            	"Fuel_76_152_S"	REAL,
-            	"Fuel_152_305_S"	REAL,
-            	"Fuel_305_508_S"	REAL,
-            	"Fuel_508_889_S"	REAL,
-            	"Fuel_889_1270_S"	REAL,
-            	"Fuel_gt_1270_S"	REAL,
-            	"Photo_Ref"	INTEGER,
-            	"Photo_code"	TEXT,
-            	"Moisture"	REAL
-            )
-    ''')
+    # Extract headers
+    headers = [header.strip('* ').strip("`") for header in lines[0].strip('| ').split('|')]
+    headers = [header for header in headers if header]  # Remove empty headers
     
-    # Create table FVS_TreeInit
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS "FVS_TreeInit" (
-                        	"Stand_CN"	TEXT,
-                        	"Stand_ID"	TEXT,
-                        	"StandPlot_CN"	TEXT,
-                        	"StandPlot_ID"	TEXT,
-                        	"Plot_ID"	INTEGER,
-                        	"Tree_ID"	INTEGER,
-                        	"Tree_Count"	REAL,
-                        	"History"	INTEGER,
-                        	"Species"	TEXT,
-                        	"DBH"	REAL,
-                        	"DG"	REAL,
-                        	"Ht"	REAL,
-                        	"HTG"	REAL,
-                        	"HtTopK"	REAL,
-                        	"CrRatio"	INTEGER,
-                        	"Damage1"	INTEGER,
-                        	"Severity1"	INTEGER,
-                        	"Damage2"	INTEGER,
-                        	"Severity2"	INTEGER,
-                        	"Damage3"	INTEGER,
-                        	"Severity3"	INTEGER,
-                        	"TreeValue"	INTEGER,
-                        	"Prescription"	INTEGER,
-                        	"Age"	INTEGER,
-                        	"Slope"	INTEGER,
-                        	"Aspect"	INTEGER,
-                        	"PV_Code"	INTEGER,
-                        	"TopoCode"	INTEGER,
-                        	"SitePrep"	INTEGER
-                        )
-    ''')
+    # Initialize an empty dictionary to hold the results
+    species_data = {}
     
-    # Inserting Stand Row
-    data_to_insert = {
-    'Stand_CN': 'STAND_EMPTY',
-    'Stand_ID': 'STAND_EMPTY',
-    'Variant': str(variant[-2:]),
-    'Inv_Year': 2023,
-    'Groups': 'All_Stands',
-    'Latitude': str(Latitude),
-    'Longitude': str(Longitude),
-    'Age': 0,
-    'Aspect': 0,
-    'Slope': str(Slope),
-    'Elevation': str(Elevation),
-    'Basal_Area_Factor': -1.0, # Used to control number of tree in stands.
-    'Inv_Plot_Size': 1.0, # Used to control number of trees in stand.
-    'Num_Plots': 0,
-    'Site_Species': str(treeSpeciesCode),
-    'Site_Index': str(siteIndex),
-    'Max_BA': str(Max_BA)
-    }
-
-    columns = ', '.join(data_to_insert.keys())
-    values = ', '.join(['%s'] * len(data_to_insert))
-    sql = "INSERT INTO FVS_StandInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
-
-    # print(sql)
-
-    cursor.execute(sql)
-    # print(f"{cursor.rowcount} record inserted in database.")
-
-    # WARNING : It looks like the tree density is calculated differently from one variant to the other.
-    # In particular, it seems like the american variants of FVS will use the number of trees given in the stand
-    # as the density/acre, while FVS Ontario will use it as density/hectare. I tested almost all american variants,
-    # and this is to be that every time.
-    # We make the change here.
-    if variant != "FVSon" and variant != "FVSbc" : # The two canadian variants seem to only deal in Ha
-        numberOfTrees = treesPerHectares * 0.4046856422
-    else:
-        numberOfTrees = treesPerHectares
+    # Iterate through the rows of the table, starting from the second row
+    for line in lines[2:]:
+        # Split the line into columns
+        columns = [col.strip('* ') for col in line.strip('| ').split('|')]
+        species_name = re.sub(r'\s*\[\^.*?\]', '', columns[0]).strip()  # Remove footnotes and asterisks
+        
+        # Create a dictionary for the species
+        species_info = {}
+        
+        # Iterate over the remaining columns and associate them with headers
+        for header, value in zip(headers[1:], columns[1:]):
+            # clean_value = re.sub(r'\s*\[\^.*?\]', '', value).strip()  # Remove footnotes
+            cleaned_value = re.match(r'(\S+)', value) # Clean the value to extract only the number at the beginning
+            if cleaned_value:
+                species_info[header] = cleaned_value.group(1)
+        
+        # Add the species info to the main dictionary
+        species_data[species_name] = species_info
     
-    # Inserting Tree row
-    data_to_insert = {
-    'Stand_CN': 'STAND_EMPTY',
-    'Stand_ID': 'STAND_EMPTY',
-    'Plot_ID': 1,
-    'Tree_ID': 1,
-    'Tree_Count': numberOfTrees,
-    'History': 1, # Values 1-5 doesn't seem to change anything. We'll use that.
-    'Species' : str(treeSpeciesCode),
-    'DBH' : 0.5 # Used to initialize young trees
-    }
+    return species_data
 
-    columns = ', '.join(data_to_insert.keys())
-    values = ', '.join(['%s'] * len(data_to_insert))
-    sql = "INSERT INTO FVS_TreeInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
 
-    # print(sql)
-
-    cursor.execute(sql)
-    # print(f"{cursor.rowcount} record inserted in database.")
-
-    # Commit changes to SQL database and close the connection
-    conn.commit()
-    conn.close()
-
-    # Creating Keyword file
-    print("Creating Keyword file")
+def parseTableGenericParameters(markdown_table: str) -> dict:
+    """Same as parse_markdown_table_core_species_parameters,
+    but for tables where we have one value per parameter, for
+    the generic parameters, where there are no variations by species."""
     
-    Keywordfile_content = """STDIDENT
-STAND_EMPTY
-
-ECHOSUM
-SCREEN
-
-DATABASE
-DSNin
-FVSData.db
-StandSQL
-SELECT * FROM FVS_StandInit WHERE Stand_ID = 'STAND_EMPTY'
-EndSQL
-TreeSQL
-SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'STAND_EMPTY'
-EndSQL
-End
-
-TIMEINT           0      INSERT_TIMEINT
-NUMCYCLE          INSERT_NUMCYCLE
-
-ESTAB           2023
-STOCKADJ          -1
-END
-
-TREELIST           0
-CUTLIST            0
-
-COMMENT
-The following lines are used to produce a "Carbon report" with the Fire and Fuel extension of FVS.
-See user guide for more : https://www.fs.usda.gov/fmsc/ftp/fvs/docs/gtr/FFEguide.pdf
-CARBCALC 1 1 is used to say that we want the report in metric tons/ha (not us tons), and that a more refined algorithm for biomass estimation be used (Jenkins algorithm, which estimates bark biomass in contrast to the regular algorithm).
-CARBREPT is used to output the report in the main output (.out) file of the simulation.
-END
-
-FMIN
-CARBCALC 1 1
-CARBREPT
-END
-
-PROCESS
-STOP
-"""
-    Keywordfile_content = Keywordfile_content.replace("INSERT_TIMEINT", str(timestep))
-    Keywordfile_content = Keywordfile_content.replace("INSERT_NUMCYCLE", str(numberOfTimesteps))
+    # Split the input string into lines
+    lines = markdown_table.strip().split('\n')
     
-    with open(folderForFiles + "/SingleStandSim_Keywords.key", 'w', encoding='utf-8') as file:
-        file.write(Keywordfile_content)
+    # Extract headers from the first line (the one with backticks)
+    headers = [value.strip("`") for value in re.split(r'\s*\|\s*', lines[0]) if value.strip()]
 
-    # Launching the sim
-    print("Launching FVS sim")
-    result = subprocess.run([variant, '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
-    if printOutput:
-        print(result.stdout)
-
-    # print("WARNING : the content of the output dictionnary of this function can differ slightly from what is printed above (console outputs of FVS). It seems that the console output can round certain variables differently than what is in the .out files (that will be read to create the dictionnary). Differences should be minimal.\n\n")
-
-    # Reading the Gross Total Volume as Output - outdated
-    # print("Reading Outputs")
-    # mapping = {}
-    # ignoreFirstLine = True
-    # with open(folderForFiles + "/SingleStandSim_Keywords.sum", 'r') as file:
-        # for line in file:
-            # if ignoreFirstLine:
-                # ignoreFirstLine = False
-            # else:
-                # Split the line into parts based on whitespace
-                # parts = line.split()
-                
-                # Check if there are enough parts to avoid IndexError
-                # if len(parts) > 8:
-                    # Get the number from the first column (index 0)
-                    # key = int(parts[0])
-                    # Get the number from the ninth column (index 8)
-                    # value = int(parts[8])
-                    
-                    # Add to dictionary
-                    # mapping[key] = value
-
-    # Reading the total stand carbon output and converting it into biomass
-    # The carbon outputs can only be outputed in the .out main report file. Not ideal, but we can get it there.
-    mapping = {}
+    # Initialize a dictionary to hold the results
+    result = {}
     
-    # Define the target string to search for
-    target_string_carbonReport = "******  CARBON REPORT VERSION 1.0 ******"
-    target_string_carbonUnits = "ALL VARIABLES ARE REPORTED IN"
-    target_string_lastLineBeforeValues = "YEAR    Total    Merch     Live     Dead     Dead      DDW    Floor  Shb/Hrb   Carbon   Carbon  from Fire"
-    target_dashesLine = "--------------------------------------------------------------------------------------------------------------"
-
-    with open(folderForFiles + "/SingleStandSim_Keywords.out", 'r') as file:
-        lines = file.readlines()
-
-    # Initialize variables to track whether we've found the target string and to collect report lines
-    found_target_carbonReport = False
-    found_target_carbonUnits = False
-    found_target_lastLineBeforeValues = False
-    found_target_lastDashesLine = False
-    report_lines = []
-
-    # The loops will look in every lines until we find the mention of the carbon report,
-    # and the lines indicating the beginning of the value table.
-    for line in lines:
-        if not found_target_carbonReport:
-            if target_string_carbonReport in line:
-                found_target_carbonReport = True
+    # Process each row of data (starting from the second line)
+    for line in lines[2:]:
+        # Extract values from the row using a regex that captures all columns
+        values = [value.strip() for value in re.split(r'\s*\|\s*', line) if value.strip()]
+        
+        # If there are values, process them
+        if len(values) == len(headers):  # Ensure we have the same number of values as headers
+            for i, value in enumerate(values):
+                # Clean the value to extract only the number at the beginning
+                cleaned_value = re.match(r'(\S+)', value)
+                if cleaned_value:
+                    result[headers[i]] = cleaned_value.group(1)
         else:
-            if not found_target_carbonUnits:
-                if target_string_carbonUnits in line:
-                    found_target_carbonUnits = True
-                    if "TONS/ACRE" in line :
-                        carbonUnits = "TONS/ACRE"
-                        print("Detected unit in carbon outputs is US Tons/Acre. Will transform into Metric ton / hectare.")
-                    elif "METRIC TONS/HECTARE" in line:
-                        carbonUnits = "METRIC TONS/HECTARE"
-                    else:
-                        raise Exception("Carbon units not properly detected in .out file of FVS. Please check the file; should be TONS/ACRES or METRIC TONS/HECTARE.")
-            else:
-                if not found_target_lastLineBeforeValues:
-                    if target_string_lastLineBeforeValues in line:
-                        found_target_lastLineBeforeValues = True
-                else:
-                    if not found_target_lastDashesLine:
-                        if target_dashesLine in line:
-                            found_target_lastDashesLine = True
-                    else:
-                        if re.match(r'^\s*-\s*$', line):
-                            break
-                        else:
-                            # Split the line into parts based on whitespace
-                            parts = line.split()
-                            
-                            # Check if there are enough parts to avoid IndexError
-                            if len(parts) > 8:
-                                # Get the number from the first column (index 0)
-                                key = int(parts[0])
-                                # Get the number from the second column (index 1), stand Aboveground live carbon
-                                value = float(parts[1])
-                                
-                                # Add to dictionary
-                                mapping[key] = value    
+            print("ERROR : Mismatch between number of headers of table and values")
 
-    # To convert carbon back to biomass : The algorithm of the Fire and Fuel extension computes biomass, but only outputs carbon (no option for outputting biomass).
-    # However, indicates the convertion factor. Quote :
-    # "Biomass, expressed as dry weight, is assumed to be 50 percent carbon (Penman et al. 2003) for all pools except forest floor, which is estimated as 37 percent carbon (Smith and Heath 2002)"
-    # This is confirmed in the source code; see https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/archive/bgc/src/binitial.f#L28
-    # Therefore, to get biomass from carbon outputs, we just have to multiply it by 2.
-    for key in mapping.keys():
-        mapping[key] = mapping[key]*2
+    return result
 
-    # There is a big issue when choosing the different variants : sometimes, the keyword CARBCALC 1 1 - which indicates among other things that
-    # we want an output of carbon in Metric tons per hectare rather than US tons / acre - does not work ! 
-    # So here, we check and make the transformation to Metric tons per hectares if needed.
-    if carbonUnits == "TONS/ACRE":
-        for key in mapping.keys():
-            # Metric Tons per Hectare = US Tons per Acre×2.24127
-            mapping[key] = mapping[key]*2.24127
-            
-    # Delete the folder created for the inputs and outputs if specified
-    if clearFiles:
-        print("Clearing files")
-        shutil.rmtree(folderForFiles)
-        print(f"The directory '{folderForFiles}' has been deleted.")
 
-    # We end up by converting things according to the arguments of the function
-    if outputFormatBiomass != "Metric tons per hectares" and outputFormatBiomass != "Metric gram per meter squared":
-        raise Exception("outputFormatBiomass must be either 'Metric tons per hectares' or 'Metric gram per meter squared'.") 
-    if outputFormatYears != "Real date" and outputFormatYears != "Start at 0":
-        raise Exception("outputFormatYears must be either 'Real date' or 'Start at 0'.")
+def replace_in_dict(d, old_str, new_str):
+    """Function to replace every key or value string in a dictionnary
+    with another. Used to change the name of species to their species code"""
+    if isinstance(d, dict):
+        return {replace_in_dict(k, old_str, new_str): replace_in_dict(v, old_str, new_str) for k, v in d.items()}
+    elif isinstance(d, list):
+        return [replace_in_dict(item, old_str, new_str) for item in d]
+    elif isinstance(d, str):
+        return d.replace(old_str, new_str)
+    else:
+        return d
 
-    if outputFormatYears == "Start at 0":
-        initialKeys = list(mapping.keys())
-        beginningYear = min(initialKeys)
-        for key in initialKeys:
-            mapping[key - beginningYear] = mapping[key]
-            del mapping[key]
-
-    if outputFormatBiomass == "Metric gram per meter squared":
-        for key in mapping.keys():
-            # Mg to gram
-            mapping[key] = mapping[key] * 1000000
-            # Hectare to m2
-            mapping[key] = mapping[key]/10000
-
-    return(mapping)
-
-#%% MISC FUNCTIONS
 
 def read_markdown_cell(notebook_path, markdownCellNumber):
     """Reads the markdown from a given cell in a jupyter notebook.
@@ -2025,84 +1621,12 @@ def extract_table(text):
     else:
         return "No valid table found."
 
-def parseTableSpeciesParameters(markdown_table):
-    """Parse a markdown table like the ones used in 3.Initial_Species_Parameters.ipynb
-    into a Python Dictionnary we can then use for the previous functions that write LANDIS-II
-    scenario files (see above)."""
-    
-    # Split the input into lines
-    lines = markdown_table.strip().split('\n')
-    
-    # Extract headers
-    headers = [header.strip('* ').strip("`") for header in lines[0].strip('| ').split('|')]
-    headers = [header for header in headers if header]  # Remove empty headers
-    
-    # Initialize an empty dictionary to hold the results
-    species_data = {}
-    
-    # Iterate through the rows of the table, starting from the second row
-    for line in lines[2:]:
-        # Split the line into columns
-        columns = [col.strip('* ') for col in line.strip('| ').split('|')]
-        species_name = re.sub(r'\s*\[\^.*?\]', '', columns[0]).strip()  # Remove footnotes and asterisks
-        
-        # Create a dictionary for the species
-        species_info = {}
-        
-        # Iterate over the remaining columns and associate them with headers
-        for header, value in zip(headers[1:], columns[1:]):
-            # clean_value = re.sub(r'\s*\[\^.*?\]', '', value).strip()  # Remove footnotes
-            cleaned_value = re.match(r'(\S+)', value) # Clean the value to extract only the number at the beginning
-            if cleaned_value:
-                species_info[header] = cleaned_value.group(1)
-        
-        # Add the species info to the main dictionary
-        species_data[species_name] = species_info
-    
-    return species_data
 
-def parseTableGenericParameters(markdown_table: str) -> dict:
-    """Same as parse_markdown_table_core_species_parameters,
-    but for tables where we have one value per parameter, for
-    the generic parameters, where there are no variations by species."""
-    
-    # Split the input string into lines
-    lines = markdown_table.strip().split('\n')
-    
-    # Extract headers from the first line (the one with backticks)
-    headers = [value.strip("`") for value in re.split(r'\s*\|\s*', lines[0]) if value.strip()]
 
-    # Initialize a dictionary to hold the results
-    result = {}
-    
-    # Process each row of data (starting from the second line)
-    for line in lines[2:]:
-        # Extract values from the row using a regex that captures all columns
-        values = [value.strip() for value in re.split(r'\s*\|\s*', line) if value.strip()]
-        
-        # If there are values, process them
-        if len(values) == len(headers):  # Ensure we have the same number of values as headers
-            for i, value in enumerate(values):
-                # Clean the value to extract only the number at the beginning
-                cleaned_value = re.match(r'(\S+)', value)
-                if cleaned_value:
-                    result[headers[i]] = cleaned_value.group(1)
-        else:
-            print("ERROR : Mismatch between number of headers of table and values")
 
-    return result
-
-def replace_in_dict(d, old_str, new_str):
-    """Function to replace every key or value string in a dictionnary
-    with another. Used to change the name of species to their species code"""
-    if isinstance(d, dict):
-        return {replace_in_dict(k, old_str, new_str): replace_in_dict(v, old_str, new_str) for k, v in d.items()}
-    elif isinstance(d, list):
-        return [replace_in_dict(item, old_str, new_str) for item in d]
-    elif isinstance(d, str):
-        return d.replace(old_str, new_str)
-    else:
-        return d
+# =============================================================================
+# FUNCTIONS GET AND FORMAT THE CLIMATE DATA (Notebook 5)
+# =============================================================================
 
 # Functions to transform kelvins to celciuses
 def kelvin_to_celsius(kelvin):
@@ -2111,48 +1635,6 @@ def kelvin_to_celsius(kelvin):
     else:
         return kelvin - 273.15
 
-# Function to load and filter data in a .nc file by polygon
-def load_and_filter_by_polygon(file_path, shapefile_path):
-    # Load the shapefile
-    gdf = gpd.read_file(shapefile_path)
-    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
-    if gdf.crs != 'EPSG:4326':
-        gdf = gdf.to_crs('EPSG:4326')
-    # Get the polygon from the shapefile (assuming first polygon if multiple)
-    polygon = gdf.geometry.iloc[0]
-    # Load the climate data
-    ds = xr.open_dataset(file_path)
-    # Create a mask for points inside the polygon
-    # We try with different attribute names
-    try:
-        lon_grid, lat_grid = np.meshgrid(ds.lon.values, ds.lat.values)
-        mask = np.zeros((len(ds.lat), len(ds.lon)), dtype=bool)
-        for i in range(len(ds.lat)):
-            for j in range(len(ds.lon)):
-                point = Point(lon_grid[i, j], lat_grid[i, j])
-                mask[i, j] = polygon.contains(point)
-        # Apply the mask to the dataset
-        # First, we need to convert the mask to have the same dimensions as the dataset
-        mask_da = xr.DataArray(mask, coords=[ds.lat, ds.lon], dims=['lat', 'lon'])
-
-    # In some cases, lat and lon are not the names used for the dimensions. We try another.
-    except:
-        # Code to handle the exception
-        print("lat and lon not found as attributes of ds. trying other")
-        lon_grid, lat_grid = np.meshgrid(ds.LonDim.values, ds.LatDim.values)
-        mask = np.zeros((len(ds.LatDim), len(ds.LonDim)), dtype=bool)
-        for i in range(len(ds.LatDim)):
-            for j in range(len(ds.LonDim)):
-                point = Point(lon_grid[i, j], lat_grid[i, j])
-                mask[i, j] = polygon.contains(point)
-        # Apply the mask to the dataset
-        # First, we need to convert the mask to have the same dimensions as the dataset
-        mask_da = xr.DataArray(mask, coords=[ds.LatDim, ds.LonDim], dims=['LatDim', 'LonDim'])
-        print(mask_da)
-
-    # Apply the mask
-    ds_filtered = ds.where(mask_da, drop=True)
-    return ds_filtered
 
 # Progress bar for downloads of some files with urllib.request
 def progress_hook(count, block_size, total_size):
@@ -2179,6 +1661,7 @@ def progress_hook(count, block_size, total_size):
     # Add a newline when download completes
     if downloaded >= total_size:
         sys.stdout.write('\n')
+
 
 # Function to process CO2 data and fill the dataframe
 # Based on datasets from https://zenodo.org/records/5021361
@@ -2383,215 +1866,6 @@ def process_co2_data_monthly(historical_ds, shapefile, df):
     return df
 
 
-    
-# Function to process CO2 data and fill the dataframe
-# Based on datasets from https://zenodo.org/records/5021361
-# But this time, takes into account future data coming from
-# https://zenodo.org/records/5021361; and does an interpolation
-# because there is one missing year (2014) between their historical
-# and future datasets
-def process_co2_data_withFutureInterpolation(historical_ds, future_ds, shapefile, df):
-    # Add CO2_Concentration column to dataframe
-    df['CO2_Concentration'] = np.nan
-
-    # Load the shapefile
-    gdf = gpd.read_file(shapefile)
-    # Ensure the shapefile is in the same CRS as the climate data (usually EPSG:4326)
-    if gdf.crs != 'EPSG:4326':
-        gdf = gdf.to_crs('EPSG:4326')
-    # Get the polygon from the shapefile (assuming first polygon if multiple)
-    polygon = gdf.geometry.iloc[0]
-    # Get the centroid of the polygon
-    polygon_centroid = polygon.centroid
-
-    # Process historical data (1950-2013)
-    # Create a mask for points inside the polygon for historical data
-    lon_values = historical_ds.Longitude.values
-    lat_values = historical_ds.Latitude.values
-    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
-    hist_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
-
-    # Check each point if it's inside the polygon
-    for i in range(len(lat_values)):
-        for j in range(len(lon_values)):
-            point = Point(lon_grid[i, j], lat_grid[i, j])
-            hist_mask[i, j] = polygon.contains(point)
-
-    # If no points are inside the polygon, find the closest point to the polygon centroid
-    if not np.any(hist_mask):
-        print("No points found inside the polygon for historical data. Finding closest point...")
-        min_dist = float('inf')
-        closest_i, closest_j = 0, 0
-
-        for i in range(len(lat_values)):
-            for j in range(len(lon_values)):
-                point = Point(lon_grid[i, j], lat_grid[i, j])
-                dist = point.distance(polygon_centroid)
-                if dist < min_dist:
-                    min_dist = dist
-                    closest_i, closest_j = i, j
-
-        hist_mask[closest_i, closest_j] = True
-        print(f"Closest point to polygon centroid for historical data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
-
-    # Process future data (2014-2100)
-    # Create a mask for points inside the polygon for future data
-    lon_values = future_ds.longitude.values
-    lat_values = future_ds.latitude.values
-    lon_grid, lat_grid = np.meshgrid(lon_values, lat_values)
-    future_mask = np.zeros((len(lat_values), len(lon_values)), dtype=bool)
-
-    # Check each point if it's inside the polygon
-    for i in range(len(lat_values)):
-        for j in range(len(lon_values)):
-            point = Point(lon_grid[i, j], lat_grid[i, j])
-            future_mask[i, j] = polygon.contains(point)
-
-    # If no points are inside the polygon, find the closest point to the polygon centroid
-    if not np.any(future_mask):
-        print("No points found inside the polygon for future data. Finding closest point...")
-        min_dist = float('inf')
-        closest_i, closest_j = 0, 0
-
-        for i in range(len(lat_values)):
-            for j in range(len(lon_values)):
-                point = Point(lon_grid[i, j], lat_grid[i, j])
-                dist = point.distance(polygon_centroid)
-                if dist < min_dist:
-                    min_dist = dist
-                    closest_i, closest_j = i, j
-
-        future_mask[closest_i, closest_j] = True
-        print(f"Closest point to polygon centroid for future data: Lon={lon_values[closest_j]}, Lat={lat_values[closest_i]}")
-
-    # Extract monthly CO2 values for 2013 to capture seasonal pattern
-    monthly_values_2013 = {}
-    for month in range(1, 13):
-        time_str = f"2013-{month:02d}-01"
-        try:
-            time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
-            co2_slice = historical_ds.value.isel(Times=time_idx).values
-            masked_values = co2_slice[hist_mask]
-            if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                monthly_values_2013[month] = np.nanmean(masked_values)
-        except (IndexError, KeyError):
-            print(f"Time {time_str} not found in historical dataset")
-
-    # Extract monthly CO2 values for 2015 to capture seasonal pattern
-    monthly_values_2015 = {}
-    for month in range(1, 13):
-        time_str = f"2015-{month:02d}-01"
-        try:
-            time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(2015, month, 15, 0, 0, 0, 0))[0][0]
-            co2_slice = future_ds.CO2.isel(time=time_idx).values
-            masked_values = co2_slice[future_mask]
-            if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                monthly_values_2015[month] = np.nanmean(masked_values)
-        except (IndexError, KeyError):
-            print(f"Time {time_str} not found in future dataset")
-
-    # Calculate annual averages for 2013 and 2015
-    if len(monthly_values_2013) == 12 and len(monthly_values_2015) == 12:
-        annual_avg_2013 = sum(monthly_values_2013.values()) / 12
-        annual_avg_2015 = sum(monthly_values_2015.values()) / 12
-
-        # Calculate seasonal anomalies (deviations from annual mean)
-        seasonal_anomaly_2013 = {month: value - annual_avg_2013 for month, value in monthly_values_2013.items()}
-        seasonal_anomaly_2015 = {month: value - annual_avg_2015 for month, value in monthly_values_2015.items()}
-
-        # Average the seasonal anomalies from 2013 and 2015
-        avg_seasonal_anomaly = {month: (seasonal_anomaly_2013[month] + seasonal_anomaly_2015[month]) / 2 
-                               for month in range(1, 13)}
-
-        # Calculate the expected annual average for 2014 (linear interpolation)
-        annual_avg_2014 = annual_avg_2013 + (annual_avg_2015 - annual_avg_2013) / 2
-
-        # Calculate the expected monthly values for 2014
-        monthly_values_2014 = {month: annual_avg_2014 + avg_seasonal_anomaly[month] for month in range(1, 13)}
-
-        print("Successfully calculated seasonal pattern for 2014")
-    else:
-        print("Cannot calculate seasonal pattern, missing monthly data for 2013 or 2015")
-        monthly_values_2014 = None
-
-    # Fill in CO2 concentration for each year and month in the dataframe
-    # To speed up : If we're in same year/month, we avoid re-reading the data
-    year_previous = "-99"
-    month_previous = "-99"
-    value_previous = 0
-    for index, row in df.iterrows():
-        year = int(row['Year'])
-        month = int(row['Month'])
-
-        if year_previous == year and month_previous == month:
-            df.at[index, 'CO2_Concentration'] = value_previous
-
-        else:
-            if 1950 <= year <= 2013:
-                # Find the corresponding time in the historical dataset
-                time_str = f"{year}-{month:02d}-01"
-                try:
-                    # Find the time index
-                    time_idx = np.where(historical_ds.Times == np.datetime64(time_str))[0][0]
-    
-                    # Extract CO2 values for this time and apply the mask
-                    co2_slice = historical_ds.value.isel(Times=time_idx).values
-                    masked_values = co2_slice[hist_mask]
-    
-                    # Calculate the average if there are valid values
-                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                        df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
-
-                    # We record this measurement to go faster next time
-                    year_previous = year
-                    month_previous = month
-                    value_previous = np.nanmean(masked_values)
-                    
-                except (IndexError, KeyError):
-                    print(f"Time {time_str} not found in historical dataset")
-    
-            elif year == 2014:
-                # Use the seasonally adjusted values for 2014
-                if monthly_values_2014 and month in monthly_values_2014:
-                    df.at[index, 'CO2_Concentration'] = monthly_values_2014[month]
-                else:
-                    # Fallback to simple linear interpolation if seasonal adjustment failed
-                    if 'value' in monthly_values_2013.get(month, {}) and 'value' in monthly_values_2015.get(month, {}):
-                        interpolated_value = (monthly_values_2013[month] + monthly_values_2015[month]) / 2
-                        df.at[index, 'CO2_Concentration'] = interpolated_value
-                    else:
-                        print(f"Cannot interpolate for 2014-{month:02d}, missing data")
-    
-            elif 2014 <= year <= 2100:
-                # Find the corresponding time in the future dataset
-                time_str = f"{year}-{month:02d}-01"
-                try:
-                    # Find the time index
-                    # Different here, as this file uses cftime format.
-                    # Plus, don't ask me why, they put the day for the timestep at 15
-                    time_idx = np.where(future_ds.time == cftime.DatetimeNoLeap(year, month, 15, 0, 0, 0, 0))[0][0]
-    
-                    # Extract CO2 values for this time and apply the mask
-                    # Here again, dimension names and all are different
-                    co2_slice = future_ds.CO2.isel(time=time_idx).values
-                    masked_values = co2_slice[future_mask]
-    
-                    # Calculate the average if there are valid values
-                    if len(masked_values) > 0 and not np.all(np.isnan(masked_values)):
-                        df.at[index, 'CO2_Concentration'] = np.nanmean(masked_values)
-
-                    # We record this measurement to go faster next time
-                    year_previous = year
-                    month_previous = month
-                    value_previous = np.nanmean(masked_values)
-                        
-                except (IndexError, KeyError):
-                    print(f"Time {time_str} not found in future dataset")
-
-    return df
-
-
-
 def standardize_xarray_dataset(ds):
     """
     Transform an xarray Dataset by converting longitude and latitude from variables to coordinates
@@ -2677,6 +1951,7 @@ def standardize_xarray_dataset(ds):
     # If conditions are not met, return the original dataset
     return ds
 
+
 # Downloads a file quickly using the axel package for linux, and display a progress bar properly in Jupyter notebook
 def download_file(url, save_path):
     # Start the process
@@ -2710,7 +1985,7 @@ def download_file(url, save_path):
     result.stdout = last_line
     result.stderr = ""
 
-# Similar toload_and_filter_by_polygon (see above), but adapted for CanLEADv1 datasets
+
 def load_and_filter_by_polygon_canLEADv1(file_path, shapefile_path):
     # Load the shapefile
     gdf = gpd.read_file(shapefile_path)
@@ -2735,6 +2010,7 @@ def load_and_filter_by_polygon_canLEADv1(file_path, shapefile_path):
     # Apply the mask
     ds_filtered = ds.where(mask_da, drop=True)
     return ds_filtered
+
 
 # Used for conversion of time format when converting CanLEADv1 data into a panda dataframe
 def convert_cftime_to_datetime(cftime_obj):
@@ -2831,6 +2107,7 @@ def plot_climateVariable_time_series_with_moving_average(variable_dict, dates_ti
     
         plt.tight_layout()
         return plt
+
 
 def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict, dates_time, window_years=20, highlightModel = ""):
     """
@@ -3044,250 +2321,6 @@ def plot_climate_variables_with_moving_average(precip_dict, tmax_dict, tmin_dict
 
     return fig, closest_model, combined_scores
 
-def save_average_raster(output_path, average_array, metadata):
-    """
-    Save the average array as a new raster.
-
-    Args:
-        output_path: Path where to save the output raster
-        average_array: Numpy array containing the average values
-        metadata: Metadata for the output raster
-    """
-    # Update metadata for the output file
-    metadata.update({
-        'dtype': 'float32',
-        'driver': 'GTiff',
-    })
-
-    with rasterio.open(output_path, 'w', **metadata) as dst:
-        # Write all bands
-        if average_array.ndim == 3:
-            for i in range(average_array.shape[0]):
-                dst.write(average_array[i].astype(np.float32), i+1)
-        else:
-            dst.write(average_array.astype(np.float32), 1)
-
-# Used to average soil textures rasters
-
-def calculate_raster_average(raster_paths, weights=None):
-    """
-    Calculate the weighted average of multiple rasters with the same dimensions,
-    given as a list of paths to the rasters and corresponding weights.
-
-    Args:
-        raster_paths: List of paths to .tif raster files
-        weights: List of weights corresponding to each raster. If None, equal weights are used.
-
-    Returns:
-        tuple: (weighted_average_array, metadata) where weighted_average_array is a numpy array
-               containing the weighted average values and metadata is from the first raster
-    """
-    if not raster_paths:
-        raise ValueError("No raster paths provided")
-
-    # Set default weights if none provided
-    if weights is None:
-        weights = np.ones(len(raster_paths))
-
-    # Validate weights
-    if len(weights) != len(raster_paths):
-        raise ValueError("Number of weights must match number of rasters")
-
-    # Convert weights to numpy array
-    weights = np.array(weights, dtype=np.float64)
-
-    # Open the first raster to get metadata and initialize the sum arrays
-    with rasterio.open(raster_paths[0]) as src:
-        # Get metadata from the first raster
-        metadata = src.meta.copy()
-        # Read all bands
-        first_raster = src.read()
-        # Initialize sum array with zeros of the same shape
-        weighted_sum_array = np.zeros_like(first_raster, dtype=np.float64)
-        # Add the first raster to the weighted sum
-        weighted_sum_array += first_raster * weights[0]
-
-    # Process the remaining rasters
-    for i, path in enumerate(raster_paths[1:], 1):
-        with rasterio.open(path) as src:
-            # Check dimensions match
-            if src.shape != (metadata['height'], metadata['width']):
-                raise ValueError(f"Raster {path} has different dimensions than the first raster")
-            # Add to the weighted sum
-            weighted_sum_array += src.read() * weights[i]
-
-    # Calculate the weighted average
-    weights_sum = np.sum(weights)
-    if weights_sum == 0:
-        raise ValueError("Sum of weights cannot be zero")
-
-    weighted_average_array = weighted_sum_array / weights_sum
-
-    return weighted_average_array, metadata
-
-
-# Takes the path to two averaged sand and clay % rasters, 
-# and generates a re-classified raster with codes corresponding to
-# the 12 soils types from the SaxtonAndRawls default parameters in PnET Succession
-# using the euclidian distance in the dimension of % of sand and % of clay for each cell
-# and the soil types
-def classify_soil_types_chunked(sand_path, clay_path, output_path, chunk_size=1024):
-    """
-    Classify soil types based on sand, clay, and silt percentages using a chunked approach.
-
-    Parameters:
-    -----------
-    sand_path : str
-        Path to the .tif file containing sand percentage values
-    clay_path : str
-        Path to the .tif file containing clay percentage values
-    silt_path : str
-        Path to the .tif file containing silt percentage values
-    output_path : str
-        Path to save the output classification .tif file
-    chunk_size : int
-        Size of chunks to process at once (default: 1024)
-    """
-    # Define soil types with their sand and clay percentages
-    # Comes from the Saxton and Rawls default parameter file of
-    # PnET Succession 5.1, in C:\Program Files\LANDIS-II-v7\extensions\Defaults\SaxtonAndRawlsParameters.txt
-    soil_types = {
-        "SAND": (0.85, 0.04),
-        "LOSA": (0.80, 0.05),
-        "SALO": (0.63, 0.10),
-        "LOAM": (0.41, 0.19),
-        "SILO": (0.15, 0.18),
-        "SILT": (0.05, 0.10),
-        "SNCL": (0.53, 0.26),
-        "CLLO": (0.29, 0.32),
-        "SLCL": (0.09, 0.32),
-        "SACL": (0.50, 0.40),
-        "SICL": (0.08, 0.47),
-        "CLAY": (0.13, 0.55),
-        "BEDR": (0.10, 0.10)
-    }
-
-    # Convert soil types to a numpy array for efficient distance calculation
-    soil_types_array = np.array(list(soil_types.values()))
-    soil_type_names = list(soil_types.keys())
-
-    # Open all input files
-    print("Opening all files")
-    with rasterio.open(sand_path) as sand_src, \
-         rasterio.open(clay_path) as clay_src:
-
-        # Get dimensions and profile from sand raster
-        height = sand_src.height
-        width = sand_src.width
-        profile = sand_src.profile
-
-        # Update profile for output
-        profile.update(
-            dtype=rasterio.uint8,
-            count=1,
-            nodata=0
-        )
-
-        # Create output file
-        print("Creating output")
-        with rasterio.open(output_path, 'w', **profile) as dst:
-            # Process the raster in chunks
-            for row in range(0, height, chunk_size):
-                row_end = min(row + chunk_size, height)
-                chunk_height = row_end - row
-
-                for col in range(0, width, chunk_size):
-                    col_end = min(col + chunk_size, width)
-                    chunk_width = col_end - col
-
-                    # Define the window for the current chunk
-                    window = Window(col, row, chunk_width, chunk_height)
-
-                    # print("reading data for current chunk")
-                    # Read data for the current window
-                    sand_chunk = sand_src.read(1, window=window)
-                    clay_chunk = clay_src.read(1, window=window)
-
-                    # Create a mask for valid data
-                    valid_mask = ~(np.isnan(sand_chunk) | np.isnan(clay_chunk) )
-
-                    # Initialize output chunk with zeros
-                    soil_classification_chunk = np.zeros_like(sand_chunk, dtype=np.uint8)
-
-                    # Process only valid cells in the chunk
-                    if np.any(valid_mask):
-                        # Get valid cell coordinates
-                        valid_indices = np.where(valid_mask)
-
-                        
-                        # Stack sand and clay percentages for valid cells
-                        # We divide by 100 as the values in the raster are in %,
-                        # but the values in the soil matrix from saxton and rawls parameters
-                        # are in decimals
-                        soil_composition = np.vstack((
-                            sand_chunk[valid_indices]/100,
-                            clay_chunk[valid_indices]/100
-                        )).T
-                        # print("Soil composition object :")
-                        # print(soil_composition)
-
-                        # Calculate distances and find closest soil type
-                        distances = cdist(soil_composition, soil_types_array)
-                        # print("Distances object :")
-                        # print(distances)
-                        # The +1 here is because the function returns the index of
-                        # the soil texture from the data matrix that is closest to 
-                        # the given cell. However, indexes go from 0 to 11 (as there
-                        # are 12 soils textures), but the script creates codes ranging
-                        # from 1 to 12 to put in the raster. Hence th + 1.
-                        # It's also because 0 is often the nodata value in rasters.
-                        closest_soil_indices = np.argmin(distances, axis=1) + 1
-                        # print("Closets soil indices object :")
-                        # print(closest_soil_indices)
-
-                        # Assign soil type indices to output chunk
-                        soil_classification_chunk[valid_indices] = closest_soil_indices
-                        
-                        # input("Press Enter to continue...")
-
-                    # Write the chunk to the output file
-                    dst.write(soil_classification_chunk, 1, window=window)
-
-                    # print(f"Processed chunk: Row {row}-{row_end}, Col {col}-{col_end}")
-
-    # Print soil type codes for reference
-    print("\nSoil Type Codes:")
-    for i, soil_type in enumerate(soil_type_names, 1):
-        print(f"{i}: {soil_type}")
-
-    print(f"\nClassification complete. Output saved to: {output_path}")
-
-def safe_convert_to_datetime(t):
-    # Check if date is within pandas' supported range
-    try:
-        # Create a datetime object directly
-        if hasattr(t, 'year') and hasattr(t, 'month') and hasattr(t, 'day'):
-            dt = datetime(t.year, t.month, t.day, 
-                          getattr(t, 'hour', 0), 
-                          getattr(t, 'minute', 0), 
-                          getattr(t, 'second', 0))
-
-            # Check if within pandas supported range (roughly)
-            if dt.year < 1678 or dt.year > 2261:
-                # For dates outside pandas range, return the datetime object
-                # but note these won't work with pandas time operations
-                return dt
-            else:
-                return pd.Timestamp(dt)
-        else:
-            # Fallback for other types
-            return pd.Timestamp(str(t))
-    except (ValueError, TypeError, OverflowError):
-        # If conversion fails, return the original object
-        # You might want to handle this differently based on your needs
-        print(f"Warning: Could not convert {t} to datetime")
-        return t
-
 
 def daylight_hour_average(rsds_24h_avg, latitude, longitude, year, month, day):
     """
@@ -3328,6 +2361,7 @@ def daylight_hour_average(rsds_24h_avg, latitude, longitude, year, month, day):
         return 0.0  # Polar night: no sunlight
     else:
         return total_energy / daylight_hours
+
 
 def convert_to_daylight_average(ds, variable_name):
     """
@@ -3557,6 +2591,7 @@ def GetDataFromESGFdatasets(catalogURL,
                 print("Not processing file " + str(cat.datasets[datasetID]) + " in dataset because it is not a .nc file")
     return(all_data)
 
+
 def GetDataFromESGFdataset(datasetURL,
                             yearStart,
                             yearStop,
@@ -3714,6 +2749,7 @@ def extract_unique_coordinates(dataframe):
     # Convert to list of tuples
     return [tuple(coord) for coord in unique_coords]
 
+
 def find_closest_coordinate_to_polygon_center(shapefile_path, coordinates_list):
     """
     Find the coordinate from a list that is closest to the center of a polygon in a shapefile.
@@ -3766,6 +2802,7 @@ def find_closest_coordinate_to_polygon_center(shapefile_path, coordinates_list):
 
     return closest_coordinate
 
+
 def transform_to_historical_averages_vectorized(df):
     # Group by month, day, and variable name to calculate historical averages
     historical_averages = df.groupby(['month', 'day', 'Variable'])['eco1'].transform('mean')
@@ -3775,6 +2812,1164 @@ def transform_to_historical_averages_vectorized(df):
     df_transformed['eco1'] = historical_averages
 
     return df_transformed
+
+
+def convert_monthly_precip_to_cm(precip_series, start_date, end_date):
+    """
+    Convert monthly precipitation time series from kg m-2 s-1 to cm.
+
+    Parameters:
+    -----------
+    precip_series : list
+        List of precipitation values in kg m-2 s-1 (monthly averages)
+    start_date : tuple
+        (year, month) of first value in series
+    end_date : tuple
+        (year, month) of last value in series
+
+    Returns:
+    --------
+    list
+        Precipitation values in cm (monthly totals)
+    """
+
+    # Generate list of (year, month) tuples for the entire period
+    start = date(start_date[0], start_date[1], 1)
+    end = date(end_date[0], end_date[1], 1)
+
+    months = []
+    current = start
+    while current <= end:
+        months.append((current.year, current.month))
+        current += relativedelta(months=1)
+
+    # Verify length matches
+    if len(precip_series) != len(months):
+        raise ValueError(f"Series length ({len(precip_series)}) doesn't match date range ({len(months)} months)")
+
+    # Convert each value
+    precip_cm = []
+    for precip_rate, (year, month) in zip(precip_series, months):
+        days_in_month = calendar.monthrange(year, month)[1]
+        seconds_in_month = days_in_month * 24 * 3600
+
+        # kg m-2 s-1 * seconds = kg m-2 = mm, then / 10 = cm
+        monthly_cm = (precip_rate * seconds_in_month) / 10
+        precip_cm.append(monthly_cm)
+
+    return precip_cm
+
+
+def average_climate_data_by_month(input_filepath):
+    """Used to create monthly averaged files for the climate
+    from monthly measurements. In the monthly averaged version,
+    the value for each month is the same accross all years, and is
+    the average of all values for this month and variable accross all years.
+
+    We do this because while we could use the Monthly_AverageAllYears statement
+    from the climate library to do this, this seems to create a problem in PnET-Cohort
+    which is not adapted to deal with the year values that the climate library
+    return in that case. See https://github.com/LANDIS-II-Foundation/Library-PnET-Cohort/issues/7
+    Instead of fixing the code, it's simpler to just modify
+    our input files."""
+    # Read the CSV file
+    df = pd.read_csv(input_filepath)
+
+    # Group by Month and Variable, calculate mean of eco1
+    monthly_avg = df.groupby(['Month', 'Variable'], as_index=False)['eco1'].mean()
+
+    # Create a complete dataframe with all Year/Month/Variable combinations
+    # using the original years but with averaged values
+    years = df['Year'].unique()
+    result = []
+
+    for year in years:
+        temp_df = monthly_avg.copy()
+        temp_df['Year'] = year
+        result.append(temp_df)
+
+    # Concatenate and reorder columns
+    df_averaged = pd.concat(result, ignore_index=True)
+    df_averaged = df_averaged[['Year', 'Month', 'Variable', 'eco1']]
+
+    # Sort by Year, Month, Variable for consistency
+    df_averaged = df_averaged.sort_values(['Year', 'Month', 'Variable']).reset_index(drop=True)
+    
+    # We sort the rows
+    df_averaged = df_averaged.sort_values(by=['Variable', 'Year', 'Month'], ascending=[True, True, True])
+    
+    # Generate output filename
+    output_filepath = input_filepath.replace('.csv', '_MonthlyAveraged.csv')
+
+    # Save to CSV
+    df_averaged.to_csv(output_filepath, index=False)
+
+    return output_filepath
+
+
+def safe_convert_to_datetime(t):
+    # Check if date is within pandas' supported range
+    try:
+        # Create a datetime object directly
+        if hasattr(t, 'year') and hasattr(t, 'month') and hasattr(t, 'day'):
+            dt = datetime(t.year, t.month, t.day, 
+                          getattr(t, 'hour', 0), 
+                          getattr(t, 'minute', 0), 
+                          getattr(t, 'second', 0))
+
+            # Check if within pandas supported range (roughly)
+            if dt.year < 1678 or dt.year > 2261:
+                # For dates outside pandas range, return the datetime object
+                # but note these won't work with pandas time operations
+                return dt
+            else:
+                return pd.Timestamp(dt)
+        else:
+            # Fallback for other types
+            return pd.Timestamp(str(t))
+    except (ValueError, TypeError, OverflowError):
+        # If conversion fails, return the original object
+        # You might want to handle this differently based on your needs
+        print(f"Warning: Could not convert {t} to datetime")
+        return t
+
+
+
+
+# =============================================================================
+# FUNCTIONS TO DEAL WITH SOIL RASTERS (Notebook 5)
+# =============================================================================
+
+def save_average_raster(output_path, average_array, metadata):
+    """
+    Save the average array as a new raster.
+
+    Args:
+        output_path: Path where to save the output raster
+        average_array: Numpy array containing the average values
+        metadata: Metadata for the output raster
+    """
+    # Update metadata for the output file
+    metadata.update({
+        'dtype': 'float32',
+        'driver': 'GTiff',
+    })
+
+    with rasterio.open(output_path, 'w', **metadata) as dst:
+        # Write all bands
+        if average_array.ndim == 3:
+            for i in range(average_array.shape[0]):
+                dst.write(average_array[i].astype(np.float32), i+1)
+        else:
+            dst.write(average_array.astype(np.float32), 1)
+
+
+# Used to average soil textures rasters
+def calculate_raster_average(raster_paths, weights=None):
+    """
+    Calculate the weighted average of multiple rasters with the same dimensions,
+    given as a list of paths to the rasters and corresponding weights.
+
+    Args:
+        raster_paths: List of paths to .tif raster files
+        weights: List of weights corresponding to each raster. If None, equal weights are used.
+
+    Returns:
+        tuple: (weighted_average_array, metadata) where weighted_average_array is a numpy array
+               containing the weighted average values and metadata is from the first raster
+    """
+    if not raster_paths:
+        raise ValueError("No raster paths provided")
+
+    # Set default weights if none provided
+    if weights is None:
+        weights = np.ones(len(raster_paths))
+
+    # Validate weights
+    if len(weights) != len(raster_paths):
+        raise ValueError("Number of weights must match number of rasters")
+
+    # Convert weights to numpy array
+    weights = np.array(weights, dtype=np.float64)
+
+    # Open the first raster to get metadata and initialize the sum arrays
+    with rasterio.open(raster_paths[0]) as src:
+        # Get metadata from the first raster
+        metadata = src.meta.copy()
+        # Read all bands
+        first_raster = src.read()
+        # Initialize sum array with zeros of the same shape
+        weighted_sum_array = np.zeros_like(first_raster, dtype=np.float64)
+        # Add the first raster to the weighted sum
+        weighted_sum_array += first_raster * weights[0]
+
+    # Process the remaining rasters
+    for i, path in enumerate(raster_paths[1:], 1):
+        with rasterio.open(path) as src:
+            # Check dimensions match
+            if src.shape != (metadata['height'], metadata['width']):
+                raise ValueError(f"Raster {path} has different dimensions than the first raster")
+            # Add to the weighted sum
+            weighted_sum_array += src.read() * weights[i]
+
+    # Calculate the weighted average
+    weights_sum = np.sum(weights)
+    if weights_sum == 0:
+        raise ValueError("Sum of weights cannot be zero")
+
+    weighted_average_array = weighted_sum_array / weights_sum
+
+    return weighted_average_array, metadata
+
+
+# Takes the path to two averaged sand and clay % rasters, 
+# and generates a re-classified raster with codes corresponding to
+# the 12 soils types from the SaxtonAndRawls default parameters in PnET Succession
+# using the euclidian distance in the dimension of % of sand and % of clay for each cell
+# and the soil types
+def classify_soil_types_chunked(sand_path, clay_path, output_path, chunk_size=1024):
+    """
+    Classify soil types based on sand, clay, and silt percentages using a chunked approach.
+
+    Parameters:
+    -----------
+    sand_path : str
+        Path to the .tif file containing sand percentage values
+    clay_path : str
+        Path to the .tif file containing clay percentage values
+    silt_path : str
+        Path to the .tif file containing silt percentage values
+    output_path : str
+        Path to save the output classification .tif file
+    chunk_size : int
+        Size of chunks to process at once (default: 1024)
+    """
+    # Define soil types with their sand and clay percentages
+    # Comes from the Saxton and Rawls default parameter file of
+    # PnET Succession 5.1, in C:\Program Files\LANDIS-II-v7\extensions\Defaults\SaxtonAndRawlsParameters.txt
+    soil_types = {
+        "SAND": (0.85, 0.04),
+        "LOSA": (0.80, 0.05),
+        "SALO": (0.63, 0.10),
+        "LOAM": (0.41, 0.19),
+        "SILO": (0.15, 0.18),
+        "SILT": (0.05, 0.10),
+        "SNCL": (0.53, 0.26),
+        "CLLO": (0.29, 0.32),
+        "SLCL": (0.09, 0.32),
+        "SACL": (0.50, 0.40),
+        "SICL": (0.08, 0.47),
+        "CLAY": (0.13, 0.55),
+        "BEDR": (0.10, 0.10)
+    }
+
+    # Convert soil types to a numpy array for efficient distance calculation
+    soil_types_array = np.array(list(soil_types.values()))
+    soil_type_names = list(soil_types.keys())
+
+    # Open all input files
+    print("Opening all files")
+    with rasterio.open(sand_path) as sand_src, \
+         rasterio.open(clay_path) as clay_src:
+
+        # Get dimensions and profile from sand raster
+        height = sand_src.height
+        width = sand_src.width
+        profile = sand_src.profile
+
+        # Update profile for output
+        profile.update(
+            dtype=rasterio.uint8,
+            count=1,
+            nodata=0
+        )
+
+        # Create output file
+        print("Creating output")
+        with rasterio.open(output_path, 'w', **profile) as dst:
+            # Process the raster in chunks
+            for row in range(0, height, chunk_size):
+                row_end = min(row + chunk_size, height)
+                chunk_height = row_end - row
+
+                for col in range(0, width, chunk_size):
+                    col_end = min(col + chunk_size, width)
+                    chunk_width = col_end - col
+
+                    # Define the window for the current chunk
+                    window = Window(col, row, chunk_width, chunk_height)
+
+                    # print("reading data for current chunk")
+                    # Read data for the current window
+                    sand_chunk = sand_src.read(1, window=window)
+                    clay_chunk = clay_src.read(1, window=window)
+
+                    # Create a mask for valid data
+                    valid_mask = ~(np.isnan(sand_chunk) | np.isnan(clay_chunk) )
+
+                    # Initialize output chunk with zeros
+                    soil_classification_chunk = np.zeros_like(sand_chunk, dtype=np.uint8)
+
+                    # Process only valid cells in the chunk
+                    if np.any(valid_mask):
+                        # Get valid cell coordinates
+                        valid_indices = np.where(valid_mask)
+
+                        
+                        # Stack sand and clay percentages for valid cells
+                        # We divide by 100 as the values in the raster are in %,
+                        # but the values in the soil matrix from saxton and rawls parameters
+                        # are in decimals
+                        soil_composition = np.vstack((
+                            sand_chunk[valid_indices]/100,
+                            clay_chunk[valid_indices]/100
+                        )).T
+                        # print("Soil composition object :")
+                        # print(soil_composition)
+
+                        # Calculate distances and find closest soil type
+                        distances = cdist(soil_composition, soil_types_array)
+                        # print("Distances object :")
+                        # print(distances)
+                        # The +1 here is because the function returns the index of
+                        # the soil texture from the data matrix that is closest to 
+                        # the given cell. However, indexes go from 0 to 11 (as there
+                        # are 12 soils textures), but the script creates codes ranging
+                        # from 1 to 12 to put in the raster. Hence th + 1.
+                        # It's also because 0 is often the nodata value in rasters.
+                        closest_soil_indices = np.argmin(distances, axis=1) + 1
+                        # print("Closets soil indices object :")
+                        # print(closest_soil_indices)
+
+                        # Assign soil type indices to output chunk
+                        soil_classification_chunk[valid_indices] = closest_soil_indices
+                        
+                        # input("Press Enter to continue...")
+
+                    # Write the chunk to the output file
+                    dst.write(soil_classification_chunk, 1, window=window)
+
+                    # print(f"Processed chunk: Row {row}-{row_end}, Col {col}-{col_end}")
+
+    # Print soil type codes for reference
+    print("\nSoil Type Codes:")
+    for i, soil_type in enumerate(soil_type_names, 1):
+        print(f"{i}: {soil_type}")
+
+    print(f"\nClassification complete. Output saved to: {output_path}")
+
+
+
+
+# =============================================================================
+# FUNCTION TO GET THE BOUNDS FOR EACH PARAMETERS WE WILL CALIBRATE (Notebook 4)
+# =============================================================================
+
+# Function to read the values taken from the litterature from the markdown table where they are
+import re
+import nbformat
+def parse_parameters_bounds_table(notebook_path: str, markdown_cell_number: int) -> dict:
+    """
+    Reads a markdown cell by its markdown-cell index (1-based, skipping
+    code/raw cells) from the given notebook, extracts the first markdown
+    table found, and returns a nested dict:
+        result[parameter_name][column_level] = [value1, value2, ...]
+
+    Parameters
+    ----------
+    notebook_path : str
+        Path to the .ipynb notebook file.
+    markdown_cell_number : int
+        1-based index counting only markdown cells.
+
+    Returns
+    -------
+    dict
+        Nested dictionary of parsed values, or {} on error.
+    """
+
+    # --- 1. Read the markdown cell ---
+    source = read_markdown_cell(notebook_path, markdown_cell_number)
+
+    if source is None:
+        print(f"[ERROR] Could not find markdown cell number {markdown_cell_number} "
+              f"in '{notebook_path}'.")
+        return {}
+
+    # --- 2. Extract the markdown table lines ---
+    lines = source.splitlines()
+    table_lines = []
+    in_table = False
+
+    for line in lines:
+        stripped = line.strip()
+        if re.match(r"^\|.*\|$", stripped):
+            in_table = True
+            table_lines.append(stripped)
+        else:
+            if in_table:
+                # Stop at the first non-table line after the table started
+                break
+
+    if len(table_lines) < 3:
+        print("[ERROR] No valid markdown table found in the cell "
+              "(need at least a header row, a separator row, and one data row).")
+        return {}
+
+    # --- 3. Validate separator row ---
+    separator = table_lines[1]
+    if not re.match(r"^\|[\s\-:|]+\|$", separator):
+        print(f"[ERROR] Row 1 does not look like a markdown table separator: "
+              f"'{separator}'")
+        return {}
+
+    # --- 4. Helper: split a markdown row into cells ---
+    def split_row(row: str) -> list:
+        return [cell.strip() for cell in row.strip("|").split("|")]
+
+    # --- 5. Parse header row ---
+    header_cells = split_row(table_lines[0])
+
+    if len(header_cells) < 3:
+        print(f"[ERROR] Table header has fewer than 3 columns: {header_cells}")
+        return {}
+
+    # Column 0 = parameter name, column 1 = description (ignored), rest = levels
+    levels = header_cells[2:]
+
+    # --- 6. Helper: extract numeric values from a cell string ---
+    def extract_values(cell_text: str) -> list:
+        """
+        Strips citation markers ([^N] or [N]) and splits on commas,
+        returning a list of floats (or strings if not numeric).
+        Empty cells return [].
+        """
+        cleaned = re.sub(r"\[\^?\d+\]", "", cell_text)
+        parts = [p.strip() for p in cleaned.split(",")]
+        values = [p for p in parts if p]
+        result = []
+        for v in values:
+            try:
+                result.append(float(v))
+            except ValueError:
+                result.append(v)
+        return result
+
+    # --- 7. Parse data rows ---
+    result = {}
+
+    for row_line in table_lines[2:]:  # skip header and separator
+        row_cells = split_row(row_line)
+
+        if len(row_cells) < 2:
+            print(f"[WARNING] Skipping malformed row: '{row_line}'")
+            continue
+
+        param_name = row_cells[0]
+
+        if not param_name:
+            print(f"[WARNING] Skipping row with empty parameter name: '{row_line}'")
+            continue
+
+        # Pad row if it has fewer columns than the header
+        while len(row_cells) < len(header_cells):
+            row_cells.append("")
+
+        result[param_name] = {}
+        for i, level in enumerate(levels):
+            col_index = i + 2  # offset: skip param name + description
+            cell_text = row_cells[col_index] if col_index < len(row_cells) else ""
+            result[param_name][level] = extract_values(cell_text)
+
+    return result
+
+
+# Functions to compute the bounds for each parameters depending on the list of values 
+# If we don't have a lot of values, or for missing values, we compute bounds
+# based on informations from other cells
+import numpy as np
+from typing import Union
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+def detect_characteristic_type(level_keys: list) -> str:
+    """Detect 'ordinal' (>2 levels) or 'binary' (exactly 2 levels)."""
+    return "binary" if len(level_keys) == 2 else "ordinal"
+
+
+def build_level_scores(level_keys: list) -> dict:
+    """Map each level key to a numeric score from 1.0 to N."""
+    return {key: float(i + 1) for i, key in enumerate(level_keys)}
+
+
+def compute_pooled_std(level_data: dict) -> float:
+    """Pooled sample std across all levels."""
+    all_values = [v for vals in level_data.values() for v in vals]
+    return float(np.std(all_values, ddof=1)) if len(all_values) >= 2 else 0.0
+
+
+def fit_trend(level_data: dict, level_scores: dict, min_n: int = 3) -> Union[tuple, None]:
+    """
+    Fit a linear regression (level_score -> mean_value) using only
+    levels with at least `min_n` observations.
+
+    Returns (slope, intercept) or None if fewer than 2 qualifying levels.
+    """
+    xs, ys = [], []
+    for level, values in level_data.items():
+        if len(values) >= min_n:
+            xs.append(level_scores[level])
+            ys.append(float(np.mean(values)))
+
+    if len(xs) < 2:
+        return None
+
+    slope, intercept = np.polyfit(np.array(xs), np.array(ys), 1)
+    return float(slope), float(intercept)
+
+
+# ---------------------------------------------------------------------------
+# Core bound computation
+# ---------------------------------------------------------------------------
+def compute_bounds_for_level(
+    values: list,
+    level,
+    char_type: str,
+    level_data: dict,
+    level_scores: dict,
+    pooled_std: float,
+    trend: Union[tuple, None],
+    expansion_factor: float = 0.5,
+) -> dict:
+    """
+    Compute (lower, upper) bounds for a single parameter-level combination.
+
+    Rules:
+        n >= 10  : empirical 5th–95th percentile
+        3–9      : empirical range ± expansion_factor * pooled_std
+        1–2      : extrapolated/borrowed mean ± pooled_std
+        0        : extrapolated/borrowed mean ± pooled_std
+    """
+    n = len(values)
+    result = {"n": n, "method": None, "lower": None, "upper": None}
+
+    def _fallback_center() -> tuple[float, str]:
+        if char_type == "ordinal" and trend is not None:
+            slope, intercept = trend
+            score = level_scores[level]
+            center = slope * score + intercept
+            return center, "extrapolated_trend"
+        else:
+            other_values = [
+                v for k, v_list in level_data.items()
+                if k != level for v in v_list
+            ]
+            if other_values:
+                return float(np.mean(other_values)), "borrowed_mean"
+            all_values = [v for vals in level_data.values() for v in vals]
+            return (float(np.mean(all_values)) if all_values else float("nan")), "global_mean"
+
+    if n >= 10:
+        result["method"] = "empirical_percentile"
+        result["lower"] = float(np.percentile(values, 5))
+        result["upper"] = float(np.percentile(values, 95))
+
+    elif 3 <= n <= 9:
+        result["method"] = "empirical_expanded"
+        result["lower"] = float(np.min(values)) - expansion_factor * pooled_std
+        result["upper"] = float(np.max(values)) + expansion_factor * pooled_std
+
+    elif 1 <= n <= 2:
+        center, label = _fallback_center()
+        result["method"] = f"{label}_pooled_std (n=1-2)"
+        result["lower"] = center - pooled_std
+        result["upper"] = center + pooled_std
+
+    else:  # n == 0
+        center, label = _fallback_center()
+        result["method"] = f"{label}_pooled_std (n=0)"
+        if np.isnan(center):
+            result["lower"] = None
+            result["upper"] = None
+        else:
+            result["lower"] = center - pooled_std
+            result["upper"] = center + pooled_std
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# Main entry point
+# ---------------------------------------------------------------------------
+def compute_all_bounds(
+    data: dict,
+    expansion_factor: float = 0.5,
+    trend_min_n: int = 3,
+    verbose: bool = False,
+) -> dict:
+    """
+    Compute bounds for all parameters and their characteristic levels.
+
+    Parameters
+    ----------
+    data : dict
+        Nested dict: {param_name: {level_key: [values]}}
+        Level keys can be any type (strings, ints, etc.); their order
+        in the dict defines their ordinal score (first = 1, last = N).
+    expansion_factor : float
+        Multiplier for pooled std when expanding sparse empirical ranges.
+    trend_min_n : int
+        Minimum observations per level to include that level in the
+        trend regression.
+    verbose : bool
+        If True, print a summary table of results after computation.
+
+    Returns
+    -------
+    dict
+        Nested dict: {param_name: {level_key: {n, method, lower, upper,
+                                               characteristic_type,
+                                               level_score, trend}}}
+    """
+    results = {}
+
+    for param, level_data in data.items():
+        level_keys = list(level_data.keys())
+        char_type = detect_characteristic_type(level_keys)
+        level_scores = build_level_scores(level_keys)
+        pooled_std = compute_pooled_std(level_data)
+        trend = (
+            fit_trend(level_data, level_scores, min_n=trend_min_n)
+            if char_type == "ordinal"
+            else None
+        )
+
+        results[param] = {}
+        for level, values in level_data.items():
+            bounds = compute_bounds_for_level(
+                values=values,
+                level=level,
+                char_type=char_type,
+                level_data=level_data,
+                level_scores=level_scores,
+                pooled_std=pooled_std,
+                trend=trend,
+                expansion_factor=expansion_factor,
+            )
+            bounds["characteristic_type"] = char_type
+            bounds["level_score"] = level_scores[level]
+            if trend is not None:
+                bounds["trend"] = {"slope": trend[0], "intercept": trend[1]}
+            results[param][level] = bounds
+
+    if verbose:
+        for param, levels in results.items():
+            print(f"\n=== {param} ===")
+            for level, info in levels.items():
+                trend_str = ""
+                if "trend" in info:
+                    t = info["trend"]
+                    trend_str = f" | slope={t['slope']:.3f}, intercept={t['intercept']:.3f}"
+                lo = f"{info['lower']:.3f}" if info["lower"] is not None else "None"
+                hi = f"{info['upper']:.3f}" if info["upper"] is not None else "None"
+                print(
+                    f"  Level {str(level):>20} (score={info['level_score']:.0f}) | "
+                    f"n={info['n']:>2} | "
+                    f"method={info['method']:<40} | "
+                    f"bounds=[{lo}, {hi}]"
+                    f"{trend_str}"
+                )
+
+    return results
+
+
+# =============================================================================
+# FUNCTIONS TO CREATE THE GROWTH CURVES WITH GAMS BASED ON NFI DATA (Notebook 4)
+# =============================================================================
+# I've lost these functions because of a bug : createPercentilesBiomassDatasetsFromNFIData
+# and getGamDiagnostics.
+# I'm going to try to make them again, because they're needed.
+
+import numpy as np
+import pandas as pd
+import geopandas as gpd
+import rasterio
+from rasterio.mask import mask as rasterio_mask
+from rasterio.features import geometry_mask
+from shapely.ops import unary_union
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+def createPercentilesBiomassDatasetsFromNFIData(
+    abundance_raster_path,
+    age_raster_path,
+    biomass_raster_path,
+    speciesName,
+    study_landscape_shp_path,
+    canadian_ecozones_shp_path,
+    age_window=5,
+    abundance_window=5,
+    percentile=100,
+    mask_path=None,
+    printPlot=False
+):
+    # ------------------------------------------------------------------
+    # 1. Load shapefiles and reproject to raster CRS
+    # ------------------------------------------------------------------
+    with rasterio.open(abundance_raster_path) as src:
+        raster_crs = src.crs
+        raster_transform = src.transform
+        raster_shape = (src.height, src.width)
+        raster_nodata = src.nodata
+
+    study_landscape = gpd.read_file(study_landscape_shp_path).to_crs(raster_crs)
+    ecozones = gpd.read_file(canadian_ecozones_shp_path).to_crs(raster_crs)
+
+    study_geom = unary_union(study_landscape.geometry)
+    intersects_mask = ecozones.geometry.intersects(study_geom)
+    study_ecozones = ecozones[intersects_mask]
+    study_ecozones_union = unary_union(study_ecozones.geometry)
+
+    surrounding_mask = ecozones.geometry.intersects(study_ecozones_union) & ~intersects_mask
+    surrounding_ecozones = ecozones[surrounding_mask]
+    surrounding_union = unary_union(
+        pd.concat([study_ecozones, surrounding_ecozones]).geometry
+    )
+    canada_union = unary_union(ecozones.geometry)
+
+    masks = {
+        'study_landscape': study_geom,
+        'ecozone': study_ecozones_union,
+        'surrounding_ecozones': surrounding_union,
+        'canada': canada_union,
+    }
+
+    # ------------------------------------------------------------------
+    # 2. Helper: extract valid pixel triplets within a geometry
+    #    Opens all 3 rasters once, clips to bounding box, applies
+    #    geometry mask — avoids loading full rasters into RAM.
+    # ------------------------------------------------------------------
+    def extract_valid_pixels(geom):
+        geom_geojson = [geom.__geo_interface__]
+
+        with rasterio.open(abundance_raster_path) as src_a, \
+             rasterio.open(age_raster_path) as src_ag, \
+             rasterio.open(biomass_raster_path) as src_b:
+
+            # Crop each raster to geometry bounding box
+            abund_arr, abund_tf = rasterio_mask(src_a,  geom_geojson, crop=True, nodata=src_a.nodata)
+            age_arr,   _        = rasterio_mask(src_ag, geom_geojson, crop=True, nodata=src_ag.nodata)
+            bio_arr,   _        = rasterio_mask(src_b,  geom_geojson, crop=True, nodata=src_b.nodata)
+
+            abund_nd = src_a.nodata
+            age_nd   = src_ag.nodata
+            bio_nd   = src_b.nodata
+
+            # Build pixel-level geometry mask (True = inside geometry)
+            geom_msk = geometry_mask(
+                geom_geojson,
+                transform=abund_tf,
+                invert=True,
+                out_shape=abund_arr.shape[1:]
+            )
+
+        abund = abund_arr[0].astype(np.float32)
+        age   = age_arr[0].astype(np.float32)
+        bio   = bio_arr[0].astype(np.float32)
+
+        # Mask nodata
+        valid = geom_msk.copy()
+        if abund_nd is not None:
+            valid &= (abund != abund_nd)
+        if age_nd is not None:
+            valid &= (age != age_nd)
+        if bio_nd is not None:
+            valid &= (bio != bio_nd)
+
+        # Keep only positive/meaningful values
+        valid &= (abund > 0) & (age > 0) & (bio >= 0)
+
+        # Return only valid pixels — discard the rest immediately
+        return age[valid], abund[valid], bio[valid]
+
+    # ------------------------------------------------------------------
+    # 3. Helper: build windowed percentile dataframe
+    # ------------------------------------------------------------------
+    def build_windowed_df(age_vals, abundance_vals, biomass_vals):
+        print("Creating windowed dataframe...")
+
+        # EDIT HERE : we change it so that it is in g/m2 instead of tons/hectares,
+        # because LANDIS-II gives us g/m2.
+        # To switch, we multiply by 100.
+        species_biomass = (abundance_vals * biomass_vals / 100.0) * 100
+
+        age_max   = age_vals.max()
+        abund_max = abundance_vals.max()
+
+        age_bins   = np.arange(0, age_max   + age_window,   age_window)
+        abund_bins = np.arange(0, abund_max + abundance_window, abundance_window)
+
+        # Digitize is faster than pd.cut for large arrays
+        age_idx   = np.digitize(age_vals,   age_bins)   - 1
+        abund_idx = np.digitize(abundance_vals, abund_bins) - 1
+
+        # Clip indices to valid range
+        age_idx   = np.clip(age_idx,   0, len(age_bins)   - 2)
+        abund_idx = np.clip(abund_idx, 0, len(abund_bins) - 2)
+
+        # Combine into a single integer key for groupby
+        n_abund_bins = len(abund_bins) - 1
+        combined_key = age_idx * n_abund_bins + abund_idx
+
+        # Sort once for efficient grouping
+        sort_order  = np.argsort(combined_key)
+        sorted_keys = combined_key[sort_order]
+        sorted_bio  = species_biomass[sort_order]
+
+        unique_keys, first_idx, counts = np.unique(
+            sorted_keys, return_index=True, return_counts=True
+        )
+
+        records = []
+        for k, fi, cnt in zip(unique_keys, first_idx, counts):
+            group_bio = sorted_bio[fi:fi + cnt]
+            p_val     = np.percentile(group_bio, percentile)
+            a_idx     = k // n_abund_bins
+            ab_idx    = k  % n_abund_bins
+            records.append({
+                'age':               age_bins[a_idx]   + age_window   / 2,
+                'abundance':         abund_bins[ab_idx] + abundance_window / 2,
+                'biomass_percentile': p_val
+            })
+
+        if not records:
+            return pd.DataFrame(columns=['age', 'abundance', 'biomass_percentile'])
+
+        result_df = pd.DataFrame(records)
+
+        # Monotonic abundance constraint
+        kept_rows = []
+        for age_b in sorted(result_df['age'].unique()):
+            age_subset = result_df[result_df['age'] == age_b].sort_values('abundance')
+            max_so_far = -np.inf
+            for _, row in age_subset.iterrows():
+                if row['biomass_percentile'] >= max_so_far:
+                    max_so_far = row['biomass_percentile']
+                    kept_rows.append(row)
+
+        result_df = pd.DataFrame(kept_rows).reset_index(drop=True)
+        print(f"Applied monotonic abundance constraint - kept {len(result_df)} entries")
+        return result_df
+
+    # ------------------------------------------------------------------
+    # 4. Main loop
+    # ------------------------------------------------------------------
+    print("Creating initial dataframes for each mask...")
+    result_dict = {}
+
+    for mask_name, geom in masks.items():
+        print(f"Dealing with mask : {mask_name}\n")
+        age_vals, abundance_vals, biomass_vals = extract_valid_pixels(geom)
+        result_dict[mask_name] = build_windowed_df(age_vals, abundance_vals, biomass_vals)
+
+    print("\n===============")
+
+    # ------------------------------------------------------------------
+    # 5. Optional plot
+    # ------------------------------------------------------------------
+    if printPlot:
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        axes = axes.flatten()
+        for idx, (mask_name, df) in enumerate(result_dict.items()):
+            ax = axes[idx]
+            if df.empty:
+                ax.set_title(f"{mask_name} (no data)")
+                continue
+            sc = ax.scatter(
+                df['age'], df['biomass_percentile'],
+                c=df['abundance'], cmap='RdYlGn',
+                vmin=0, vmax=100, alpha=0.7,
+                edgecolors='k', linewidths=0.3
+            )
+            plt.colorbar(sc, ax=ax, label='% Abundance')
+            ax.set_xlabel('Forest Age (years)')
+            ax.set_ylabel(f'Biomass (Percentile {percentile}) in g/m2')
+            ax.set_title(f'{speciesName} — {mask_name}')
+        plt.tight_layout()
+        plt.show()
+
+    return result_dict
+
+
+import numpy as np
+import pandas as pd
+import json
+import os
+from pygam import LinearGAM, s, te
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import warnings
+warnings.filterwarnings('ignore')
+def getGamDiagnostics(
+    dictOfPointsSubsets,
+    speciesName,
+    exportCsvOfSelectedCurve_Path,
+    printPlot=False,
+    dictionnaryOfSelectedCurves=None
+):
+    """
+    Fits a GAM on each mask's dataframe from createPercentilesBiomassDatasetsFromNFIData,
+    computes diagnostics for the 100% abundance prediction curve, selects the best
+    mask, exports the predictions CSV and updates the JSON dictionary.
+
+    Parameters
+    ----------
+    dictOfPointsSubsets             : output dict from createPercentilesBiomassDatasetsFromNFIData
+    speciesName                     : species name string
+    exportCsvOfSelectedCurve_Path   : path to export the predictions CSV
+    printPlot                       : if True, plots GAM curves for all masks
+    dictionnaryOfSelectedCurves     : path to the JSON file tracking selected masks per species
+    """
+
+    mask_order = ['study_landscape', 'ecozone', 'surrounding_ecozones', 'canada']
+    abundance_levels = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
+
+    # ------------------------------------------------------------------
+    # 1. Fit GAM and compute diagnostics for each mask
+    # ------------------------------------------------------------------
+    fitted_gams   = {}
+    age_arrays    = {}
+    diagnostics   = {}
+
+    print("=" * 80)
+    print("GAM 100% Abundance Curve Diagnostics")
+    print("=" * 80)
+
+    for mask_name in mask_order:
+        df = dictOfPointsSubsets.get(mask_name)
+        if df is None or df.empty:
+            continue
+
+        X = df[['age', 'abundance']].values
+        y = df['biomass_percentile'].values
+
+        # GAM: s(age, by=abundance) + s(abundance, by=age) + s(age) + s(abundance)
+        # All splines constrained to be concave (constraint='concave')
+        gam = LinearGAM(
+            s(0, by=1, constraints='concave') +
+            s(1, by=0, constraints='concave') +
+            s(0, constraints='concave') +
+            s(1, constraints='concave')
+        ).fit(X, y)
+
+        fitted_gams[mask_name] = gam
+
+        # Age range for prediction (same resolution as example CSV)
+        age_min  = df['age'].min()
+        age_max  = df['age'].max()
+        age_pred = np.linspace(age_min, age_max, 180)
+        age_arrays[mask_name] = age_pred
+
+        # 100% abundance prediction curve
+        X_pred_100 = np.column_stack([age_pred, np.full_like(age_pred, 100.0)])
+        pred_100   = gam.predict(X_pred_100)
+
+        # --- Pseudo R² ---
+        pseudo_r2 = gam.statistics_['pseudo_r2']['explained_deviance']
+
+        # --- Peak age and biomass ---
+        peak_idx     = np.argmax(pred_100)
+        peak_age     = age_pred[peak_idx]
+        peak_biomass = pred_100[peak_idx]
+
+        # --- % negative biomass ---
+        pct_negative = 100.0 * np.sum(pred_100 < 0) / len(pred_100)
+
+        # --- Concavity: % decrease after peak ---
+        post_peak    = pred_100[peak_idx:]
+        if len(post_peak) > 1:
+            pct_decrease = 100.0 * (post_peak[0] - post_peak[-1]) / post_peak[0] if post_peak[0] != 0 else 0.0
+        else:
+            pct_decrease = 0.0
+
+        # --- Is truly concave: second derivative < 0 everywhere after age 0 ---
+        is_concave = bool(np.all(np.diff(pred_100[:peak_idx + 1]) >= 0) and np.all(np.diff(pred_100[peak_idx:]) <= 0))
+
+        # --- Max observed biomass in mask ---
+        max_obs_biomass = df['biomass_percentile'].max()
+
+        # --- % points above 40% abundance ---
+        pct_above_40 = 100.0 * np.sum(df['abundance'] > 40) / len(df)
+
+        # --- Validity ---
+        is_valid = (pseudo_r2 > 0.85) and is_concave and (pct_negative < 20.0)
+
+        diagnostics[mask_name] = {
+            'Pseudo_R2':               round(pseudo_r2,       6),
+            'Peak_Age':                round(peak_age,        6),
+            'Peak_Biomass':            round(peak_biomass,    6),
+            'Pct_Negative_Biomass':    round(pct_negative,    1),
+            'Concavity_Pct_Decrease':  round(pct_decrease,    6),
+            'Is_Truly_Concave':        is_concave,
+            'Max_Observed_Biomass':    round(max_obs_biomass, 6),
+            'Pct_Above_40_Abundance':  round(pct_above_40,    6),
+            'Is_Valid':                is_valid,
+        }
+
+    diag_df = pd.DataFrame(diagnostics).T
+    diag_df.index.name = 'Mask'
+
+    # Reorder rows to match mask_order
+    diag_df = diag_df.reindex([m for m in mask_order if m in diag_df.index])
+
+    # Split display into column groups of 4 as in the example output
+    all_cols   = list(diag_df.columns)
+    col_groups = [all_cols[i:i+4] for i in range(0, len(all_cols), 4)]
+
+    for gi, group in enumerate(col_groups):
+        print(f"\nColumns {gi*4+1}-{min((gi+1)*4, len(all_cols))}:")
+        print(diag_df[group].to_string())
+        print("-" * 80)
+
+    print("=" * 80)
+
+    # ------------------------------------------------------------------
+    # 6. Optional plot
+    # ------------------------------------------------------------------
+    if printPlot:
+        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+        axes = axes.flatten()
+        cmap = cm.get_cmap('RdYlGn')
+
+        for idx, mask_name in enumerate(mask_order):
+            if mask_name not in fitted_gams:
+                continue
+            ax       = axes[idx]
+            gam_m    = fitted_gams[mask_name]
+            age_p    = age_arrays[mask_name]
+            df       = dictOfPointsSubsets[mask_name]
+
+            # Scatter of data points coloured by abundance
+            sc = ax.scatter(
+                df['age'], df['biomass_percentile'],
+                c=df['abundance'], cmap='RdYlGn',
+                vmin=0, vmax=100, alpha=0.5,
+                edgecolors='k', linewidths=0.2, s=20, label='Data'
+            )
+            plt.colorbar(sc, ax=ax, label='% Abundance')
+
+            # GAM curves for each abundance level
+            for abund in abundance_levels:
+                X_p   = np.column_stack([age_p, np.full_like(age_p, float(abund))])
+                p     = gam_m.predict(X_p)
+                color = cmap(abund / 100.0)
+                lw    = 2.5 if abund == 100 else 1.0
+                ax.plot(age_p, p, color=color, linewidth=lw,
+                        label=f'{abund}%' if abund == 100 else None)
+
+            ax.axhline(0, color='grey', linestyle='--', linewidth=0.8)
+            ax.set_xlabel('Forest Age (years)')
+            ax.set_ylabel(f'Species Biomass (Percentile) in g/m2')
+            valid_str = '✓ Valid' if diagnostics[mask_name]['Is_Valid'] else '✗ Invalid'
+            ax.set_title(f'{speciesName} — {mask_name}\n'
+                         f'R²={diagnostics[mask_name]["Pseudo_R2"]:.3f}  {valid_str}')
+
+        plt.suptitle(f'GAM Diagnostics — {speciesName}', fontsize=14, fontweight='bold')
+        plt.tight_layout()
+        plt.show()
+    
+    # ------------------------------------------------------------------
+    # 2. Select best mask
+    # ------------------------------------------------------------------
+    valid_masks = [m for m in mask_order if m in diagnostics and diagnostics[m]['Is_Valid']]
+
+    selected_mask = None
+    selection_reason = None
+
+    if valid_masks:
+        # Among valid masks, prefer those whose peak age and peak biomass
+        # are within 20% of the average across valid masks
+        valid_peak_ages    = [diagnostics[m]['Peak_Age']    for m in valid_masks]
+        valid_peak_biomass = [diagnostics[m]['Peak_Biomass'] for m in valid_masks]
+        avg_peak_age       = np.mean(valid_peak_ages)
+        avg_peak_biomass   = np.mean(valid_peak_biomass)
+
+        for mask_name in mask_order:  # smallest first
+            if mask_name not in valid_masks:
+                continue
+            d = diagnostics[mask_name]
+            age_ok     = abs(d['Peak_Age']    - avg_peak_age)    <= 0.20 * avg_peak_age
+            biomass_ok = abs(d['Peak_Biomass'] - avg_peak_biomass) <= 0.20 * avg_peak_biomass
+            if age_ok and biomass_ok:
+                selected_mask    = mask_name
+                selection_reason = (
+                    f"  - Curve is valid (R² > 0.85, truly concave, <20% negative values)\n"
+                    f"  - Peak age within 20% of average ({avg_peak_age:.2f} years)\n"
+                    f"  - Peak biomass within 20% of average ({avg_peak_biomass:.2f})"
+                )
+                break
+
+        # Fallback: just pick the smallest valid mask
+        if selected_mask is None:
+            selected_mask    = valid_masks[0]
+            selection_reason = "  - Smallest valid mask (peak age/biomass outside 20% window)"
+
+    else:
+        # No valid curve — let user choose
+        print("\nNo valid curve found. Diagnostics summary:")
+        print(diag_df.to_string())
+        print("\nAvailable masks:", mask_order)
+        user_choice = input("Please select a mask manually: ").strip()
+        selected_mask    = user_choice if user_choice in diagnostics else mask_order[0]
+        selection_reason = "  - Manually selected by user (no valid curve found)"
+
+    # ------------------------------------------------------------------
+    # 3. Print selection summary
+    # ------------------------------------------------------------------
+    print("\n" + "=" * 80)
+    print("BEST CURVE SELECTION")
+    print("=" * 80)
+    print(f"\nSelected Mask: {selected_mask}")
+    print(f"\nReason for Selection:\n{selection_reason}")
+    print(f"\nDiagnostics for Selected Curve:")
+    print("-" * 80)
+    for group in col_groups:
+        print(diag_df.loc[[selected_mask], group].to_string())
+        print()
+    print("=" * 80)
+
+    # ------------------------------------------------------------------
+    # 4. Export predictions CSV for selected mask
+    # ------------------------------------------------------------------
+    gam_selected  = fitted_gams[selected_mask]
+    age_pred_sel  = age_arrays[selected_mask]
+
+    csv_data = {'Age': age_pred_sel}
+    for abund in abundance_levels:
+        X_pred = np.column_stack([age_pred_sel, np.full_like(age_pred_sel, float(abund))])
+        preds  = gam_selected.predict(X_pred)
+        csv_data[f'GAM_Prediction_{abund}%Abundance'] = preds
+
+    pred_df = pd.DataFrame(csv_data)
+    os.makedirs(os.path.dirname(exportCsvOfSelectedCurve_Path), exist_ok=True)
+    pred_df.to_csv(exportCsvOfSelectedCurve_Path, index=False)
+
+    # ------------------------------------------------------------------
+    # 5. Update JSON dictionary of selected curves
+    # ------------------------------------------------------------------
+    if dictionnaryOfSelectedCurves is not None:
+        if os.path.exists(dictionnaryOfSelectedCurves):
+            with open(dictionnaryOfSelectedCurves, 'r') as f:
+                existing = json.load(f)
+        else:
+            existing = {}
+        existing[speciesName] = selected_mask
+        with open(dictionnaryOfSelectedCurves, 'w') as f:
+            json.dump(existing, f, indent=None)
+
+
+    return {"Peak_age" : diag_df.at[selected_mask, 'Peak_Age'],
+           "Peak_Biomass" : diag_df.at[selected_mask, 'Peak_Biomass']}
 
 
 def plottingNFISpeciesUpperBiomassByProvince(species_path,
@@ -3846,6 +4041,7 @@ def plottingNFISpeciesUpperBiomassByProvince(species_path,
     plt.tight_layout()
     # plt.savefig('age_vs_abies_biomass.png', dpi=300)
     plt.show()
+
 
 def process_NFI_rasters_to_arraysForPlot(species_data, age_data, biomass_data, mask_path=None, thresholdMaximumBiomass=0.90, thresholdMinimumPercentBiomass = 0, verbose = False):
     """
@@ -4067,6 +4263,7 @@ def processNFI_RastersIntoDataFrameForGAM(age_raster_path, biomass_raster_path, 
     print(f"Generated final dataframe with {len(result_df)} rows")
 
     return result_df
+
 
 def analyze_species_growth_curves(
     prevalence_raster_path,
@@ -4620,6 +4817,7 @@ def analyze_species_growth_curves(
         'n_pixels_processed': len(age_clean),
         'output_csv_path': output_csv_path
     }
+
 
 def prepareNFIDataForGAMs(abundance_path,
                           age_path,
@@ -5237,85 +5435,6 @@ def createGAMsAndPredictionsForNFIDataGrowthCurves(windowed_df,
         export_df = export_predictions_to_csv(pred_ages, pred_biomass_dict, abundance_levels, 
                                              filename= csvOutputName)
 
-def plotNFICurvesFromGAMAndFromAlgorithmTogether(pathOfCsvFileWithGAMPredictions,
-                                                 pathOfCsvFileWithAlgorithmPrediction):
-    """
-    Compare and visualize forest growth curves from GAM predictions (generated by the function
-    createGAMsAndPredictionsForNFIData) and algorithm predictions (generated by analyze_species_growth_curves).
-
-    This function creates a comparative plot displaying biomass growth curves generated by two
-    different methods: Generalized Additive Models (GAM) and an alternative algorithm. The plot
-    allows visual comparison of prediction methods for forest biomass estimation across different
-    abundance levels and age ranges.
-
-    Parameters
-    ----------
-    pathOfCsvFileWithGAMPredictions : str
-        File path to CSV containing GAM prediction curves. Expected structure:
-        - First column: Age values (years)
-        - Subsequent columns: Biomass predictions for different abundance levels
-          (e.g., 'GAM_Prediction_100%Abundance', 'GAM_Prediction_80%Abundance', etc.)
-    pathOfCsvFileWithAlgorithmPrediction : str
-        File path to CSV containing algorithm prediction curves. Expected structure:
-        - First column: Age values (years)
-        - Subsequent columns: Various prediction outputs, including columns with 'smoothed'
-          in their names which will be plotted
-
-    Returns
-    -------
-    None
-        The function generates and displays a matplotlib plot but does not return values.
-
-    Plot Features
-    -------------
-    - **GAM Curves**: Plotted as solid lines using viridis colormap (purple to yellow)
-    - **Algorithm Curves**: Plotted as dashed lines using inverted viridis colormap (yellow to purple;
-    inverted as the column names are inverted for this one, because of how previous functions are written.)
-    - **Selective Plotting**: Only plots 'smoothed' columns from the algorithm predictions, avoiding the raw curves. 
-    - **Grid**: Light grid overlay for easier value reading
-    """
-
-    # Read the two CSV files
-    pathOfCsvFileWithGAMPredictions = pd.read_csv(pathOfCsvFileWithGAMPredictions)
-    pathOfCsvFileWithAlgorithmPrediction = pd.read_csv(pathOfCsvFileWithAlgorithmPrediction)
-    
-    # Create the plot
-    plt.figure(figsize=(12, 8))
-    
-    # Get age column (assuming first column is age)
-    age_col1 = pathOfCsvFileWithGAMPredictions.iloc[:, 0]
-    age_col2 = pathOfCsvFileWithAlgorithmPrediction.iloc[:, 0]
-    
-    # Plot curves from first CSV file
-    biomass_cols1 = pathOfCsvFileWithGAMPredictions.columns[1:]  # All columns except age
-    n_curves1 = len(biomass_cols1)
-    viridis_colors1 = plt.cm.viridis(np.linspace(0, 1, n_curves1))
-    
-    for i, col in enumerate(biomass_cols1):
-        plt.plot(age_col1, pathOfCsvFileWithGAMPredictions[col], color=viridis_colors1[i], label=col, linewidth=2)
-    
-    # Plot curves from second CSV file (only "Smoothed" columns)
-    smoothed_cols = [col for col in pathOfCsvFileWithAlgorithmPrediction.columns[1:] if 'smoothed' in col]
-    n_curves2 = len(smoothed_cols)
-    
-    if n_curves2 > 0:
-        # Inverted viridis palette (yellow to purple)
-        viridis_colors2 = plt.cm.viridis(np.linspace(1, 0, n_curves2))
-    
-        for i, col in enumerate(smoothed_cols):
-            plt.plot(age_col2, pathOfCsvFileWithAlgorithmPrediction[col], color=viridis_colors2[i], 
-                    label=col, linestyle='--', linewidth=2)
-    
-    # Customize the plot
-    plt.xlabel('Age')
-    plt.ylabel('Biomass')
-    plt.title('Biomass vs Age Curves from GAM (solid) and from algorithm (Dashed) - Abies balsamea')
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    plt.show()
-
-
 
 def plot_species_biomass_age_comparison(prevalence_path, age_path, biomass_path, 
                                         mask1_path, mask2_path, species_name):
@@ -5482,779 +5601,13 @@ def plot_species_biomass_age_comparison(prevalence_path, age_path, biomass_path,
     return n_mask1, n_mask2
 
 
-def extract_try_traits(filepath, encoding='latin-1'):
-    """
-    Extract plant functional trait data from TRY database file into a nested dictionary.
 
-    Parameters
-    ----------
-    filepath : str
-        Path to the TRY database text file (tab-separated format).
-    encoding : str, optional
-        Character encoding of the file. Default is 'latin-1'.
-        Common alternatives: 'utf-8', 'iso-8859-1', 'cp1252'.
 
-    Returns
-    -------
-    dict
-        Nested dictionary with structure:
-        {species_name: {trait_name: [list of trait values]}}
-        where species_name is from AccSpeciesName column,
-        trait_name is from TraitName column,
-        and values are from OrigValueStr column.
-
-    Notes
-    -----
-    The string "none" is preserved as a valid trait value and not treated as missing data.
-
-    Examples
-    --------
-    >>> data = extract_try_traits('try_data.txt')
-    >>> data['Quercus robur']['Leaf area']
-    ['45.2', '52.1', '48.7']
-
-    >>> data = extract_try_traits('try_data.txt', encoding='utf-8')
-    """
-    # Read tab-separated file with specified encoding
-    # keep_default_na=False prevents "none" from being converted to NaN
-    df = pd.read_csv(filepath, sep='\t', encoding=encoding, 
-                     keep_default_na=False, na_values=['nan', 'NaN'], low_memory=False)
-
-    # Remove rows with missing TraitName (empty strings after our na_values setting)
-    df = df[df['TraitName'] != '']
-
-    # Initialize nested dictionary with automatic list creation
-    trait_dict = defaultdict(lambda: defaultdict(list))
-
-    # Populate the nested dictionary
-    for _, row in df.iterrows():
-        species = row['AccSpeciesName']
-        trait = row['TraitName']
-        value = row['OrigValueStr']
-
-        trait_dict[species][trait].append(value)
-
-    # Convert to regular dict for cleaner output
-    return {species: dict(traits) for species, traits in trait_dict.items()}
-
-def average_tolerance_traits(trait_dict):
-    """
-    Calculate average tolerance trait values for each species from TRY trait dictionary.
-
-    Parameters
-    ----------
-    trait_dict : dict
-        Nested dictionary from extract_try_traits() with structure:
-        {species_name: {trait_name: [list of trait values]}}
-        Made by extract_try_traits().
-
-    Returns
-    -------
-    dict
-        Dictionary with structure:
-        {species_name: {trait_name: average_value}}
-        containing only tolerance traits with numeric averages.
-
-    Notes
-    -----
-    Conversion rules for trait values:
-    - Numeric 1-5: kept as is
-    - 0 or "none"/"no": converted to 1
-    - "low": converted to 1.5
-    - "medium": converted to 2.5
-    - "tolerant": converted to 3.5
-    - Values > 5: capped at 5
-    - Unrecognized values: ignored and reported
-
-    Examples
-    --------
-    >>> raw_data = extract_try_traits('try_data.txt')
-    >>> avg_data = average_tolerance_traits(raw_data)
-    >>> avg_data['Quercus robur']['Waterlogging tolerance']
-    2.75
-    """
-    # Mapping for text values to numeric scores
-    value_mapping = {
-        'none': 1,
-        'no': 1,
-        'low': 1.5,
-        'medium': 2.5,
-        'tolerant': 3.5,
-        'intolerant': 1.5,
-        'late-successional': 3.5
-    }
-
-    result_dict = {}
-    ignored_values = set()
-
-    for species, traits in trait_dict.items():
-        species_tolerances = {}
-
-        for trait_name, values in traits.items():
-            # Only process traits with "tolerance" in the name
-            if 'tolerance' not in trait_name.lower():
-                continue
-
-            numeric_values = []
-
-            for value in values:
-                # Convert to string and lowercase for consistent processing
-                value_str = str(value).strip().lower()
-
-                # Try to convert to float first
-                try:
-                    num_value = float(value_str)
-
-                    # Apply conversion rules
-                    if num_value == 0:
-                        numeric_values.append(1)
-                    elif num_value > 5:
-                        numeric_values.append(5)
-                    else:
-                        numeric_values.append(num_value)
-
-                except ValueError:
-                    # Handle text values
-                    if value_str in value_mapping:
-                        numeric_values.append(value_mapping[value_str])
-                    else:
-                        # Ignore and track unrecognized values
-                        ignored_values.add(value)
-
-            # Calculate average if we have valid numeric values
-            if numeric_values:
-                species_tolerances[trait_name] = sum(numeric_values) / len(numeric_values)
-
-        # Only add species if they have tolerance traits
-        if species_tolerances:
-            result_dict[species] = species_tolerances
-
-    # Print ignored values if any
-    if ignored_values:
-        print("Ignored values (unrecognized):")
-        for val in sorted(ignored_values):
-            print(f"  - {val}")
-
-    return result_dict
-
-def plot_competition_matrices(avg_trait_dict):
-    """
-    Plot competition probability matrices for each tolerance trait.
-
-    Creates one heatmap per trait showing the probability that each species
-    (challenger, rows) wins against each other species (opponent, columns)
-    based on their tolerance values.
-
-    Parameters
-    ----------
-    avg_trait_dict : dict
-        Dictionary from average_tolerance_traits() with structure:
-        {species_name: {trait_name: average_value}}
-
-    Returns
-    -------
-    None
-        Displays matplotlib figures with competition matrices.
-
-    Notes
-    -----
-    Competition probability calculation:
-    - Challenger tolerance 1 vs Opponent tolerance 5: 0% win probability
-    - Challenger tolerance 5 vs Opponent tolerance 1: 100% win probability
-    - Equal tolerances: 50% win probability
-    - Other combinations: linear interpolation
-    - Diagonal (species vs itself): displayed as white with no probability
-
-    Formula: P(win) = 0.5 + 0.125 * (challenger_tolerance - opponent_tolerance)
-
-    Examples
-    --------
-    >>> avg_data = average_tolerance_traits(raw_data)
-    >>> plot_competition_matrices(avg_data)
-    """
-    # Organize data by trait
-    trait_data = {}
-    for species, traits in avg_trait_dict.items():
-        for trait_name, trait_value in traits.items():
-            if trait_name not in trait_data:
-                trait_data[trait_name] = {}
-            trait_data[trait_name][species] = trait_value
-
-    # Create one plot per trait
-    for trait_name, species_values in trait_data.items():
-        # Get sorted species list for consistent ordering
-        species_list = sorted(species_values.keys())
-        n_species = len(species_list)
-
-        # Initialize probability matrix with NaN for diagonal
-        prob_matrix = np.zeros((n_species, n_species))
-
-        # Calculate win probabilities
-        for i, challenger in enumerate(species_list):
-            for j, opponent in enumerate(species_list):
-                if i == j:
-                    # Set diagonal to NaN for masking
-                    prob_matrix[i, j] = np.nan
-                    continue
-
-                challenger_tol = species_values[challenger]
-                opponent_tol = species_values[opponent]
-
-                # Linear interpolation formula
-                diff = challenger_tol - opponent_tol
-                prob_win = 0.5 + 0.125 * diff
-
-                # Ensure probability is within [0, 1]
-                prob_win = np.clip(prob_win, 0, 1)
-
-                prob_matrix[i, j] = prob_win
-
-        # Create figure
-        fig, ax = plt.subplots(figsize=(max(5, n_species * 0.5), max(4, n_species * 0.4)))
-
-        # Create masked array to handle NaN values (diagonal)
-        masked_matrix = np.ma.masked_invalid(prob_matrix)
-
-        # Create heatmap with red-to-blue colormap
-        im = ax.imshow(masked_matrix, cmap='RdBu', aspect='auto', vmin=0, vmax=1)
-
-        # Set background color for masked cells (diagonal) to white
-        ax.set_facecolor('white')
-
-        # Set ticks and labels
-        ax.set_xticks(np.arange(n_species))
-        ax.set_yticks(np.arange(n_species))
-        ax.set_xticklabels(species_list, rotation=45, ha='right', fontsize=8)
-        ax.set_yticklabels(species_list, fontsize=8)
-
-        # Add labels
-        ax.set_xlabel('Opponent', fontsize=12, fontweight='bold')
-        ax.set_ylabel('Challenger', fontsize=12, fontweight='bold')
-        ax.set_title(f'Competition Matrix: {trait_name}', fontsize=14, fontweight='bold', pad=20)
-
-        # Add probability values in cells (skip diagonal)
-        for i in range(n_species):
-            for j in range(n_species):
-                if i != j:  # Skip diagonal
-                    ax.text(j, i, f'{prob_matrix[i, j]:.2f}',
-                           ha='center', va='center', color='black', fontsize=9)
-
-        # Add colorbar
-        cbar = plt.colorbar(im, ax=ax)
-        cbar.set_label('Win Probability', rotation=270, labelpad=20, fontsize=11)
-
-        plt.tight_layout()
-        plt.show()
-
-def plot_competition_matrices_with_shade(avg_trait_dict, shade_weight=1.0):
-    """
-    Plot competition probability matrices for each tolerance trait, incorporating shade tolerance.
-
-    Creates one heatmap per trait showing the probability that each species
-    (challenger, rows) wins against each other species (opponent, columns).
-    For non-shade tolerances, the probability is a weighted average of the
-    specific tolerance and shade tolerance probabilities.
-
-    Parameters
-    ----------
-    avg_trait_dict : dict
-        Dictionary from average_tolerance_traits() with structure:
-        {species_name: {trait_name: average_value}}
-    shade_weight : float, optional
-        Weight for shade tolerance in the weighted average. Default is 1.0.
-        - 1.0: equal weight (1:1 ratio)
-        - 2.0: shade tolerance weighted twice as much (2:1 ratio)
-        - 0.5: shade tolerance weighted half as much (1:2 ratio)
-
-    Returns
-    -------
-    None
-        Displays matplotlib figures with competition matrices.
-
-    Notes
-    -----
-    Competition probability calculation:
-    - For shade tolerance: standard calculation only
-    - For other tolerances: weighted average of trait probability and shade probability
-    - Formula: P(win) = (shade_weight × P_shade + P_trait) / (shade_weight + 1)
-    - Diagonal (species vs itself): displayed as white with no probability
-
-    Examples
-    --------
-    >>> avg_data = average_tolerance_traits(raw_data)
-    >>> plot_competition_matrices_with_shade(avg_data, shade_weight=2.0)
-    """
-    # Organize data by trait
-    trait_data = {}
-    for species, traits in avg_trait_dict.items():
-        for trait_name, trait_value in traits.items():
-            if trait_name not in trait_data:
-                trait_data[trait_name] = {}
-            trait_data[trait_name][species] = trait_value
-
-    # Find shade tolerance trait
-    shade_trait_name = None
-    for trait_name in trait_data.keys():
-        if 'shade' in trait_name.lower():
-            shade_trait_name = trait_name
-            break
-
-    if shade_trait_name is None:
-        print("Warning: No shade tolerance trait found. Using standard calculation for all traits.")
-
-    # Calculate shade probability matrix once if it exists
-    shade_prob_matrix = None
-    species_list = None
-
-    if shade_trait_name:
-        species_list = sorted(trait_data[shade_trait_name].keys())
-        n_species = len(species_list)
-        shade_prob_matrix = np.zeros((n_species, n_species))
-
-        for i, challenger in enumerate(species_list):
-            for j, opponent in enumerate(species_list):
-                if i == j:
-                    shade_prob_matrix[i, j] = np.nan
-                    continue
-
-                challenger_tol = trait_data[shade_trait_name][challenger]
-                opponent_tol = trait_data[shade_trait_name][opponent]
-                diff = challenger_tol - opponent_tol
-                prob_win = 0.5 + 0.125 * diff
-                shade_prob_matrix[i, j] = np.clip(prob_win, 0, 1)
-
-    # Create one plot per trait
-    for trait_name, species_values in trait_data.items():
-        # Get sorted species list for consistent ordering
-        if species_list is None:
-            species_list = sorted(species_values.keys())
-
-        # Filter to only species present in current trait
-        current_species = sorted(species_values.keys())
-        n_species = len(current_species)
-
-        # Initialize probability matrix
-        prob_matrix = np.zeros((n_species, n_species))
-
-        # Initialize output dictionnary
-        competitionDict = dict()
-
-        # Calculate win probabilities
-        for i, challenger in enumerate(current_species):
-            for j, opponent in enumerate(current_species):
-                if i == j:
-                    prob_matrix[i, j] = np.nan
-                    continue
-
-                challenger_tol = species_values[challenger]
-                opponent_tol = species_values[opponent]
-                diff = challenger_tol - opponent_tol
-                prob_win = 0.5 + 0.125 * diff
-                prob_win = np.clip(prob_win, 0, 1)
-
-                # If not shade tolerance and shade data exists, apply weighted average
-                if trait_name != shade_trait_name and shade_prob_matrix is not None:
-                    # Find indices in shade matrix
-                    if challenger in trait_data[shade_trait_name] and opponent in trait_data[shade_trait_name]:
-                        shade_i = species_list.index(challenger)
-                        shade_j = species_list.index(opponent)
-                        shade_prob = shade_prob_matrix[shade_i, shade_j]
-
-                        if not np.isnan(shade_prob):
-                            # Weighted average: (shade_weight * P_shade + P_trait) / (shade_weight + 1)
-                            prob_win = (shade_weight * shade_prob + prob_win) / (shade_weight + 1)
-
-                prob_matrix[i, j] = prob_win
-                if challenger not in competitionDict.keys():
-                    competitionDict[challenger] = dict()
-                competitionDict[challenger][opponent] = prob_win
-
-        # Create figure
-        fig, ax = plt.subplots(figsize=(max(5, n_species * 0.5), max(4, n_species * 0.4)))
-
-        # Create masked array to handle NaN values (diagonal)
-        masked_matrix = np.ma.masked_invalid(prob_matrix)
-
-        # Create heatmap with red-to-blue colormap
-        im = ax.imshow(masked_matrix, cmap='RdBu', aspect='auto', vmin=0, vmax=1)
-
-        # Set background color for masked cells (diagonal) to white
-        ax.set_facecolor('white')
-
-        # Set ticks and labels
-        ax.set_xticks(np.arange(n_species))
-        ax.set_yticks(np.arange(n_species))
-        ax.set_xticklabels(current_species, rotation=45, ha='right', fontsize=8)
-        ax.set_yticklabels(current_species, fontsize=8)
-
-        # Add labels
-        ax.set_xlabel('Opponent', fontsize=12, fontweight='bold')
-        ax.set_ylabel('Challenger', fontsize=12, fontweight='bold')
-
-        # Add shade weight info to title for non-shade traits
-        title = f'Competition Matrix: {trait_name}'
-        if trait_name != shade_trait_name and shade_trait_name:
-            title += f' (Shade weight: {shade_weight})'
-        ax.set_title(title, fontsize=14, fontweight='bold', pad=20)
-
-        # Add probability values in cells (skip diagonal)
-        for i in range(n_species):
-            for j in range(n_species):
-                if i != j:
-                    ax.text(j, i, f'{prob_matrix[i, j]:.2f}',
-                           ha='center', va='center', color='black', fontsize=9)
-
-        # Add colorbar
-        cbar = plt.colorbar(im, ax=ax)
-        cbar.set_label('Win Probability', rotation=270, labelpad=20, fontsize=11)
-
-        plt.tight_layout()
-        plt.show()
-
-    return competitionDict
-
-def convert_monthly_precip_to_cm(precip_series, start_date, end_date):
-    """
-    Convert monthly precipitation time series from kg m-2 s-1 to cm.
-
-    Parameters:
-    -----------
-    precip_series : list
-        List of precipitation values in kg m-2 s-1 (monthly averages)
-    start_date : tuple
-        (year, month) of first value in series
-    end_date : tuple
-        (year, month) of last value in series
-
-    Returns:
-    --------
-    list
-        Precipitation values in cm (monthly totals)
-    """
-
-    # Generate list of (year, month) tuples for the entire period
-    start = date(start_date[0], start_date[1], 1)
-    end = date(end_date[0], end_date[1], 1)
-
-    months = []
-    current = start
-    while current <= end:
-        months.append((current.year, current.month))
-        current += relativedelta(months=1)
-
-    # Verify length matches
-    if len(precip_series) != len(months):
-        raise ValueError(f"Series length ({len(precip_series)}) doesn't match date range ({len(months)} months)")
-
-    # Convert each value
-    precip_cm = []
-    for precip_rate, (year, month) in zip(precip_series, months):
-        days_in_month = calendar.monthrange(year, month)[1]
-        seconds_in_month = days_in_month * 24 * 3600
-
-        # kg m-2 s-1 * seconds = kg m-2 = mm, then / 10 = cm
-        monthly_cm = (precip_rate * seconds_in_month) / 10
-        precip_cm.append(monthly_cm)
-
-    return precip_cm
-
-
-def average_climate_data_by_month(input_filepath):
-    """Used to create monthly averaged files for the climate
-    from monthly measurements. In the monthly averaged version,
-    the value for each month is the same accross all years, and is
-    the average of all values for this month and variable accross all years.
-
-    We do this because while we could use the Monthly_AverageAllYears statement
-    from the climate library to do this, this seems to create a problem in PnET-Cohort
-    which is not adapted to deal with the year values that the climate library
-    return in that case. See https://github.com/LANDIS-II-Foundation/Library-PnET-Cohort/issues/7
-    Instead of fixing the code, it's simpler to just modify
-    our input files."""
-    # Read the CSV file
-    df = pd.read_csv(input_filepath)
-
-    # Group by Month and Variable, calculate mean of eco1
-    monthly_avg = df.groupby(['Month', 'Variable'], as_index=False)['eco1'].mean()
-
-    # Create a complete dataframe with all Year/Month/Variable combinations
-    # using the original years but with averaged values
-    years = df['Year'].unique()
-    result = []
-
-    for year in years:
-        temp_df = monthly_avg.copy()
-        temp_df['Year'] = year
-        result.append(temp_df)
-
-    # Concatenate and reorder columns
-    df_averaged = pd.concat(result, ignore_index=True)
-    df_averaged = df_averaged[['Year', 'Month', 'Variable', 'eco1']]
-
-    # Sort by Year, Month, Variable for consistency
-    df_averaged = df_averaged.sort_values(['Year', 'Month', 'Variable']).reset_index(drop=True)
-    
-    # We sort the rows
-    df_averaged = df_averaged.sort_values(by=['Variable', 'Year', 'Month'], ascending=[True, True, True])
-    
-    # Generate output filename
-    output_filepath = input_filepath.replace('.csv', '_MonthlyAveraged.csv')
-
-    # Save to CSV
-    df_averaged.to_csv(output_filepath, index=False)
-
-    return output_filepath
-
-
-import pandas as pd
-import matplotlib.pyplot as plt
-from pathlib import Path
-import numpy as np
-from collections import defaultdict
-
-def plot_all_cohort_results(output_folder, species_colors):
-    """
-    Plot vegetation model results for multiple cohorts.
-
-    Parameters:
-    -----------
-    output_folder : str or Path
-        Path to folder containing cohort CSV files
-    """
-
-    # Step 1: Load all cohort files
-    output_path = Path(output_folder)
-    cohort_files = list(output_path.glob("Cohort_*.csv"))
-
-    if not cohort_files:
-        print(f"No cohort files found in {output_folder}")
-        return
-
-    # Step 2: Parse filenames and load data
-    cohorts_data = []
-    species_cohorts = defaultdict(list)
-
-    for file in cohort_files:
-        # Extract species and implant year from filename
-        parts = file.stem.split('_')
-        species = parts[1]
-        implant_year = int(parts[2])
-        label = f"{species}_{implant_year}"
-
-        # Load data
-        df = pd.read_csv(file)
-        df['Cohort'] = label
-        df['Species'] = species
-        df['ImplantYear'] = implant_year
-        df['AbovegroundBiomass_InSite'] = df['SiteWood(gDW)'] + df['SiteFol(gDW)']
-
-        cohorts_data.append(df)
-        species_cohorts[species].append((implant_year, label))
-
-    # Step 3: Combine all data
-    all_data = pd.concat(cohorts_data, ignore_index=True)
-
-    # Step 4: Determine time range
-    min_year = all_data['Year'].min()
-    max_year = all_data['Year'].max()
-
-    # Step 5: Assign colors to species and cohorts
-    species_list = sorted(species_cohorts.keys())
-    # base_colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
-    # species_colors = {species: base_colors[idx % 3] for idx, species in enumerate(species_list)}
-
-    cohort_colors = {}
-    for idx, species in enumerate(species_list):
-        cohorts = sorted(species_cohorts[species])
-        n_cohorts = len(cohorts)
-
-        # Create gradient for this species
-        # base_color = base_colors[idx % 3]
-        base_color = species_colors[species]
-        base_rgb = plt.matplotlib.colors.to_rgb(base_color)
-
-        for i, (implant_year, label) in enumerate(cohorts):
-            # Vary brightness from 0.4 to 1.0
-            brightness = 0.4 + 0.6 * (i / max(1, n_cohorts - 1))
-            cohort_colors[label] = tuple(c * brightness for c in base_rgb)
-
-    # Step 6: Prepare data for stackplots
-    # Aggregate aboveground biomass by species and year
-    species_biomass = all_data.groupby(['Year', 'Species'])['AbovegroundBiomass_InSite'].sum().unstack(fill_value=0)
-    years = species_biomass.index.values
-
-    # Prepare data arrays for stackplot
-    biomass_arrays = [species_biomass[species].values if species in species_biomass.columns else np.zeros(len(years)) 
-                      for species in species_list]
-
-    # Calculate relative proportions
-    total_biomass = np.sum(biomass_arrays, axis=0)
-    total_biomass[total_biomass == 0] = 1  # Avoid division by zero
-    proportion_arrays = [(biomass / total_biomass * 100) for biomass in biomass_arrays]
-
-    # Step 7: Create plots
-    variables = ['SiteWood(gDW)', 'Fol(gDW)', 'LAI(m2)', 'SiteLAI(m2)', 'NSC(gC)']
-    fig, axes = plt.subplots(5, 1, figsize=(12, 16))
-
-    # Individual cohort plots
-    for ax, var in zip(axes[:3], variables):
-        for cohort_label in sorted(cohort_colors.keys()):
-            cohort_df = all_data[all_data['Cohort'] == cohort_label]
-            ax.plot(cohort_df['Year'], cohort_df[var], 
-                   label=cohort_label, 
-                   color=cohort_colors[cohort_label],
-                   linewidth=1.5,
-                   alpha=0.6)
-
-        ax.set_xlabel('Year')
-        ax.set_ylabel(var)
-        ax.set_title(f'{var} over time')
-        ax.set_xlim(min_year, max_year)
-        ax.grid(True, alpha=0.3)
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
-
-    # Absolute aboveground biomass stackplot
-    axes[3].stackplot(years, *biomass_arrays, 
-                      labels=species_list,
-                      colors=[species_colors[sp] for sp in species_list],
-                      alpha=0.7)
-    axes[3].set_xlabel('Year')
-    axes[3].set_ylabel('Aboveground Biomass (gDW)')
-    axes[3].set_title('Total Aboveground Biomass by Species')
-    axes[3].set_xlim(min_year, max_year)
-    axes[3].grid(True, alpha=0.3)
-    axes[3].legend(loc='upper left', fontsize=8)
-
-    # Relative aboveground biomass stackplot
-    axes[4].stackplot(years, *proportion_arrays,
-                      labels=species_list,
-                      colors=[species_colors[sp] for sp in species_list],
-                      alpha=0.7)
-    axes[4].set_xlabel('Year')
-    axes[4].set_ylabel('Relative Proportion (%)')
-    axes[4].set_title('Relative Aboveground Biomass by Species')
-    axes[4].set_xlim(min_year, max_year)
-    axes[4].set_ylim(0, 100)
-    axes[4].grid(True, alpha=0.3)
-    axes[4].legend(loc='upper left', fontsize=8)
-
-    plt.subplots_adjust(hspace=0.4)
-    plt.show()
-
-    return all_data
-
-
-def plot_single_cohort_results(csv_path, monthsToKeep=None):
-    """Plot results of PnET Site Outputs for a single cohort (a single .csv file)
-    to better understand the dynamic of cohorts."""
-    
-    # Read the CSV file
-    df = pd.read_csv(csv_path)
-
-    # Filter data by monthsToKeep if specified
-    if monthsToKeep is not None:
-        df = df.iloc[0:monthsToKeep]
-
-    # Create figure with 4 subplots
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-    fig.suptitle(f'Cohort Results: {csv_path.split("/")[-1]}', fontsize=14, fontweight='bold')
-
-    # Subplot 1: Wood biomass
-    axes[0, 0].plot(df['Time'], df['Wood(gDW)'], color='#8B4513', linewidth=2)
-    axes[0, 0].set_xlabel('Time (year)')
-    axes[0, 0].set_ylabel('Wood (gDW)')
-    axes[0, 0].set_title('Wood Biomass Evolution')
-    axes[0, 0].grid(True, alpha=0.3)
-
-    # Subplot 2: LAI
-    axes[0, 1].plot(df['Time'], df['LAI(m2)'], color='#228B22', linewidth=2)
-    axes[0, 1].set_xlabel('Time (year)')
-    axes[0, 1].set_ylabel('LAI (m²)')
-    axes[0, 1].set_title('Leaf Area Index Evolution')
-    axes[0, 1].grid(True, alpha=0.3)
-
-    # Subplot 3: NSC
-    axes[1, 0].plot(df['Time'], df['NSC(gC)'], color='#FF8C00', linewidth=2)
-    axes[1, 0].set_xlabel('Time (year)')
-    axes[1, 0].set_ylabel('NSC (gC)')
-    axes[1, 0].set_title('Non-Structural Carbohydrates Evolution')
-    axes[1, 0].grid(True, alpha=0.3)
-
-    # Subplot 4: Environmental factors (0-1 range)
-    axes[1, 1].plot(df['Time'], df['fWater(-)'], color='#1E90FF', linewidth=2, alpha=0.8, label='fWater')
-    axes[1, 1].plot(df['Time'], df['fRad(-)'], color='#FFD700', linewidth=2, alpha=0.8, label='fRad')
-    axes[1, 1].plot(df['Time'], df['fTemp_psn(-)'], color='#DC143C', linewidth=2, alpha=0.8, label='fTemp_psn')
-    axes[1, 1].plot(df['Time'], df['fage(-)'], color='#9370DB', linewidth=2, alpha=0.8, label='fage')
-    axes[1, 1].set_xlabel('Time (year)')
-    axes[1, 1].set_ylabel('Factor value (-)')
-    axes[1, 1].set_title('Environmental and Age Factors')
-    axes[1, 1].set_ylim(-0.05, 1.05)
-    axes[1, 1].legend(loc='best', framealpha=0.9)
-    axes[1, 1].grid(True, alpha=0.3)
-
-    plt.tight_layout()
-    plt.show()
-
-
-def create_species_csv(species_tuple, numberOfCells, ageRange, filename='output.csv'):
-    """Function used to create the .csv files to initialize
-    the landscapes for the little simulations used for the calibration."""
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',')
-
-        # Write header
-        writer.writerow(['MapCode', 'SpeciesName', 'CohortAge', 'CohortBiomass'])
-
-        # Loop through MapCode 1 to 1001
-        for map_code in range(1, numberOfCells+2):
-            # Write one row for each species
-            for species in species_tuple:
-                random_age = random.randint(ageRange[0], ageRange[1])
-                writer.writerow([map_code, species, random_age, 0])
-
-def min_max_top30_contiguous(series) -> tuple:
-    """
-    Returns (min, max) of a contiguous window of the top 30% values,
-    anchored at the global maximum and expanded greedily left/right.
-    Used to get the variation of the LAI around its maximum
-    """
-    values = series.reset_index(drop=True)
-    n = len(values)
-    n_top = max(1, int(n * 0.30))
-
-    peak_idx = values.idxmax()
-
-    left = peak_idx - 1
-    right = peak_idx + 1
-    window_indices = [peak_idx]
-
-    while len(window_indices) < n_top:
-        has_left = left >= 0
-        has_right = right < n
-
-        if has_left and has_right:
-            # Expand toward the side with the larger neighbor
-            if values[left] >= values[right]:
-                window_indices.append(left)
-                left -= 1
-            else:
-                window_indices.append(right)
-                right += 1
-        elif has_left:
-            window_indices.append(left)
-            left -= 1
-        elif has_right:
-            window_indices.append(right)
-            right += 1
-        else:
-            break  # Series exhausted
-
-    selected_values = values[window_indices]
-    return selected_values.min(), selected_values.max()
-
+# =============================================================================
+# FUNCTIONS FOR FIRST CALIBRATION STEP (MONOCULTURE IN IDEAL CONDITIONS) (Notebook 6)
+# =============================================================================
 
 import copy
-
 def calibrationSimulationMonoculturemanawan(duration = 100,
                                             climate = "mild",
                                             soil = "SILO",
@@ -6622,835 +5975,9 @@ def calibrationSimulationMonoculturemanawan(duration = 100,
     # shutil.rmtree(simulationPath)
 
 
-#########################################################
-# FUNCTION TO GET THE BOUNDS FOR EACH PARAMETERS WE WILL CALIBRATE
-#########################################################
-
-# Function to read the values taken from the litterature from the markdown table where they are
-
-import re
-import nbformat
-
-def parse_parameters_bounds_table(notebook_path: str, markdown_cell_number: int) -> dict:
-    """
-    Reads a markdown cell by its markdown-cell index (1-based, skipping
-    code/raw cells) from the given notebook, extracts the first markdown
-    table found, and returns a nested dict:
-        result[parameter_name][column_level] = [value1, value2, ...]
-
-    Parameters
-    ----------
-    notebook_path : str
-        Path to the .ipynb notebook file.
-    markdown_cell_number : int
-        1-based index counting only markdown cells.
-
-    Returns
-    -------
-    dict
-        Nested dictionary of parsed values, or {} on error.
-    """
-
-    # --- 1. Read the markdown cell ---
-    source = read_markdown_cell(notebook_path, markdown_cell_number)
-
-    if source is None:
-        print(f"[ERROR] Could not find markdown cell number {markdown_cell_number} "
-              f"in '{notebook_path}'.")
-        return {}
-
-    # --- 2. Extract the markdown table lines ---
-    lines = source.splitlines()
-    table_lines = []
-    in_table = False
-
-    for line in lines:
-        stripped = line.strip()
-        if re.match(r"^\|.*\|$", stripped):
-            in_table = True
-            table_lines.append(stripped)
-        else:
-            if in_table:
-                # Stop at the first non-table line after the table started
-                break
-
-    if len(table_lines) < 3:
-        print("[ERROR] No valid markdown table found in the cell "
-              "(need at least a header row, a separator row, and one data row).")
-        return {}
-
-    # --- 3. Validate separator row ---
-    separator = table_lines[1]
-    if not re.match(r"^\|[\s\-:|]+\|$", separator):
-        print(f"[ERROR] Row 1 does not look like a markdown table separator: "
-              f"'{separator}'")
-        return {}
-
-    # --- 4. Helper: split a markdown row into cells ---
-    def split_row(row: str) -> list:
-        return [cell.strip() for cell in row.strip("|").split("|")]
-
-    # --- 5. Parse header row ---
-    header_cells = split_row(table_lines[0])
-
-    if len(header_cells) < 3:
-        print(f"[ERROR] Table header has fewer than 3 columns: {header_cells}")
-        return {}
-
-    # Column 0 = parameter name, column 1 = description (ignored), rest = levels
-    levels = header_cells[2:]
-
-    # --- 6. Helper: extract numeric values from a cell string ---
-    def extract_values(cell_text: str) -> list:
-        """
-        Strips citation markers ([^N] or [N]) and splits on commas,
-        returning a list of floats (or strings if not numeric).
-        Empty cells return [].
-        """
-        cleaned = re.sub(r"\[\^?\d+\]", "", cell_text)
-        parts = [p.strip() for p in cleaned.split(",")]
-        values = [p for p in parts if p]
-        result = []
-        for v in values:
-            try:
-                result.append(float(v))
-            except ValueError:
-                result.append(v)
-        return result
-
-    # --- 7. Parse data rows ---
-    result = {}
-
-    for row_line in table_lines[2:]:  # skip header and separator
-        row_cells = split_row(row_line)
-
-        if len(row_cells) < 2:
-            print(f"[WARNING] Skipping malformed row: '{row_line}'")
-            continue
-
-        param_name = row_cells[0]
-
-        if not param_name:
-            print(f"[WARNING] Skipping row with empty parameter name: '{row_line}'")
-            continue
-
-        # Pad row if it has fewer columns than the header
-        while len(row_cells) < len(header_cells):
-            row_cells.append("")
-
-        result[param_name] = {}
-        for i, level in enumerate(levels):
-            col_index = i + 2  # offset: skip param name + description
-            cell_text = row_cells[col_index] if col_index < len(row_cells) else ""
-            result[param_name][level] = extract_values(cell_text)
-
-    return result
-
-
-# Functions to compute the bounds for each parameters depending on the list of values 
-# If we don't have a lot of values, or for missing values, we compute bounds
-# based on informations from other cells
-
-import numpy as np
-from typing import Union
-
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
-def detect_characteristic_type(level_keys: list) -> str:
-    """Detect 'ordinal' (>2 levels) or 'binary' (exactly 2 levels)."""
-    return "binary" if len(level_keys) == 2 else "ordinal"
-
-
-def build_level_scores(level_keys: list) -> dict:
-    """Map each level key to a numeric score from 1.0 to N."""
-    return {key: float(i + 1) for i, key in enumerate(level_keys)}
-
-
-def compute_pooled_std(level_data: dict) -> float:
-    """Pooled sample std across all levels."""
-    all_values = [v for vals in level_data.values() for v in vals]
-    return float(np.std(all_values, ddof=1)) if len(all_values) >= 2 else 0.0
-
-
-def fit_trend(level_data: dict, level_scores: dict, min_n: int = 3) -> Union[tuple, None]:
-    """
-    Fit a linear regression (level_score -> mean_value) using only
-    levels with at least `min_n` observations.
-
-    Returns (slope, intercept) or None if fewer than 2 qualifying levels.
-    """
-    xs, ys = [], []
-    for level, values in level_data.items():
-        if len(values) >= min_n:
-            xs.append(level_scores[level])
-            ys.append(float(np.mean(values)))
-
-    if len(xs) < 2:
-        return None
-
-    slope, intercept = np.polyfit(np.array(xs), np.array(ys), 1)
-    return float(slope), float(intercept)
-
-
-# ---------------------------------------------------------------------------
-# Core bound computation
-# ---------------------------------------------------------------------------
-
-def compute_bounds_for_level(
-    values: list,
-    level,
-    char_type: str,
-    level_data: dict,
-    level_scores: dict,
-    pooled_std: float,
-    trend: Union[tuple, None],
-    expansion_factor: float = 0.5,
-) -> dict:
-    """
-    Compute (lower, upper) bounds for a single parameter-level combination.
-
-    Rules:
-        n >= 10  : empirical 5th–95th percentile
-        3–9      : empirical range ± expansion_factor * pooled_std
-        1–2      : extrapolated/borrowed mean ± pooled_std
-        0        : extrapolated/borrowed mean ± pooled_std
-    """
-    n = len(values)
-    result = {"n": n, "method": None, "lower": None, "upper": None}
-
-    def _fallback_center() -> tuple[float, str]:
-        if char_type == "ordinal" and trend is not None:
-            slope, intercept = trend
-            score = level_scores[level]
-            center = slope * score + intercept
-            return center, "extrapolated_trend"
-        else:
-            other_values = [
-                v for k, v_list in level_data.items()
-                if k != level for v in v_list
-            ]
-            if other_values:
-                return float(np.mean(other_values)), "borrowed_mean"
-            all_values = [v for vals in level_data.values() for v in vals]
-            return (float(np.mean(all_values)) if all_values else float("nan")), "global_mean"
-
-    if n >= 10:
-        result["method"] = "empirical_percentile"
-        result["lower"] = float(np.percentile(values, 5))
-        result["upper"] = float(np.percentile(values, 95))
-
-    elif 3 <= n <= 9:
-        result["method"] = "empirical_expanded"
-        result["lower"] = float(np.min(values)) - expansion_factor * pooled_std
-        result["upper"] = float(np.max(values)) + expansion_factor * pooled_std
-
-    elif 1 <= n <= 2:
-        center, label = _fallback_center()
-        result["method"] = f"{label}_pooled_std (n=1-2)"
-        result["lower"] = center - pooled_std
-        result["upper"] = center + pooled_std
-
-    else:  # n == 0
-        center, label = _fallback_center()
-        result["method"] = f"{label}_pooled_std (n=0)"
-        if np.isnan(center):
-            result["lower"] = None
-            result["upper"] = None
-        else:
-            result["lower"] = center - pooled_std
-            result["upper"] = center + pooled_std
-
-    return result
-
-
-# ---------------------------------------------------------------------------
-# Main entry point
-# ---------------------------------------------------------------------------
-
-def compute_all_bounds(
-    data: dict,
-    expansion_factor: float = 0.5,
-    trend_min_n: int = 3,
-    verbose: bool = False,
-) -> dict:
-    """
-    Compute bounds for all parameters and their characteristic levels.
-
-    Parameters
-    ----------
-    data : dict
-        Nested dict: {param_name: {level_key: [values]}}
-        Level keys can be any type (strings, ints, etc.); their order
-        in the dict defines their ordinal score (first = 1, last = N).
-    expansion_factor : float
-        Multiplier for pooled std when expanding sparse empirical ranges.
-    trend_min_n : int
-        Minimum observations per level to include that level in the
-        trend regression.
-    verbose : bool
-        If True, print a summary table of results after computation.
-
-    Returns
-    -------
-    dict
-        Nested dict: {param_name: {level_key: {n, method, lower, upper,
-                                               characteristic_type,
-                                               level_score, trend}}}
-    """
-    results = {}
-
-    for param, level_data in data.items():
-        level_keys = list(level_data.keys())
-        char_type = detect_characteristic_type(level_keys)
-        level_scores = build_level_scores(level_keys)
-        pooled_std = compute_pooled_std(level_data)
-        trend = (
-            fit_trend(level_data, level_scores, min_n=trend_min_n)
-            if char_type == "ordinal"
-            else None
-        )
-
-        results[param] = {}
-        for level, values in level_data.items():
-            bounds = compute_bounds_for_level(
-                values=values,
-                level=level,
-                char_type=char_type,
-                level_data=level_data,
-                level_scores=level_scores,
-                pooled_std=pooled_std,
-                trend=trend,
-                expansion_factor=expansion_factor,
-            )
-            bounds["characteristic_type"] = char_type
-            bounds["level_score"] = level_scores[level]
-            if trend is not None:
-                bounds["trend"] = {"slope": trend[0], "intercept": trend[1]}
-            results[param][level] = bounds
-
-    if verbose:
-        for param, levels in results.items():
-            print(f"\n=== {param} ===")
-            for level, info in levels.items():
-                trend_str = ""
-                if "trend" in info:
-                    t = info["trend"]
-                    trend_str = f" | slope={t['slope']:.3f}, intercept={t['intercept']:.3f}"
-                lo = f"{info['lower']:.3f}" if info["lower"] is not None else "None"
-                hi = f"{info['upper']:.3f}" if info["upper"] is not None else "None"
-                print(
-                    f"  Level {str(level):>20} (score={info['level_score']:.0f}) | "
-                    f"n={info['n']:>2} | "
-                    f"method={info['method']:<40} | "
-                    f"bounds=[{lo}, {hi}]"
-                    f"{trend_str}"
-                )
-
-    return results
-
-#################################################################
-# TRYING TO RE-CREATE THE FUNCTIONS TO CREATE AND SELECT THE GAMS
-#################################################################
-
-# I've lost these functions because of a bug : createPercentilesBiomassDatasetsFromNFIData
-# and getGamDiagnostics.
-
-# I'm going to try to make them again, because they're needed.
-
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-import rasterio
-from rasterio.mask import mask as rasterio_mask
-from rasterio.features import geometry_mask
-from shapely.ops import unary_union
-import matplotlib.pyplot as plt
-import warnings
-warnings.filterwarnings('ignore')
-
-
-def createPercentilesBiomassDatasetsFromNFIData(
-    abundance_raster_path,
-    age_raster_path,
-    biomass_raster_path,
-    speciesName,
-    study_landscape_shp_path,
-    canadian_ecozones_shp_path,
-    age_window=5,
-    abundance_window=5,
-    percentile=100,
-    mask_path=None,
-    printPlot=False
-):
-    # ------------------------------------------------------------------
-    # 1. Load shapefiles and reproject to raster CRS
-    # ------------------------------------------------------------------
-    with rasterio.open(abundance_raster_path) as src:
-        raster_crs = src.crs
-        raster_transform = src.transform
-        raster_shape = (src.height, src.width)
-        raster_nodata = src.nodata
-
-    study_landscape = gpd.read_file(study_landscape_shp_path).to_crs(raster_crs)
-    ecozones = gpd.read_file(canadian_ecozones_shp_path).to_crs(raster_crs)
-
-    study_geom = unary_union(study_landscape.geometry)
-    intersects_mask = ecozones.geometry.intersects(study_geom)
-    study_ecozones = ecozones[intersects_mask]
-    study_ecozones_union = unary_union(study_ecozones.geometry)
-
-    surrounding_mask = ecozones.geometry.intersects(study_ecozones_union) & ~intersects_mask
-    surrounding_ecozones = ecozones[surrounding_mask]
-    surrounding_union = unary_union(
-        pd.concat([study_ecozones, surrounding_ecozones]).geometry
-    )
-    canada_union = unary_union(ecozones.geometry)
-
-    masks = {
-        'study_landscape': study_geom,
-        'ecozone': study_ecozones_union,
-        'surrounding_ecozones': surrounding_union,
-        'canada': canada_union,
-    }
-
-    # ------------------------------------------------------------------
-    # 2. Helper: extract valid pixel triplets within a geometry
-    #    Opens all 3 rasters once, clips to bounding box, applies
-    #    geometry mask — avoids loading full rasters into RAM.
-    # ------------------------------------------------------------------
-    def extract_valid_pixels(geom):
-        geom_geojson = [geom.__geo_interface__]
-
-        with rasterio.open(abundance_raster_path) as src_a, \
-             rasterio.open(age_raster_path) as src_ag, \
-             rasterio.open(biomass_raster_path) as src_b:
-
-            # Crop each raster to geometry bounding box
-            abund_arr, abund_tf = rasterio_mask(src_a,  geom_geojson, crop=True, nodata=src_a.nodata)
-            age_arr,   _        = rasterio_mask(src_ag, geom_geojson, crop=True, nodata=src_ag.nodata)
-            bio_arr,   _        = rasterio_mask(src_b,  geom_geojson, crop=True, nodata=src_b.nodata)
-
-            abund_nd = src_a.nodata
-            age_nd   = src_ag.nodata
-            bio_nd   = src_b.nodata
-
-            # Build pixel-level geometry mask (True = inside geometry)
-            geom_msk = geometry_mask(
-                geom_geojson,
-                transform=abund_tf,
-                invert=True,
-                out_shape=abund_arr.shape[1:]
-            )
-
-        abund = abund_arr[0].astype(np.float32)
-        age   = age_arr[0].astype(np.float32)
-        bio   = bio_arr[0].astype(np.float32)
-
-        # Mask nodata
-        valid = geom_msk.copy()
-        if abund_nd is not None:
-            valid &= (abund != abund_nd)
-        if age_nd is not None:
-            valid &= (age != age_nd)
-        if bio_nd is not None:
-            valid &= (bio != bio_nd)
-
-        # Keep only positive/meaningful values
-        valid &= (abund > 0) & (age > 0) & (bio >= 0)
-
-        # Return only valid pixels — discard the rest immediately
-        return age[valid], abund[valid], bio[valid]
-
-    # ------------------------------------------------------------------
-    # 3. Helper: build windowed percentile dataframe
-    # ------------------------------------------------------------------
-    def build_windowed_df(age_vals, abundance_vals, biomass_vals):
-        print("Creating windowed dataframe...")
-
-        # EDIT HERE : we change it so that it is in g/m2 instead of tons/hectares,
-        # because LANDIS-II gives us g/m2.
-        # To switch, we multiply by 100.
-        species_biomass = (abundance_vals * biomass_vals / 100.0) * 100
-
-        age_max   = age_vals.max()
-        abund_max = abundance_vals.max()
-
-        age_bins   = np.arange(0, age_max   + age_window,   age_window)
-        abund_bins = np.arange(0, abund_max + abundance_window, abundance_window)
-
-        # Digitize is faster than pd.cut for large arrays
-        age_idx   = np.digitize(age_vals,   age_bins)   - 1
-        abund_idx = np.digitize(abundance_vals, abund_bins) - 1
-
-        # Clip indices to valid range
-        age_idx   = np.clip(age_idx,   0, len(age_bins)   - 2)
-        abund_idx = np.clip(abund_idx, 0, len(abund_bins) - 2)
-
-        # Combine into a single integer key for groupby
-        n_abund_bins = len(abund_bins) - 1
-        combined_key = age_idx * n_abund_bins + abund_idx
-
-        # Sort once for efficient grouping
-        sort_order  = np.argsort(combined_key)
-        sorted_keys = combined_key[sort_order]
-        sorted_bio  = species_biomass[sort_order]
-
-        unique_keys, first_idx, counts = np.unique(
-            sorted_keys, return_index=True, return_counts=True
-        )
-
-        records = []
-        for k, fi, cnt in zip(unique_keys, first_idx, counts):
-            group_bio = sorted_bio[fi:fi + cnt]
-            p_val     = np.percentile(group_bio, percentile)
-            a_idx     = k // n_abund_bins
-            ab_idx    = k  % n_abund_bins
-            records.append({
-                'age':               age_bins[a_idx]   + age_window   / 2,
-                'abundance':         abund_bins[ab_idx] + abundance_window / 2,
-                'biomass_percentile': p_val
-            })
-
-        if not records:
-            return pd.DataFrame(columns=['age', 'abundance', 'biomass_percentile'])
-
-        result_df = pd.DataFrame(records)
-
-        # Monotonic abundance constraint
-        kept_rows = []
-        for age_b in sorted(result_df['age'].unique()):
-            age_subset = result_df[result_df['age'] == age_b].sort_values('abundance')
-            max_so_far = -np.inf
-            for _, row in age_subset.iterrows():
-                if row['biomass_percentile'] >= max_so_far:
-                    max_so_far = row['biomass_percentile']
-                    kept_rows.append(row)
-
-        result_df = pd.DataFrame(kept_rows).reset_index(drop=True)
-        print(f"Applied monotonic abundance constraint - kept {len(result_df)} entries")
-        return result_df
-
-    # ------------------------------------------------------------------
-    # 4. Main loop
-    # ------------------------------------------------------------------
-    print("Creating initial dataframes for each mask...")
-    result_dict = {}
-
-    for mask_name, geom in masks.items():
-        print(f"Dealing with mask : {mask_name}\n")
-        age_vals, abundance_vals, biomass_vals = extract_valid_pixels(geom)
-        result_dict[mask_name] = build_windowed_df(age_vals, abundance_vals, biomass_vals)
-
-    print("\n===============")
-
-    # ------------------------------------------------------------------
-    # 5. Optional plot
-    # ------------------------------------------------------------------
-    if printPlot:
-        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-        axes = axes.flatten()
-        for idx, (mask_name, df) in enumerate(result_dict.items()):
-            ax = axes[idx]
-            if df.empty:
-                ax.set_title(f"{mask_name} (no data)")
-                continue
-            sc = ax.scatter(
-                df['age'], df['biomass_percentile'],
-                c=df['abundance'], cmap='RdYlGn',
-                vmin=0, vmax=100, alpha=0.7,
-                edgecolors='k', linewidths=0.3
-            )
-            plt.colorbar(sc, ax=ax, label='% Abundance')
-            ax.set_xlabel('Forest Age (years)')
-            ax.set_ylabel(f'Biomass (Percentile {percentile}) in g/m2')
-            ax.set_title(f'{speciesName} — {mask_name}')
-        plt.tight_layout()
-        plt.show()
-
-    return result_dict
-
-import numpy as np
-import pandas as pd
-import json
-import os
-from pygam import LinearGAM, s, te
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-import warnings
-warnings.filterwarnings('ignore')
-
-
-def getGamDiagnostics(
-    dictOfPointsSubsets,
-    speciesName,
-    exportCsvOfSelectedCurve_Path,
-    printPlot=False,
-    dictionnaryOfSelectedCurves=None
-):
-    """
-    Fits a GAM on each mask's dataframe from createPercentilesBiomassDatasetsFromNFIData,
-    computes diagnostics for the 100% abundance prediction curve, selects the best
-    mask, exports the predictions CSV and updates the JSON dictionary.
-
-    Parameters
-    ----------
-    dictOfPointsSubsets             : output dict from createPercentilesBiomassDatasetsFromNFIData
-    speciesName                     : species name string
-    exportCsvOfSelectedCurve_Path   : path to export the predictions CSV
-    printPlot                       : if True, plots GAM curves for all masks
-    dictionnaryOfSelectedCurves     : path to the JSON file tracking selected masks per species
-    """
-
-    mask_order = ['study_landscape', 'ecozone', 'surrounding_ecozones', 'canada']
-    abundance_levels = [100, 90, 80, 70, 60, 50, 40, 30, 20, 10]
-
-    # ------------------------------------------------------------------
-    # 1. Fit GAM and compute diagnostics for each mask
-    # ------------------------------------------------------------------
-    fitted_gams   = {}
-    age_arrays    = {}
-    diagnostics   = {}
-
-    print("=" * 80)
-    print("GAM 100% Abundance Curve Diagnostics")
-    print("=" * 80)
-
-    for mask_name in mask_order:
-        df = dictOfPointsSubsets.get(mask_name)
-        if df is None or df.empty:
-            continue
-
-        X = df[['age', 'abundance']].values
-        y = df['biomass_percentile'].values
-
-        # GAM: s(age, by=abundance) + s(abundance, by=age) + s(age) + s(abundance)
-        # All splines constrained to be concave (constraint='concave')
-        gam = LinearGAM(
-            s(0, by=1, constraints='concave') +
-            s(1, by=0, constraints='concave') +
-            s(0, constraints='concave') +
-            s(1, constraints='concave')
-        ).fit(X, y)
-
-        fitted_gams[mask_name] = gam
-
-        # Age range for prediction (same resolution as example CSV)
-        age_min  = df['age'].min()
-        age_max  = df['age'].max()
-        age_pred = np.linspace(age_min, age_max, 180)
-        age_arrays[mask_name] = age_pred
-
-        # 100% abundance prediction curve
-        X_pred_100 = np.column_stack([age_pred, np.full_like(age_pred, 100.0)])
-        pred_100   = gam.predict(X_pred_100)
-
-        # --- Pseudo R² ---
-        pseudo_r2 = gam.statistics_['pseudo_r2']['explained_deviance']
-
-        # --- Peak age and biomass ---
-        peak_idx     = np.argmax(pred_100)
-        peak_age     = age_pred[peak_idx]
-        peak_biomass = pred_100[peak_idx]
-
-        # --- % negative biomass ---
-        pct_negative = 100.0 * np.sum(pred_100 < 0) / len(pred_100)
-
-        # --- Concavity: % decrease after peak ---
-        post_peak    = pred_100[peak_idx:]
-        if len(post_peak) > 1:
-            pct_decrease = 100.0 * (post_peak[0] - post_peak[-1]) / post_peak[0] if post_peak[0] != 0 else 0.0
-        else:
-            pct_decrease = 0.0
-
-        # --- Is truly concave: second derivative < 0 everywhere after age 0 ---
-        is_concave = bool(np.all(np.diff(pred_100[:peak_idx + 1]) >= 0) and np.all(np.diff(pred_100[peak_idx:]) <= 0))
-
-        # --- Max observed biomass in mask ---
-        max_obs_biomass = df['biomass_percentile'].max()
-
-        # --- % points above 40% abundance ---
-        pct_above_40 = 100.0 * np.sum(df['abundance'] > 40) / len(df)
-
-        # --- Validity ---
-        is_valid = (pseudo_r2 > 0.85) and is_concave and (pct_negative < 20.0)
-
-        diagnostics[mask_name] = {
-            'Pseudo_R2':               round(pseudo_r2,       6),
-            'Peak_Age':                round(peak_age,        6),
-            'Peak_Biomass':            round(peak_biomass,    6),
-            'Pct_Negative_Biomass':    round(pct_negative,    1),
-            'Concavity_Pct_Decrease':  round(pct_decrease,    6),
-            'Is_Truly_Concave':        is_concave,
-            'Max_Observed_Biomass':    round(max_obs_biomass, 6),
-            'Pct_Above_40_Abundance':  round(pct_above_40,    6),
-            'Is_Valid':                is_valid,
-        }
-
-    diag_df = pd.DataFrame(diagnostics).T
-    diag_df.index.name = 'Mask'
-
-    # Reorder rows to match mask_order
-    diag_df = diag_df.reindex([m for m in mask_order if m in diag_df.index])
-
-    # Split display into column groups of 4 as in the example output
-    all_cols   = list(diag_df.columns)
-    col_groups = [all_cols[i:i+4] for i in range(0, len(all_cols), 4)]
-
-    for gi, group in enumerate(col_groups):
-        print(f"\nColumns {gi*4+1}-{min((gi+1)*4, len(all_cols))}:")
-        print(diag_df[group].to_string())
-        print("-" * 80)
-
-    print("=" * 80)
-
-    # ------------------------------------------------------------------
-    # 6. Optional plot
-    # ------------------------------------------------------------------
-    if printPlot:
-        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-        axes = axes.flatten()
-        cmap = cm.get_cmap('RdYlGn')
-
-        for idx, mask_name in enumerate(mask_order):
-            if mask_name not in fitted_gams:
-                continue
-            ax       = axes[idx]
-            gam_m    = fitted_gams[mask_name]
-            age_p    = age_arrays[mask_name]
-            df       = dictOfPointsSubsets[mask_name]
-
-            # Scatter of data points coloured by abundance
-            sc = ax.scatter(
-                df['age'], df['biomass_percentile'],
-                c=df['abundance'], cmap='RdYlGn',
-                vmin=0, vmax=100, alpha=0.5,
-                edgecolors='k', linewidths=0.2, s=20, label='Data'
-            )
-            plt.colorbar(sc, ax=ax, label='% Abundance')
-
-            # GAM curves for each abundance level
-            for abund in abundance_levels:
-                X_p   = np.column_stack([age_p, np.full_like(age_p, float(abund))])
-                p     = gam_m.predict(X_p)
-                color = cmap(abund / 100.0)
-                lw    = 2.5 if abund == 100 else 1.0
-                ax.plot(age_p, p, color=color, linewidth=lw,
-                        label=f'{abund}%' if abund == 100 else None)
-
-            ax.axhline(0, color='grey', linestyle='--', linewidth=0.8)
-            ax.set_xlabel('Forest Age (years)')
-            ax.set_ylabel(f'Species Biomass (Percentile) in g/m2')
-            valid_str = '✓ Valid' if diagnostics[mask_name]['Is_Valid'] else '✗ Invalid'
-            ax.set_title(f'{speciesName} — {mask_name}\n'
-                         f'R²={diagnostics[mask_name]["Pseudo_R2"]:.3f}  {valid_str}')
-
-        plt.suptitle(f'GAM Diagnostics — {speciesName}', fontsize=14, fontweight='bold')
-        plt.tight_layout()
-        plt.show()
-    
-    # ------------------------------------------------------------------
-    # 2. Select best mask
-    # ------------------------------------------------------------------
-    valid_masks = [m for m in mask_order if m in diagnostics and diagnostics[m]['Is_Valid']]
-
-    selected_mask = None
-    selection_reason = None
-
-    if valid_masks:
-        # Among valid masks, prefer those whose peak age and peak biomass
-        # are within 20% of the average across valid masks
-        valid_peak_ages    = [diagnostics[m]['Peak_Age']    for m in valid_masks]
-        valid_peak_biomass = [diagnostics[m]['Peak_Biomass'] for m in valid_masks]
-        avg_peak_age       = np.mean(valid_peak_ages)
-        avg_peak_biomass   = np.mean(valid_peak_biomass)
-
-        for mask_name in mask_order:  # smallest first
-            if mask_name not in valid_masks:
-                continue
-            d = diagnostics[mask_name]
-            age_ok     = abs(d['Peak_Age']    - avg_peak_age)    <= 0.20 * avg_peak_age
-            biomass_ok = abs(d['Peak_Biomass'] - avg_peak_biomass) <= 0.20 * avg_peak_biomass
-            if age_ok and biomass_ok:
-                selected_mask    = mask_name
-                selection_reason = (
-                    f"  - Curve is valid (R² > 0.85, truly concave, <20% negative values)\n"
-                    f"  - Peak age within 20% of average ({avg_peak_age:.2f} years)\n"
-                    f"  - Peak biomass within 20% of average ({avg_peak_biomass:.2f})"
-                )
-                break
-
-        # Fallback: just pick the smallest valid mask
-        if selected_mask is None:
-            selected_mask    = valid_masks[0]
-            selection_reason = "  - Smallest valid mask (peak age/biomass outside 20% window)"
-
-    else:
-        # No valid curve — let user choose
-        print("\nNo valid curve found. Diagnostics summary:")
-        print(diag_df.to_string())
-        print("\nAvailable masks:", mask_order)
-        user_choice = input("Please select a mask manually: ").strip()
-        selected_mask    = user_choice if user_choice in diagnostics else mask_order[0]
-        selection_reason = "  - Manually selected by user (no valid curve found)"
-
-    # ------------------------------------------------------------------
-    # 3. Print selection summary
-    # ------------------------------------------------------------------
-    print("\n" + "=" * 80)
-    print("BEST CURVE SELECTION")
-    print("=" * 80)
-    print(f"\nSelected Mask: {selected_mask}")
-    print(f"\nReason for Selection:\n{selection_reason}")
-    print(f"\nDiagnostics for Selected Curve:")
-    print("-" * 80)
-    for group in col_groups:
-        print(diag_df.loc[[selected_mask], group].to_string())
-        print()
-    print("=" * 80)
-
-    # ------------------------------------------------------------------
-    # 4. Export predictions CSV for selected mask
-    # ------------------------------------------------------------------
-    gam_selected  = fitted_gams[selected_mask]
-    age_pred_sel  = age_arrays[selected_mask]
-
-    csv_data = {'Age': age_pred_sel}
-    for abund in abundance_levels:
-        X_pred = np.column_stack([age_pred_sel, np.full_like(age_pred_sel, float(abund))])
-        preds  = gam_selected.predict(X_pred)
-        csv_data[f'GAM_Prediction_{abund}%Abundance'] = preds
-
-    pred_df = pd.DataFrame(csv_data)
-    os.makedirs(os.path.dirname(exportCsvOfSelectedCurve_Path), exist_ok=True)
-    pred_df.to_csv(exportCsvOfSelectedCurve_Path, index=False)
-
-    # ------------------------------------------------------------------
-    # 5. Update JSON dictionary of selected curves
-    # ------------------------------------------------------------------
-    if dictionnaryOfSelectedCurves is not None:
-        if os.path.exists(dictionnaryOfSelectedCurves):
-            with open(dictionnaryOfSelectedCurves, 'r') as f:
-                existing = json.load(f)
-        else:
-            existing = {}
-        existing[speciesName] = selected_mask
-        with open(dictionnaryOfSelectedCurves, 'w') as f:
-            json.dump(existing, f, indent=None)
-
-
-    return {"Peak_age" : diag_df.at[selected_mask, 'Peak_Age'],
-           "Peak_Biomass" : diag_df.at[selected_mask, 'Peak_Biomass']}
-
-
-### FUNCTIONS FOR FIRST CALIBRATION STEP (MONOCULTURE IN IDEAL CONDITIONS)
-
 import json
 import copy
 import shutil
-
 def calibrate_phase1_1(
     species,
     functional_type,
@@ -8363,158 +6890,11 @@ def calibrate_LAI_subphase_1_1_2(
     }
 
 
-
-
-import json
-import copy
-import shutil
-
-def calibrate_subphase_1_1_3(
-    species: str,
-    target_peak_biomass: float,
-    DictOfBounds: dict,
-    path_core: str = './SpeciesParametersSets/Initial/initialCoreSpeciesParameters.json',
-    path_pnet: str = './SpeciesParametersSets/Initial/initialPnETSpeciesParameters.json',
-    path_generic: str = './SpeciesParametersSets/Initial/InitialGenericParameters.json',
-    duration: int = 300,
-    climate: str = "mild",
-    soil: str = "SILO",
-    tolerance: float = 0.01,
-    max_iter: int = 50
-):
-    # --- Load parameter dicts ---
-    core_params    = json.load(open(path_core))
-    pnet_params    = json.load(open(path_pnet))
-    generic_params = json.load(open(path_generic))
-    # EDIT : Put longevity veeeeery far away so that fAge
-    # doesn't influence the peak
-    core_params[species]["Longevity"]="999"
-
-    # --- Retrieve FolN bounds ---
-    foln_lower = float(DictOfBounds[species]["FolN"]["lower"])
-    foln_upper = float(DictOfBounds[species]["FolN"]["upper"])
-
-    target_peak_biomass = float(target_peak_biomass)
-
-    print(f"[1.1.3] Species          : {species}")
-    print(f"[1.1.3] Target biomass   : {target_peak_biomass:.2f} g/m²")
-    print(f"[1.1.3] FolN bounds      : [{foln_lower}, {foln_upper}]")
-
-    # --- Helper: run simulation for a given FolN value ---
-    def run_sim(foln_value, printPlots = False):
-        foln_value = float(foln_value)
-        pnet_trial = copy.deepcopy(pnet_params)
-        pnet_trial["PnETSpeciesParameters"][species]["FolN"] = foln_value
-        result = calibrationSimulationMonoculturemanawan(
-            duration=duration,
-            climate=climate,
-            soil=soil,
-            speciesToSimulate=species,
-            dictOfInitialCoreSpeciesParameters=copy.deepcopy(core_params),
-            dictOfInitialPnETSpeciesParameters=pnet_trial,
-            dictOfInitialPnETGenericParameters=copy.deepcopy(generic_params),
-            plotResults = printPlots
-        )
-        return float(result["Biomass peak height"])
-
-    # --- Baseline check ---
-    current_foln = float(pnet_params["PnETSpeciesParameters"][species]["FolN"])
-    baseline_peak = run_sim(current_foln)
-    rel_error = abs(baseline_peak - target_peak_biomass) / target_peak_biomass
-
-    print(f"[1.1.3] Baseline FolN    : {current_foln:.4f}")
-    print(f"[1.1.3] Baseline peak    : {baseline_peak:.2f} g/m²  "
-          f"(relative error: {rel_error * 100:.2f}%)")
-
-    if rel_error <= tolerance:
-        print(f"[1.1.3] Already within tolerance. No adjustment needed.")
-        return current_foln, baseline_peak
-
-    # --- Evaluate biomass at both bounds ---
-    peak_at_lower = run_sim(foln_lower)
-    peak_at_upper = run_sim(foln_upper)
-
-    print(f"[1.1.3] Biomass at FolN lower bound ({foln_lower:.4f}): {peak_at_lower:.2f} g/m²")
-    print(f"[1.1.3] Biomass at FolN upper bound ({foln_upper:.4f}): {peak_at_upper:.2f} g/m²")
-
-    # Check that the target lies within the achievable range
-    foln_min_peak = min(peak_at_lower, peak_at_upper)
-    foln_max_peak = max(peak_at_lower, peak_at_upper)
-
-    if not (foln_min_peak <= target_peak_biomass <= foln_max_peak):
-        if abs(peak_at_lower - target_peak_biomass) < abs(peak_at_upper - target_peak_biomass):
-            best_foln = foln_lower
-            best_peak = peak_at_lower
-        else:
-            best_foln = foln_upper
-            best_peak = peak_at_upper
-
-        rel_error_best = abs(best_peak - target_peak_biomass) / target_peak_biomass
-        print(f"\n[WARNING] Target biomass ({target_peak_biomass:.2f} g/m²) is outside the range "
-              f"achievable by FolN [{foln_min_peak:.2f}, {foln_max_peak:.2f}] g/m².")
-        print(f"[WARNING] Best achievable peak: {best_peak:.2f} g/m² at FolN={best_foln:.4f} "
-              f"(relative error: {rel_error_best * 100:.2f}%).")
-        print("[WARNING] Please return to subphase 1.1.1 to make major adjustments "
-              "to the biomass peak before retrying subphase 1.1.3.")
-        return best_foln, best_peak
-
-    # --- Bisection ---
-    if peak_at_lower <= target_peak_biomass:
-        low, high = foln_lower, foln_upper
-    else:
-        low, high = foln_upper, foln_lower
-
-    print(f"\n[1.1.3] Starting bisection...")
-
-    best_foln = float((low + high) / 2.0)
-    best_peak = None
-
-    for i in range(max_iter):
-        mid      = float((low + high) / 2.0)
-        mid_peak = run_sim(mid)
-        rel_error = abs(mid_peak - target_peak_biomass) / target_peak_biomass
-
-        print(f"  Iter {i+1:02d} | FolN={mid:.4f} | "
-              f"Biomass peak={mid_peak:.2f} g/m² | "
-              f"Relative error={rel_error * 100:.2f}%")
-
-        best_foln = mid
-        best_peak = mid_peak
-
-        if rel_error <= tolerance:
-            print(f"\n[1.1.3] Converged at iteration {i+1}.")
-            break
-
-        if mid_peak < target_peak_biomass:
-            low = mid
-        else:
-            high = mid
-
-    else:
-        rel_error_final = abs(float(best_peak) - target_peak_biomass) / target_peak_biomass
-        print(f"\n[WARNING] Bisection reached max iterations ({max_iter}) without converging "
-              f"within tolerance (final relative error: {rel_error_final * 100:.2f}%).")
-        print("[WARNING] Please return to subphase 1.1.1 to make major adjustments "
-              "to the biomass peak before retrying subphase 1.1.3.")
-
-    best_peak = float(best_peak)
-    best_foln = float(best_foln)
-
-    run_sim(best_foln, printPlots = True)
-
-    print(f"\n[1.1.3] Calibrated FolN  : {best_foln:.4f}")
-    print(f"[1.1.3] Achieved peak    : {best_peak:.2f} g/m²")
-    print(f"[1.1.3] Relative error   : {abs(best_peak - target_peak_biomass) / target_peak_biomass * 100:.2f}%")
-
-    return best_foln
-
-
 import json
 import copy
 import numpy as np
 import shutil
 import math
-
 def calibrate_subphase_1_2(
     species: str,
     target_peak_time: float,
@@ -9408,10 +7788,8 @@ def calibrate_subphase_1_2(
             "FolN": current_FolN}
 
 
-
 import copy
 import json
-
 def calibrate_subphase_1_3(
     species,
     target_peak_time,
@@ -9822,11 +8200,9 @@ def calibrate_subphase_1_3(
     return changed_params
 
 
-
 import json
 import math
 import copy
-
 def calibrate_senescence(
     species,
     typical_mortality,
@@ -10074,10 +8450,8 @@ def calibrate_senescence(
     }
 
 
-
 import pandas as pd
 import matplotlib.pyplot as plt
-
 def plot_growth_curves(
     nfi_gam_path: str,
     pnet_growth_path: str,
@@ -10154,7 +8528,6 @@ def plot_growth_curves(
     plt.show()
 
 
-
 def plot_multispecies_growth_curves(
     nfi_gam_paths: list[str],
     pnet_growth_paths: list[str],
@@ -10227,14 +8600,16 @@ def plot_multispecies_growth_curves(
 
 
 
-## FUNCTIONS FOR DERIVING PARAMETERS THROUGH REGRESSION WITH PUBLISHED STUDIES
-# Drought and waterlogging
 
+# =============================================================================
+# FUNCTIONS FOR DERIVING PARAMETERS THROUGH REGRESSION WITH PUBLISHED STUDIES (Notebook 4)
+# =============================================================================
+
+# Drought and waterlogging
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pygam import LinearGAM, s
-
 def predict_H_parameters(
     drought_tolerance: float,
     waterlogging_tolerance: float,
@@ -10370,15 +8745,11 @@ def predict_H_parameters(
     return {"H1":round(pred_H1, 2), "H2":round(pred_H2, 2), "H3":round(pred_H3, 2), "H4":round(pred_H4, 2)}
 
 
-
-
 # TEMPERATURE PARAMETERS
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pygam import LinearGAM, s
-
 def predict_temperature_parameters(species_map, return_df=True, plotAndSummaries = True):
     # ─────────────────────────────────────────────
     # Hardcoded CSV paths
@@ -10613,8 +8984,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from pygam import LinearGAM, s
-
-
 def predict_temperature_parameters_single_species(
     species_code: str,
     species_latin_name: str,
@@ -10754,13 +9123,9 @@ def predict_temperature_parameters_single_species(
     return predictions, None
 
 
-
-
 # GET PARAMETER VALUES FOR A NEW SPECIES ACCORDING TO THE CALIBRATION TIPS
 # OF ERIC GUSTAFSON
-
 import numpy as np
-
 def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_type: str,
                                    fullLatinSpeciesName : str, IMAX : int,
                                    diazDatasetPath : str = "./ReferencesAndData/Others/DiazEtAlDatasetTraits.csv") -> dict[str, str]:
@@ -10887,13 +9252,13 @@ def get_parameters_gustafson_rules(shade_tolerance: float, tree_type: str, wood_
 
 
 
-#######################################################
-# FUNCTIONS FOR INVESTIGATING COMPETITION OUTCOMES
-#######################################################
+
+# =============================================================================
+# FUNCTIONS FOR INVESTIGATING COMPETITION OUTCOMES (Notebook 7)
+# =============================================================================
 
 import copy
-
-def competitionSimulationMonoculturemanawan(duration = 200,
+def competitionSimulationManawan(duration = 200,
                                             climate = "mild",
                                             soil = "SILO",
                                             speciesToSimulate = ["ABIE.BAL", "ACER.RUB"],
@@ -11131,8 +9496,6 @@ import numpy as np
 import rasterio
 from pathlib import Path
 from dataclasses import dataclass, field
-
-
 @dataclass
 class CompetitionResult:
     """Holds Y indices, win fractions, and growth curves for one species pair."""
@@ -11161,30 +9524,6 @@ def _get_available_timesteps(species_name: str, base_dir: Path) -> list[int]:
     if not timesteps:
         raise FileNotFoundError(f"No WoodFoliageBiomass-*.img files found in {folder}")
     return timesteps
-
-
-def _load_biomass(species_name: str, timestep: int, base_dir: Path) -> np.ndarray:
-    """
-    Load a flat 1D array of valid (non-NoData) biomass values for a given
-    species and timestep.
-
-    Returns
-    -------
-    np.ndarray
-        1D array of valid biomass values across all cells.
-    """
-    path = base_dir / species_name / f"WoodFoliageBiomass-{timestep}.img"
-
-    with rasterio.open(path) as src:
-        data = src.read(1).astype(np.float64)
-        nodata = src.nodata
-
-    if nodata is not None:
-        valid_mask = data != nodata
-    else:
-        valid_mask = np.isfinite(data)
-
-    return data[valid_mask]
 
 
 def _load_all_timesteps(
@@ -11362,8 +9701,6 @@ def compute_Y(
 from itertools import combinations
 from dataclasses import dataclass, field
 import numpy as np
-
-
 # Represents one row in the full factorial design (one of the 8 configurations)
 FACTORIAL_CONFIGS = [
     # (equalizeWater, equalizeTemperature, equalizeRest)  — all 2^3 combinations
@@ -11376,6 +9713,7 @@ FACTORIAL_CONFIGS = [
     (False, True,  True),   # temp + rest equalized    (+1, -1, -1)
     (True,  True,  True),   # all equalized            (-1, -1, -1)
 ]
+
 
 # Corresponding ±1 codes for the factorial model (W, T, R)
 FACTORIAL_CODES = np.array([
@@ -11404,10 +9742,7 @@ from itertools import combinations
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass, field
-
-
 # ── Worker (must be top-level for pickling) ────────────────────────────────────
-
 def _run_single_config(
     sp1: str,
     sp2: str,
@@ -11426,14 +9761,14 @@ def _run_single_config(
     """
     Top-level worker function executed in a separate process.
 
-    Delegates entirely to competitionSimulationMonoculturemanawan, which
+    Delegates entirely to competitionSimulationManawan, which
     already calls compute_Y internally and returns a CompetitionResult.
     We do NOT call compute_Y again here — the simulator handles the correct
     output path (simulationPath + "/output/WoodFoliageBiomass") itself.
     """
     eq_water, eq_temp, eq_rest = config
 
-    result = competitionSimulationMonoculturemanawan(
+    result = competitionSimulationManawan(
         speciesToSimulate=[sp1, sp2],
         dictOfInitialCoreSpeciesParameters_path=dictOfInitialCoreSpeciesParameters_path,
         dictOfInitialPnETSpeciesParameters_path=dictOfInitialPnETSpeciesParameters_path,
@@ -11449,9 +9784,7 @@ def _run_single_config(
     return config, result
 
 
-
 # ── Main automation function ───────────────────────────────────────────────────
-
 def run_all_pairs(
     species_list: list[str],
     base_dir: str = "/output/WoodFoliageBiomass",
@@ -11468,7 +9801,7 @@ def run_all_pairs(
 ) -> list[PairSimulationResults]:
     """
     For every unique (unordered) pair of species, run all 8 factorial
-    configurations of competitionSimulationMonoculturemanawan and collect
+    configurations of competitionSimulationManawan and collect
     CompetitionResult objects.
 
     The all-equalized config (equalizeWater=True, equalizeTemperature=True,
@@ -11550,7 +9883,7 @@ def run_all_pairs(
                 f"[{sp1} vs {sp2}] "
                 f"W={eq_water} T={eq_temp} R={eq_rest}"
             )
-            competitionSimulationMonoculturemanawan(
+            competitionSimulationManawan(
                 speciesToSimulate=[sp1, sp2],
                 dictOfInitialCoreSpeciesParameters_path=dictOfInitialCoreSpeciesParameters_path,
                 dictOfInitialPnETSpeciesParameters_path=dictOfInitialPnETSpeciesParameters_path,
@@ -11778,12 +10111,12 @@ def compute_effects(
 
     return results[0], results[1]  # (short, long)
 
+
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpatches
 from matplotlib.cm import ScalarMappable
 import numpy as np
-
 def _to_ternary(e_W, e_T, e_R):
     """
     Convert (e_W, e_T, e_R) barycentric coordinates (summing to 1)
@@ -11799,16 +10132,8 @@ def _to_ternary(e_W, e_T, e_R):
     return x, y
 
 
-
-def _assign_species_colors(species_list: list[str]) -> dict[str, str]:
-    """Assign a unique, visually distinct color to each species."""
-    palette = plt.cm.tab20.colors  # 20 distinct colors
-    return {sp: palette[i % len(palette)] for i, sp in enumerate(species_list)}
-
-
 import warnings
 import matplotlib.colors as mcolors
-
 def make_species_colors(
     species_list: list[str],
     use_glasbey: bool = True,
@@ -12286,12 +10611,124 @@ equalizeTemperature=True,  equalizeRest=False)
 
     return fig
 
-#######################################################
-# FUNCTIONS TO CALIBRATE MAXPEST
-#######################################################
+
+def plot_competition_matrices(avg_trait_dict):
+    """
+    Plot competition probability matrices for each tolerance trait.
+
+    Creates one heatmap per trait showing the probability that each species
+    (challenger, rows) wins against each other species (opponent, columns)
+    based on their tolerance values.
+
+    Parameters
+    ----------
+    avg_trait_dict : dict
+        Dictionary from average_tolerance_traits() with structure:
+        {species_name: {trait_name: average_value}}
+
+    Returns
+    -------
+    None
+        Displays matplotlib figures with competition matrices.
+
+    Notes
+    -----
+    Competition probability calculation:
+    - Challenger tolerance 1 vs Opponent tolerance 5: 0% win probability
+    - Challenger tolerance 5 vs Opponent tolerance 1: 100% win probability
+    - Equal tolerances: 50% win probability
+    - Other combinations: linear interpolation
+    - Diagonal (species vs itself): displayed as white with no probability
+
+    Formula: P(win) = 0.5 + 0.125 * (challenger_tolerance - opponent_tolerance)
+
+    Examples
+    --------
+    >>> avg_data = average_tolerance_traits(raw_data)
+    >>> plot_competition_matrices(avg_data)
+    """
+    # Organize data by trait
+    trait_data = {}
+    for species, traits in avg_trait_dict.items():
+        for trait_name, trait_value in traits.items():
+            if trait_name not in trait_data:
+                trait_data[trait_name] = {}
+            trait_data[trait_name][species] = trait_value
+
+    # Create one plot per trait
+    for trait_name, species_values in trait_data.items():
+        # Get sorted species list for consistent ordering
+        species_list = sorted(species_values.keys())
+        n_species = len(species_list)
+
+        # Initialize probability matrix with NaN for diagonal
+        prob_matrix = np.zeros((n_species, n_species))
+
+        # Calculate win probabilities
+        for i, challenger in enumerate(species_list):
+            for j, opponent in enumerate(species_list):
+                if i == j:
+                    # Set diagonal to NaN for masking
+                    prob_matrix[i, j] = np.nan
+                    continue
+
+                challenger_tol = species_values[challenger]
+                opponent_tol = species_values[opponent]
+
+                # Linear interpolation formula
+                diff = challenger_tol - opponent_tol
+                prob_win = 0.5 + 0.125 * diff
+
+                # Ensure probability is within [0, 1]
+                prob_win = np.clip(prob_win, 0, 1)
+
+                prob_matrix[i, j] = prob_win
+
+        # Create figure
+        fig, ax = plt.subplots(figsize=(max(5, n_species * 0.5), max(4, n_species * 0.4)))
+
+        # Create masked array to handle NaN values (diagonal)
+        masked_matrix = np.ma.masked_invalid(prob_matrix)
+
+        # Create heatmap with red-to-blue colormap
+        im = ax.imshow(masked_matrix, cmap='RdBu', aspect='auto', vmin=0, vmax=1)
+
+        # Set background color for masked cells (diagonal) to white
+        ax.set_facecolor('white')
+
+        # Set ticks and labels
+        ax.set_xticks(np.arange(n_species))
+        ax.set_yticks(np.arange(n_species))
+        ax.set_xticklabels(species_list, rotation=45, ha='right', fontsize=8)
+        ax.set_yticklabels(species_list, fontsize=8)
+
+        # Add labels
+        ax.set_xlabel('Opponent', fontsize=12, fontweight='bold')
+        ax.set_ylabel('Challenger', fontsize=12, fontweight='bold')
+        ax.set_title(f'Competition Matrix: {trait_name}', fontsize=14, fontweight='bold', pad=20)
+
+        # Add probability values in cells (skip diagonal)
+        for i in range(n_species):
+            for j in range(n_species):
+                if i != j:  # Skip diagonal
+                    ax.text(j, i, f'{prob_matrix[i, j]:.2f}',
+                           ha='center', va='center', color='black', fontsize=9)
+
+        # Add colorbar
+        cbar = plt.colorbar(im, ax=ax)
+        cbar.set_label('Win Probability', rotation=270, labelpad=20, fontsize=11)
+
+        plt.tight_layout()
+        plt.show()
+
+
+
+
+# =============================================================================
+# FUNCTIONS TO CALIBRATE MAXPEST (Notebook 8)
+# =============================================================================
 
 import random
-
 def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange, averageNumberOfCohorts = 12, standardDeviationNumberOfCohorts = 2.71, medianAge = 50, filename='output.csv'):
     """Function used to create the .csv files to initialize
     the landscapes for the little simulations used for the calibration.
@@ -12345,7 +10782,6 @@ def create_species_csv_maxpestcalibration(listOfSpecies, numberOfCells, ageRange
 
 
 import copy
-
 def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
                                                 climate = "realHistorical",
                                                 soilsProportions = {"highlands":0.2, "lowlands":0.6, "mucky_peat":0.2},
@@ -12674,15 +11110,14 @@ def calibrationSimulationLandscapeMaxPestManawan(duration = 500,
 
 
 
-#######
-# Functions to make soil maps
-#######
+
+# =============================================================================
+# FUNCTIONS TO MAKE A RANDOM SOIL MAP (FOR CALIBRATING MAXPEST) (Notebook 8)
+# =============================================================================
 
 import random
 from collections import defaultdict
 import numpy as np
-
-
 class _IndexedSet:
     """Set with O(1) add / discard / uniform random pick."""
     __slots__ = ("items", "index")
@@ -12871,3 +11306,740 @@ def _plot_soil_map(grid, codes, soil_names, soilsTypesFixed = True):
                title="Soil type", borderaxespad=0.)
     plt.tight_layout()
     plt.show()
+
+
+
+
+# =============================================================================
+# FUNCTIONS TO LAUNCH AND PARSE A FVS (FOREST VEGETATION SIMULATOR) SIMULATION (Unused now)
+# =============================================================================
+
+def FVS_on_simulationOnSingleEmptyStand(Latitude,
+                                        Longitude,
+                                        Slope,
+                                        Elevation,
+                                        treeSpeciesCode,
+                                        treesPerHectares,
+                                        siteIndex,
+                                        variant = "FVSon",
+                                        Max_BA = "",
+                                        timestep = 10,
+                                        numberOfTimesteps = 12,
+                                        outputFormatBiomass = "Metric tons per hectares",
+                                        outputFormatYears = "Real date",
+                                        folderForFiles = "/tmp/FVS_SingleEmptyStandRun",
+                                        clearFiles = True,
+                                        printOutput = False):
+
+
+    # Check if the directory exists
+    if os.path.exists(folderForFiles):
+        # Remove the directory and all its contents
+        shutil.rmtree(folderForFiles)
+        print(f"The directory '{folderForFiles}' has been deleted.")
+    
+    # Create the directory
+    os.makedirs(folderForFiles)
+    print(f"The directory '{folderForFiles}' has been created.")
+
+    print("Creating Database with stand and tree ini values")
+    # Connect to the SQLite database (or create it if it doesn't exist)
+    conn = sqlite3.connect(folderForFiles + "/FVSData.db")
+    cursor = conn.cursor()
+    
+    # Create table FVS_StandInit
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS "FVS_StandInit" (
+            	"Stand_CN"	TEXT,
+            	"Stand_ID"	TEXT,
+            	"Variant"	TEXT,
+            	"Inv_Year"	INTEGER,
+            	"Groups"	REAL,
+            	"AddFiles"	TEXT,
+            	"FVSKeywords"	TEXT,
+            	"Latitude"	REAL,
+            	"Longitude"	REAL,
+            	"Region"	INTEGER,
+            	"Forest"	INTEGER,
+            	"District"	INTEGER,
+            	"Compartment"	INTEGER,
+            	"Location"	INTEGER,
+            	"Ecoregion"	TEXT,
+            	"BEC"	TEXT,
+            	"PV_Code"	TEXT,
+            	"PV_Ref_Code"	INTEGER,
+            	"Age"	INTEGER,
+            	"Aspect"	REAL,
+            	"Slope"	REAL,
+            	"Elevation"	REAL,
+            	"ElevFt"	REAL,
+            	"Basal_Area_Factor"	REAL,
+            	"Inv_Plot_Size"	REAL,
+            	"Brk_DBH"	TEXT,
+            	"Num_Plots"	INTEGER,
+            	"NonStk_Plots"	INTEGER,
+            	"Sam_Wt"	REAL,
+            	"Stk_Pcnt"	REAL,
+            	"DG_Trans"	INTEGER,
+            	"DG_Measure"	INTEGER,
+            	"HTG_Trans"	INTEGER,
+            	"HTG_Measure"	INTEGER,
+            	"Mort_Measure"	INTEGER,
+            	"Max_BA"	REAL,
+            	"Max_SDI"	REAL,
+            	"Site_Species"	TEXT,
+            	"Site_Index"	REAL,
+            	"Model_Type"	INTEGER,
+            	"Physio_Region"	INTEGER,
+            	"Forest_Type"	INTEGER,
+            	"State"	INTEGER,
+            	"County"	INTEGER,
+            	"Fuel_Model"	INTEGER,
+            	"Fuel_0_25_H"	REAL,
+            	"Fuel_25_1_H"	REAL,
+            	"Fuel_1_3_H"	REAL,
+            	"Fuel_3_6_H"	REAL,
+            	"Fuel_6_12_H"	REAL,
+            	"Fuel_12_20_H"	REAL,
+            	"Fuel_20_35_H"	REAL,
+            	"Fuel_35_50_H"	REAL,
+            	"Fuel_gt_50_H"	REAL,
+            	"Fuel_0_25_S"	REAL,
+            	"Fuel_25_1_S"	REAL,
+            	"Fuel_1_3_S"	REAL,
+            	"Fuel_3_6_S"	REAL,
+            	"Fuel_6_12_S"	REAL,
+            	"Fuel_12_20_S"	REAL,
+            	"Fuel_20_35_S"	REAL,
+            	"Fuel_35_50_S"	REAL,
+            	"Fuel_gt_50_S"	REAL,
+            	"Fuel_Litter"	REAL,
+            	"Fuel_Duff"	REAL,
+            	"Fuel_0_06_H"	REAL,
+            	"Fuel_06_25_H"	REAL,
+            	"Fuel_25_76_H"	REAL,
+            	"Fuel_76_152_H"	REAL,
+            	"Fuel_152_305_H"	REAL,
+            	"Fuel_305_508_H"	BLOB,
+            	"Fuel_508_889_H"	REAL,
+            	"Fuel_889_1270_H"	REAL,
+            	"Fuel_gt_1270_H"	REAL,
+            	"Fuel_0_06_S"	REAL,
+            	"Fuel_06_25_S"	REAL,
+            	"Fuel_25_76_S"	REAL,
+            	"Fuel_76_152_S"	REAL,
+            	"Fuel_152_305_S"	REAL,
+            	"Fuel_305_508_S"	REAL,
+            	"Fuel_508_889_S"	REAL,
+            	"Fuel_889_1270_S"	REAL,
+            	"Fuel_gt_1270_S"	REAL,
+            	"Photo_Ref"	INTEGER,
+            	"Photo_code"	TEXT,
+            	"Moisture"	REAL
+            )
+    ''')
+    
+    # Create table FVS_TreeInit
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS "FVS_TreeInit" (
+                        	"Stand_CN"	TEXT,
+                        	"Stand_ID"	TEXT,
+                        	"StandPlot_CN"	TEXT,
+                        	"StandPlot_ID"	TEXT,
+                        	"Plot_ID"	INTEGER,
+                        	"Tree_ID"	INTEGER,
+                        	"Tree_Count"	REAL,
+                        	"History"	INTEGER,
+                        	"Species"	TEXT,
+                        	"DBH"	REAL,
+                        	"DG"	REAL,
+                        	"Ht"	REAL,
+                        	"HTG"	REAL,
+                        	"HtTopK"	REAL,
+                        	"CrRatio"	INTEGER,
+                        	"Damage1"	INTEGER,
+                        	"Severity1"	INTEGER,
+                        	"Damage2"	INTEGER,
+                        	"Severity2"	INTEGER,
+                        	"Damage3"	INTEGER,
+                        	"Severity3"	INTEGER,
+                        	"TreeValue"	INTEGER,
+                        	"Prescription"	INTEGER,
+                        	"Age"	INTEGER,
+                        	"Slope"	INTEGER,
+                        	"Aspect"	INTEGER,
+                        	"PV_Code"	INTEGER,
+                        	"TopoCode"	INTEGER,
+                        	"SitePrep"	INTEGER
+                        )
+    ''')
+    
+    # Inserting Stand Row
+    data_to_insert = {
+    'Stand_CN': 'STAND_EMPTY',
+    'Stand_ID': 'STAND_EMPTY',
+    'Variant': str(variant[-2:]),
+    'Inv_Year': 2023,
+    'Groups': 'All_Stands',
+    'Latitude': str(Latitude),
+    'Longitude': str(Longitude),
+    'Age': 0,
+    'Aspect': 0,
+    'Slope': str(Slope),
+    'Elevation': str(Elevation),
+    'Basal_Area_Factor': -1.0, # Used to control number of tree in stands.
+    'Inv_Plot_Size': 1.0, # Used to control number of trees in stand.
+    'Num_Plots': 0,
+    'Site_Species': str(treeSpeciesCode),
+    'Site_Index': str(siteIndex),
+    'Max_BA': str(Max_BA)
+    }
+
+    columns = ', '.join(data_to_insert.keys())
+    values = ', '.join(['%s'] * len(data_to_insert))
+    sql = "INSERT INTO FVS_StandInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
+
+    # print(sql)
+
+    cursor.execute(sql)
+    # print(f"{cursor.rowcount} record inserted in database.")
+
+    # WARNING : It looks like the tree density is calculated differently from one variant to the other.
+    # In particular, it seems like the american variants of FVS will use the number of trees given in the stand
+    # as the density/acre, while FVS Ontario will use it as density/hectare. I tested almost all american variants,
+    # and this is to be that every time.
+    # We make the change here.
+    if variant != "FVSon" and variant != "FVSbc" : # The two canadian variants seem to only deal in Ha
+        numberOfTrees = treesPerHectares * 0.4046856422
+    else:
+        numberOfTrees = treesPerHectares
+    
+    # Inserting Tree row
+    data_to_insert = {
+    'Stand_CN': 'STAND_EMPTY',
+    'Stand_ID': 'STAND_EMPTY',
+    'Plot_ID': 1,
+    'Tree_ID': 1,
+    'Tree_Count': numberOfTrees,
+    'History': 1, # Values 1-5 doesn't seem to change anything. We'll use that.
+    'Species' : str(treeSpeciesCode),
+    'DBH' : 0.5 # Used to initialize young trees
+    }
+
+    columns = ', '.join(data_to_insert.keys())
+    values = ', '.join(['%s'] * len(data_to_insert))
+    sql = "INSERT INTO FVS_TreeInit (" + str(columns) + ") VALUES" + str(tuple(data_to_insert.values()))
+
+    # print(sql)
+
+    cursor.execute(sql)
+    # print(f"{cursor.rowcount} record inserted in database.")
+
+    # Commit changes to SQL database and close the connection
+    conn.commit()
+    conn.close()
+
+    # Creating Keyword file
+    print("Creating Keyword file")
+    
+    Keywordfile_content = """STDIDENT
+STAND_EMPTY
+
+ECHOSUM
+SCREEN
+
+DATABASE
+DSNin
+FVSData.db
+StandSQL
+SELECT * FROM FVS_StandInit WHERE Stand_ID = 'STAND_EMPTY'
+EndSQL
+TreeSQL
+SELECT * FROM FVS_TreeInit WHERE Stand_ID = 'STAND_EMPTY'
+EndSQL
+End
+
+TIMEINT           0      INSERT_TIMEINT
+NUMCYCLE          INSERT_NUMCYCLE
+
+ESTAB           2023
+STOCKADJ          -1
+END
+
+TREELIST           0
+CUTLIST            0
+
+COMMENT
+The following lines are used to produce a "Carbon report" with the Fire and Fuel extension of FVS.
+See user guide for more : https://www.fs.usda.gov/fmsc/ftp/fvs/docs/gtr/FFEguide.pdf
+CARBCALC 1 1 is used to say that we want the report in metric tons/ha (not us tons), and that a more refined algorithm for biomass estimation be used (Jenkins algorithm, which estimates bark biomass in contrast to the regular algorithm).
+CARBREPT is used to output the report in the main output (.out) file of the simulation.
+END
+
+FMIN
+CARBCALC 1 1
+CARBREPT
+END
+
+PROCESS
+STOP
+"""
+    Keywordfile_content = Keywordfile_content.replace("INSERT_TIMEINT", str(timestep))
+    Keywordfile_content = Keywordfile_content.replace("INSERT_NUMCYCLE", str(numberOfTimesteps))
+    
+    with open(folderForFiles + "/SingleStandSim_Keywords.key", 'w', encoding='utf-8') as file:
+        file.write(Keywordfile_content)
+
+    # Launching the sim
+    print("Launching FVS sim")
+    result = subprocess.run([variant, '--keywordfile=SingleStandSim_Keywords.key'], cwd=folderForFiles, capture_output=True, text=True)
+    if printOutput:
+        print(result.stdout)
+
+    # print("WARNING : the content of the output dictionnary of this function can differ slightly from what is printed above (console outputs of FVS). It seems that the console output can round certain variables differently than what is in the .out files (that will be read to create the dictionnary). Differences should be minimal.\n\n")
+
+    # Reading the Gross Total Volume as Output - outdated
+    # print("Reading Outputs")
+    # mapping = {}
+    # ignoreFirstLine = True
+    # with open(folderForFiles + "/SingleStandSim_Keywords.sum", 'r') as file:
+        # for line in file:
+            # if ignoreFirstLine:
+                # ignoreFirstLine = False
+            # else:
+                # Split the line into parts based on whitespace
+                # parts = line.split()
+                
+                # Check if there are enough parts to avoid IndexError
+                # if len(parts) > 8:
+                    # Get the number from the first column (index 0)
+                    # key = int(parts[0])
+                    # Get the number from the ninth column (index 8)
+                    # value = int(parts[8])
+                    
+                    # Add to dictionary
+                    # mapping[key] = value
+
+    # Reading the total stand carbon output and converting it into biomass
+    # The carbon outputs can only be outputed in the .out main report file. Not ideal, but we can get it there.
+    mapping = {}
+    
+    # Define the target string to search for
+    target_string_carbonReport = "******  CARBON REPORT VERSION 1.0 ******"
+    target_string_carbonUnits = "ALL VARIABLES ARE REPORTED IN"
+    target_string_lastLineBeforeValues = "YEAR    Total    Merch     Live     Dead     Dead      DDW    Floor  Shb/Hrb   Carbon   Carbon  from Fire"
+    target_dashesLine = "--------------------------------------------------------------------------------------------------------------"
+
+    with open(folderForFiles + "/SingleStandSim_Keywords.out", 'r') as file:
+        lines = file.readlines()
+
+    # Initialize variables to track whether we've found the target string and to collect report lines
+    found_target_carbonReport = False
+    found_target_carbonUnits = False
+    found_target_lastLineBeforeValues = False
+    found_target_lastDashesLine = False
+    report_lines = []
+
+    # The loops will look in every lines until we find the mention of the carbon report,
+    # and the lines indicating the beginning of the value table.
+    for line in lines:
+        if not found_target_carbonReport:
+            if target_string_carbonReport in line:
+                found_target_carbonReport = True
+        else:
+            if not found_target_carbonUnits:
+                if target_string_carbonUnits in line:
+                    found_target_carbonUnits = True
+                    if "TONS/ACRE" in line :
+                        carbonUnits = "TONS/ACRE"
+                        print("Detected unit in carbon outputs is US Tons/Acre. Will transform into Metric ton / hectare.")
+                    elif "METRIC TONS/HECTARE" in line:
+                        carbonUnits = "METRIC TONS/HECTARE"
+                    else:
+                        raise Exception("Carbon units not properly detected in .out file of FVS. Please check the file; should be TONS/ACRES or METRIC TONS/HECTARE.")
+            else:
+                if not found_target_lastLineBeforeValues:
+                    if target_string_lastLineBeforeValues in line:
+                        found_target_lastLineBeforeValues = True
+                else:
+                    if not found_target_lastDashesLine:
+                        if target_dashesLine in line:
+                            found_target_lastDashesLine = True
+                    else:
+                        if re.match(r'^\s*-\s*$', line):
+                            break
+                        else:
+                            # Split the line into parts based on whitespace
+                            parts = line.split()
+                            
+                            # Check if there are enough parts to avoid IndexError
+                            if len(parts) > 8:
+                                # Get the number from the first column (index 0)
+                                key = int(parts[0])
+                                # Get the number from the second column (index 1), stand Aboveground live carbon
+                                value = float(parts[1])
+                                
+                                # Add to dictionary
+                                mapping[key] = value    
+
+    # To convert carbon back to biomass : The algorithm of the Fire and Fuel extension computes biomass, but only outputs carbon (no option for outputting biomass).
+    # However, indicates the convertion factor. Quote :
+    # "Biomass, expressed as dry weight, is assumed to be 50 percent carbon (Penman et al. 2003) for all pools except forest floor, which is estimated as 37 percent carbon (Smith and Heath 2002)"
+    # This is confirmed in the source code; see https://github.com/USDAForestService/ForestVegetationSimulator/blob/5c29887e4168fd8182c1b2bad762f900b7d7e90c/archive/bgc/src/binitial.f#L28
+    # Therefore, to get biomass from carbon outputs, we just have to multiply it by 2.
+    for key in mapping.keys():
+        mapping[key] = mapping[key]*2
+
+    # There is a big issue when choosing the different variants : sometimes, the keyword CARBCALC 1 1 - which indicates among other things that
+    # we want an output of carbon in Metric tons per hectare rather than US tons / acre - does not work ! 
+    # So here, we check and make the transformation to Metric tons per hectares if needed.
+    if carbonUnits == "TONS/ACRE":
+        for key in mapping.keys():
+            # Metric Tons per Hectare = US Tons per Acre×2.24127
+            mapping[key] = mapping[key]*2.24127
+            
+    # Delete the folder created for the inputs and outputs if specified
+    if clearFiles:
+        print("Clearing files")
+        shutil.rmtree(folderForFiles)
+        print(f"The directory '{folderForFiles}' has been deleted.")
+
+    # We end up by converting things according to the arguments of the function
+    if outputFormatBiomass != "Metric tons per hectares" and outputFormatBiomass != "Metric gram per meter squared":
+        raise Exception("outputFormatBiomass must be either 'Metric tons per hectares' or 'Metric gram per meter squared'.") 
+    if outputFormatYears != "Real date" and outputFormatYears != "Start at 0":
+        raise Exception("outputFormatYears must be either 'Real date' or 'Start at 0'.")
+
+    if outputFormatYears == "Start at 0":
+        initialKeys = list(mapping.keys())
+        beginningYear = min(initialKeys)
+        for key in initialKeys:
+            mapping[key - beginningYear] = mapping[key]
+            del mapping[key]
+
+    if outputFormatBiomass == "Metric gram per meter squared":
+        for key in mapping.keys():
+            # Mg to gram
+            mapping[key] = mapping[key] * 1000000
+            # Hectare to m2
+            mapping[key] = mapping[key]/10000
+
+    return(mapping)
+
+
+
+
+# =============================================================================
+# OTHER FUNCTIONS (Unused or unclassifiable)
+# =============================================================================
+
+def extract_try_traits(filepath, encoding='latin-1'):
+    """
+    Extract plant functional trait data from TRY database file into a nested dictionary.
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the TRY database text file (tab-separated format).
+    encoding : str, optional
+        Character encoding of the file. Default is 'latin-1'.
+        Common alternatives: 'utf-8', 'iso-8859-1', 'cp1252'.
+
+    Returns
+    -------
+    dict
+        Nested dictionary with structure:
+        {species_name: {trait_name: [list of trait values]}}
+        where species_name is from AccSpeciesName column,
+        trait_name is from TraitName column,
+        and values are from OrigValueStr column.
+
+    Notes
+    -----
+    The string "none" is preserved as a valid trait value and not treated as missing data.
+
+    Examples
+    --------
+    >>> data = extract_try_traits('try_data.txt')
+    >>> data['Quercus robur']['Leaf area']
+    ['45.2', '52.1', '48.7']
+
+    >>> data = extract_try_traits('try_data.txt', encoding='utf-8')
+    """
+    # Read tab-separated file with specified encoding
+    # keep_default_na=False prevents "none" from being converted to NaN
+    df = pd.read_csv(filepath, sep='\t', encoding=encoding, 
+                     keep_default_na=False, na_values=['nan', 'NaN'], low_memory=False)
+
+    # Remove rows with missing TraitName (empty strings after our na_values setting)
+    df = df[df['TraitName'] != '']
+
+    # Initialize nested dictionary with automatic list creation
+    trait_dict = defaultdict(lambda: defaultdict(list))
+
+    # Populate the nested dictionary
+    for _, row in df.iterrows():
+        species = row['AccSpeciesName']
+        trait = row['TraitName']
+        value = row['OrigValueStr']
+
+        trait_dict[species][trait].append(value)
+
+    # Convert to regular dict for cleaner output
+    return {species: dict(traits) for species, traits in trait_dict.items()}
+
+
+def average_tolerance_traits(trait_dict):
+    """
+    Calculate average tolerance trait values for each species from TRY trait dictionary.
+
+    Parameters
+    ----------
+    trait_dict : dict
+        Nested dictionary from extract_try_traits() with structure:
+        {species_name: {trait_name: [list of trait values]}}
+        Made by extract_try_traits().
+
+    Returns
+    -------
+    dict
+        Dictionary with structure:
+        {species_name: {trait_name: average_value}}
+        containing only tolerance traits with numeric averages.
+
+    Notes
+    -----
+    Conversion rules for trait values:
+    - Numeric 1-5: kept as is
+    - 0 or "none"/"no": converted to 1
+    - "low": converted to 1.5
+    - "medium": converted to 2.5
+    - "tolerant": converted to 3.5
+    - Values > 5: capped at 5
+    - Unrecognized values: ignored and reported
+
+    Examples
+    --------
+    >>> raw_data = extract_try_traits('try_data.txt')
+    >>> avg_data = average_tolerance_traits(raw_data)
+    >>> avg_data['Quercus robur']['Waterlogging tolerance']
+    2.75
+    """
+    # Mapping for text values to numeric scores
+    value_mapping = {
+        'none': 1,
+        'no': 1,
+        'low': 1.5,
+        'medium': 2.5,
+        'tolerant': 3.5,
+        'intolerant': 1.5,
+        'late-successional': 3.5
+    }
+
+    result_dict = {}
+    ignored_values = set()
+
+    for species, traits in trait_dict.items():
+        species_tolerances = {}
+
+        for trait_name, values in traits.items():
+            # Only process traits with "tolerance" in the name
+            if 'tolerance' not in trait_name.lower():
+                continue
+
+            numeric_values = []
+
+            for value in values:
+                # Convert to string and lowercase for consistent processing
+                value_str = str(value).strip().lower()
+
+                # Try to convert to float first
+                try:
+                    num_value = float(value_str)
+
+                    # Apply conversion rules
+                    if num_value == 0:
+                        numeric_values.append(1)
+                    elif num_value > 5:
+                        numeric_values.append(5)
+                    else:
+                        numeric_values.append(num_value)
+
+                except ValueError:
+                    # Handle text values
+                    if value_str in value_mapping:
+                        numeric_values.append(value_mapping[value_str])
+                    else:
+                        # Ignore and track unrecognized values
+                        ignored_values.add(value)
+
+            # Calculate average if we have valid numeric values
+            if numeric_values:
+                species_tolerances[trait_name] = sum(numeric_values) / len(numeric_values)
+
+        # Only add species if they have tolerance traits
+        if species_tolerances:
+            result_dict[species] = species_tolerances
+
+    # Print ignored values if any
+    if ignored_values:
+        print("Ignored values (unrecognized):")
+        for val in sorted(ignored_values):
+            print(f"  - {val}")
+
+    return result_dict
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+import numpy as np
+from collections import defaultdict
+def plot_all_cohort_results(output_folder, species_colors):
+    """
+    Plot vegetation model results for multiple cohorts.
+
+    Parameters:
+    -----------
+    output_folder : str or Path
+        Path to folder containing cohort CSV files
+    """
+
+    # Step 1: Load all cohort files
+    output_path = Path(output_folder)
+    cohort_files = list(output_path.glob("Cohort_*.csv"))
+
+    if not cohort_files:
+        print(f"No cohort files found in {output_folder}")
+        return
+
+    # Step 2: Parse filenames and load data
+    cohorts_data = []
+    species_cohorts = defaultdict(list)
+
+    for file in cohort_files:
+        # Extract species and implant year from filename
+        parts = file.stem.split('_')
+        species = parts[1]
+        implant_year = int(parts[2])
+        label = f"{species}_{implant_year}"
+
+        # Load data
+        df = pd.read_csv(file)
+        df['Cohort'] = label
+        df['Species'] = species
+        df['ImplantYear'] = implant_year
+        df['AbovegroundBiomass_InSite'] = df['SiteWood(gDW)'] + df['SiteFol(gDW)']
+
+        cohorts_data.append(df)
+        species_cohorts[species].append((implant_year, label))
+
+    # Step 3: Combine all data
+    all_data = pd.concat(cohorts_data, ignore_index=True)
+
+    # Step 4: Determine time range
+    min_year = all_data['Year'].min()
+    max_year = all_data['Year'].max()
+
+    # Step 5: Assign colors to species and cohorts
+    species_list = sorted(species_cohorts.keys())
+    # base_colors = ['#1f77b4', '#ff7f0e', '#2ca02c']  # Blue, Orange, Green
+    # species_colors = {species: base_colors[idx % 3] for idx, species in enumerate(species_list)}
+
+    cohort_colors = {}
+    for idx, species in enumerate(species_list):
+        cohorts = sorted(species_cohorts[species])
+        n_cohorts = len(cohorts)
+
+        # Create gradient for this species
+        # base_color = base_colors[idx % 3]
+        base_color = species_colors[species]
+        base_rgb = plt.matplotlib.colors.to_rgb(base_color)
+
+        for i, (implant_year, label) in enumerate(cohorts):
+            # Vary brightness from 0.4 to 1.0
+            brightness = 0.4 + 0.6 * (i / max(1, n_cohorts - 1))
+            cohort_colors[label] = tuple(c * brightness for c in base_rgb)
+
+    # Step 6: Prepare data for stackplots
+    # Aggregate aboveground biomass by species and year
+    species_biomass = all_data.groupby(['Year', 'Species'])['AbovegroundBiomass_InSite'].sum().unstack(fill_value=0)
+    years = species_biomass.index.values
+
+    # Prepare data arrays for stackplot
+    biomass_arrays = [species_biomass[species].values if species in species_biomass.columns else np.zeros(len(years)) 
+                      for species in species_list]
+
+    # Calculate relative proportions
+    total_biomass = np.sum(biomass_arrays, axis=0)
+    total_biomass[total_biomass == 0] = 1  # Avoid division by zero
+    proportion_arrays = [(biomass / total_biomass * 100) for biomass in biomass_arrays]
+
+    # Step 7: Create plots
+    variables = ['SiteWood(gDW)', 'Fol(gDW)', 'LAI(m2)', 'SiteLAI(m2)', 'NSC(gC)']
+    fig, axes = plt.subplots(5, 1, figsize=(12, 16))
+
+    # Individual cohort plots
+    for ax, var in zip(axes[:3], variables):
+        for cohort_label in sorted(cohort_colors.keys()):
+            cohort_df = all_data[all_data['Cohort'] == cohort_label]
+            ax.plot(cohort_df['Year'], cohort_df[var], 
+                   label=cohort_label, 
+                   color=cohort_colors[cohort_label],
+                   linewidth=1.5,
+                   alpha=0.6)
+
+        ax.set_xlabel('Year')
+        ax.set_ylabel(var)
+        ax.set_title(f'{var} over time')
+        ax.set_xlim(min_year, max_year)
+        ax.grid(True, alpha=0.3)
+        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+
+    # Absolute aboveground biomass stackplot
+    axes[3].stackplot(years, *biomass_arrays, 
+                      labels=species_list,
+                      colors=[species_colors[sp] for sp in species_list],
+                      alpha=0.7)
+    axes[3].set_xlabel('Year')
+    axes[3].set_ylabel('Aboveground Biomass (gDW)')
+    axes[3].set_title('Total Aboveground Biomass by Species')
+    axes[3].set_xlim(min_year, max_year)
+    axes[3].grid(True, alpha=0.3)
+    axes[3].legend(loc='upper left', fontsize=8)
+
+    # Relative aboveground biomass stackplot
+    axes[4].stackplot(years, *proportion_arrays,
+                      labels=species_list,
+                      colors=[species_colors[sp] for sp in species_list],
+                      alpha=0.7)
+    axes[4].set_xlabel('Year')
+    axes[4].set_ylabel('Relative Proportion (%)')
+    axes[4].set_title('Relative Aboveground Biomass by Species')
+    axes[4].set_xlim(min_year, max_year)
+    axes[4].set_ylim(0, 100)
+    axes[4].grid(True, alpha=0.3)
+    axes[4].legend(loc='upper left', fontsize=8)
+
+    plt.subplots_adjust(hspace=0.4)
+    plt.show()
+
+    return all_data
+
+
+def create_species_csv(species_tuple, numberOfCells, ageRange, filename='output.csv'):
+    """Function used to create the .csv files to initialize
+    the landscapes for the little simulations used for the calibration."""
+    with open(filename, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',')
+
+        # Write header
+        writer.writerow(['MapCode', 'SpeciesName', 'CohortAge', 'CohortBiomass'])
+
+        # Loop through MapCode 1 to 1001
+        for map_code in range(1, numberOfCells+2):
+            # Write one row for each species
+            for species in species_tuple:
+                random_age = random.randint(ageRange[0], ageRange[1])
+                writer.writerow([map_code, species, random_age, 0])
+

@@ -24,6 +24,7 @@ project:
         - file: StartingCalibrationTest/6.Monoculture_ideal_conditions.ipynb
         - file: StartingCalibrationTest/7.Calibrating_competition_between_species.ipynb
         - file: StartingCalibrationTest/8.Calibration_of_the_probability_of_establishment.ipynb
+    - file: StartingCalibrationTest/100.Future_additions_todo.ipynb
 site:
   options:
     logo: ../DIVERSE_PnET_Calibration_Logo.png
